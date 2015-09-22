@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisVREF"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x2"
+            width="8">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TRM"
+                width="8"
+                writemask="63">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VREF Trim Register, offset: 0x0 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TRIM"
+                    width="6"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="SC"
+                offset="0x1"
+                width="8"
+                writemask="195">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VREF Status and Control Register, offset: 0x1 "/>
+                </docsection>
+                <field name="MODE_LV"
+                    width="2"/>
+                <field bitoffset="6"
+                    name="REGEN"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="VREFEN"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="VREFST"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="__pad3"
+                    width="3"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

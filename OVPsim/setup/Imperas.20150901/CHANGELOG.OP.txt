@@ -1,0 +1,54 @@
+###############################################################################
+#                           CHANGELOG.OP.txt                                  #
+#      Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com         #
+#               Covered under your Software License Agreement                 #
+#                                                                             #
+#                          IMPERAS CONFIDENTIAL                               #
+#                                                                             #
+###############################################################################
+    Date : 20150825                        Version : 20150901.0
+###############################################################################
+
+- Addition to API
+   opqNetPortMustBeConnected
+   
+- Changes to API
+   ALL port connections must be created before creating a sub module instance.
+   
+   New functions
+      opcBusConnect       (replaces opcBusPortConnNew)
+      opcBusConnectRange  (replaces opcBusPortConnAddrNew)
+      opcNetConnect
+      opcPacketnetConnect
+      opcFIFOConnect
+      
+   Changed Arguments
+      opcModuleNew() now takes a structure pointer optConnectionsP instead of
+      the arguments optBusPortConnP and optNetPortConnP
+
+###############################################################################
+##                                                                           ##
+## Date 2015-February-11                                                     ##
+##                                                                           ##
+## Release 20150205.0                                                        ##
+##                                                                           ##
+###############################################################################
+
+- Changes to API
+
+  Bus port connections must be created before creating a sub module instance.
+
+  New functions
+     opcBusPortConnNew
+     opcBusPortConnAddrNew
+  
+  Changed Arguments
+  opcModuleNew() two new arguments - optBusPortConnP and optNetPortConnP
+     optBusPortConnP is a list created by opcBusPortConnNew & opcBusPortConnAddrNew
+     optNetPortConnP not used yet.
+
+  Deleted functions
+     opcModuleBusConnect
+     
+###############################################################################
+     

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisRCM"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x8"
+            width="8">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="SRS0"
+                width="8">
+                <reset mask="255"
+                    name="Reset"
+                    value="130"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="System Reset Status Register 0, offset: 0x0 "/>
+                </docsection>
+                <field bitoffset="2"
+                    name="LOC"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="LVD"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="PIN"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="POR"
+                    width="1"/>
+                <field name="WAKEUP"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="WDOG"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="__pad3"
+                    width="2"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="SRS1"
+                offset="0x1"
+                width="8">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="System Reset Status Register 1, offset: 0x1 "/>
+                </docsection>
+                <field bitoffset="4"
+                    name="EZPT"
+                    width="1"/>
+                <field name="JTAG"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="LOCKUP"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="MDM_AP"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="SACKERR"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="SW"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="TAMPER"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="__pad6"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="RPFC"
+                offset="0x4"
+                width="8"
+                writemask="7">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Reset Pin Filter Control Register, offset: 0x4 "/>
+                </docsection>
+                <field name="RSTFLTSRW"
+                    width="2"/>
+                <field bitoffset="2"
+                    name="RSTFLTSS"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="RPFW"
+                offset="0x5"
+                width="8"
+                writemask="31">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Reset Pin Filter Width Register, offset: 0x5 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="RSTFLTSEL"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="MR"
+                offset="0x7"
+                width="8">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Mode Register, offset: 0x7 "/>
+                </docsection>
+                <field bitoffset="1"
+                    name="EZP_MS"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="1"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

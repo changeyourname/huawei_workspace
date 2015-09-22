@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="Or1kUclinux_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="imperas.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Platform for an Or1k Processor using SystemC TLM2.0."/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <processorinstance mips="100.000000"
+        name="cpu1">
+        <vlnvreference name="or1k"
+            vendor="ovpworld.org"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+        <netportconnection connection="int1"
+            name="intr2"/>
+    </processorinstance>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <memoryinstance name="programMemory">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x7fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="stackMemory">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            loaddress="0xf0000000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="dummyMemory">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x930000ff"
+            loaddress="0x93000000"
+            name="sp1"/>
+    </memoryinstance>
+    <peripheralinstance name="uart1">
+        <vlnvreference name="16550"
+            vendor="national.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x90000007"
+            loaddress="0x90000000"
+            name="bport1"/>
+        <netportconnection connection="int1"
+            name="intOut"/>
+    </peripheralinstance>
+    <nets name="nets">
+        <net name="int1"/>
+    </nets>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

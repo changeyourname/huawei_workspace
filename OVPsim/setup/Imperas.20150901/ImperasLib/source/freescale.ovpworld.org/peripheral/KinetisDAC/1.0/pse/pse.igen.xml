@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisDAC"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x24"
+            width="8">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT0L"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT0H"
+                offset="0x1"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT1L"
+                offset="0x2"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT1H"
+                offset="0x3"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT2L"
+                offset="0x4"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT2H"
+                offset="0x5"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT3L"
+                offset="0x6"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT3H"
+                offset="0x7"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT4L"
+                offset="0x8"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT4H"
+                offset="0x9"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT5L"
+                offset="0xa"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT5H"
+                offset="0xb"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT6L"
+                offset="0xc"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT6H"
+                offset="0xd"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT7L"
+                offset="0xe"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT7H"
+                offset="0xf"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT8L"
+                offset="0x10"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT8H"
+                offset="0x11"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT9L"
+                offset="0x12"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT9H"
+                offset="0x13"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT10L"
+                offset="0x14"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT10H"
+                offset="0x15"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT11L"
+                offset="0x16"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT11H"
+                offset="0x17"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT12L"
+                offset="0x18"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT12H"
+                offset="0x19"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT13L"
+                offset="0x1a"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT13H"
+                offset="0x1b"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT14L"
+                offset="0x1c"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT14H"
+                offset="0x1d"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT15L"
+                offset="0x1e"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data Low Register, array offset: 0x0, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DAT15H"
+                offset="0x1f"
+                width="8"
+                writemask="15">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Data High Register, array offset: 0x1, array step: 0x2 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="DATA"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="SR"
+                offset="0x20"
+                width="8"
+                writemask="7">
+                <reset mask="255"
+                    name="Reset"
+                    value="2"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Status Register, offset: 0x20 "/>
+                </docsection>
+                <field name="DACBFRPBF"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="DACBFRPTF"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DACBFWMF"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="C0"
+                offset="0x21"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Control Register, offset: 0x21 "/>
+                </docsection>
+                <field name="DACBBIEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="DACBTIEN"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DACBWIEN"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="LPEN"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="DACSWTRG"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="DACTRGSEL"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="DACRFS"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="DACEN"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="C1"
+                offset="0x22"
+                width="8"
+                writemask="159">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Control Register 1, offset: 0x22 "/>
+                </docsection>
+                <field name="DACBFEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="DACBFMD"
+                    width="2"/>
+                <field bitoffset="3"
+                    name="DACBFWM"
+                    width="2"/>
+                <field bitoffset="7"
+                    name="DMAEN"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="__pad5"
+                    width="2"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="C2"
+                offset="0x23"
+                width="8"
+                writemask="255">
+                <reset mask="255"
+                    name="Reset"
+                    value="15"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DAC Control Register 2, offset: 0x23 "/>
+                </docsection>
+                <field name="DACBFUP"
+                    width="4"/>
+                <field bitoffset="4"
+                    name="DACBFRP"
+                    width="4"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

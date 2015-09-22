@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="BareMetalOr1kSingle_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Bare Metal Platform for an Or1k Processor using SystemC TLM2.0 as infrastructure.
+                The bare metal platform instantiates a single Or1k processor instance.
+                It creates two memories; program memory from 0x00000000 to 0x000FFFFF.
+                                         stack memory from 0xFFFF0000 to 0xFFFFFFFF.
+                                                          
+                The TLM2.0 platform can be passed any application compiled to an Or1k elf format as the argument 
+                
+                platform.OS.exe application.CROSS.elf
+                
+                Where OS is Linux or Windows"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="BareMetal platform for execution of OR1K binary files compiled with OR1K CrossCompiler toolchain."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="None"/>
+    </docsection>
+    <processorinstance mips="100.000000"
+        name="cpu1">
+        <vlnvreference library="processor"
+            name="or1k"
+            vendor="ovpworld.org"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <memoryinstance name="program">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xfffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="stack">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            loaddress="0xffff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

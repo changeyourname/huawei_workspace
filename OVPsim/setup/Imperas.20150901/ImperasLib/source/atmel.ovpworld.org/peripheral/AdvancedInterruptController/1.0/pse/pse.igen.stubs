@@ -1,0 +1,449 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_REG_WRITE_CB(AIC_EOICR_wcb) {
+    // YOUR CODE HERE (AIC_EOICR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_ICCR_wcb) {
+    // YOUR CODE HERE (AIC_ICCR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_IDCR_wcb) {
+    // YOUR CODE HERE (AIC_IDCR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_IECR_wcb) {
+    // YOUR CODE HERE (AIC_IECR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_ISCR_wcb) {
+    // YOUR CODE HERE (AIC_ISCR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_READ_CB(AIC_IVR_rcb) {
+    // YOUR CODE HERE (AIC_IVR_rcb)
+    return *(Uns32*)user;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb0) {
+    // YOUR CODE HERE (AIC_SMR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb1) {
+    // YOUR CODE HERE (AIC_SMR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb10) {
+    // YOUR CODE HERE (AIC_SMR_wcb10)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb11) {
+    // YOUR CODE HERE (AIC_SMR_wcb11)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb12) {
+    // YOUR CODE HERE (AIC_SMR_wcb12)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb13) {
+    // YOUR CODE HERE (AIC_SMR_wcb13)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb14) {
+    // YOUR CODE HERE (AIC_SMR_wcb14)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb15) {
+    // YOUR CODE HERE (AIC_SMR_wcb15)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb16) {
+    // YOUR CODE HERE (AIC_SMR_wcb16)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb17) {
+    // YOUR CODE HERE (AIC_SMR_wcb17)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb18) {
+    // YOUR CODE HERE (AIC_SMR_wcb18)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb19) {
+    // YOUR CODE HERE (AIC_SMR_wcb19)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb2) {
+    // YOUR CODE HERE (AIC_SMR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb20) {
+    // YOUR CODE HERE (AIC_SMR_wcb20)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb21) {
+    // YOUR CODE HERE (AIC_SMR_wcb21)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb22) {
+    // YOUR CODE HERE (AIC_SMR_wcb22)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb23) {
+    // YOUR CODE HERE (AIC_SMR_wcb23)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb24) {
+    // YOUR CODE HERE (AIC_SMR_wcb24)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb25) {
+    // YOUR CODE HERE (AIC_SMR_wcb25)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb26) {
+    // YOUR CODE HERE (AIC_SMR_wcb26)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb27) {
+    // YOUR CODE HERE (AIC_SMR_wcb27)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb28) {
+    // YOUR CODE HERE (AIC_SMR_wcb28)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb29) {
+    // YOUR CODE HERE (AIC_SMR_wcb29)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb3) {
+    // YOUR CODE HERE (AIC_SMR_wcb3)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb30) {
+    // YOUR CODE HERE (AIC_SMR_wcb30)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb31) {
+    // YOUR CODE HERE (AIC_SMR_wcb31)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb4) {
+    // YOUR CODE HERE (AIC_SMR_wcb4)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb5) {
+    // YOUR CODE HERE (AIC_SMR_wcb5)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb6) {
+    // YOUR CODE HERE (AIC_SMR_wcb6)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb7) {
+    // YOUR CODE HERE (AIC_SMR_wcb7)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb8) {
+    // YOUR CODE HERE (AIC_SMR_wcb8)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SMR_wcb9) {
+    // YOUR CODE HERE (AIC_SMR_wcb9)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SPU_wcb) {
+    // YOUR CODE HERE (AIC_SPU_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb0) {
+    // YOUR CODE HERE (AIC_SVR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb1) {
+    // YOUR CODE HERE (AIC_SVR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb10) {
+    // YOUR CODE HERE (AIC_SVR_wcb10)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb11) {
+    // YOUR CODE HERE (AIC_SVR_wcb11)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb12) {
+    // YOUR CODE HERE (AIC_SVR_wcb12)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb13) {
+    // YOUR CODE HERE (AIC_SVR_wcb13)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb14) {
+    // YOUR CODE HERE (AIC_SVR_wcb14)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb15) {
+    // YOUR CODE HERE (AIC_SVR_wcb15)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb16) {
+    // YOUR CODE HERE (AIC_SVR_wcb16)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb17) {
+    // YOUR CODE HERE (AIC_SVR_wcb17)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb18) {
+    // YOUR CODE HERE (AIC_SVR_wcb18)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb19) {
+    // YOUR CODE HERE (AIC_SVR_wcb19)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb2) {
+    // YOUR CODE HERE (AIC_SVR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb20) {
+    // YOUR CODE HERE (AIC_SVR_wcb20)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb21) {
+    // YOUR CODE HERE (AIC_SVR_wcb21)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb22) {
+    // YOUR CODE HERE (AIC_SVR_wcb22)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb23) {
+    // YOUR CODE HERE (AIC_SVR_wcb23)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb24) {
+    // YOUR CODE HERE (AIC_SVR_wcb24)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb25) {
+    // YOUR CODE HERE (AIC_SVR_wcb25)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb26) {
+    // YOUR CODE HERE (AIC_SVR_wcb26)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb27) {
+    // YOUR CODE HERE (AIC_SVR_wcb27)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb28) {
+    // YOUR CODE HERE (AIC_SVR_wcb28)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb29) {
+    // YOUR CODE HERE (AIC_SVR_wcb29)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb3) {
+    // YOUR CODE HERE (AIC_SVR_wcb3)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb30) {
+    // YOUR CODE HERE (AIC_SVR_wcb30)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb31) {
+    // YOUR CODE HERE (AIC_SVR_wcb31)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb4) {
+    // YOUR CODE HERE (AIC_SVR_wcb4)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb5) {
+    // YOUR CODE HERE (AIC_SVR_wcb5)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb6) {
+    // YOUR CODE HERE (AIC_SVR_wcb6)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb7) {
+    // YOUR CODE HERE (AIC_SVR_wcb7)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb8) {
+    // YOUR CODE HERE (AIC_SVR_wcb8)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(AIC_SVR_wcb9) {
+    // YOUR CODE HERE (AIC_SVR_wcb9)
+    *(Uns32*)user = data;
+}
+
+PPM_NET_CB(FIQ_wcb) {
+    // YOUR CODE HERE (FIQ_wcb)
+}
+
+PPM_NET_CB(IRQ0_wcb) {
+    // YOUR CODE HERE (IRQ0_wcb)
+}
+
+PPM_NET_CB(IRQ1_wcb) {
+    // YOUR CODE HERE (IRQ1_wcb)
+}
+
+PPM_NET_CB(IRQ2_wcb) {
+    // YOUR CODE HERE (IRQ2_wcb)
+}
+
+PPM_NET_CB(PIOIRQ_wcb) {
+    // YOUR CODE HERE (PIOIRQ_wcb)
+}
+
+PPM_NET_CB(SWIRQ_wcb) {
+    // YOUR CODE HERE (SWIRQ_wcb)
+}
+
+PPM_NET_CB(TC0IRQ_wcb) {
+    // YOUR CODE HERE (TC0IRQ_wcb)
+}
+
+PPM_NET_CB(TC1IRQ_wcb) {
+    // YOUR CODE HERE (TC1IRQ_wcb)
+}
+
+PPM_NET_CB(TC2IRQ_wcb) {
+    // YOUR CODE HERE (TC2IRQ_wcb)
+}
+
+PPM_NET_CB(US0IRQ_wcb) {
+    // YOUR CODE HERE (US0IRQ_wcb)
+}
+
+PPM_NET_CB(US1IRQ_wcb) {
+    // YOUR CODE HERE (US1IRQ_wcb)
+}
+
+PPM_NET_CB(WDIRQ_wcb) {
+    // YOUR CODE HERE (WDIRQ_wcb)
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

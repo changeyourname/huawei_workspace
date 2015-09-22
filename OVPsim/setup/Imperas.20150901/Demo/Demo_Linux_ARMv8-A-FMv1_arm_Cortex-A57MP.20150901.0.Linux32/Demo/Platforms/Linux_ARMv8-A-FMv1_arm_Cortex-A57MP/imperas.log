@@ -1,0 +1,32 @@
+Info Session started: Tue Sep 22 16:19:05 2015
+
+Info ---------------- FLAGS ----------------
+Info --output  imperas.log
+Info --verbose
+Info --startaddress  0x80000000
+Info --override  ARMv8-A-FMv1/smartLoader/kernel=Image
+Info --override  ARMv8-A-FMv1/smartLoader/initrd=initrd.arm64.img
+Info --override  ARMv8-A-FMv1/smartLoader/dtb=foundation-v8.dtb
+Info --override  ARMv8-A-FMv1/uart0/console=1
+Info --override  ARMv8-A-FMv1/uart1/console=1
+Info ---------------------------------------
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Copyright (c) 2005-2015 Imperas Software Ltd.  Contains Imperas Proprietary Information.
+Licensed Software, All Rights Reserved.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+OVPsim started: Tue Sep 22 16:19:05 2015
+
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/processor/arm/1.0/model.so'
+Fatal (LIC) No such feature exists.
+Feature:       IMP_MODEL_ARMv8
+License path:  /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/OVPsim.lic:
+FLEXnet Licensing error:-5,357
+For further information, refer to the FLEXnet Licensing documentation,
+available at "www.flexerasoftware.com".
+Info Exiting
+Info Session ended: Tue Sep 22 16:19:05 2015
+

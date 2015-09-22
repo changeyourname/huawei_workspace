@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisUSBDCD"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x1c"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CONTROL"
+                width="32"
+                writemask="50397185">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="65536"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Control Register, offset: 0x0 "/>
+                </docsection>
+                <field name="IACK"
+                    width="1"/>
+                <field bitoffset="16"
+                    name="IE"
+                    width="1"/>
+                <field bitoffset="8"
+                    name="IF"
+                    width="1"/>
+                <field bitoffset="25"
+                    name="SR"
+                    width="1"/>
+                <field bitoffset="24"
+                    name="START"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="7"/>
+                <field bitoffset="9"
+                    name="__pad9"
+                    width="7"/>
+                <field bitoffset="17"
+                    name="__pad17"
+                    width="7"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CLOCK"
+                offset="0x4"
+                width="32"
+                writemask="4093">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="193"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Clock Register, offset: 0x4 "/>
+                </docsection>
+                <field bitoffset="2"
+                    name="CLOCK_SPEED"
+                    width="10"/>
+                <field name="CLOCK_UNIT"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="STATUS"
+                offset="0x8"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Status Register, offset: 0x8 "/>
+                </docsection>
+                <field bitoffset="22"
+                    name="ACTIVE"
+                    width="1"/>
+                <field bitoffset="20"
+                    name="ERR"
+                    width="1"/>
+                <field bitoffset="16"
+                    name="SEQ_RES"
+                    width="2"/>
+                <field bitoffset="18"
+                    name="SEQ_STAT"
+                    width="2"/>
+                <field bitoffset="21"
+                    name="TO"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="16"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TIMER0"
+                offset="0x10"
+                width="32"
+                writemask="33488896">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="1048576"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="TIMER0 Register, offset: 0x10 "/>
+                </docsection>
+                <field bitoffset="16"
+                    name="TSEQ_INIT"
+                    width="10"/>
+                <field name="TUNITCON"
+                    width="12"/>
+                <field bitoffset="12"
+                    name="__pad12"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TIMER1"
+                offset="0x14"
+                width="32"
+                writemask="67044351">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="655400"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="TIMER1 Register, offset: 0x14"/>
+                </docsection>
+                <field bitoffset="16"
+                    name="TDCD_DBNC"
+                    width="10"/>
+                <field name="TVDPSRC_ON"
+                    width="10"/>
+                <field bitoffset="10"
+                    name="__pad10"
+                    width="6"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TIMER2"
+                offset="0x18"
+                width="32"
+                writemask="67043343">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="2621450"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="TIMER2 Register, offset: 0x18 "/>
+                </docsection>
+                <field name="CHECK_DM"
+                    width="4"/>
+                <field bitoffset="16"
+                    name="TVDPSRC_CON"
+                    width="10"/>
+                <field bitoffset="4"
+                    name="__pad4"
+                    width="12"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

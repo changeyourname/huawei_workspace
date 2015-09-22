@@ -1,0 +1,99 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+// This file declares functions to be implemented by the user.
+// Be careful to avoid overwriting any edits should igen be re-run.
+
+
+#include <string.h>
+#include <stdlib.h>
+
+#include "op/op.h"
+
+
+// Change the name here if required.
+
+#define MODULE_NAME "ArmuKernelDual"
+
+#include "platform.options.igen.h"
+#include "platform.constructor.igen.h"
+#include "platform.clp.igen.h"
+
+typedef struct optModuleObjectS {
+    // insert module persistent data here
+} optModuleObject;
+
+////////////////////////////////////////////////////////////////////////////////
+//                         U S E R   F U N C T I O N S
+////////////////////////////////////////////////////////////////////////////////
+
+static OPT_PRE_SIMULATE_FN(modulePreSimulate) {
+// insert modulePreSimulate code here
+}
+
+static OPT_SIMULATE_FN(moduleSimulate) {
+// insert moduleSimulate code here
+}
+
+static OPT_POST_SIMULATE_FN(modulePostSimulate) {
+// insert modulePostSimulate code here
+}
+
+static OPT_DESTRUCT_FN(moduleDestruct) {
+// insert moduleDestruct code here
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                                    ATTRS
+////////////////////////////////////////////////////////////////////////////////
+
+#include "platform.attr.igen.h"
+
+////////////////////////////////////////////////////////////////////////////////
+//                                   M A I N
+////////////////////////////////////////////////////////////////////////////////
+
+int main(int argc, const char *argv[]) {
+
+    opcInit(OP_VERSION);
+    optCmdParserP parser = oppCmdParserNew(MODULE_NAME, OPT_AC_ALL);
+    cmdParser(parser);
+
+    // insert modifications to the CLP here
+
+    oppCmdParseArgs(parser, argc, argv);
+
+    // insert overrides here
+
+    optModuleP top = opcRootModuleNew(&modelAttrs, MODULE_NAME, 0);
+    oprModuleSimulate(top);
+    opcTerminate();
+    return 0;
+}
+

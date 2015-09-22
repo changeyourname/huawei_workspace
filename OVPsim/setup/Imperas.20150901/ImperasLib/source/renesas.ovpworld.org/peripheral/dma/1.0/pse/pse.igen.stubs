@@ -1,0 +1,400 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_REG_READ_CB(readDMADSCL) {
+    // YOUR CODE HERE (readDMADSCL)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDMAMCL) {
+    // YOUR CODE HERE (readDMAMCL)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDMASL) {
+    // YOUR CODE HERE (readDMASL)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDMAWC0) {
+    // YOUR CODE HERE (readDMAWC0)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readDMAWC1) {
+    // YOUR CODE HERE (readDMAWC1)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readDTCR0) {
+    // YOUR CODE HERE (readDTCR0)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR1) {
+    // YOUR CODE HERE (readDTCR1)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR2) {
+    // YOUR CODE HERE (readDTCR2)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR3) {
+    // YOUR CODE HERE (readDTCR3)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR4) {
+    // YOUR CODE HERE (readDTCR4)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR5) {
+    // YOUR CODE HERE (readDTCR5)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR6) {
+    // YOUR CODE HERE (readDTCR6)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR7) {
+    // YOUR CODE HERE (readDTCR7)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR8) {
+    // YOUR CODE HERE (readDTCR8)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTCR9) {
+    // YOUR CODE HERE (readDTCR9)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTFR4) {
+    // YOUR CODE HERE (readDTFR4)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTFR5) {
+    // YOUR CODE HERE (readDTFR5)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTFR6) {
+    // YOUR CODE HERE (readDTFR6)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readDTFR7) {
+    // YOUR CODE HERE (readDTFR7)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readMAR0) {
+    // YOUR CODE HERE (readMAR0)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR1) {
+    // YOUR CODE HERE (readMAR1)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR2) {
+    // YOUR CODE HERE (readMAR2)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR3) {
+    // YOUR CODE HERE (readMAR3)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR4) {
+    // YOUR CODE HERE (readMAR4)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR5) {
+    // YOUR CODE HERE (readMAR5)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR6) {
+    // YOUR CODE HERE (readMAR6)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR7) {
+    // YOUR CODE HERE (readMAR7)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR8) {
+    // YOUR CODE HERE (readMAR8)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readMAR9) {
+    // YOUR CODE HERE (readMAR9)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readSAR2) {
+    // YOUR CODE HERE (readSAR2)
+    return *(Uns8*)user;
+}
+
+PPM_REG_READ_CB(readSAR3) {
+    // YOUR CODE HERE (readSAR3)
+    return *(Uns8*)user;
+}
+
+PPM_NET_CB(triggerADDMARQ0) {
+    // YOUR CODE HERE (triggerADDMARQ0)
+}
+
+PPM_NET_CB(triggerADDMARQ1) {
+    // YOUR CODE HERE (triggerADDMARQ1)
+}
+
+PPM_NET_CB(triggerINTBE0R) {
+    // YOUR CODE HERE (triggerINTBE0R)
+}
+
+PPM_NET_CB(triggerINTBE1R) {
+    // YOUR CODE HERE (triggerINTBE1R)
+}
+
+PPM_NET_CB(triggerINTCE0C) {
+    // YOUR CODE HERE (triggerINTCE0C)
+}
+
+PPM_NET_CB(triggerINTCE1C) {
+    // YOUR CODE HERE (triggerINTCE1C)
+}
+
+PPM_NET_CB(triggerINTTS0CD) {
+    // YOUR CODE HERE (triggerINTTS0CD)
+}
+
+PPM_NET_CB(triggerINTTS1CD) {
+    // YOUR CODE HERE (triggerINTTS1CD)
+}
+
+PPM_NET_CB(triggerINTUC0R) {
+    // YOUR CODE HERE (triggerINTUC0R)
+}
+
+PPM_NET_CB(triggerINTUC1R) {
+    // YOUR CODE HERE (triggerINTUC1R)
+}
+
+PPM_NET_CB(triggerINTUC2R) {
+    // YOUR CODE HERE (triggerINTUC2R)
+}
+
+PPM_REG_WRITE_CB(writeDMADSCL) {
+    // YOUR CODE HERE (writeDMADSCL)
+    *(Uns8*)user = (*(Uns8*)user & 0xf) | (data & 0xf0);
+}
+
+PPM_REG_WRITE_CB(writeDMAMCL) {
+    // YOUR CODE HERE (writeDMAMCL)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDMASL) {
+    // YOUR CODE HERE (writeDMASL)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDMAWC0) {
+    // YOUR CODE HERE (writeDMAWC0)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDMAWC1) {
+    // YOUR CODE HERE (writeDMAWC1)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR0) {
+    // YOUR CODE HERE (writeDTCR0)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR1) {
+    // YOUR CODE HERE (writeDTCR1)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR2) {
+    // YOUR CODE HERE (writeDTCR2)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR3) {
+    // YOUR CODE HERE (writeDTCR3)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR4) {
+    // YOUR CODE HERE (writeDTCR4)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR5) {
+    // YOUR CODE HERE (writeDTCR5)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR6) {
+    // YOUR CODE HERE (writeDTCR6)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR7) {
+    // YOUR CODE HERE (writeDTCR7)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR8) {
+    // YOUR CODE HERE (writeDTCR8)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTCR9) {
+    // YOUR CODE HERE (writeDTCR9)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTFR4) {
+    // YOUR CODE HERE (writeDTFR4)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTFR5) {
+    // YOUR CODE HERE (writeDTFR5)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTFR6) {
+    // YOUR CODE HERE (writeDTFR6)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeDTFR7) {
+    // YOUR CODE HERE (writeDTFR7)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR0) {
+    // YOUR CODE HERE (writeMAR0)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR1) {
+    // YOUR CODE HERE (writeMAR1)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR2) {
+    // YOUR CODE HERE (writeMAR2)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR3) {
+    // YOUR CODE HERE (writeMAR3)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR4) {
+    // YOUR CODE HERE (writeMAR4)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR5) {
+    // YOUR CODE HERE (writeMAR5)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR6) {
+    // YOUR CODE HERE (writeMAR6)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR7) {
+    // YOUR CODE HERE (writeMAR7)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR8) {
+    // YOUR CODE HERE (writeMAR8)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeMAR9) {
+    // YOUR CODE HERE (writeMAR9)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSAR2) {
+    // YOUR CODE HERE (writeSAR2)
+    *(Uns8*)user = (*(Uns8*)user & 0xf0) | (data & 0xf);
+}
+
+PPM_REG_WRITE_CB(writeSAR3) {
+    // YOUR CODE HERE (writeSAR3)
+    *(Uns8*)user = (*(Uns8*)user & 0xf0) | (data & 0xf);
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

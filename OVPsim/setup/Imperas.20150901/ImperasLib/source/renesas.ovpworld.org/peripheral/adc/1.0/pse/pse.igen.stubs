@@ -1,0 +1,120 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_NET_CB(P_ADTRG) {
+    // YOUR CODE HERE (P_ADTRG)
+}
+
+PPM_NET_CB(P_INTADEN) {
+    // YOUR CODE HERE (P_INTADEN)
+}
+
+PPM_NET_CB(P_INTTS0CD) {
+    // YOUR CODE HERE (P_INTTS0CD)
+}
+
+PPM_NET_CB(P_INTTS0OD) {
+    // YOUR CODE HERE (P_INTTS0OD)
+}
+
+PPM_NET_CB(P_INTTS1CD) {
+    // YOUR CODE HERE (P_INTTS1CD)
+}
+
+PPM_NET_CB(P_INTTS1OD) {
+    // YOUR CODE HERE (P_INTTS1OD)
+}
+
+PPM_NET_CB(P_TS0ADT0) {
+    // YOUR CODE HERE (P_TS0ADT0)
+}
+
+PPM_NET_CB(P_TS0ADT1) {
+    // YOUR CODE HERE (P_TS0ADT1)
+}
+
+PPM_NET_CB(P_TS1ADT0) {
+    // YOUR CODE HERE (P_TS1ADT0)
+}
+
+PPM_NET_CB(P_TS1ADT1) {
+    // YOUR CODE HERE (P_TS1ADT1)
+}
+
+PPM_REG_READ_CB(readADCR) {
+    // YOUR CODE HERE (readADCR)
+    return 0;
+}
+
+PPM_REG_READ_CB(readADDMA) {
+    // YOUR CODE HERE (readADDMA)
+    return *(Uns16*)user;
+}
+
+PPM_REG_WRITE_CB(writeADM0) {
+    // YOUR CODE HERE (writeADM0)
+    *(Uns8*)user = (*(Uns8*)user & 0xf) | (data & 0xf0);
+}
+
+PPM_REG_WRITE_CB(writeADM1) {
+    // YOUR CODE HERE (writeADM1)
+    *(Uns8*)user = (*(Uns8*)user & 0xc) | (data & 0xf3);
+}
+
+PPM_REG_WRITE_CB(writeADM2) {
+    // YOUR CODE HERE (writeADM2)
+    *(Uns8*)user = (*(Uns8*)user & 0xf0) | (data & 0xf);
+}
+
+PPM_REG_WRITE_CB(writeADTRSEL) {
+    // YOUR CODE HERE (writeADTRSEL)
+    *(Uns8*)user = (*(Uns8*)user & 0xf0) | (data & 0xf);
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+PPM_DESTRUCTOR_CB(destructor) {
+    // YOUR CODE HERE (destructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="RtcPL031"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="arm.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="ARM PL031 Real Time Clock (RTC)"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"
+            text="none"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Reference">
+        <doctext name="txt"
+            text="ARM PrimeCell Real Time Clock (PL031) Technical Reference Manual (ARM DDI 0224)"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x1000"
+            width="32">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="dr"
+                readfunction="readDR"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Data read"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="mr"
+                offset="0x4"
+                width="32"
+                writefunction="writeMR">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Match"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="lr"
+                offset="0x8"
+                width="32"
+                writefunction="writeLR">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Data load"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="cr"
+                offset="0xc"
+                readfunction="readCR"
+                width="32"
+                writefunction="writeCR">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Control"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="im"
+                offset="0x10"
+                width="32"
+                writefunction="writeIM">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Interrupt mask"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="is"
+                offset="0x14"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Raw interrupt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="mis"
+                offset="0x18"
+                readfunction="readMIS"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Masked interrupt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="icr"
+                offset="0x1c"
+                width="32"
+                writefunction="writeICR">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Interrupt clear"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id0"
+                offset="0xfe0"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id1"
+                offset="0xfe4"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id2"
+                offset="0xfe8"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id3"
+                offset="0xfec"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id4"
+                offset="0xff0"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id5"
+                offset="0xff4"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id6"
+                offset="0xff8"
+                readfunction="readID"
+                width="32"/>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="id7"
+                offset="0xffc"
+                readfunction="readID"
+                width="32"/>
+        </addressblock>
+    </busslaveport>
+    <netport name="irq"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="ARM PL031 RTC"/>
+        </docsection>
+    </netport>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

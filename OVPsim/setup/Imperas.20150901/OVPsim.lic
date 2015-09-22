@@ -1,0 +1,20 @@
+#
+# Please obtain a license key from the supplier who provided this software 
+# distribution, from http://www.OVPworld.org or by emailing ovpsim@imperas.com
+# and place the license key information you receive in this file
+#
+
+
+#### OVPsim non-commercial license keys for UzairSharif uzair.sharif@tum.de Technical University Munich
+#### Please put them in $IMPERAS_HOME/OVPsim.lic
+#### Generated on 22-Sep-2015 for 90 days duration
+
+#### Hostname1 uzair-HP-ProDesk-600-G1-TWR
+
+FEATURE IMP_OVPSIM_20150901 imperasd 1.0 21-dec-2015 uncounted \
+        HOSTID=ecb1d74a0f25 SIGN="157E 92ED 61E5 750C A33F EB6A 6A05 \
+        171A 6F4D 8B57 5B6F 10FC AFFB EE7D 3C40 12B3 1374 B2A8 F8A9 \
+        5B73 86CD 389A 942F B2FC 6C2B 2978 C74A 18F0 4DE0 4A25"
+        
+        
+        

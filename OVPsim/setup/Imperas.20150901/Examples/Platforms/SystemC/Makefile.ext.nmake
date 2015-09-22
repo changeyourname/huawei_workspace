@@ -1,0 +1,80 @@
+# Set this to your System C installation
+# SYSTEMC_HOME = 
+
+!IFDEF VERBOSE
+V= 
+!ELSE
+V=@
+!ENDIF
+
+membase=0xeff0
+memsize=0x14
+MEM_CFLAGS = -D"EXTMEM_BASEADDR=$(membase)" -D"EXTMEM_SIZE=$(memsize)"
+
+# examples
+SRC=platform
+INC=platform
+
+# imperas models
+IMPERAS_MODELS    =$(IMPERAS_HOME)\ImperasLib\source
+
+ICM_SRC =$(IMPERAS_HOME)\ImpPublic\source\host\icm
+ICM_INC =$(IMPERAS_HOME)\ImpPublic\include\host
+
+# Imperas link library
+IMPERAS_LIB     = $(IMPERAS_HOME)\bin\$(IMPERAS_ARCH)
+
+# systemc
+SYSTEMC_INC_DIR = $(SYSTEMC_HOME)\src
+
+# Tools
+DEL    = del
+CPP    = cl.exe
+LD     = link.exe /SUBSYSTEM:CONSOLE /nologo
+OPT    = /O2
+DEBUG  = /Od /ZI -D_CRT_SECURE_NO_DEPRECATE
+MAKE   = nmake /NOLOGO
+
+OBJ    = obj
+ARCH   = $(IMPERAS_ARCH)
+
+# Adjust the following includes according to your version of Visual C++
+# \WX removed : made warnings into errors
+
+INCS=\
+    -I"$(SYSTEMC_INC_DIR)" \
+    -I"$(ICM_INC)" \
+    -I"$(INC)"
+
+FLAGS  = $(DEBUG) /GR /vmg /MTd /EHsc /nologo /W3  /DSC_INCLUDE_DYNAMIC_PROCESSES
+
+LDFLAGS = /debug \
+          /LIBPATH:"$(SYSTEMC_HOME)\msvc71\SystemC\Debug" \
+          /LIBPATH:"$(IMPERAS_LIB)" \
+          systemc.lib libRuntimeLoader.lib
+
+CFLAGS = $(FLAGS) $(INCS)
+
+OBJS =  impSimulation.$(OBJ) \
+        icmCpuManager.$(OBJ) 
+
+all: impSimulation.exe 
+
+clean:
+	$(V) $(DEL) -f *.$(OBJ) *.exe
+
+icmCpuManager.$(OBJ): "$(ICM_SRC)\icmCpuManager.cpp"
+	$(V) $(CPP) -c $(CFLAGS) %s
+	
+impSimulation.$(OBJ): "$(SRC)\impSimulation.cpp"
+    $(V) echo Compiling $@
+	$(V) $(CPP) -c $(CFLAGS) $(MEM_CFLAGS) %s
+
+impSimulation.exe: $(OBJS) "$(IMPERAS_LIB)\libRuntimeLoader.lib"
+    $(V) echo Linking $@
+	$(V) $(LD) /OUT:"$@" $(LDFLAGS) $(OBJS)
+
+{$(SRC)}.cpp{}.$(OBJ):
+	$(V) $(CPP) -c $(CFLAGS) %s
+
+

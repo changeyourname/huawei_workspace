@@ -1,0 +1,1631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisFMC"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x300"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PFAPR"
+                width="32"
+                writemask="16777215">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="16252991"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Flash Access Protection Register, offset: 0x0 "/>
+                </docsection>
+                <field name="M0AP"
+                    width="2"/>
+                <field bitoffset="16"
+                    name="M0PFD"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="M1AP"
+                    width="2"/>
+                <field bitoffset="17"
+                    name="M1PFD"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="M2AP"
+                    width="2"/>
+                <field bitoffset="18"
+                    name="M2PFD"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="M3AP"
+                    width="2"/>
+                <field bitoffset="19"
+                    name="M3PFD"
+                    width="1"/>
+                <field bitoffset="8"
+                    name="M4AP"
+                    width="2"/>
+                <field bitoffset="20"
+                    name="M4PFD"
+                    width="1"/>
+                <field bitoffset="10"
+                    name="M5AP"
+                    width="2"/>
+                <field bitoffset="21"
+                    name="M5PFD"
+                    width="1"/>
+                <field bitoffset="12"
+                    name="M6AP"
+                    width="2"/>
+                <field bitoffset="22"
+                    name="M6PFD"
+                    width="1"/>
+                <field bitoffset="14"
+                    name="M7AP"
+                    width="2"/>
+                <field bitoffset="23"
+                    name="M7PFD"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PFB01CR"
+                offset="0x4"
+                width="32"
+                writemask="252182783">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="805568543"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Flash Bank 0-1 Control Register, offset: 0x4 "/>
+                </docsection>
+                <field bitoffset="4"
+                    name="B01DCE"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="B01DPE"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="B01ICE"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="B01IPE"
+                    width="1"/>
+                <field bitoffset="17"
+                    name="B01MW"
+                    width="2"/>
+                <field bitoffset="28"
+                    name="B01RWSC"
+                    width="4"/>
+                <field name="B01SEBE"
+                    width="1"/>
+                <field bitoffset="20"
+                    name="CINV_WAY"
+                    width="4"/>
+                <field bitoffset="24"
+                    name="CLCK_WAY"
+                    width="4"/>
+                <field bitoffset="5"
+                    name="CRC"
+                    width="3"/>
+                <field bitoffset="19"
+                    name="S_B_INV"
+                    width="1"/>
+                <field bitoffset="8"
+                    name="__pad8"
+                    width="9"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PFB23CR"
+                offset="0x8"
+                width="32"
+                writemask="31">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="805568543"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Flash Bank 2-3 Control Register, offset: 0x8 "/>
+                </docsection>
+                <field bitoffset="4"
+                    name="B23DCE"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="B23DPE"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="B23ICE"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="B23IPE"
+                    width="1"/>
+                <field bitoffset="17"
+                    name="B23MW"
+                    width="2"/>
+                <field bitoffset="28"
+                    name="B23RWSC"
+                    width="4"/>
+                <field name="B23SEBE"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="__pad5"
+                    width="12"/>
+                <field bitoffset="19"
+                    name="__pad19"
+                    width="9"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW0S0"
+                offset="0x100"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW0S1"
+                offset="0x104"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW0S2"
+                offset="0x108"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW0S3"
+                offset="0x10c"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW1S0"
+                offset="0x110"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW1S1"
+                offset="0x114"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW1S2"
+                offset="0x118"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW1S3"
+                offset="0x11c"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW2S0"
+                offset="0x120"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW2S1"
+                offset="0x124"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW2S2"
+                offset="0x128"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW2S3"
+                offset="0x12c"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW3S0"
+                offset="0x130"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW3S1"
+                offset="0x134"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW3S2"
+                offset="0x138"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TAGVDW3S3"
+                offset="0x13c"
+                width="32"
+                writemask="1048513">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Tag Storage, array offset: 0x100, array step: index*0x10, index2*0x4 "/>
+                </docsection>
+                <field bitoffset="6"
+                    name="tag"
+                    width="14"/>
+                <field name="valid"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="5"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S0UM"
+                offset="0x200"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S0MU"
+                offset="0x204"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S0ML"
+                offset="0x208"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S0LM"
+                offset="0x20c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S1UM"
+                offset="0x210"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S1MU"
+                offset="0x214"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S1ML"
+                offset="0x218"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S1LM"
+                offset="0x21c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S2UM"
+                offset="0x220"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S2MU"
+                offset="0x224"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S2ML"
+                offset="0x228"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S2LM"
+                offset="0x22c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S3UM"
+                offset="0x230"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S3MU"
+                offset="0x234"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S3ML"
+                offset="0x238"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW0S3LM"
+                offset="0x23c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S0UM"
+                offset="0x240"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S0MU"
+                offset="0x244"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S0ML"
+                offset="0x248"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S0LM"
+                offset="0x24c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S1UM"
+                offset="0x250"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S1MU"
+                offset="0x254"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S1ML"
+                offset="0x258"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S1LM"
+                offset="0x25c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S2UM"
+                offset="0x260"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S2MU"
+                offset="0x264"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S2ML"
+                offset="0x268"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S2LM"
+                offset="0x26c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S3UM"
+                offset="0x270"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S3MU"
+                offset="0x274"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S3ML"
+                offset="0x278"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW1S3LM"
+                offset="0x27c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S0UM"
+                offset="0x280"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S0MU"
+                offset="0x284"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S0ML"
+                offset="0x288"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S0LM"
+                offset="0x28c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S1UM"
+                offset="0x290"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S1MU"
+                offset="0x294"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S1ML"
+                offset="0x298"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S1LM"
+                offset="0x29c"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S2UM"
+                offset="0x2a0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S2MU"
+                offset="0x2a4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S2ML"
+                offset="0x2a8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S2LM"
+                offset="0x2ac"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S3UM"
+                offset="0x2b0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S3MU"
+                offset="0x2b4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S3ML"
+                offset="0x2b8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW2S3LM"
+                offset="0x2bc"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S0UM"
+                offset="0x2c0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S0MU"
+                offset="0x2c4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S0ML"
+                offset="0x2c8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S0LM"
+                offset="0x2cc"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S1UM"
+                offset="0x2d0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S1MU"
+                offset="0x2d4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S1ML"
+                offset="0x2d8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S1LM"
+                offset="0x2dc"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S2UM"
+                offset="0x2e0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S2MU"
+                offset="0x2e4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S2ML"
+                offset="0x2e8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S2LM"
+                offset="0x2ec"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S3UM"
+                offset="0x2f0"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (uppermost word), array offset: 0x200, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S3MU"
+                offset="0x2f4"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-upper word), array offset: 0x204, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S3ML"
+                offset="0x2f8"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (mid-lower word), array offset: 0x208, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DATAW3S3LM"
+                offset="0x2fc"
+                width="32"
+                writemask="4294967295">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Cache Data Storage (lowermost word), array offset: 0x20C, array step: index*0x40, index2*0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="data"
+                    width="32"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

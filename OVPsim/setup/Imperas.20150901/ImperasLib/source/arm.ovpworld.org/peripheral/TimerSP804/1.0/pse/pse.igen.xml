@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    destructor="destructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="TimerSP804"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="arm.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Timer SP804 Module"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="none"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="ARM Dual-Timer Module (SP804) Technical Reference Manual (ARM DDI 0271)"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x1000"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T0Load"
+                readfunction="readLoad"
+                userdata="0x0"
+                width="32"
+                writefunction="writeLoad">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T0Value"
+                offset="0x4"
+                readfunction="readValue"
+                userdata="0x0"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T0Control"
+                offset="0x8"
+                readfunction="readControl"
+                userdata="0x0"
+                width="32"
+                writefunction="writeControl">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+                <field name="ONESHOT"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="M32BIT"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DIV"
+                    width="2"/>
+                <field bitoffset="5"
+                    name="IE"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="PERIODIC"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="ENABLE"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="__pad4"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="T0IntClr"
+                offset="0xc"
+                userdata="0x0"
+                width="32"
+                writefunction="writeIntClr">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T0RIS"
+                offset="0x10"
+                readfunction="readRIS"
+                userdata="0x0"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T0MIS"
+                offset="0x14"
+                readfunction="readMIS"
+                userdata="0x0"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T0BGLoad"
+                offset="0x18"
+                readfunction="readLoad"
+                userdata="0x0"
+                width="32"
+                writefunction="writeBGLoad">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T1Load"
+                offset="0x20"
+                readfunction="readLoad"
+                userdata="0x1"
+                width="32"
+                writefunction="writeLoad">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T1Value"
+                offset="0x24"
+                readfunction="readValue"
+                userdata="0x1"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T1Control"
+                offset="0x28"
+                readfunction="readControl"
+                userdata="0x1"
+                width="32"
+                writefunction="writeControl">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+                <field name="ONESHOT"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="M32BIT"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DIV"
+                    width="2"/>
+                <field bitoffset="5"
+                    name="IE"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="PERIODIC"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="ENABLE"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="__pad4"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="T1IntClr"
+                offset="0x2c"
+                userdata="0x1"
+                width="32"
+                writefunction="writeIntClr">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T1RIS"
+                offset="0x30"
+                readfunction="readRIS"
+                userdata="0x1"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="T1MIS"
+                offset="0x34"
+                readfunction="readMIS"
+                userdata="0x1"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="T1BGLoad"
+                offset="0x38"
+                readfunction="readLoad"
+                userdata="0x1"
+                width="32"
+                writefunction="writeBGLoad">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="ITCR"
+                offset="0xf00"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="ITOP"
+                offset="0xf04"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PeriphID0"
+                offset="0xfe0"
+                readfunction="readPeriphID0"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PeriphID1"
+                offset="0xfe4"
+                readfunction="readPeriphID1"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PeriphID2"
+                offset="0xfe8"
+                readfunction="readPeriphID2"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PeriphID3"
+                offset="0xfec"
+                readfunction="readPeriphID3"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PCellID0"
+                offset="0xff0"
+                readfunction="readPCellID0"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PCellID1"
+                offset="0xff4"
+                readfunction="readPCellID1"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PCellID2"
+                offset="0xff8"
+                readfunction="readPCellID2"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PCellID3"
+                offset="0xffc"
+                readfunction="readPCellID3"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"/>
+                </docsection>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="irq"
+        type="output"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

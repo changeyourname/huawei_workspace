@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisLPTMR"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x10"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CSR"
+                width="32"
+                writemask="255">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Low Power Timer Control Status Register, offset: 0x0 "/>
+                </docsection>
+                <field bitoffset="7"
+                    name="TCF"
+                    width="1"/>
+                <field name="TEN"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="TFC"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="TIE"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="TMS"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="TPP"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="TPS"
+                    width="2"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PSR"
+                offset="0x4"
+                width="32"
+                writemask="127">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Low Power Timer Prescale Register, offset: 0x4 "/>
+                </docsection>
+                <field bitoffset="2"
+                    name="PBYP"
+                    width="1"/>
+                <field name="PCS"
+                    width="2"/>
+                <field bitoffset="3"
+                    name="PRESCALE"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CMR"
+                offset="0x8"
+                width="32"
+                writemask="65535">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Low Power Timer Compare Register, offset: 0x8 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="COMPARE"
+                    width="16"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="CNR"
+                offset="0xc"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Low Power Timer Counter Register, offset: 0xC "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="COUNTER"
+                    width="16"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

@@ -1,0 +1,191 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_NET_CB(P_INTBRG0) {
+    // YOUR CODE HERE (P_INTBRG0)
+}
+
+PPM_NET_CB(P_INTBRG1) {
+    // YOUR CODE HERE (P_INTBRG1)
+}
+
+PPM_NET_CB(P_INTCB0R) {
+    // YOUR CODE HERE (P_INTCB0R)
+}
+
+PPM_NET_CB(P_INTCB0RE) {
+    // YOUR CODE HERE (P_INTCB0RE)
+}
+
+PPM_NET_CB(P_INTCB0T) {
+    // YOUR CODE HERE (P_INTCB0T)
+}
+
+PPM_NET_CB(P_INTDEDF) {
+    // YOUR CODE HERE (P_INTDEDF)
+}
+
+PPM_NET_CB(P_INTDEDFR) {
+    // YOUR CODE HERE (P_INTDEDFR)
+}
+
+PPM_NET_CB(P_INTDEDR) {
+    // YOUR CODE HERE (P_INTDEDR)
+}
+
+PPM_NET_CB(P_INTDMA3) {
+    // YOUR CODE HERE (P_INTDMA3)
+}
+
+PPM_NET_CB(P_INTFL) {
+    // YOUR CODE HERE (P_INTFL)
+}
+
+PPM_NET_CB(P_INTOSD) {
+    // YOUR CODE HERE (P_INTOSD)
+}
+
+PPM_NET_CB(P_INTP13) {
+    // YOUR CODE HERE (P_INTP13)
+}
+
+PPM_NET_CB(P_INTP4) {
+    // YOUR CODE HERE (P_INTP4)
+}
+
+PPM_NET_CB(P_INTP5) {
+    // YOUR CODE HERE (P_INTP5)
+}
+
+PPM_NET_CB(P_INTUC0R) {
+    // YOUR CODE HERE (P_INTUC0R)
+}
+
+PPM_NET_CB(P_INTUC1R) {
+    // YOUR CODE HERE (P_INTUC1R)
+}
+
+PPM_NET_CB(P_INTUC2R) {
+    // YOUR CODE HERE (P_INTUC2R)
+}
+
+PPM_NET_CB(P_INTUC2RE) {
+    // YOUR CODE HERE (P_INTUC2RE)
+}
+
+PPM_NET_CB(P_INTUC2T) {
+    // YOUR CODE HERE (P_INTUC2T)
+}
+
+PPM_NET_CB(P_NMIIN) {
+    // YOUR CODE HERE (P_NMIIN)
+}
+
+PPM_REG_WRITE_CB(writeERR) {
+    // YOUR CODE HERE (writeERR)
+    *(Uns8*)user = (*(Uns8*)user & 0x78) | (data & 0x87);
+}
+
+PPM_REG_WRITE_CB(writeESOST5) {
+    // YOUR CODE HERE (writeESOST5)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeESOST6) {
+    // YOUR CODE HERE (writeESOST6)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeP) {
+    // YOUR CODE HERE (writeP)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePESC5) {
+    // YOUR CODE HERE (writePESC5)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePESC6) {
+    // YOUR CODE HERE (writePESC6)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePESMK5) {
+    // YOUR CODE HERE (writePESMK5)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePESMK6) {
+    // YOUR CODE HERE (writePESMK6)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePFC) {
+    // YOUR CODE HERE (writePFC)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePM) {
+    // YOUR CODE HERE (writePM)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePMC) {
+    // YOUR CODE HERE (writePMC)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writePRCMD) {
+    // YOUR CODE HERE (writePRCMD)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSEL) {
+    // YOUR CODE HERE (writeSEL)
+    *(Uns8*)user = (*(Uns8*)user & 0x62) | (data & 0x9d);
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

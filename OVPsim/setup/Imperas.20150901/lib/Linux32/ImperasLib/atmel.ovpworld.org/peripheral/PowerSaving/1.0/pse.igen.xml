@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral imagefile="pse.pse"
+    library="peripheral"
+    name="PowerSaving"
+    releasestatus="0"
+    saveRestore="F"
+    vendor="atmel.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="
+This model contains an accurate Register set interface.
+The functionality has only been implemented to sufficiently boot uClinux
+for more information visit http://www.atmel.com/products/at91
+"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="This model is sufficient to boot Linux"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="Rev. 1354D–ATARM–08/02"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="bp1"
+        size="0x4000">
+        <addressblock name="REG"
+            size="0x4000"
+            width="32">
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PS_CR"
+                offset="0x0"
+                width="32"
+                writefunction="PS_CR_wcb">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+                <field bitoffset="0"
+                    name="CPU"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PS_PCER"
+                offset="0x4"
+                width="32"
+                writefunction="PS_PCER_wcb">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+                <field bitoffset="8"
+                    name="PIO"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="TC2"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="TC1"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="TC0"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="US1"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="US0"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="2"/>
+                <field bitoffset="7"
+                    name="__pad7"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PS_PCDR"
+                offset="0x8"
+                width="32"
+                writefunction="PS_PCDR_wcb">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+                <field bitoffset="8"
+                    name="PIO"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="TC2"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="TC1"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="TC0"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="US1"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="US0"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="2"/>
+                <field bitoffset="7"
+                    name="__pad7"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PS_PCSR"
+                offset="0xc"
+                width="32">
+                <reset mask="4294967295"
+                    name="resetNet"
+                    value="380"/>
+                <field bitoffset="8"
+                    name="PIO"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="TC2"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="TC1"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="TC0"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="US1"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="US0"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="2"/>
+                <field bitoffset="7"
+                    name="__pad7"
+                    width="1"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

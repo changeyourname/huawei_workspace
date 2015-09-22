@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="dma"
+    releasestatus="0"
+    saveRestore="F"
+    vendor="renesas.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="Renesas DMA Controller"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="Initial implementation to support CAN DMA message transfer only"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="R01UH0128ED0700, Rev. 7.00, Oct 06, 2010"/>
+    </docsection>
+    <busmasterport addresswidth="28"
+        name="DMAPM"/>
+    <busslaveport addresswidth="32"
+        name="DMAP0"
+        size="0x10">
+        <addressblock name="abc"
+            size="0x10"
+            width="16">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DMAWC0"
+                readfunction="readDMAWC0"
+                width="16"
+                writefunction="writeDMAWC0">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Wait Control Register 0"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"
+                    value="55"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DMAWC1"
+                offset="0x2"
+                readfunction="readDMAWC1"
+                width="16"
+                writefunction="writeDMAWC1">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Wait Control Register 1"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"
+                    value="7"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <busslaveport addresswidth="32"
+        name="DMAP1"
+        size="0x100">
+        <addressblock name="abw"
+            size="0x24"
+            width="16">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR0"
+                readfunction="readMAR0"
+                width="16"
+                writefunction="writeMAR0">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR1"
+                offset="0x2"
+                readfunction="readMAR1"
+                width="16"
+                writefunction="writeMAR1">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR2"
+                offset="0x4"
+                readfunction="readMAR2"
+                width="16"
+                writefunction="writeMAR2">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR3"
+                offset="0x6"
+                readfunction="readMAR3"
+                width="16"
+                writefunction="writeMAR3">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR4"
+                offset="0x8"
+                readfunction="readMAR4"
+                width="16"
+                writefunction="writeMAR4">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR5"
+                offset="0xa"
+                readfunction="readMAR5"
+                width="16"
+                writefunction="writeMAR5">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR6"
+                offset="0xc"
+                readfunction="readMAR6"
+                width="16"
+                writefunction="writeMAR6">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR7"
+                offset="0xe"
+                readfunction="readMAR7"
+                width="16"
+                writefunction="writeMAR7">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR8"
+                offset="0x10"
+                readfunction="readMAR8"
+                width="16"
+                writefunction="writeMAR8">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MAR9"
+                offset="0x12"
+                readfunction="readMAR9"
+                width="16"
+                writefunction="writeMAR9">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Memory Start Address Register"/>
+                </docsection>
+                <reset mask="65535"
+                    name="reset"/>
+            </memorymappedregister>
+        </addressblock>
+        <addressblock name="abb"
+            offset="0x24"
+            size="0xdc"
+            width="8">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="SAR2"
+                readfunction="readSAR2"
+                width="8"
+                writefunction="writeSAR2"
+                writemask="15">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer SFR Start Adrress Register 2"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="SAR"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="SAR3"
+                offset="0x2"
+                readfunction="readSAR3"
+                width="8"
+                writefunction="writeSAR3"
+                writemask="15">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer SFR Start Adrress Register 3"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="SAR"
+                    width="4"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTFR4"
+                offset="0x64"
+                readfunction="readDTFR4"
+                width="8"
+                writefunction="writeDTFR4">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Trigger Factor register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="IFCn"
+                    width="3"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTFR5"
+                offset="0x66"
+                readfunction="readDTFR5"
+                width="8"
+                writefunction="writeDTFR5">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Trigger Factor register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="IFCn"
+                    width="3"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTFR6"
+                offset="0x68"
+                readfunction="readDTFR6"
+                width="8"
+                writefunction="writeDTFR6">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Trigger Factor register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="IFCn"
+                    width="3"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTFR7"
+                offset="0x6a"
+                readfunction="readDTFR7"
+                width="8"
+                writefunction="writeDTFR7">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Trigger Factor register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="0"
+                    name="IFCn"
+                    width="3"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR0"
+                offset="0x1c"
+                readfunction="readDTCR0"
+                width="8"
+                writefunction="writeDTCR0">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR1"
+                offset="0x1e"
+                readfunction="readDTCR1"
+                width="8"
+                writefunction="writeDTCR1">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR2"
+                offset="0x20"
+                readfunction="readDTCR2"
+                width="8"
+                writefunction="writeDTCR2">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR3"
+                offset="0x22"
+                readfunction="readDTCR3"
+                width="8"
+                writefunction="writeDTCR3">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR4"
+                offset="0x24"
+                readfunction="readDTCR4"
+                width="8"
+                writefunction="writeDTCR4">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR5"
+                offset="0x26"
+                readfunction="readDTCR5"
+                width="8"
+                writefunction="writeDTCR5">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR6"
+                offset="0x28"
+                readfunction="readDTCR6"
+                width="8"
+                writefunction="writeDTCR6">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR7"
+                offset="0x2a"
+                readfunction="readDTCR7"
+                width="8"
+                writefunction="writeDTCR7">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR8"
+                offset="0x2c"
+                readfunction="readDTCR8"
+                width="8"
+                writefunction="writeDTCR8">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DTCR9"
+                offset="0x2e"
+                readfunction="readDTCR9"
+                width="8"
+                writefunction="writeDTCR9">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Transfer Count register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DMASL"
+                offset="0x3e"
+                readfunction="readDMASL"
+                width="8"
+                writefunction="writeDMASL">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Status Register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="7"
+                    name="DMAS7"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="DMAS6"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="DMAS5"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="DMAS4"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="DMAS3"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DMAS2"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="DMAS1"
+                    width="1"/>
+                <field name="DMAS0"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DMAMCL"
+                offset="0x3c"
+                readfunction="readDMAMCL"
+                width="8"
+                writefunction="writeDMAMCL">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Mode Control Register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="7"
+                    name="DE7"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="DE6"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="DE5"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="DE4"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="DE3"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="DE2"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="DE1"
+                    width="1"/>
+                <field name="DE0"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="DMADSCL"
+                offset="0x40"
+                readfunction="readDMADSCL"
+                width="8"
+                writefunction="writeDMADSCL"
+                writemask="240">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="DMA Controller Data Size Control Register"/>
+                </docsection>
+                <reset mask="255"
+                    name="reset"/>
+                <field bitoffset="7"
+                    name="DMADCS7"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="DMADCS6"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="DMADCS5"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="DMADCS4"
+                    width="1"/>
+                <field bitoffset="0"
+                    name="__pad0"
+                    width="4"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="INTDMA0"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA1"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA2"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA3"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA4"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA5"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA6"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA7"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA8"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTDMA9"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="DMA0EN"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="DMA1EN"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="ADDMARQ0"
+        type="input"
+        updatefunction="triggerADDMARQ0"
+        updatefunctionargument="0"/>
+    <netport name="ADDMARQ1"
+        type="input"
+        updatefunction="triggerADDMARQ1"
+        updatefunctionargument="0"/>
+    <netport name="INTTS0CD"
+        type="input"
+        updatefunction="triggerINTTS0CD"
+        updatefunctionargument="0"/>
+    <netport name="INTTS1CD"
+        type="input"
+        updatefunction="triggerINTTS1CD"
+        updatefunctionargument="0"/>
+    <netport name="INTCE0C"
+        type="input"
+        updatefunction="triggerINTCE0C"
+        updatefunctionargument="0"/>
+    <netport name="INTCE1C"
+        type="input"
+        updatefunction="triggerINTCE1C"
+        updatefunctionargument="0"/>
+    <netport name="INTBE0R"
+        type="input"
+        updatefunction="triggerINTBE0R"
+        updatefunctionargument="0"/>
+    <netport name="INTBE1R"
+        type="input"
+        updatefunction="triggerINTBE1R"
+        updatefunctionargument="0"/>
+    <netport name="INTUC0R"
+        type="input"
+        updatefunction="triggerINTUC0R"
+        updatefunctionargument="0"/>
+    <netport name="INTUC1R"
+        type="input"
+        updatefunction="triggerINTUC1R"
+        updatefunctionargument="0"/>
+    <netport name="INTUC2R"
+        type="input"
+        updatefunction="triggerINTUC2R"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

@@ -1,0 +1,168 @@
+# Build the support objects needed to run TLM2.0 on Ovpsim
+# Build the user's platform
+# Objects and exes are put in the cwd
+
+############################ YOUR SYSTEMC  ####################################
+# Set this to your SystemC and installation
+# SYSTEMC_HOME   = 
+
+# If SYSTEMC is set and SYSTEMC_HOME is not then use SYSTEMC
+ifeq ($(SYSTEMC_HOME),)
+ifneq ($(SYSTEMC),)
+SYSTEMC_HOME=$(SYSTEMC)
+endif
+endif
+
+ifndef SYSTEMC_HOME
+  SYSTEMC_HOME := $(error "SYSTEMC_HOME must be defined for SystemC install directory")
+endif
+
+############################# INPUT PARAMETERS ################################
+
+SRC?=platform.cpp
+
+ifeq ($(VERBOSE),1)
+  V=
+else
+  V=@
+endif
+
+########################### END INPUT PARAMETERS ##############################
+
+ICM_INC      = $(IMPERAS_HOME)/ImpPublic/include/host
+IMPERAS_LIB  = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)
+
+SYSTEMC_INC     = $(SYSTEMC_HOME)/include
+
+ifeq ($(IMPERAS_ARCH),Linux32)
+    LIBRTL = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.so
+    SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib-linux
+    EXECSTACK = execstack --clear-execstack
+endif
+ifeq ($(IMPERAS_ARCH),Linux64)
+    LIBRTL = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.so
+    SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib-linux64
+    EXECSTACK = execstack --clear-execstack
+endif
+ifeq ($(IMPERAS_ARCH),Windows32)
+    LIBRTL = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.lib
+    SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib-mingw
+    EXECSTACK = touch
+endif
+ifeq ($(IMPERAS_ARCH),Windows64)
+    LIBRTL = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.lib
+    SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib-mingw64
+    EXECSTACK = touch
+endif
+
+TLM_CFLAGS  = -g -Wno-long-long -Wall -Werror -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE
+TLM_LDFLAGS = \
+    $(OTHER_ARCHIVES) \
+    -L$(IMPERAS_LIB) -lRuntimeLoader \
+    $(SYSTEMC_LIB_DIR)/libsystemc.a 
+
+#
+# Host/Emulation Mode setup
+#
+ifeq ($(IMPERAS_ARCH),Linux32)
+    TLM_CFLAGS  += -m32
+    TLM_LDFLAGS += -m32 -lpthread
+    HOST_PREFIX  =
+endif
+ifeq ($(IMPERAS_ARCH),Linux64)
+    TLM_CFLAGS  += -m64 -fPIC
+    TLM_LDFLAGS += -m64 -fPIC -lpthread
+    HOST_PREFIX  =
+endif
+ifeq ($(IMPERAS_ARCH),Windows32)
+  TLM_CFLAGS  += -m32 -static-libgcc
+  TLM_LDFLAGS += -m32 -static-libgcc
+  HOST_PREFIX  =
+endif
+ifeq ($(IMPERAS_ARCH),Windows64)
+  TLM_CFLAGS  += -m64 -static-libgcc
+  TLM_LDFLAGS += -m64 -static-libgcc
+  HOST_PREFIX  = x86_64-w64-mingw32-
+endif
+HOST_CXX ?= $(HOST_PREFIX)g++
+HOST_LD  ?= $(HOST_PREFIX)g++
+HOST_AR  ?= $(HOST_PREFIX)ar
+
+SUPPORT_INCS  = \
+	-I$(ICM_INC) \
+	-I$(SYSTEMC_INC) \
+	-I$(IMPERAS_HOME)/ImperasLib/source \
+	$(MODEL_INCLUDES)
+
+SYS_OBJD = Build/$(IMPERAS_ARCH)/sys
+USR_OBJD = Build/$(IMPERAS_ARCH)/usr
+
+#
+# System TLM files
+#
+VPATH     = $(wildcard $(IMPERAS_HOME)/ImperasLib/source/ovpworld.org/memory/*/*/tlm2.0)
+VPATH    += $(wildcard $(IMPERAS_HOME)/ImperasLib/source/ovpworld.org/modelSupport/*/*/tlm2.0)
+VPATH    += $(IMPERAS_HOME)/ImpPublic/source/host/icm
+SYS_SRC   = $(foreach dir, $(VPATH), $(notdir $(wildcard $(dir)/*.cpp)))
+SYS_DEP   = $(sort $(patsubst %.cpp, $(SYS_OBJD)/%.d, $(SYS_SRC)))
+SYS_OBJ   = $(sort $(patsubst %.cpp, $(SYS_OBJD)/%.o, $(SYS_SRC)))
+
+#
+# User files
+#
+USR_DEP   = $(sort $(patsubst %.cpp, $(USR_OBJD)/%.d, $(SRC)))
+USR_OBJ   = $(sort $(patsubst %.cpp, $(USR_OBJD)/%.o, $(SRC)))
+
+#
+# Platform name, first stem of SRC
+#
+EXE       = $(patsubst %.cpp,%.$(IMPERAS_ARCH).exe,$(word 1, $(SRC)))
+ARCHIVE   = $(SYS_OBJD)/tlmSupport.a
+
+################################### RULES #####################################
+
+all: $(EXE)
+
+#
+# include all the dependancy requirements
+#
+ifneq ($(MAKECMDGOALS),clean)
+    $(foreach dep,$(SYS_DEP),$(eval -include $(dep)))
+    $(foreach dep,$(USR_DEP),$(eval -include $(dep)))
+endif
+
+#
+# Rule for the USR/SYS files
+#
+$(USR_OBJD)/%.d $(SYS_OBJD)/%.d: %.cpp
+	@    echo "# Depending $@"
+	@    mkdir -p $(@D)
+	$(V) $(HOST_CXX) -MM $< $(SUPPORT_INCS) $(TLM_CFLAGS) $(CFLAGS) -MT $(@D)/$*.o -MF $@
+
+$(USR_OBJD)/%.o $(SYS_OBJD)/%.o: %.cpp
+	@    echo "# Compiling $@"
+	@    mkdir -p $(@D)
+	$(V) $(HOST_CXX) -c -o $@ $< $(SUPPORT_INCS) $(TLM_CFLAGS) $(CFLAGS)
+
+#
+# Rule for the user's files
+#
+$(EXE): $(ARCHIVE) $(USR_OBJ) $(LIBRTL)
+	@    echo "# Linking $@"
+	@    mkdir -p $(@D)
+	$(V) $(HOST_LD) -o $@ $(USR_OBJ) $(ARCHIVE) $(LDFLAGS) $(TLM_LDFLAGS)
+	$(V) test -f /usr/bin/execstack; \
+        if [ $$? -eq 0 ]; then \
+            $(EXECSTACK) $@; \
+        fi
+
+#
+# archive contains TLM support code
+#
+$(ARCHIVE): $(SYS_OBJ)
+	$(V) $(HOST_AR) rc $@ $^
+
+clean:
+	$(V) - rm -f *.exe
+	$(V) - rm -rf $(SYS_OBJD) $(USR_OBJD)
+	

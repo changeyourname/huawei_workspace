@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw clp="T"
+    clpAllArgs="T"
+    clpExtArgs="T"
+    clpStdArgs="T"
+    enableintercepts="F"
+    library="platform"
+    name="BareMetalArmCortexMSingle"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="arm.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Bare Metal Platform for an ARM Cortex-M series Processor (default Cortex-M3).
+    The bare metal platform instantiates a single ARM Cortex-M series processor instance. 
+    The processor operates using little endian data ordering.
+    It creates contiguous memory from 0x00000000 to 0xFFFFFFFF.
+    The ICM platform can be passed any application compiled to an ARM elf format.
+    It may also be passed a new variant to be used (default Cortex-M3)
+    ./platform.OS.exe --program application.CROSS.elf [ --variant &lt;model variant&gt;]"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="BareMetal platform for execution of ARM binary files compiled with Linaro 32-bit CrossCompiler toolchain for Cortex-M."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="None"/>
+    </docsection>
+    <processorinstance endian="little"
+        mips="100.000000"
+        name="cpu1">
+        <vlnvreference name="armm"
+            vendor="arm.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="armNewlib_0">
+            <vlnvreference name="armNewlib"
+                vendor="arm.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="Cortex-M3"
+            name="variant"/>
+        <attribute content="nopBKPT"
+            name="compatibility"/>
+        <attribute content="false"
+            name="resetAtTime0"/>
+        <attribute content="1"
+            name="UAL"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <memoryinstance name="memory">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

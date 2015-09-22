@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="ArmIntegratorCP_TLM2.0"
+    purpose="2"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="arm.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="This platform models the ARM INTEGRATOR CP development board using OVP models 
+and SystemC TLM2.0.
+It provides the peripherals required to boot and run a Linux Operating System.
+The main processor is an ARM926EJ-S.
+The platform comprises OVP models connected together using systemC TLM2.0 infrastructure.
+All models are OVP models with TLM2.0 wrappers.
+"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="No known limitations for executing Linux operating system."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="ARM Development Boards Integrator CP BaseBoard and Integrator Core Modules ARM9x6"/>
+    </docsection>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <processorinstance endian="little"
+        mips="200.000000"
+        name="arm1"
+        simulateexceptions="T">
+        <vlnvreference name="arm"
+            vendor="arm.ovpworld.org"/>
+        <attribute content="ARM926EJ-S"
+            name="variant"/>
+        <attribute content="ISA"
+            name="compatibility"/>
+        <attribute content="0"
+            name="showHiddenRegs"/>
+        <attribute name="override_debugMask"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+        <netportconnection connection="irq"
+            name="irq"/>
+        <netportconnection connection="fiq"
+            name="fiq"/>
+    </processorinstance>
+    <peripheralinstance name="cm">
+        <vlnvreference name="CoreModule9x6"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x10000fff"
+            loaddress="0x10000000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="pic1">
+        <vlnvreference name="IntICP"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x14000fff"
+            loaddress="0x14000000"
+            name="bport1"/>
+        <netportconnection connection="irq"
+            name="irq"/>
+        <netportconnection connection="fiq"
+            name="fiq"/>
+        <netportconnection connection="ir1"
+            name="ir1"/>
+        <netportconnection connection="ir2"
+            name="ir2"/>
+        <netportconnection connection="ir3"
+            name="ir3"/>
+        <netportconnection connection="ir4"
+            name="ir4"/>
+        <netportconnection connection="ir5"
+            name="ir5"/>
+        <netportconnection connection="ir6"
+            name="ir6"/>
+        <netportconnection connection="ir7"
+            name="ir7"/>
+        <netportconnection connection="ir8"
+            name="ir8"/>
+        <netportconnection connection="ir23"
+            name="ir23"/>
+        <netportconnection connection="ir24"
+            name="ir24"/>
+    </peripheralinstance>
+    <peripheralinstance name="pic2">
+        <vlnvreference name="IntICP"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xca000fff"
+            loaddress="0xca000000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="ethlan">
+        <vlnvreference name="LAN9118"
+            vendor="smsc.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xc8000fff"
+            loaddress="0xc8000000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="pit">
+        <vlnvreference name="IcpCounterTimer"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x13000fff"
+            loaddress="0x13000000"
+            name="bport1"/>
+        <netportconnection connection="ir5"
+            name="irq0"/>
+        <netportconnection connection="ir6"
+            name="irq1"/>
+        <netportconnection connection="ir7"
+            name="irq2"/>
+    </peripheralinstance>
+    <peripheralinstance name="icp">
+        <vlnvreference name="IcpControl"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xcb00000f"
+            loaddress="0xcb000000"
+            name="bport1"/>
+    </peripheralinstance>
+    <memoryinstance name="ram1">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x7ffffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <bridge name="ram1Bridge">
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x87ffffff"
+            loaddress="0x80000000"
+            name="sp"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0x7ffffff"
+            loaddress="0x0"
+            name="mp"/>
+    </bridge>
+    <memoryinstance name="ambaDummy">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1d000fff"
+            loaddress="0x1d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="lcdDummy">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xc0ffffff"
+            loaddress="0xc0000000"
+            name="sp1"/>
+    </memoryinstance>
+    <peripheralinstance name="ld1">
+        <vlnvreference name="DebugLedAndDipSwitch"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1a000fff"
+            loaddress="0x1a000000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="kb1">
+        <vlnvreference name="KbPL050"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000fff"
+            loaddress="0x18000000"
+            name="bport1"/>
+        <netportconnection connection="ir3"
+            name="irq"/>
+        <attribute content="0"
+            name="isMouse"/>
+        <attribute content="0"
+            name="grabDisable"/>
+    </peripheralinstance>
+    <peripheralinstance name="ms1">
+        <vlnvreference name="KbPL050"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x19000fff"
+            loaddress="0x19000000"
+            name="bport1"/>
+        <netportconnection connection="ir4"
+            name="irq"/>
+        <attribute content="1"
+            name="isMouse"/>
+        <attribute content="1"
+            name="grabDisable"/>
+    </peripheralinstance>
+    <peripheralinstance name="rtc">
+        <vlnvreference name="RtcPL031"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x15000fff"
+            loaddress="0x15000000"
+            name="bport1"/>
+        <netportconnection connection="ir8"
+            name="irq"/>
+    </peripheralinstance>
+    <peripheralinstance diagnosticlevel="1"
+        name="uart1">
+        <vlnvreference name="UartPL011"
+            vendor="arm.ovpworld.org"/>
+        <attribute content="ARM"
+            name="variant"/>
+        <attribute name="log"/>
+        <attribute name="outfile"/>
+        <attribute name="portnum"/>
+        <attribute name="console"/>
+        <attribute name="finishOnDisconnect"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x16000fff"
+            loaddress="0x16000000"
+            name="bport1"/>
+        <netportconnection connection="ir1"
+            name="irq"/>
+    </peripheralinstance>
+    <peripheralinstance diagnosticlevel="1"
+        name="uart2">
+        <vlnvreference name="UartPL011"
+            vendor="arm.ovpworld.org"/>
+        <attribute content="ARM"
+            name="variant"/>
+        <attribute name="log"/>
+        <attribute name="outfile"/>
+        <attribute name="portnum"/>
+        <attribute name="console"/>
+        <attribute name="finishOnDisconnect"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x17000fff"
+            loaddress="0x17000000"
+            name="bport1"/>
+        <netportconnection connection="ir2"
+            name="irq"/>
+    </peripheralinstance>
+    <peripheralinstance name="mmci">
+        <vlnvreference name="MmciPL181"
+            vendor="arm.ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1c000fff"
+            loaddress="0x1c000000"
+            name="bport1"/>
+        <netportconnection connection="ir23"
+            name="irq0"/>
+        <netportconnection connection="ir24"
+            name="irq1"/>
+    </peripheralinstance>
+    <peripheralinstance name="smartLoader">
+        <vlnvreference name="SmartLoaderArmLinux"
+            vendor="arm.ovpworld.org"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            loaddress="0x0"
+            name="mport"/>
+        <attribute name="kernel"/>
+        <attribute name="initrd"/>
+        <attribute name="command"/>
+        <attribute name="physicalbase"/>
+        <attribute name="memsize"/>
+        <attribute name="disable"/>
+    </peripheralinstance>
+    <nets name="nets">
+        <net name="irq"/>
+        <net name="fiq"/>
+        <net name="ir1"/>
+        <net name="ir2"/>
+        <net name="ir3"/>
+        <net name="ir4"/>
+        <net name="ir5"/>
+        <net name="ir6"/>
+        <net name="ir7"/>
+        <net name="ir8"/>
+        <net name="ir23"/>
+        <net name="ir24"/>
+    </nets>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

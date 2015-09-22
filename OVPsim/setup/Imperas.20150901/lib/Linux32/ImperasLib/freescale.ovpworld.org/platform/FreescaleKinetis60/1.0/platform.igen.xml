@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw clp="T"
+    clpAllArgs="T"
+    clpExtArgs="T"
+    clpStdArgs="T"
+    enableintercepts="F"
+    library="platform"
+    name="FreescaleKinetis60"
+    purpose="2"
+    releasestatus="4"
+    stoponctrlc="T"
+    vendor="freescale.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="
+Freescale Kinetis K60 Platform
+"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="
+Only enough functionality modeled to boot MQX. Most peripherals modeled as dummy register ports
+"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="Development based on document number: K60P144M100SF2RM Rev. 6, Nov 2011"/>
+    </docsection>
+    <bus addresswidth="32"
+        name="pBus"/>
+    <memoryinstance name="flash">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0xfffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="sram">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x2000ffff"
+            loaddress="0x1fff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <processorinstance endian="little"
+        mips="120.000000"
+        name="cpu"
+        simulateexceptions="T">
+        <vlnvreference name="armm"
+            vendor="arm.ovpworld.org"
+            version="1.0"/>
+        <busmasterportconnection connection="pBus"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="pBus"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+        <attribute content="Cortex-M4F"
+            name="variant"/>
+        <attribute content="1"
+            name="UAL"/>
+        <attribute content="4"
+            name="override_priorityBits"/>
+        <attribute content="94"
+            name="override_numInterrupts"/>
+        <netportconnection connection="int45"
+            name="int45"/>
+        <netportconnection connection="int47"
+            name="int47"/>
+        <netportconnection connection="int49"
+            name="int49"/>
+        <netportconnection connection="int51"
+            name="int51"/>
+        <netportconnection connection="int53"
+            name="int53"/>
+        <netportconnection connection="int55"
+            name="int55"/>
+    </processorinstance>
+    <peripheralinstance name="dmac">
+        <vlnvreference name="KinetisDMAC"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40008fff"
+            loaddress="0x40008000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="flexbus">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4000cfff"
+            loaddress="0x4000c000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="mpu">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4000dfff"
+            loaddress="0x4000d000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="fmc">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4001ffff"
+            loaddress="0x4001f000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="dmamux0">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40021fff"
+            loaddress="0x40021000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="dmamux1">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40022fff"
+            loaddress="0x40022000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="rtc">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4003dfff"
+            loaddress="0x4003d000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="simlpl">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40047fff"
+            loaddress="0x40047000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="sim">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40048fff"
+            loaddress="0x40048000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="amux">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40049fff"
+            loaddress="0x40049000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="bmux">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4004afff"
+            loaddress="0x4004a000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="cmux">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4004bfff"
+            loaddress="0x4004b000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="dmux">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4004cfff"
+            loaddress="0x4004c000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="emux">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4004dfff"
+            loaddress="0x4004d000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="swwd">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40052fff"
+            loaddress="0x40052000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="mcg">
+        <vlnvreference name="KinetisMCG"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40064fff"
+            loaddress="0x40064000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="osc0">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x40065fff"
+            loaddress="0x40065000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart0">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4006afff"
+            loaddress="0x4006a000"
+            name="bport1"/>
+        <netportconnection connection="int45"
+            name="Interrupt"/>
+        <attribute content="8"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="uart0_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart1">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4006bfff"
+            loaddress="0x4006b000"
+            name="bport1"/>
+        <netportconnection connection="int47"
+            name="Interrupt"/>
+        <attribute content="8"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="1"
+            name="finishOnDisconnect"/>
+        <attribute content="uart1_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart2">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4006cfff"
+            loaddress="0x4006c000"
+            name="bport1"/>
+        <netportconnection connection="int49"
+            name="Interrupt"/>
+        <attribute content="1"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="1"
+            name="finishOnDisconnect"/>
+        <attribute content="uart2_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart3">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4006dfff"
+            loaddress="0x4006d000"
+            name="bport1"/>
+        <netportconnection connection="int51"
+            name="Interrupt"/>
+        <attribute content="1"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="1"
+            name="finishOnDisconnect"/>
+        <attribute content="uart3_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <peripheralinstance name="llwu">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4007cfff"
+            loaddress="0x4007c000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="pmc">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4007dfff"
+            loaddress="0x4007d000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="smc">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4007efff"
+            loaddress="0x4007e000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="rcm">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x4007ffff"
+            loaddress="0x4007f000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="osc1">
+        <vlnvreference name="dummyPort"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x400e5fff"
+            loaddress="0x400e5000"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart4">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x400eafff"
+            loaddress="0x400ea000"
+            name="bport1"/>
+        <netportconnection connection="int53"
+            name="Interrupt"/>
+        <attribute content="1"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="1"
+            name="finishOnDisconnect"/>
+        <attribute content="uart4_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <peripheralinstance name="uart5">
+        <vlnvreference name="Uart"
+            vendor="freescale.ovpworld.org"/>
+        <busslaveportconnection connection="pBus"
+            hiaddress="0x400ebfff"
+            loaddress="0x400eb000"
+            name="bport1"/>
+        <netportconnection connection="int55"
+            name="Interrupt"/>
+        <attribute content="1"
+            name="fifoSize"/>
+        <attribute content="60000000"
+            name="moduleClkFreq"/>
+        <attribute content="1"
+            name="finishOnDisconnect"/>
+        <attribute content="uart5_outfile.txt"
+            name="outfile"/>
+    </peripheralinstance>
+    <formalarg description="enable console on UART0"
+        mustbespecified="F"
+        name="uart0console"
+        type="boolvar"/>
+    <formalarg description="enable console on UART1"
+        mustbespecified="F"
+        name="uart1console"
+        type="boolvar"/>
+    <formalarg description="enable console on UART2"
+        mustbespecified="F"
+        name="uart2console"
+        type="boolvar"/>
+    <formalarg description="enable console on UART3"
+        mustbespecified="F"
+        name="uart3console"
+        type="boolvar"/>
+    <formalarg description="enable console on UART4"
+        mustbespecified="F"
+        name="uart4console"
+        type="boolvar"/>
+    <formalarg description="enable console on UART5"
+        mustbespecified="F"
+        name="uart5console"
+        type="boolvar"/>
+    <nets name="nets">
+        <net name="int45"/>
+        <net name="int47"/>
+        <net name="int49"/>
+        <net name="int51"/>
+        <net name="int53"/>
+        <net name="int55"/>
+    </nets>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

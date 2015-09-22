@@ -1,0 +1,57 @@
+
+############################# INPUT PARAMETERS ################################
+# (Edit these to include more or different platform source files)
+
+!IFDEF PLATFORM 
+!ELSE
+PLATFORM=platform
+!ENDIF
+
+!IFDEF VERBOSE
+V=
+!ELSE
+V=@
+!ENDIF
+
+
+########################### END INPUT PARAMETERS ##############################
+
+ICM_INC         = $(IMPERAS_HOME)/ImpPublic/include/host
+IMPERAS_LIB     = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)
+
+
+CFLAGS  = /GR /vmg /MTd /EHsc /nologo /W3 /DSC_INCLUDE_DYNAMIC_PROCESSES \
+          /D_CRT_SECURE_NO_WARNINGS /D_CRT_SECURE_NO_DEPRECATE \
+          /D_CRT_NONSTDC_NO_DEPRECATE \
+          /wd 4267
+
+LDFLAGS = /SUBSYSTEM:CONSOLE /nologo \
+          /LIBPATH:$(IMPERAS_LIB) libRuntimeLoader.lib \
+          /ignore:4075
+
+CPP     = cl.exe
+LD      = link.exe
+MKDIR  	= mkdir
+
+ICM_INC = -I$(ICM_INC) 
+
+
+PLATFORM_EXE    = $(PLATFORM).$(IMPERAS_ARCH).exe
+
+################################### RULES #####################################
+
+all: $(PLATFORM_EXE)
+
+$(PLATFORM).obj: $(PLATFORM).c
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(ICM_INC) $(CFLAGS) %s /Fo"$@"
+
+# rule for the executable
+$(PLATFORM_EXE): $(PLATFORM).obj $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.dll
+	@    echo # Linking $@
+	$(V) $(LD) /OUT:$@ $(PLATFORM).obj $(LDFLAGS)
+
+
+clean:
+	rm -f *.obj *.exe
+

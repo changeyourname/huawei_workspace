@@ -1,0 +1,13 @@
+colors hiforeground black background white hibackground red foreground black
+window .root 759x617+241+297
+window .cmdtool +1009+752
+window .stack 731x120+1008+601
+window .register 304x272+1433+297
+window .breakpoints 547x178+1191+754
+window .localvar 416x272+1008+296
+eval igui::View_Source 1
+eval igui::View_Machine_Code 1
+eval igui::View_Console 1
+eval .root.pane sashpos 0 359
+eval .root.pane sashpos 1 486
+

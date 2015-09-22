@@ -1,0 +1,185 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_REG_READ_CB(byteTest) {
+    // YOUR CODE HERE (byteTest)
+    return 0;
+}
+
+PPM_REG_READ_CB(defaultRdCB) {
+    // YOUR CODE HERE (defaultRdCB)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(defaultWrCB) {
+    // YOUR CODE HERE (defaultWrCB)
+}
+
+PPM_REG_READ_CB(hwCfgRd) {
+    // YOUR CODE HERE (hwCfgRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(hwCfgWr) {
+    // YOUR CODE HERE (hwCfgWr)
+}
+
+PPM_REG_READ_CB(idRev) {
+    // YOUR CODE HERE (idRev)
+    return 0;
+}
+
+PPM_REG_READ_CB(intEnRd) {
+    // YOUR CODE HERE (intEnRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(intEnWr) {
+    // YOUR CODE HERE (intEnWr)
+}
+
+PPM_REG_READ_CB(intStsRd) {
+    // YOUR CODE HERE (intStsRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(intStsWr) {
+    // YOUR CODE HERE (intStsWr)
+}
+
+PPM_REG_READ_CB(irqCfgRd) {
+    // YOUR CODE HERE (irqCfgRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(irqCfgWr) {
+    // YOUR CODE HERE (irqCfgWr)
+}
+
+PPM_REG_READ_CB(macCsrCmdRd) {
+    // YOUR CODE HERE (macCsrCmdRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(macCsrCmdWr) {
+    // YOUR CODE HERE (macCsrCmdWr)
+}
+
+PPM_REG_READ_CB(macCsrDataRd) {
+    // YOUR CODE HERE (macCsrDataRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(macCsrDataWr) {
+    // YOUR CODE HERE (macCsrDataWr)
+}
+
+PPM_REG_READ_CB(rxCfgRd) {
+    // YOUR CODE HERE (rxCfgRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(rxCfgWr) {
+    // YOUR CODE HERE (rxCfgWr)
+}
+
+PPM_REG_READ_CB(rxDropRd) {
+    // YOUR CODE HERE (rxDropRd)
+    return 0;
+}
+
+PPM_REG_READ_CB(rxFifoInfRd) {
+    // YOUR CODE HERE (rxFifoInfRd)
+    return 0;
+}
+
+PPM_REG_READ_CB(rxFifoRd) {
+    // YOUR CODE HERE (rxFifoRd)
+    return 0;
+}
+
+PPM_REG_READ_CB(rxStatusFifoPeek) {
+    // YOUR CODE HERE (rxStatusFifoPeek)
+    return 0;
+}
+
+PPM_REG_READ_CB(rxStatusFifoRd) {
+    // YOUR CODE HERE (rxStatusFifoRd)
+    return 0;
+}
+
+PPM_REG_READ_CB(txCfgRd) {
+    // YOUR CODE HERE (txCfgRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(txCfgWr) {
+    // YOUR CODE HERE (txCfgWr)
+}
+
+PPM_REG_READ_CB(txFifoInfRd) {
+    // YOUR CODE HERE (txFifoInfRd)
+    return 0;
+}
+
+PPM_REG_WRITE_CB(txFifoWr) {
+    // YOUR CODE HERE (txFifoWr)
+}
+
+PPM_REG_READ_CB(txStatusFifoPeek) {
+    // YOUR CODE HERE (txStatusFifoPeek)
+    return 0;
+}
+
+PPM_REG_READ_CB(txStatusFifoRd) {
+    // YOUR CODE HERE (txStatusFifoRd)
+    return 0;
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+PPM_DESTRUCTOR_CB(destructor) {
+    // YOUR CODE HERE (destructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

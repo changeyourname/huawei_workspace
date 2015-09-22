@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral imagefile="pse.pse"
+    library="peripheral"
+    name="GT6412x"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="marvell.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="GT64120 System Controller.
+Diagnostic levels:
+ PCI_SLAVE           0x03
+ PCI_CONFIG_MASTER   0x04
+ PCI_EMPTY           0x08
+ INT_ACK             0x10
+ MAIN_BUS            0x20
+ INFO                0x40"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="This model has sufficient functionality to allow a Linux Kernel to Boot on the MIPS:MALTA platform."/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="busPort"
+        remappable="T"
+        size="0x1000"/>
+    <busmasterport addresswidth="16"
+        mustbeconnected="T"
+        name="PCIconfigM"/>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="PCIconfigS"
+        size="0x10000"/>
+    <busslaveport addresswidth="16"
+        name="PCIconfig"
+        remappable="T"
+        size="0x0"/>
+    <busmasterport addresswidth="1"
+        name="PCIackM"/>
+    <netport name="timerInt"
+        type="output"
+        updatefunctionargument="0"/>
+    <formalattribute name="PCIslot"
+        type="integer">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify which PCI slot the device occupies."/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="PCIfunction"
+        type="integer">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify which PCI function the device implements."/>
+        </docsection>
+    </formalattribute>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

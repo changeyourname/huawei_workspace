@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="BareMetalArm7Dual_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="imperas.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="
+    Bare Metal Platform for an ARM7 Processor using SystemC TLM2.0 as infrastructure.
+    The bare metal platform instantiates two ARM7 processor instance sub-systems, using little endian data ordering.
+    It creates two memories within each sub-system:
+       program memory from 0x00000000 to 0x00FFFFFF
+       stack memory   from 0xffff0000 to 0xffffffff"/>
+    </docsection>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <bus addresswidth="32"
+        name="bus2"/>
+    <processorinstance endian="big"
+        id="0"
+        mips="100.000000"
+        name="cpu1">
+        <vlnvreference name="arm"
+            vendor="arm.ovpworld.org"/>
+        <attribute content="ARM7TDMI"
+            name="variant"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <processorinstance endian="big"
+        id="1"
+        mips="100.000000"
+        name="cpu2">
+        <vlnvreference name="arm"
+            vendor="arm.ovpworld.org"/>
+        <attribute content="ARM7TDMI"
+            name="variant"/>
+        <busmasterportconnection connection="bus2"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus2"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="ram10">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xffffff"
+            loaddress="0x0"
+            name="sp10"/>
+    </memoryinstance>
+    <memoryinstance name="ram11">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            loaddress="0xffff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="ram20">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus2"
+            hiaddress="0xffffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="ram21">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus2"
+            hiaddress="0xffffffff"
+            loaddress="0xffff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

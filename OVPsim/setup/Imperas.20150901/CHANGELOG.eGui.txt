@@ -1,0 +1,57 @@
+###############################################################################
+#                           CHANGELOG.eGUI.txt                                #
+#      Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com         #
+#               Covered under your Software License Agreement                 #
+#                                                                             #
+#                          IMPERAS CONFIDENTIAL                               #
+#                                                                             #
+###############################################################################
+    Date : 20150825                        Version : 20150901.0
+###############################################################################
+
+Install OVPsim_FreeRTOS_arm demo and see this file for a brief introduction
+on running the Imperas eGui (based on Eclipse) IDE:
+    $IMPERAS_HOME/Demo/Platforms/OVPsim_FreeRTOS_arm
+
+KNOWN LIMITATIONS:
+------------------
+
+Debug View:
+- When a breakpoint is hit the instance corresponding to where the breakpoint 
+  occurred is not always automatically selected. You can examine the status  
+  info listed for each ID to find the one that indicates "breakpoint". (The 
+  status is shown in parentheses at the end of the "ID" line)
+
+Breakpoints View:
+- In multiprocessor platforms, deleting or disabling breakpoints from the 
+  breakpoint view or the source window view may not work. It is possible to 
+  delete breakpoints from the MPD Console by using the gdb command
+  'info breakpoints' to see the current breakpoints and 'delete <number>'
+  to delete a specific breakpoint.
+
+Memory View:
+- If a memory monitor spans a region with both valid memory and invalid memory 
+  the entire view will show as invalid memory.
+
+Source View:
+- Breakpoint markers in source file views may have spurious error markers 
+  indicating "Breakpoint installation failed". This is due to the CDT 
+  behavior of adding breakpoints on all targets, and can be ignored.
+
+Programmers View:
+- The Programmers View window does not update automatically when a breakpoint
+  is hit. Selecting a different stack entry in the Debug view will cause it
+  to update.
+- The rbrk and wbrk fields are not functional. In the future these will allow
+  eventpoints to be set to cause breaks on reads or writes of a register.
+
+Programmers View events:
+- Programmers View events may be managed by entering commands directly in the
+  MPD console but are not displayed properly in the breakpoints view, and may
+  cause spurious error messages.
+
+A problem with "Clear Breakpoints Status" may be reported when terminating a 
+simulation in some situations. This can be safely ignored.
+
+The suspend button does not work when running the Windows 32-bit version on a
+64-bit host (i.e. when setup.bat has been run with the -m32 option). 

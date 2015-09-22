@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    destructor="destructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="xps-uartlite"
+    releasestatus="0"
+    saveRestore="F"
+    vendor="xilinx.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Xilinx Uart-Lite"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"
+            text="Register Accurate &amp; Functional Model"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="DS573 Jun 22, 2011 v1.02.a"/>
+    </docsection>
+    <formalmacro name="BHM_SER_OPEN_AUTO_FORMALS"/>
+    <formalmacro name="BHM_RECORD_REPLAY_FORMALS"/>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="plb"
+        size="0x10">
+        <addressblock name="REG"
+            size="0x10"
+            width="32">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="RxFifo"
+                readfunction="ReadRxFifo"
+                width="32">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="TxFifo"
+                offset="0x4"
+                width="32"
+                writefunction="WriteTxFifo">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="Stat"
+                offset="0x8"
+                readfunction="ReadStat"
+                width="32">
+                <reset mask="4294967295"
+                    name="resetNet"
+                    value="2"/>
+                <field name="RxFifoValidData"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="RxFifoFull"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="TxFifoEmpty"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="TxFifoFull"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="IntrEnabled"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="OverrunError"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="FrameError"
+                    width="1"/>
+                <field bitoffset="7"
+                    name="ParityError"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="Ctrl"
+                offset="0xc"
+                width="32"
+                writefunction="WriteCtrl">
+                <reset mask="4294967295"
+                    name="resetNet"/>
+                <field name="RstTxFifo"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="RstRxFifo"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="EnableIntr"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="__pad2"
+                    width="2"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Interrupt"
+        type="output"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

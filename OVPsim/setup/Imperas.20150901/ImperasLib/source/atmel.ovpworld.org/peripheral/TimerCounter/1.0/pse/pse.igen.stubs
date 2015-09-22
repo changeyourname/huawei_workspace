@@ -1,0 +1,176 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_REG_WRITE_CB(TC_BCR_wcb) {
+    // YOUR CODE HERE (TC_BCR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_BMR_wcb) {
+    // YOUR CODE HERE (TC_BMR_wcb)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CCR_wcb0) {
+    // YOUR CODE HERE (TC_CCR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CCR_wcb1) {
+    // YOUR CODE HERE (TC_CCR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CCR_wcb2) {
+    // YOUR CODE HERE (TC_CCR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CMR_wcb0) {
+    // YOUR CODE HERE (TC_CMR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CMR_wcb1) {
+    // YOUR CODE HERE (TC_CMR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CMR_wcb2) {
+    // YOUR CODE HERE (TC_CMR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CVR_wcb0) {
+    // YOUR CODE HERE (TC_CVR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CVR_wcb1) {
+    // YOUR CODE HERE (TC_CVR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_CVR_wcb2) {
+    // YOUR CODE HERE (TC_CVR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IDR_wcb0) {
+    // YOUR CODE HERE (TC_IDR_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IDR_wcb1) {
+    // YOUR CODE HERE (TC_IDR_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IDR_wcb2) {
+    // YOUR CODE HERE (TC_IDR_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IER_wcb0) {
+    // YOUR CODE HERE (TC_IER_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IER_wcb1) {
+    // YOUR CODE HERE (TC_IER_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_IER_wcb2) {
+    // YOUR CODE HERE (TC_IER_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RA_wcb0) {
+    // YOUR CODE HERE (TC_RA_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RA_wcb1) {
+    // YOUR CODE HERE (TC_RA_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RA_wcb2) {
+    // YOUR CODE HERE (TC_RA_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RB_wcb0) {
+    // YOUR CODE HERE (TC_RB_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RB_wcb1) {
+    // YOUR CODE HERE (TC_RB_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RB_wcb2) {
+    // YOUR CODE HERE (TC_RB_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RC_wcb0) {
+    // YOUR CODE HERE (TC_RC_wcb0)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RC_wcb1) {
+    // YOUR CODE HERE (TC_RC_wcb1)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(TC_RC_wcb2) {
+    // YOUR CODE HERE (TC_RC_wcb2)
+    *(Uns32*)user = data;
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

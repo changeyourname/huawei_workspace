@@ -1,0 +1,442 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20140806.0
+//                          Thu Sep 18 23:22:19 2014
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// This file declares sc_main and functions to be implemented by the user.
+// This file will not be overwritten by subsequent igen runs
+// unless --overwrite is specified.
+// To conditionally set model attributes, use
+// icmOverride("instance-path", "<value>");
+
+#include <fcntl.h>
+#include "tlm.h"
+#include "ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp"
+extern "C" {
+#include "platform.sc_options.igen.h"
+}
+#include "platform.sc_constructor.igen.h"
+
+////////////////////////////////////////////////////////////////////////////////
+//                         U S E R   F U N C T I O N S
+////////////////////////////////////////////////////////////////////////////////
+
+// Physical address of base of RAM - use as start address
+#define PHYS_BASE 0x80000000
+
+#define PREFIX "ArmVersatileExpress_CA9_TLM2"
+
+//
+// Return the entry address in the Boot file, if one is specified.
+// Cache the result so we don't read the file over and over
+//
+static Addr getBootElfEntry() {
+
+    static Addr bootElfEntry = -1ULL;
+
+    if (bootElfEntry != -1ULL) {
+
+        // Already set - no action
+
+    } else if (options.boot) {
+
+        if (!icmReadObjectFileHeader(options.boot, NULL, NULL, &bootElfEntry)) {
+            icmMessage("F", PREFIX"_URB", "Unable to load Boot code file '%s'", options.boot);
+        }
+
+    }
+
+    return bootElfEntry;
+
+}
+
+//
+// Set non-zero default configuration values - may be overridden from command line
+//
+static void setDefaults() {
+
+    // Allows detecting when not set, since 0 is a valid value
+    options.image0addr = -1ULL;
+    options.image1addr = -1ULL;
+    options.zimageaddr = -1ULL;
+    options.initrdaddr = -1ULL;
+    options.boardid    = -1;
+
+}
+
+static void overrideError(const char *target, const char *value) {
+    icmMessage(
+        "W", PREFIX"_OE",
+        "Unable to override attribute '%s' with value '%s'", target, value
+    );
+}
+
+static void overrideUns32x(const char *target, Uns32 value) {
+
+    char buf[32];
+
+    snprintf(buf, sizeof(buf), "0x%x", value);
+
+    if (!icmOverride(target, buf)) {
+        overrideError(target, buf);
+    }
+}
+
+static void overrideUns64x(const char *target, Uns64 value) {
+
+    char buf[32];
+
+    snprintf(buf, sizeof(buf), "0x"FMT_6408x, value);
+
+    if (!icmOverride(target, buf)) {
+        overrideError(target, buf);
+    }
+}
+
+static void overrideBool(const char *target, Bool value) {
+
+    const char *buf = value ? "1" : "0";
+
+    if (!icmOverride(target, buf)) {
+        overrideError(target, buf);
+    }
+}
+
+static void overrideString(const char *target, const char *value) {
+
+    if (!icmOverride(target, value)) {
+        overrideError(target, value);
+    }
+}
+
+#define SMARTLOADER "ArmVersatileExpress_CA9_TLM2.smartLoader/"
+#define UART0       "ArmVersatileExpress_CA9_TLM2.uart0/"
+#define UART1       "ArmVersatileExpress_CA9_TLM2.uart1/"
+#define LCD1        "ArmVersatileExpress_CA9_TLM2.lcd1/"
+#define CLCD        "ArmVersatileExpress_CA9_TLM2.clcd/"
+//
+// Set overrides for attributes affected by command line options
+//
+static void setOverrides() {
+
+    if (options.zimage) {
+
+        overrideString(SMARTLOADER"kernel", options.zimage);
+
+        if (options.linuxcmd) {
+            overrideString(SMARTLOADER"command", options.linuxcmd);
+        }
+
+        if (options.boardid != -1) {
+            overrideUns32x(SMARTLOADER"boardid", options.boardid);
+        }
+
+        if (options.linuxmem) {
+            overrideUns64x(SMARTLOADER"memsize", options.linuxmem);
+        }
+
+        if (options.zimageaddr != -1ULL) {
+            overrideUns64x(SMARTLOADER"kerneladdr", options.zimageaddr);
+        }
+
+        if (options.boot) {
+            overrideUns64x(SMARTLOADER"bootaddr", getBootElfEntry() );
+        }
+
+        if (options.initrd) {
+            overrideString(SMARTLOADER"initrd",     options.initrd);
+        }
+
+        if (options.initrdaddr != -1ULL) {
+            overrideUns64x(SMARTLOADER"initrdaddr", options.initrdaddr);
+        }
+
+    } else {
+
+        // Disable smart loader if LINUX is not used
+        overrideString(SMARTLOADER"disable", "1");
+
+    }
+
+    if (options.uart0port) {
+        Uns32 portNum;
+        if (strcmp(options.uart0port, "auto") == 0) {
+            overrideString(UART0"console", "1");
+        } else if (sscanf(options.uart0port, "%i", &portNum) == 1) {
+            overrideString(UART0"portnum", options.uart0port);
+        } else {
+            icmMessage(
+                "W", PREFIX"_IO",
+                "Invalid argument for uart0port: '%s'. Must be 'auto' or a number.",
+                options.uart0port
+            );
+        }
+    }
+
+    if (options.uart1port) {
+        Uns32 portNum;
+        if (strcmp(options.uart1port, "auto") == 0) {
+            overrideString(UART1"console", "1");
+        } else if (sscanf(options.uart1port, "%i", &portNum) == 1) {
+            overrideString(UART1"portnum", options.uart1port);
+        } else {
+            icmMessage(
+                "W", PREFIX"_IO",
+                "Invalid argument for uart1port: '%s'. Must be 'auto' or a number.",
+                options.uart1port
+            );
+        }
+    }
+
+    if (options.nographics) {
+        overrideBool(LCD1"noGraphics", options.nographics);
+        overrideBool(CLCD"noGraphics", options.nographics);
+    }
+
+}
+
+//
+// Check for valid command line arguments specified
+//
+static Bool postCmdParser(void) {
+
+    Bool ok = True;
+
+    // Check args for errors
+    if (!options.zimage && !options.boot && !options.image0) {
+        icmPrintf("Warning: None of zimage, image0 or boot specified. Must specify executable some other way\n");
+    }
+
+    if (!options.zimage && (options.initrd || options.linuxsym || options.linuxcmd || options.linuxmem)) {
+        icmPrintf("Error: Linux-only argument specified with out specifying zimage\n");
+        ok = False;
+    }
+
+    if (!options.image0 && options.image0sym) {
+        icmPrintf("Error: image0sym specified without image0\n");
+        ok = False;
+    }
+
+    if (!options.image1 && options.image1sym) {
+        icmPrintf("Error: image1sym specified without image1\n");
+        ok = False;
+    }
+
+    if (options.image0 && options.image0addr==-1ULL) {
+        icmPrintf("Error: image0sym specified without image0addr\n");
+        ok = False;
+    }
+
+    if (options.image1 && options.image1addr==-1ULL) {
+        icmPrintf("Error: image1sym specified without image1addr\n");
+        ok = False;
+    }
+
+    if (ok) {
+        setOverrides();
+    }
+
+    return ok;
+
+}
+
+#define BYTES_PER_ACCESS  128
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
+//
+// Load the binary image file at the indicated address
+// Returns number of bytes loaded or 0 if an error
+//
+static Uns32 loadImage(icmProcessorP processor, const char *filename, Uns32 addr) {
+
+    Int32 fd = open(filename, O_RDONLY | O_BINARY);
+
+    if (fd < 0) {
+        icmMessage("E", PREFIX, "Cannot open image file %s", filename);
+        return 0;
+    }
+
+    // Get the size of the file
+    Int32 size = lseek(fd, 0, SEEK_END);
+    lseek(fd, 0, SEEK_SET);
+
+    // Copy the file to simulated memory
+    Uns32 bytes = size;
+    Uns32 dest  = addr;
+    char  buff[BYTES_PER_ACCESS];
+    while (bytes) {
+
+        Uns32 thisAccess = (bytes > BYTES_PER_ACCESS) ? BYTES_PER_ACCESS : bytes;
+
+        thisAccess = read(fd, buff, thisAccess);
+
+        if (!icmWriteProcessorMemory(processor, dest, buff, thisAccess)) {
+
+            icmMessage(
+                "E", PREFIX"_UWI",
+                "Unable to write image file %s to simulated memory: failed at 0x%08x",
+                filename, dest
+            );
+
+            close(fd);
+            return 0;
+
+        }
+
+        dest  += thisAccess;
+        bytes -= thisAccess;
+
+    }
+
+    close(fd);
+
+    icmMessage(
+            "I", PREFIX"_IFL",
+            "Image file %s loaded (%u bytes) on %s",
+            filename, size, icmGetProcessorName(processor, 0)
+    );
+
+    return size;
+}
+
+//
+// Load a symbol file on a processor
+//
+static void loadSymbols(icmProcessorP processor, const char *symFile) {
+    icmLoadSymbols(processor, symFile, False);
+    icmMessage(
+        "I", PREFIX"_SFL",
+        "Symbols file %s loaded on %s",
+        symFile, icmGetProcessorName(processor, 0)
+    );
+}
+
+//
+// Do application setup for each leaf processor
+//
+static ICM_SMP_ITERATOR_FN(setupApplication) {
+
+    if (icmSMPIsLeaf(processor)) {
+
+        Uns32 smpIndex = icmGetSMPIndex(processor);
+
+        const char *appName = NULL;
+        const char *imgName = smpIndex==0 ? options.image0     : options.image1;
+        const char *imgSyms = smpIndex==0 ? options.image0sym  : options.image1sym;
+        Uns32       imgAddr = smpIndex==0 ? options.image0addr : options.image1addr;
+        Addr        start   = 0;
+
+        // Is this processor running Linux?
+        // (Linux runs on both processors if no application for cpu1 specified)
+        if (options.zimage && (smpIndex==0 || !imgName)) {
+
+            // Running Linux on this processor
+            appName = "Linux";
+
+            // Linux image file is loaded by smartLoader peripheral
+            // so just load a symbol file here, if one was specified,
+            if (options.linuxsym) loadSymbols(processor, options.linuxsym);
+
+            // Set start address to physical base, where smartLoader writes the boot code
+            start = PHYS_BASE;
+
+        }
+
+        // Load image file if indicated
+        if (imgName) {
+
+            Uns32 imageSize = loadImage(processor, imgName, imgAddr);
+
+            if (imageSize) {
+                if (imgSyms) {
+                    loadSymbols(processor, imgSyms);
+                }
+            }
+            if (!appName) appName = imgName;
+            start = options.boot ? getBootElfEntry() : imgAddr;
+        }
+
+        // Set processor's starting address
+        icmSetPC(processor, start);
+
+        icmMessage(
+            "I", PREFIX"_LAF",
+            "%s loaded on %s (start address set to 0x"FMT_A08x")",
+            appName ? appName : "nothing", icmGetProcessorName(processor, 0), start
+        );
+
+    }
+}
+
+static Bool postPlatformConstruct(ArmVersatileExpress_CA9_TLM2 &top) {
+
+    if (options.boot) {
+        // Use the processor to load memory with the boot file.
+        top.cpu.loadLocalMemory(options.boot, (icmLoaderAttrs)(ICM_LOAD_VERBOSE));
+    }
+
+    // Setup application on each leaf processor
+    icmIterAllDescendants(top.cpu.getProcessorP(), setupApplication, NULL);
+
+    // top.sysRegs.traceBuses(true);
+    // top.sysRegs.setDiagnosticLevel(2U);
+    // top.cpu.traceBuses(true);
+    return True;
+
+}
+
+
+#include "platform.sc_clp.igen.h"
+
+////////////////////////////////////////////////////////////////////////////////
+//                                   M A I N
+////////////////////////////////////////////////////////////////////////////////
+
+int sc_main (int argc, char *argv[]) {
+    // Initialize options to default values
+    setDefaults();
+
+    if(!cmdParser(argc, (const char **)argv)) {
+        return 1;
+    }
+    if(!postCmdParser())  {
+        return 1;
+    }
+
+    ArmVersatileExpress_CA9_TLM2 ArmVersatileExpress_CA9_TLM2 ("ArmVersatileExpress_CA9_TLM2");
+
+    if(!postPlatformConstruct(ArmVersatileExpress_CA9_TLM2)) {
+        return 1;
+    }
+
+    sc_core::sc_start();
+
+    return 0;
+}
+

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral extensionfile="model"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="79C970"
+    releasestatus="0"
+    saveRestore="F"
+    vendor="amd.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="
+PCI:Ethernet interface. Implements part of the AMD AM79C97xx series devices.
+
+diagnosticlevel:
+    bits 0:1 give levels 0:3 for the network hardware.
+    bits 2:3 give levels 0:3 for the user:mode SLIRP interface."/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="Sufficient to Boot MIPS Linux."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="AMD Am79C973/Am79C975 PCnet-FAST III Single-Chip 10/100 Mbps PCI Ethernet Controller with Integrated PHY Datasheet"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="busPort"
+        remappable="T"
+        size="0x8">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="PCI main bus connection for register access."/>
+        </docsection>
+    </busslaveport>
+    <busslaveport addresswidth="32"
+        name="PCIconfig"
+        remappable="T"
+        size="0x800">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="PCI configuration bus connection."/>
+        </docsection>
+    </busslaveport>
+    <busmasterport addresswidth="32"
+        name="dmaPort">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="PCI DMA bus connection."/>
+        </docsection>
+    </busmasterport>
+    <netport name="intOut0"
+        type="output"
+        updatefunctionargument="0"/>
+    <formalattribute name="PCIslot"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Set the PCI slot at which the Ethernet card is installed"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="PCIfunction"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Set the PCI function of the device. The default of 0 is correct for this device."/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="ethereal"
+        type="string">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Set a log file name and turn on packet logging using ethereal format. Every packet passing trough the device will be added to the file. Use the freely available &apos;ethereal&apos; program to analyze the output. Example: /home/my_user/my_ethereal_log_file.txt"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="maxEtherLength"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Only used when ethereal attribute set. Specify the max length for each packet logged."/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="pollDelay"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Allows the rate the network is checked for packets to transfer to be altered ."/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="MAC"
+        type="integer">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Set the MAC address of the NIC, as read from the PCI bus.
+Note that the interface to the host&apos;s network is at the TCP/UPD level so it is
+not possible to affect the actual MAC address.
+Example: ab:cd:ef:01:23:45"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="redir"
+        type="string">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify a list of ports to open on the host and redirect to the guest.
+Format:
+redirect{,redirect}
+
+redirect        := protocol:host_port:guest_ip:guest_port
+protocol        := udp|tcp
+host_port       := integer
+guest_ip        := integer.integer.integer.integer
+guest_port      := integer
+
+Example:
+tcp:10080:10.0.2.15:80,tcp:10021:10.0.2.15:21
+
+This opens ports 10080 and 10021 on the host and redirects them to the guest&apos;s
+http and ftp ports. This could be used if http and ftp servers are running on the guest.
+
+The default sub-net of the network interface is 10.0.2.0;  This can be changed
+(see below), but there is rarely any need; each network card is on a private network
+invisible to all other devices (even another network card in the same platform). TCP and
+UDP packets are routed to the real network using N.A.T. (like in a SOHO router).
+
+In this example, the guest Linux configures the network IP as 10.0.2.15, which is correct
+for the 10.0.2.0 virtual subnet it is connected to."/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="tftpPrefix"
+        type="string">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Enable the TFTP server emulation and set the tftp root directory.
+tftp is a trivial FTP protocol (port 69) used usually to boot diskless computers on a LAN.
+When this feature is enabled, the network card intercepts all TFTP &apos;get&apos; requests,
+regardless of their destination, and searches the supplied directory for the requested file.
+Thus, a TFTP client running on the guest platform can fetch files without a server on the host.
+Note that there is no &apos;put&apos; feature.
+Example: /home/my_user/my_tftp_directory"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="localNet"
+        type="string">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Change the local network address from its default of 10.0.2.0 (rarely required, see above).
+Example: 192.168.0.0"/>
+        </docsection>
+    </formalattribute>
+    <formalmacro name="BHM_RECORD_REPLAY_FORMALS"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

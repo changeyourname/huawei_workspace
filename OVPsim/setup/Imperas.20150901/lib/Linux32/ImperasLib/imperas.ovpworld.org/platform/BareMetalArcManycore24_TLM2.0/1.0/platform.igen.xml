@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="BareMetalArcManycore24_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="imperas.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="
+    This is a platform that instantiates 24 ARC processors within a SystemC TLM2.0 infrastructure.
+    Each processor has independent memory areas for program memory 0x00000000 to 0x000fffff
+                                                    stack memory 0x3d000000 to 0x3d0fffff."/>
+    </docsection>
+    <bus addresswidth="32"
+        name="Bus0"/>
+    <processorinstance endian="little"
+        id="0"
+        mips="100.000000"
+        name="cpu0">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_0">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus0"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus0"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program0">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus0"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack0">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus0"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus1"/>
+    <processorinstance endian="little"
+        id="1"
+        mips="100.000000"
+        name="cpu1">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_1">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program1">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus1"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack1">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus1"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus2"/>
+    <processorinstance endian="little"
+        id="2"
+        mips="100.000000"
+        name="cpu2">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_2">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus2"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus2"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program2">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus2"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack2">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus2"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus3"/>
+    <processorinstance endian="little"
+        id="3"
+        mips="100.000000"
+        name="cpu3">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_3">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus3"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus3"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program3">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus3"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack3">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus3"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus4"/>
+    <processorinstance endian="little"
+        id="4"
+        mips="100.000000"
+        name="cpu4">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_4">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus4"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus4"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program4">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus4"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack4">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus4"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus5"/>
+    <processorinstance endian="little"
+        id="5"
+        mips="100.000000"
+        name="cpu5">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_5">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus5"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus5"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program5">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus5"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack5">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus5"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus6"/>
+    <processorinstance endian="little"
+        id="6"
+        mips="100.000000"
+        name="cpu6">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_6">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus6"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus6"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program6">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus6"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack6">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus6"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus7"/>
+    <processorinstance endian="little"
+        id="7"
+        mips="100.000000"
+        name="cpu7">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_7">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus7"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus7"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program7">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus7"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack7">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus7"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus8"/>
+    <processorinstance endian="little"
+        id="8"
+        mips="100.000000"
+        name="cpu8">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_8">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus8"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus8"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program8">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus8"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack8">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus8"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus9"/>
+    <processorinstance endian="little"
+        id="9"
+        mips="100.000000"
+        name="cpu9">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_9">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus9"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus9"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program9">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus9"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack9">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus9"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus10"/>
+    <processorinstance endian="little"
+        id="10"
+        mips="100.000000"
+        name="cpu10">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_10">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus10"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus10"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program10">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus10"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack10">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus10"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus11"/>
+    <processorinstance endian="little"
+        id="11"
+        mips="100.000000"
+        name="cpu11">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_11">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus11"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus11"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program11">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus11"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack11">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus11"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus12"/>
+    <processorinstance endian="little"
+        id="12"
+        mips="100.000000"
+        name="cpu12">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_12">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus12"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus12"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program12">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus12"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack12">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus12"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus13"/>
+    <processorinstance endian="little"
+        id="13"
+        mips="100.000000"
+        name="cpu13">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_13">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus13"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus13"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program13">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus13"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack13">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus13"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus14"/>
+    <processorinstance endian="little"
+        id="14"
+        mips="100.000000"
+        name="cpu14">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_14">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus14"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus14"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program14">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus14"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack14">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus14"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus15"/>
+    <processorinstance endian="little"
+        id="15"
+        mips="100.000000"
+        name="cpu15">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_15">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus15"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus15"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program15">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus15"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack15">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus15"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus16"/>
+    <processorinstance endian="little"
+        id="16"
+        mips="100.000000"
+        name="cpu16">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_16">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus16"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus16"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program16">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus16"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack16">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus16"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus17"/>
+    <processorinstance endian="little"
+        id="17"
+        mips="100.000000"
+        name="cpu17">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_17">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus17"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus17"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program17">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus17"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack17">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus17"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus18"/>
+    <processorinstance endian="little"
+        id="18"
+        mips="100.000000"
+        name="cpu18">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_18">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus18"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus18"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program18">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus18"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack18">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus18"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus19"/>
+    <processorinstance endian="little"
+        id="19"
+        mips="100.000000"
+        name="cpu19">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_19">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus19"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus19"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program19">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus19"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack19">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus19"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus20"/>
+    <processorinstance endian="little"
+        id="20"
+        mips="100.000000"
+        name="cpu20">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_20">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus20"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus20"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program20">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus20"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack20">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus20"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus21"/>
+    <processorinstance endian="little"
+        id="21"
+        mips="100.000000"
+        name="cpu21">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_21">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus21"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus21"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program21">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus21"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack21">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus21"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus22"/>
+    <processorinstance endian="little"
+        id="22"
+        mips="100.000000"
+        name="cpu22">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_22">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus22"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus22"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program22">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus22"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack22">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus22"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bus addresswidth="32"
+        name="Bus23"/>
+    <processorinstance endian="little"
+        id="23"
+        mips="100.000000"
+        name="cpu23">
+        <vlnvreference name="arc"
+            vendor="arc.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="arcNewlib_23">
+            <vlnvreference name="arcNewlib"
+                vendor="arc.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="gdb"
+            name="format"/>
+        <busmasterportconnection connection="Bus23"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="Bus23"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <memoryinstance name="Program23">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus23"
+            hiaddress="0x1fffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="Stack23">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="Bus23"
+            hiaddress="0x3d0fffff"
+            loaddress="0x3d000000"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

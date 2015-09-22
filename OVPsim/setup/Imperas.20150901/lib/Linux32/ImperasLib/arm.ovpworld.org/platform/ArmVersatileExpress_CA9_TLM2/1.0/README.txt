@@ -1,0 +1,78 @@
+Copyright (c) 2005-2015 Imperas Ltd. All Rights Reserved.
+
+Name
+----
+    arm.ovpworld.org/platform/ArmVersatileExpress_CA9_TLM2/1.0
+
+
+Attributes that can be overridden
+---------------------------------
+    cpu/variant
+    cpu/compatibility
+    cpu/UAL
+    cpu/showHiddenRegs
+    cpu/override_CBAR
+    sysRegs/SYS_PROCID0
+    kb1/isKeyboard
+    kb1/grabDisable
+    ms1/isMouse
+    ms1/grabDisable
+    uart0/variant
+    uart0/log
+    uart0/outfile
+    uart0/portnum
+    uart0/console
+    uart0/finishOnDisconnect
+    uart1/variant
+    uart1/log
+    uart1/outfile
+    uart1/portnum
+    uart1/console
+    uart1/finishOnDisconnect
+    uart2/variant
+    uart2/log
+    uart2/outfile
+    uart2/portnum
+    uart2/console
+    uart2/finishOnDisconnect
+    uart3/variant
+    uart3/log
+    uart3/outfile
+    uart3/portnum
+    uart3/console
+    uart3/finishOnDisconnect
+    clcd/resolution
+    clcd/noGraphics
+    lcd1/resolution
+    lcd1NS/mpLoAddress
+    lcd1NS/spLoAddress
+    lcd1NS/portSize
+    dmc1NS/mpLoAddress
+    dmc1NS/spLoAddress
+    dmc1NS/portSize
+    smc1NS/mpLoAddress
+    smc1NS/spLoAddress
+    smc1NS/portSize
+    scc1NS/mpLoAddress
+    scc1NS/spLoAddress
+    scc1NS/portSize
+    timer45NS/mpLoAddress
+    timer45NS/spLoAddress
+    timer45NS/portSize
+    wdt2NS/mpLoAddress
+    wdt2NS/spLoAddress
+    wdt2NS/portSize
+    faxi1NS/mpLoAddress
+    faxi1NS/spLoAddress
+    faxi1NS/portSize
+    saxi1NS/mpLoAddress
+    saxi1NS/spLoAddress
+    saxi1NS/portSize
+    smartLoader/kernel
+    smartLoader/initrd
+    smartLoader/command
+    smartLoader/physicalbase
+    smartLoader/memsize
+    smartLoader/boardid
+    smartLoader/disable
+

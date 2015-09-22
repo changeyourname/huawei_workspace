@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_NET_CB(irqUpdate) {
+    // YOUR CODE HERE (irqUpdate)
+}
+
+PPM_REG_READ_CB(readFIQ) {
+    // YOUR CODE HERE (readFIQ)
+    return *(Uns32*)user;
+}
+
+PPM_REG_READ_CB(readIRQ) {
+    // YOUR CODE HERE (readIRQ)
+    return *(Uns32*)user;
+}
+
+PPM_REG_READ_CB(readLEV) {
+    // YOUR CODE HERE (readLEV)
+    return *(Uns32*)user;
+}
+
+PPM_REG_READ_CB(readLevel) {
+    // YOUR CODE HERE (readLevel)
+    return *(Uns32*)user;
+}
+
+PPM_REG_WRITE_CB(writeCLR) {
+    // YOUR CODE HERE (writeCLR)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeFIQC) {
+    // YOUR CODE HERE (writeFIQC)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeFIQS) {
+    // YOUR CODE HERE (writeFIQS)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSCL) {
+    // YOUR CODE HERE (writeSCL)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSET) {
+    // YOUR CODE HERE (writeSET)
+    *(Uns32*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSST) {
+    // YOUR CODE HERE (writeSST)
+    *(Uns32*)user = data;
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

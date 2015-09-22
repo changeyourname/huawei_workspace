@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="MipsMaltaLinux_TLM2.0"
+    purpose="2"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="mips.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="This is a platform representing a MIPS Malta development board.
+    It provides the peripherals required to boot and run a Linux Operating System.
+    A single MIPS32 architecture processor is instantiated in this platform.
+    This instance could be duplicated to instantiate further processors to easily create an SMP platform.
+    Attributes are provided for configuration of the generic ISA model for a specific processor.
+    The processor model is configured to operate as a MIPS32 4KEc.
+
+    The main SDRAM and Flash memory is modeled using RAM models. Both are initialised in places by the
+    &apos;SmartLoaderLinux&apos;. The SmartLoaderLinux allows ease of use of changing kernel command lines,
+    loading an initial ram disk and creating the boot flash(s). The operation of the SmartloaderLinux is configured
+    using a number of attributes.  
+    The kernel attribute of the SmartLoaderLinux and the imagefile of the processor must be consistent.
+
+    NOTE: a non Mips Malta peripheral &apos;AlphaDisplay16x2&apos; has been defined in this platform definition
+          to be used for demo purposes. It should be removed if there is a memory error in the address space 0x18000100-0x18000103
+
+    If this platform is not part of your installation, then it is available for download from www.OVPworld.org/MIPSuser."/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="Verification has only been carried out using Little Endian memory ordering."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="MIPS Malta User&apos;s Manual MD00048-2B-MALTA-USM-1.07.pdf
+	   CoreFPGA User&apos;s Manual MD00116-2B-COREFPGA-USM-01.00.pdf
+	   Linux for the MIPS Malta Development Platform Useer&apos;s Guide MD00646-2B-LINUXMALTA-USM-01.03.pdf"/>
+    </docsection>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <bus addresswidth="16"
+        name="PCIconfigBus"/>
+    <bus addresswidth="1"
+        name="PCIackBus"/>
+    <bus addresswidth="3"
+        name="cascadeBus"/>
+    <processorinstance endian="little"
+        mips="100.000000"
+        name="mipsle1"
+        simulateexceptions="T"
+        startaddress="0xbfc00000">
+        <vlnvreference name="mips32"
+            vendor="mips.ovpworld.org"/>
+        <attribute content="24KEf"
+            name="variant"/>
+        <attribute content="disable"
+            name="vectoredinterrupt"/>
+        <attribute content="63"
+            name="config1MMUSizeM1"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+        <netportconnection connection="i8259Int"
+            name="hwint0"/>
+    </processorinstance>
+    <memoryinstance name="Core_Board_SDRAM">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x7ffffff"
+            loaddress="0x0"
+            name="sp1"/>
+    </memoryinstance>
+    <peripheralinstance name="Core_Board_SDRAM_promInit">
+        <vlnvreference library="peripheral"
+            name="SmartLoaderLinux"
+            vendor="mips.ovpworld.org"
+            version="1.0"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0x7fffffff"
+            loaddress="0x0"
+            name="mport"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1fc00013"
+            loaddress="0x1fc00010"
+            name="idport"/>
+        <attribute content="vmlinux"
+            name="kernel"/>
+        <attribute content="0x00000420"
+            name="boardid"/>
+        <attribute content="initrd.gz"
+            name="initrd"/>
+        <attribute name="root"/>
+        <attribute name="nonelinux"/>
+        <attribute name="bootimage"/>
+        <attribute content="console=ttyS0"
+            name="command"/>
+    </peripheralinstance>
+    <bus addresswidth="32"
+        name="flashBus"/>
+    <memoryinstance name="Monitor_Flash">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="flashBus"
+            hiaddress="0x1e3fffff"
+            loaddress="0x1e000000"
+            name="sp1"/>
+    </memoryinstance>
+    <bridge name="map">
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1e0fffff"
+            loaddress="0x1e000000"
+            name="sp1"/>
+        <busmasterportconnection connection="flashBus"
+            hiaddress="0x1e0fffff"
+            loaddress="0x1e000000"
+            name="mp1"/>
+    </bridge>
+    <bridge name="remap1">
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1fc0000f"
+            loaddress="0x1fc00000"
+            name="sp1"/>
+        <busmasterportconnection connection="flashBus"
+            hiaddress="0x1e00000f"
+            loaddress="0x1e000000"
+            name="mp1"/>
+    </bridge>
+    <bridge name="remap2">
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1fffffff"
+            loaddress="0x1fc00014"
+            name="sp1"/>
+        <busmasterportconnection connection="flashBus"
+            hiaddress="0x1e3fffff"
+            loaddress="0x1e000014"
+            name="mp1"/>
+    </bridge>
+    <peripheralinstance name="PIIX4">
+        <vlnvreference library="peripheral"
+            name="82371EB"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <attribute content="10"
+            name="PCIslot"/>
+    </peripheralinstance>
+    <peripheralinstance name="PIIX4-IDE">
+        <vlnvreference library="peripheral"
+            name="PciIDE"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <attribute content="10"
+            name="PCIslot"/>
+        <attribute content="1"
+            name="PCIfunction"/>
+        <attribute content="mipsel_hda"
+            name="Drive0Name"/>
+        <attribute content="mipsel_hdb"
+            name="Drive1Name"/>
+        <attribute content="mipsel_cd"
+            name="Drive2Name"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <busslaveportconnection connection="bus1"
+            name="busPort"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="dmaPort"/>
+        <netportconnection connection="intCtl_ir14"
+            name="intOut0"/>
+        <netportconnection connection="intCtl_ir15"
+            name="intOut1"/>
+    </peripheralinstance>
+    <peripheralinstance name="PCI_USB">
+        <vlnvreference library="peripheral"
+            name="PciUSB"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <attribute content="10"
+            name="PCIslot"/>
+        <attribute content="2"
+            name="PCIfunction"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <busslaveportconnection connection="bus1"
+            name="busPort"/>
+    </peripheralinstance>
+    <peripheralinstance name="PCI_PM">
+        <vlnvreference library="peripheral"
+            name="PciPM"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <attribute content="10"
+            name="PCIslot"/>
+        <attribute content="3"
+            name="PCIfunction"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <busslaveportconnection connection="bus1"
+            name="busPort"/>
+    </peripheralinstance>
+    <peripheralinstance name="PCI_NET">
+        <vlnvreference library="peripheral"
+            name="79C970"
+            vendor="amd.ovpworld.org"
+            version="1.0"/>
+        <attribute content="11"
+            name="PCIslot"/>
+        <attribute content="0"
+            name="PCIfunction"/>
+        <attribute content="1000"
+            name="pollDelay"/>
+        <attribute name="redir"/>
+        <attribute name="tftpPrefix"/>
+        <attribute name="ethereal"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <busslaveportconnection connection="bus1"
+            name="busPort"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="dmaPort"/>
+        <netportconnection connection="intCtl_ir10"
+            name="intOut0"/>
+    </peripheralinstance>
+    <peripheralinstance name="intCtrlMaster">
+        <vlnvreference library="peripheral"
+            name="8259A"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000021"
+            loaddress="0x18000020"
+            name="io"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180004d0"
+            loaddress="0x180004d0"
+            name="elcr"/>
+        <busmasterportconnection connection="cascadeBus"
+            hiaddress="0x7"
+            name="cascade"/>
+        <busslaveportconnection connection="PCIackBus"
+            hiaddress="0x0"
+            loaddress="0x0"
+            name="PCIackS"/>
+        <netportconnection connection="i8259Int"
+            name="intp"/>
+        <netportconnection connection="intCtl_ir1"
+            name="ir1"/>
+        <netportconnection connection="intCtl_ir3"
+            name="ir3"/>
+        <netportconnection connection="intCtl_ir4"
+            name="ir4"/>
+        <netportconnection connection="i8259Cascade"
+            name="ir2"/>
+        <attribute content="master"
+            name="spen"/>
+    </peripheralinstance>
+    <peripheralinstance name="intCtrlSlave">
+        <vlnvreference library="peripheral"
+            name="8259A"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180000a1"
+            loaddress="0x180000a0"
+            name="io"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180004d1"
+            loaddress="0x180004d1"
+            name="elcr"/>
+        <busslaveportconnection connection="cascadeBus"
+            hiaddress="0x2"
+            loaddress="0x2"
+            name="PCIackS"/>
+        <netportconnection connection="intCtl_ir8"
+            name="ir0"/>
+        <netportconnection connection="intCtl_ir10"
+            name="ir2"/>
+        <netportconnection connection="intCtl_ir12"
+            name="ir4"/>
+        <netportconnection connection="intCtl_ir14"
+            name="ir6"/>
+        <netportconnection connection="intCtl_ir15"
+            name="ir7"/>
+        <netportconnection connection="i8259Cascade"
+            name="intp"/>
+        <attribute content="slave"
+            name="spen"/>
+    </peripheralinstance>
+    <peripheralinstance name="Ps2">
+        <vlnvreference library="peripheral"
+            name="Ps2Control"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <attribute content="50000"
+            name="pollPeriod"/>
+        <attribute name="disableInput"/>
+        <attribute content="1"
+            name="grabDisable"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000067"
+            loaddress="0x18000060"
+            name="config"/>
+        <netportconnection connection="intCtl_ir1"
+            name="kbdInterrupt"/>
+        <netportconnection connection="intCtl_ir12"
+            name="mouseInterrupt"/>
+    </peripheralinstance>
+    <peripheralinstance name="pit">
+        <vlnvreference library="peripheral"
+            name="8253"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000043"
+            loaddress="0x18000040"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="rtc">
+        <vlnvreference library="peripheral"
+            name="MC146818"
+            vendor="motorola.ovpworld.org"
+            version="1.0"/>
+        <attribute name="timefromhost"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000071"
+            loaddress="0x18000070"
+            name="busPort"/>
+        <netportconnection connection="intCtl_ir8"
+            name="timerInt"/>
+    </peripheralinstance>
+    <peripheralinstance name="uartTTY0">
+        <vlnvreference library="peripheral"
+            name="16550"
+            vendor="national.ovpworld.org"
+            version="1.0"/>
+        <attribute name="infile"/>
+        <attribute content="uartTTY0.log"
+            name="outfile"/>
+        <attribute name="portnum"/>
+        <attribute content="enable"
+            name="console"/>
+        <attribute content="y"
+            name="finishOnDisconnect"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180003ff"
+            loaddress="0x180003f8"
+            name="bport1"/>
+        <netportconnection connection="intCtl_ir4"
+            name="intOut"/>
+    </peripheralinstance>
+    <peripheralinstance name="uartTTY1">
+        <vlnvreference library="peripheral"
+            name="16550"
+            vendor="national.ovpworld.org"
+            version="1.0"/>
+        <attribute name="infile"/>
+        <attribute content="uartTTY1.log"
+            name="outfile"/>
+        <attribute name="portnum"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180002ff"
+            loaddress="0x180002f8"
+            name="bport1"/>
+        <netportconnection connection="intCtl_ir3"
+            name="intOut"/>
+    </peripheralinstance>
+    <peripheralinstance name="uartCBUS">
+        <vlnvreference library="peripheral"
+            name="16450C"
+            vendor="mips.ovpworld.org"
+            version="1.0"/>
+        <attribute name="infile"/>
+        <attribute name="outfile"/>
+        <attribute name="portnum"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1f00093f"
+            loaddress="0x1f000900"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="fd0">
+        <vlnvreference library="peripheral"
+            name="82077AA"
+            vendor="intel.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x180003f7"
+            loaddress="0x180003f0"
+            name="bport1"/>
+    </peripheralinstance>
+    <peripheralinstance name="maltaFpga">
+        <vlnvreference library="peripheral"
+            name="MaltaFPGA"
+            vendor="mips.ovpworld.org"
+            version="1.0"/>
+        <attribute content="1"
+            name="stoponsoftreset"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1f0008ff"
+            loaddress="0x1f000000"
+            name="busPort1"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x1f000fff"
+            loaddress="0x1f000a00"
+            name="busPort2"/>
+    </peripheralinstance>
+    <peripheralinstance name="alphaDisplay">
+        <vlnvreference name="Alpha2x16Display"
+            vendor="ovpworld.org"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x18000103"
+            loaddress="0x18000100"
+            name="busPort"/>
+    </peripheralinstance>
+    <peripheralinstance name="sysControl">
+        <vlnvreference library="peripheral"
+            name="GT6412x"
+            vendor="marvell.ovpworld.org"
+            version="1.0"/>
+        <busslaveportconnection connection="bus1"
+            name="busPort"/>
+        <busmasterportconnection connection="PCIconfigBus"
+            hiaddress="0xffff"
+            name="PCIconfigM"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            name="PCIconfig"/>
+        <busmasterportconnection connection="PCIackBus"
+            hiaddress="0x1"
+            name="PCIackM"/>
+        <busslaveportconnection connection="PCIconfigBus"
+            hiaddress="0xffff"
+            loaddress="0x0"
+            name="PCIconfigS"/>
+    </peripheralinstance>
+    <nets name="nets">
+        <net name="i8259Int"/>
+        <net name="intCtl_ir14"/>
+        <net name="intCtl_ir15"/>
+        <net name="intCtl_ir10"/>
+        <net name="intCtl_ir1"/>
+        <net name="intCtl_ir3"/>
+        <net name="intCtl_ir4"/>
+        <net name="i8259Cascade"/>
+        <net name="intCtl_ir8"/>
+        <net name="intCtl_ir12"/>
+    </nets>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

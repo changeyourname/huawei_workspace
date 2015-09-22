@@ -1,0 +1,125 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                              Version 99999999
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include "icm/icmCpuManager.h"
+
+// Be careful to avoid overwriting any edits if igen is run a second time.
+// Only use -overwrite if you wish to overwrite this file.
+
+#include "platform.options.igen.h"
+#include "platform.handles.igen.h"
+#include "platform.constructor.igen.h"
+
+#include "platform.clp.igen.h"
+////////////////////////////////////////////////////////////////////////////////
+//                                   M A I N
+////////////////////////////////////////////////////////////////////////////////
+
+#define PLATFORM    "ArmIntegratorCP"
+#define UART        "uart1"
+#define SMARTLOADER "smartLoader"
+#define LCD         "lcd"
+#define CPU         "arm1"
+
+int main(int argc, const char *argv[]) {
+    if(!cmdParser(argc, argv)) {
+        return 1;
+    }
+    // postCmdParser code goes here
+    //
+    // Check to see what UART options are used
+    //
+    // NOTE
+    // We should be using the following rather than adding options.openuartport but cannot get at parser
+    // Cannot use options.uartport directly as it may be set to 0!
+    //     Bool setUartport = icmCLParseArgUsed (parser,"uartport");
+    if (options.uartconsole && options.uartporten) {
+    	icmMessage("E", PLATFORM"_CFG", "Can only specify one of --uartport and --uartconsole");
+    } else if (options.uartporten) {
+        char buf[32];
+        snprintf(buf, sizeof(buf), "0x"FMT_6408x, options.uartport);
+        icmOverride(PLATFORM"/"UART"/portnum", buf);			// Override the parameter to cause the UART to open port "portnum"
+
+    } else if (options.uartconsole) {
+    	icmOverride(PLATFORM"/"UART"/console", "1");			// Override the parameter to cause the UART to open a console
+    }
+
+    if (options.uartconsole || options.uartporten) {
+        icmOverride(PLATFORM"/"UART"/finishOnDisconnect", "1");
+        icmOverride(PLATFORM"/"UART"/diagnosticlevel", "1");
+    }
+
+    if(options.nographics) {
+    	icmOverride(PLATFORM"/"LCD"/noGraphics", "1");
+    }
+
+    // Check to see if the program argument is loading a non Linux Kernel
+    // NOTE: options.nolinuc should be 'icmCLParseArgUsed (parser,"program")'
+	if (options.nolinux) {
+//		if(icmCLParseArgUsed (parser,"kernel")) {
+//			icmMessage("E", PLATFORM, "Arguments '--program' and '--kernel' cannot be used together");
+//		} else {
+			icmMessage("I", PLATFORM, "Loading baremetal application, disabling '%s'", SMARTLOADER);
+	        icmOverride(PLATFORM"/"SMARTLOADER"/disable", "1");
+
+// NOTE: Not able to override the processor semihost yet
+//	        if (options.semihost) {
+//	            icmOverride(PLATFORM"/"CPU"/semihost", options.semihost);
+//	        }
+
+//		}
+	} else {
+    	if(options.kernel) {
+    		icmOverride(PLATFORM"/"SMARTLOADER"/kernel", options.kernel);
+    	}
+    	if(options.ramdisk) {
+    		icmOverride(PLATFORM"/"SMARTLOADER"/initrd", options.ramdisk);
+    	}
+
+    }
+
+    platformConstructor();
+
+    // postPlatformConstruct code goes here
+
+    icmSimulationStarting();
+
+    icmSimulatePlatform();
+
+    // postSimulate code goes here
+
+    icmTerminate();
+    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////

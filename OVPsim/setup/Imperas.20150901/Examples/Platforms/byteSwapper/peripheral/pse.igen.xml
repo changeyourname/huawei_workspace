@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="init"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="Simple32"
+    vendor="ovpworld.com"
+    version="1.0">
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="sp1"
+        size="0x10">
+        <addressblock name="ab1"
+            size="0x10"
+            width="32">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="r0"
+                width="32">
+                <reset mask="4294967295"
+                    name="reset"
+                    value="16909060"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="r1"
+                offset="0x4"
+                width="32">
+                <reset mask="4294967295"
+                    name="reset"
+                    value="286397204"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="r2"
+                offset="0x8"
+                width="32">
+                <reset mask="4294967295"
+                    name="reset"
+                    value="555885348"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="r3"
+                offset="0xc"
+                width="32">
+                <reset mask="4294967295"
+                    name="reset"
+                    value="825373492"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="reset"
+        type="input"
+        updatefunction="reset"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

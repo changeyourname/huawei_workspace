@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisPIT"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x140"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="MCR"
+                width="32"
+                writefunction="writeMCR"
+                writemask="3">
+                <reset mask="4294967295"
+                    name="Reset"
+                    value="2"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="PIT Module Control Register, offset: 0x0 "/>
+                </docsection>
+                <field name="FRZ"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="MDIS"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LDVAL0"
+                offset="0x100"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Load Value Register, array offset: 0x100, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TSV"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="CVAL0"
+                offset="0x104"
+                readfunction="readCVAL"
+                viewfunction="viewCVAL"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Current Timer Value Register, array offset: 0x104, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TVL"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TCTRL0"
+                offset="0x108"
+                width="32"
+                writefunction="writeTCTRL"
+                writemask="3">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Control Register, array offset: 0x108, array step: 0x10 "/>
+                </docsection>
+                <field name="TEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="TIE"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TFLG0"
+                offset="0x10c"
+                width="32"
+                writefunction="writeTFLG"
+                writemask="1">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Flag Register, array offset: 0x10C, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TIF"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LDVAL1"
+                offset="0x110"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Load Value Register, array offset: 0x100, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TSV"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="CVAL1"
+                offset="0x114"
+                readfunction="readCVAL"
+                viewfunction="viewCVAL"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Current Timer Value Register, array offset: 0x104, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TVL"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TCTRL1"
+                offset="0x118"
+                width="32"
+                writefunction="writeTCTRL"
+                writemask="3">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Control Register, array offset: 0x108, array step: 0x10 "/>
+                </docsection>
+                <field name="TEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="TIE"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TFLG1"
+                offset="0x11c"
+                width="32"
+                writefunction="writeTFLG"
+                writemask="1">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Flag Register, array offset: 0x10C, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TIF"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LDVAL2"
+                offset="0x120"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Load Value Register, array offset: 0x100, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TSV"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="CVAL2"
+                offset="0x124"
+                readfunction="readCVAL"
+                viewfunction="viewCVAL"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Current Timer Value Register, array offset: 0x104, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TVL"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TCTRL2"
+                offset="0x128"
+                width="32"
+                writefunction="writeTCTRL"
+                writemask="3">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Control Register, array offset: 0x108, array step: 0x10 "/>
+                </docsection>
+                <field name="TEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="TIE"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TFLG2"
+                offset="0x12c"
+                width="32"
+                writefunction="writeTFLG"
+                writemask="1">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Flag Register, array offset: 0x10C, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TIF"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LDVAL3"
+                offset="0x130"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Load Value Register, array offset: 0x100, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TSV"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="CVAL3"
+                offset="0x134"
+                readfunction="readCVAL"
+                viewfunction="viewCVAL"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Current Timer Value Register, array offset: 0x104, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TVL"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TCTRL3"
+                offset="0x138"
+                width="32"
+                writefunction="writeTCTRL"
+                writemask="3">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Control Register, array offset: 0x108, array step: 0x10 "/>
+                </docsection>
+                <field name="TEN"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="TIE"
+                    width="1"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="TFLG3"
+                offset="0x13c"
+                width="32"
+                writefunction="writeTFLG"
+                writemask="1">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Timer Flag Register, array offset: 0x10C, array step: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="TIF"
+                    width="1"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="irq0"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="IRQ0 port"/>
+        </docsection>
+    </netport>
+    <netport name="trg0"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Trigger0 port"/>
+        </docsection>
+    </netport>
+    <netport name="irq1"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="IRQ1 port"/>
+        </docsection>
+    </netport>
+    <netport name="trg1"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Trigger1 port"/>
+        </docsection>
+    </netport>
+    <netport name="irq2"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="IRQ2 port"/>
+        </docsection>
+    </netport>
+    <netport name="trg2"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Trigger2 port"/>
+        </docsection>
+    </netport>
+    <netport name="irq3"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="IRQ3 port"/>
+        </docsection>
+    </netport>
+    <netport name="trg3"
+        type="output"
+        updatefunctionargument="0">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Trigger3 port"/>
+        </docsection>
+    </netport>
+    <formalattribute name="frequency"
+        type="integer">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Frequency of the clock input in Hz (default is 80MHz)"/>
+        </docsection>
+    </formalattribute>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

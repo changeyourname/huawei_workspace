@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral imagefile="pse.pse"
+    library="peripheral"
+    name="SimpleDma"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Description">
+        <doctext name="txt"
+            text="Basic DMA Controller."/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="This model is a basic DMA engine example implementation, it does not conform to an actual device."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="This is not based upon a real device"/>
+    </docsection>
+    <busmasterport addresswidth="32"
+        mustbeconnected="T"
+        name="MREAD"/>
+    <busmasterport addresswidth="32"
+        mustbeconnected="T"
+        name="MWRITE"/>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="DMACSP"
+        size="0x140"/>
+    <netport name="INTR"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="INTTC"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="RESET"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

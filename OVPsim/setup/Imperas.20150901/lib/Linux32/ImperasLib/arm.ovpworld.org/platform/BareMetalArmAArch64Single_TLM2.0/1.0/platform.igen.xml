@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="BareMetalArmAArch64Single_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="arm.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Bare Metal Platform for an ARM Cortex-A AArch64 series Processor (default Cortex-A57MPx1).
+    The bare metal platform instantiates a single ARM Cortex-A AArch64 series processor instance. 
+    The processor operates using little endian data ordering.
+    It creates memory regions 0x80000000 to 0x8000FFFF, 0x80027000 to 0x8002bfff and 0xefff0000 to 0xeFFFFFFF.
+    The ICM platform can be passed any application compiled to an ARM AArch64 elf format.
+    It may also be passed a new variant to be used (default Cortex-A57MPx1)
+    ./platform.OS.exe application.CROSS.elf [model variant]"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="BareMetal platform for execution of ARM binary files compiled with Linaro 64-bit CrossCompiler toolchain."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="None"/>
+    </docsection>
+    <processorinstance endian="little"
+        mips="100.000000"
+        name="cpu0">
+        <vlnvreference name="arm"
+            vendor="arm.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="armAngel_0">
+            <vlnvreference name="armAngel"
+                vendor="arm.ovpworld.org"/>
+        </extlibrary>
+        <attribute content="Cortex-A57MPx1"
+            name="variant"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <memoryinstance name="local1">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x8000ffff"
+            loaddress="0x80000000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="local2">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x8002bfff"
+            loaddress="0x80027000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="local3">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0xefffffff"
+            loaddress="0xefff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

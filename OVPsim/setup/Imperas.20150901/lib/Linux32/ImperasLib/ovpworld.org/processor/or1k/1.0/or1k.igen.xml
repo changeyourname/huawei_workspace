@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <processor QLQualified="T"
+    defaultsemihostlibrary="semihosting"
+    defaultsemihostname="or1kNewlib"
+    defaultsemihostvendor="ovpworld.org"
+    defaultsemihostversion="1.0"
+    elfcode="33906"
+    endian="big"
+    family="openCores"
+    gdbpath="$IMPERAS_HOME/lib/$IMPERAS_ARCH/CrossCompiler/or32-elf/bin/or32-elf-gdb"
+    groupH="or1k"
+    imagefile="model"
+    library="processor"
+    name="or1k"
+    procdoc="$IMPERAS_HOME/ImperasLib/source/ovpworld.org/processor/or1k/1.0/doc/OVP_Model_Specific_Information_or1k_generic.pdf"
+    releasestatus="4"
+    useindefaultplatform="T"
+    vendor="ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="OR1K 32Bit processor model."/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="Core instruction set only. Does not support MMU &amp; TLB."/>
+    </docsection>
+    <formalattribute name="fifos"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Turn on FIFO feature"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="verbose"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Turn on model messages"/>
+        </docsection>
+    </formalattribute>
+    <busmasterport addresswidth="32"
+        mustbeconnected="T"
+        name="INSTRUCTION">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Used to fetch code for execution"/>
+        </docsection>
+    </busmasterport>
+    <busmasterport addresswidth="32"
+        mustbeconnected="F"
+        name="DATA">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Used to read &amp; write data"/>
+        </docsection>
+    </busmasterport>
+    <netport mustbeconnected="F"
+        name="intr0"
+        type="input"/>
+    <netport mustbeconnected="F"
+        name="intr1"
+        type="input"/>
+    <netport mustbeconnected="F"
+        name="intr2"
+        type="input"/>
+    <netport mustbeconnected="F"
+        name="intr3"
+        type="input"/>
+    <netport mustbeconnected="F"
+        name="reset"
+        type="input"/>
+    <command name="isync">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="specify instruction address range for synchronous execution"/>
+        </docsection>
+    </command>
+    <command name="itrace">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="enable or disable instruction tracing"/>
+        </docsection>
+    </command>
+    <exceptions name="Exceptions">
+        <exception code="256"
+            name="RST">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Reset"/>
+            </docsection>
+        </exception>
+        <exception code="512"
+            name="BUS">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Bus error"/>
+            </docsection>
+        </exception>
+        <exception code="768"
+            name="DPF">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Data privilege"/>
+            </docsection>
+        </exception>
+        <exception code="1024"
+            name="IPF">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Instruction privilege"/>
+            </docsection>
+        </exception>
+        <exception code="1280"
+            name="TTI">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Tick timer"/>
+            </docsection>
+        </exception>
+        <exception code="1792"
+            name="ILL">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="Illegal instruction"/>
+            </docsection>
+        </exception>
+        <exception code="2048"
+            name="EXI">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="External interrupt"/>
+            </docsection>
+        </exception>
+        <exception code="3072"
+            name="SYS">
+            <docsection name="doc"
+                text="Description">
+                <doctext name="txt"
+                    text="System call"/>
+            </docsection>
+        </exception>
+    </exceptions>
+    <modes name="Modes">
+        <mode code="0"
+            name="SUPERVISOR"/>
+        <mode code="1"
+            name="USER"/>
+    </modes>
+    <registers name="GPR">
+        <register name="R0"
+            readonly="T"
+            type="0"
+            width="32"/>
+        <register name="R1"
+            readonly="F"
+            type="2"
+            width="32"/>
+        <register name="R2"
+            readonly="F"
+            type="3"
+            width="32"/>
+        <register name="R3"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R4"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R5"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R6"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R7"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R8"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R9"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R10"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R11"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R12"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R13"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R14"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R15"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R16"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R17"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R18"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R19"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R20"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R21"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R22"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R23"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R24"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R25"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R26"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R27"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R28"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R29"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R30"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="R31"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="System">
+        <register name="PC"
+            readonly="F"
+            type="1"
+            width="32"/>
+        <register name="SR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="EPCR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="EEAR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="ESR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="PICMR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="PICSR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="TTCR"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="TTMR"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Integration_Support">
+        <register name="EXCPT"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </processor>

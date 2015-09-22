@@ -1,0 +1,1343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <processor QLQualified="T"
+    defaultsemihostlibrary="semihosting"
+    defaultsemihostname="armNewlib"
+    defaultsemihostvendor="arm.ovpworld.org"
+    defaultsemihostversion="1.0"
+    elfcode="40"
+    endian="either"
+    family="ARM"
+    gdbpath="$IMPERAS_HOME/lib/$IMPERAS_ARCH/gdb/arm-none-eabi-gdb"
+    groupH="Classic"
+    groupL="ARMv4"
+    imagefile="model"
+    library="processor"
+    name="arm"
+    procdoc="$IMPERAS_HOME/ImperasLib/source/arm.ovpworld.org/processor/arm/1.0/doc/OVP_Model_Specific_Information_arm_generic.pdf"
+    releasestatus="4"
+    useindefaultplatform="T"
+    vendor="arm.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="ARM Processor Model"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Usage of binary model under license governing simulator usage. "/>
+        <doctext name="txt_1"/>
+        <doctext name="txt_2"
+            text="Note that for models of ARM CPUs the license includes the following terms:"/>
+        <doctext name="txt_3"/>
+        <doctext name="txt_4"
+            text="Licensee is granted a non-exclusive, worldwide, non-transferable, revocable licence to:"/>
+        <doctext name="txt_5"/>
+        <doctext name="txt_6"
+            text="If no source is being provided to the Licensee:  use and copy only (no modifications rights are granted) the model for the sole purpose of designing, developing, analyzing, debugging, testing, verifying, validating and optimizing software which: (a) (i) is for ARM based systems; and (ii) does not incorporate the ARM Models or any part thereof; and (b) such ARM Models may not be used to emulate an ARM based system to run application software in a production or live environment."/>
+        <doctext name="txt_7"/>
+        <doctext name="txt_8"
+            text="If source code is being provided to the Licensee:  use, copy and modify the model for the sole purpose of designing, developing, analyzing, debugging, testing, verifying, validating and optimizing software which: (a) (i) is for ARM based systems; and (ii) does not incorporate the ARM Models or any part thereof; and (b) such ARM Models may not be used to emulate an ARM based system to run application software in a production or live environment."/>
+        <doctext name="txt_9"/>
+        <doctext name="txt_10"
+            text="In the case of any Licensee who is either or both an academic or educational institution the purposes shall be limited to internal use. "/>
+        <doctext name="txt_11"/>
+        <doctext name="txt_12"
+            text="Except to the extent that such activity is permitted by applicable law, Licensee shall not reverse engineer, decompile, or disassemble this model. If this model was provided to Licensee in Europe, Licensee shall not reverse engineer, decompile or disassemble the Model for the purposes of error correction. "/>
+        <doctext name="txt_13"/>
+        <doctext name="txt_14"
+            text="The License agreement does not entitle Licensee to manufacture in silicon any product based on this model. "/>
+        <doctext name="txt_15"/>
+        <doctext name="txt_16"
+            text="The License agreement does not entitle Licensee to use this model for evaluating the validity of any ARM patent. "/>
+        <doctext name="txt_17"/>
+        <doctext name="txt_18"
+            text="Source of model available under separate Imperas Software License Agreement."/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="Instruction pipelines are not modeled in any way. All instructions are assumed to complete immediately. This means that instruction barrier instructions (e.g. ISB, CP15ISB) are treated as NOPs, with the exception of any undefined instruction behavior, which is modeled. The model does not implement speculative fetch behavior. The branch cache is not modeled."/>
+        <doctext name="txt_1"
+            text="Caches and write buffers are not modeled in any way. All loads, fetches and stores complete immediately and in order, and are fully synchronous (as if the memory was of Strongly Ordered or Device-nGnRnE type). Data barrier instructions (e.g. DSB, CP15DSB) are treated as NOPs, with the exception of any undefined instruction behavior, which is modeled. Cache manipulation instructions are implemented as NOPs, with the exception of any undefined instruction behavior, which is modeled."/>
+        <doctext name="txt_2"
+            text="Real-world timing effects are not modeled: all instructions are assumed to complete in a single cycle."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Verification">
+        <doctext name="txt"
+            text="Models have been extensively tested by Imperas."/>
+    </docsection>
+    <docsection name="doc_4"
+        text="Features">
+        <doctext name="txt"
+            text="Thumb instructions are supported."/>
+    </docsection>
+    <formalattribute name="variant"
+        type="enumeration">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Selects variant (either a generic ISA or a specific model)"/>
+        </docsection>
+        <enum name="ARMv4T"
+            value="0"/>
+        <enum name="ARMv4xM"
+            value="1"/>
+        <enum name="ARMv4"
+            value="2"/>
+        <enum name="ARMv4TxM"
+            value="3"/>
+        <enum name="ARMv5xM"
+            value="4"/>
+        <enum name="ARMv5"
+            value="5"/>
+        <enum name="ARMv5TxM"
+            value="6"/>
+        <enum name="ARMv5T"
+            value="7"/>
+        <enum name="ARMv5TExP"
+            value="8"/>
+        <enum name="ARMv5TE"
+            value="9"/>
+        <enum name="ARMv5TEJ"
+            value="10"/>
+        <enum name="ARMv6"
+            value="11"/>
+        <enum name="ARMv6K"
+            value="12"/>
+        <enum name="ARMv6T2"
+            value="13"/>
+        <enum name="ARMv6KZ"
+            value="14"/>
+        <enum name="ARMv7"
+            value="15"/>
+        <enum name="ARM7TDMI"
+            value="16"/>
+        <enum name="ARM7EJ-S"
+            value="17"/>
+        <enum name="ARM720T"
+            value="18"/>
+        <enum name="ARM920T"
+            value="19"/>
+        <enum name="ARM922T"
+            value="20"/>
+        <enum name="ARM926EJ-S"
+            value="21"/>
+        <enum name="ARM940T"
+            value="22"/>
+        <enum name="ARM946E"
+            value="23"/>
+        <enum name="ARM966E"
+            value="24"/>
+        <enum name="ARM968E-S"
+            value="25"/>
+        <enum name="ARM1020E"
+            value="26"/>
+        <enum name="ARM1022E"
+            value="27"/>
+        <enum name="ARM1026EJ-S"
+            value="28"/>
+        <enum name="ARM1136J-S"
+            value="29"/>
+        <enum name="ARM1156T2-S"
+            value="30"/>
+        <enum name="ARM1176JZ-S"
+            value="31"/>
+        <enum name="Cortex-R4"
+            value="32"/>
+        <enum name="Cortex-R4F"
+            value="33"/>
+        <enum name="Cortex-A5UP"
+            value="34"/>
+        <enum name="Cortex-A5MPx1"
+            value="35"/>
+        <enum name="Cortex-A5MPx2"
+            value="36"/>
+        <enum name="Cortex-A5MPx3"
+            value="37"/>
+        <enum name="Cortex-A5MPx4"
+            value="38"/>
+        <enum name="Cortex-A8"
+            value="39"/>
+        <enum name="Cortex-A9UP"
+            value="40"/>
+        <enum name="Cortex-A9MPx1"
+            value="41"/>
+        <enum name="Cortex-A9MPx2"
+            value="42"/>
+        <enum name="Cortex-A9MPx3"
+            value="43"/>
+        <enum name="Cortex-A9MPx4"
+            value="44"/>
+        <enum name="Cortex-A7UP"
+            value="45"/>
+        <enum name="Cortex-A7MPx1"
+            value="46"/>
+        <enum name="Cortex-A7MPx2"
+            value="47"/>
+        <enum name="Cortex-A7MPx3"
+            value="48"/>
+        <enum name="Cortex-A7MPx4"
+            value="49"/>
+        <enum name="Cortex-A15UP"
+            value="50"/>
+        <enum name="Cortex-A15MPx1"
+            value="51"/>
+        <enum name="Cortex-A15MPx2"
+            value="52"/>
+        <enum name="Cortex-A15MPx3"
+            value="53"/>
+        <enum name="Cortex-A15MPx4"
+            value="54"/>
+        <enum name="Cortex-A17MPx1"
+            value="55"/>
+        <enum name="Cortex-A17MPx2"
+            value="56"/>
+        <enum name="Cortex-A17MPx3"
+            value="57"/>
+        <enum name="Cortex-A17MPx4"
+            value="58"/>
+        <enum name="AArch32"
+            value="59"/>
+        <enum name="AArch64"
+            value="60"/>
+        <enum name="Cortex-A53MPx1"
+            value="61"/>
+        <enum name="Cortex-A53MPx2"
+            value="62"/>
+        <enum name="Cortex-A53MPx3"
+            value="63"/>
+        <enum name="Cortex-A53MPx4"
+            value="64"/>
+        <enum name="Cortex-A57MPx1"
+            value="65"/>
+        <enum name="Cortex-A57MPx2"
+            value="66"/>
+        <enum name="Cortex-A57MPx3"
+            value="67"/>
+        <enum name="Cortex-A57MPx4"
+            value="68"/>
+    </formalattribute>
+    <formalattribute name="verbose"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify verbosity of output"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="showHiddenRegs"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Show hidden registers during register tracing"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="UAL"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Disassemble using UAL syntax"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="enableGICv3"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Enable GICv3 (default: GICv2 only) - under development, do not use"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="enableVFPAtReset"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Enable vector floating point (SIMD and VFP) instructions at reset. (Enables cp10/11 in CPACR and sets FPEXC.EN)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="useInternalTCMs"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Enable internally-modeled TCM memories (not connected to external ATCM/BTCM ports)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="compatibility"
+        type="enumeration">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify compatibility mode"/>
+        </docsection>
+        <enum name="ISA"
+            value="0"/>
+        <enum name="gdb"
+            value="1"/>
+        <enum name="nopSVC"
+            value="2"/>
+    </formalattribute>
+    <formalattribute name="override_debugMask"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies debug mask, enabling debug output for model components"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_numCPUs"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify the number of cores in a multiprocessor (maximum of 8 for GICv1/GICv2)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_affinityMask"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify bitmask of implemented affinity bits in format Aff3:Aff2:Aff1:Aff0 (each a byte)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_fcsePresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that FCSE is present (if true)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_fpexcDexPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that the FPEXC.DEX register field is implemented (if true)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_advSIMDPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that Advanced SIMD extensions are present (if true)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_vfpPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that VFP extensions are present (if true)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_physicalBits"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies the implemented physical bus bits (defaults to connected physical bus width)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_timerScaleFactor"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies the fraction of MIPS rate to use for MPCore timers (generic timers or global/local/watchdogs depending on implementation). Defaults to 20 for generic timers, 2 for others"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_NSACRPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that optional GICD_NSACR distributor registers are present (GICv2 only)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_PPISRPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that implementation-specific GICD_PPISR distributor register is present (GICv1 ICDPPIS/ICPPISR, GICv1 and GICv2 only)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_SPISRPresent"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that implementation-specific GICD_SPISR distributor registers are present (GICv1 ICDSPIS/ICSPISR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICv3_DistributorBase"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify distributor register block base address (GICv3 only)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GIC_PPIMask"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify bitmask of implemented PPIs in the GIC (e.g. ID16 is 0x0001, ID31 is 0x8000)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_SCTLR_V"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SCTLR.V with the passed value (enables high vectors)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_SCTLR_CP15BEN_Present"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Enable ARMv7 SCTLR.CP15BEN bit (CP15 barrier enable)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MIDR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override MIDR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_CTR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override CTR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_TLBTR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override TLBTR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MPUIR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override MPUIR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_CLIDR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override CLIDR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AIDR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override AIDR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ATCMRR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ATCMRR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_BTCMRR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override BTCMRR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_CBAR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override Configuration Base Address Register (Corresponds to value on PERIPHBASE input pins)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_PFR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_PFR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_PFR1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_PFR1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_DFR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_DFR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AFR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AFR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MMFR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_MMFR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MMFR1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_MMFR1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MMFR2"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_MMFR2 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MMFR3"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_MMFR3 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR2"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR2 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR3"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR3 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR4"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR4 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ISAR5"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR5 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_PMCR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override PMCR register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_PMCEID0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override PMCEID0 register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_PMCEID1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override PMCEID1 register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_SACTLR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override Cortex-R5 SACTLR register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_BuildOptions0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override Cortex-R5 BuildOptions0 register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_BuildOptions1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override Cortex-R5 BuildOptions1 register (not functionally significant in the model)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FPSID"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SIMD/VFP FPSID register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MVFR0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SIMD/VFP MVFR0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MVFR1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SIMD/VFP MVFR1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MVFR2"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SIMD/VFP MVFR2 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FPEXC"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SIMD/VFP FPEXC register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICC_IIDR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override GICC_IIDR register (GICv1 ICCIIDR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_TYPER"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override GICD_TYPER register (GICv1 ICDICTR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_TYPER_ITLines"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ITLinesNumber field of GICD_TYPER register (GICv1 ICDICTR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_ICFGRN"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override reset value of GICD_ICFGR2...GICD_ICFGRn (GICv1 ICDICFR2...ICDICFRn)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICD_IIDR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override GICD_IIDR register (GICv1 ICDIIDR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_GICH_VTR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override GICH_VTR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ICCPMRBits"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify the number of writable bits in GICC_PMR (GICv1 ICCPMR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_minICCBPR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specify the minimum possible value for GICC_BPR (GICv1 ICCBPR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FILASTARTRS"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override secure FILASTARTR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FILASTARTRNS"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override non-secure FILASTARTR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FILAENDRS"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override secure FILAENDR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_FILAENDRNS"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override non-secure FILAENDR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ERG"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies exclusive reservation granule"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_RMR"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override RMR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_RVBAR"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override RVBAR register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64PFR0_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64PFR0_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64PFR1_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64PFR1_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64DFR0_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64DFR0_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64DFR1_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64DFR1_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64AFR0_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64AFR0_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64AFR1_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64AFR1_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64ISAR0_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64ISAR0_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64ISAR1_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64ISAR1_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64MMFR0_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64MMFR0_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_AA64MMFR1_EL1"
+        type="uns64">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_AA64MMFR1_EL1 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_DCZID_EL0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override DCZID_EL0 register"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_STRoffsetPC12"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that STR/STR of PC should do so with 12:byte offset from the current instruction (if true), otherwise an 8:byte offset is used"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_mpuV5ExtAP"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that ARMv5 MPU extended access permissions implemented (cp15/5/2 and cp15/5/2)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_fcseRequiresMMU"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies that FCSE is active only when MMU is enabled (if true)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_ignoreBadCp15"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Specifies whether invalid coprocessor 15 access should be ignored (if true) or cause Invalid Instruction exceptions (if false)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_SGIDisable"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override whether GIC SGIs may be disabled (if true) or are permanently enabled (if false)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_condUndefined"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Force undefined instructions to take Undefined Instruction exception even if they are conditional"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_deviceStrongAligned"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Force accesses to Device and Strongly Ordered regions to be aligned"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_Control_V"
+        type="bool">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override SCTLR.V with the passed value (deprecated, use override_SCTLR_V)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MainId"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override MIDR register (deprecated, use override_MIDR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_CacheType"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override CTR register (deprecated, use override_CTR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_TLBType"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override TLBTR register (deprecated, use override_TLBTR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_MPUType"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override MPUIR register (deprecated, use override_MPUIR)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes0"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR0 register (deprecated, use override_ISAR0)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes1"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR1 register (deprecated, use override_ISAR1)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes2"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR2 register (deprecated, use override_ISAR2)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes3"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR3 register (deprecated, use override_ISAR3)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes4"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR4 register (deprecated, use override_ISAR4)"/>
+        </docsection>
+    </formalattribute>
+    <formalattribute name="override_InstructionAttributes5"
+        type="uns32">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Override ID_ISAR5 register (deprecated, use override_ISAR5)"/>
+        </docsection>
+    </formalattribute>
+    <busmasterport addresswidth="32"
+        mustbeconnected="T"
+        name="INSTRUCTION"/>
+    <busmasterport addresswidth="32"
+        mustbeconnected="F"
+        name="DATA"/>
+    <netport mustbeconnected="F"
+        name="reset"
+        type="input">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="Processor reset, active high"/>
+        </docsection>
+    </netport>
+    <netport mustbeconnected="F"
+        name="fiq"
+        type="input">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="FIQ interrupt, active high (negation of nFIQ)"/>
+        </docsection>
+    </netport>
+    <netport mustbeconnected="F"
+        name="irq"
+        type="input">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="IRQ interrupt, active high (negation of nIRQ)"/>
+        </docsection>
+    </netport>
+    <command name="debugflags"/>
+    <command name="dumpTLB"/>
+    <command name="isync">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="specify instruction address range for synchronous execution"/>
+        </docsection>
+    </command>
+    <command name="itrace">
+        <docsection name="doc"
+            text="Description">
+            <doctext name="txt"
+                text="enable or disable instruction tracing"/>
+        </docsection>
+    </command>
+    <exceptions name="Exceptions">
+        <exception code="0"
+            name="Reset"/>
+        <exception code="1"
+            name="Undefined"/>
+        <exception code="2"
+            name="SupervisorCall"/>
+        <exception code="5"
+            name="PrefetchAbort"/>
+        <exception code="6"
+            name="DataAbort"/>
+        <exception code="8"
+            name="IRQ"/>
+        <exception code="9"
+            name="FIQ"/>
+    </exceptions>
+    <modes name="Modes">
+        <mode code="16"
+            name="User"/>
+        <mode code="17"
+            name="FIQ"/>
+        <mode code="18"
+            name="IRQ"/>
+        <mode code="19"
+            name="Supervisor"/>
+        <mode code="23"
+            name="Abort"/>
+        <mode code="27"
+            name="Undefined"/>
+        <mode code="31"
+            name="System"/>
+    </modes>
+    <registers name="Core">
+        <register name="r0"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r1"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r2"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r3"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r4"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r5"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r6"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r7"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r8"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r9"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r10"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r11"
+            readonly="F"
+            type="3"
+            width="32"/>
+        <register name="r12"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="sp"
+            readonly="F"
+            type="2"
+            width="32"/>
+        <register name="lr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="pc"
+            readonly="F"
+            type="1"
+            width="32"/>
+    </registers>
+    <registers name="Control">
+        <register name="fps"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="cpsr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="User">
+        <register name="r8_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r9_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r10_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r11_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r12_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="sp_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_usr"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="FIQ">
+        <register name="r8_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r9_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r10_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r11_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="r12_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="sp_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr_fiq"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="IRQ">
+        <register name="sp_irq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_irq"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr_irq"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Supervisor">
+        <register name="sp_svc"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_svc"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr_svc"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Undefined">
+        <register name="sp_undef"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_undef"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr_undef"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Abort">
+        <register name="sp_abt"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="lr_abt"
+            readonly="F"
+            type="0"
+            width="32"/>
+        <register name="spsr_abt"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Coprocessor_32_bit">
+        <register name="MIDR"
+            readonly="T"
+            type="0"
+            width="32"/>
+        <register name="SCTLR"
+            readonly="F"
+            type="0"
+            width="32"/>
+    </registers>
+    <registers name="Integration_support">
+        <register name="transactPL"
+            readonly="T"
+            type="0"
+            width="32"/>
+        <register name="transactAT"
+            readonly="T"
+            type="0"
+            width="32"/>
+    </registers>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </processor>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <hw enableintercepts="F"
+    library="platform"
+    name="BareMetalNios_IISingle_TLM2.0"
+    purpose="0"
+    releasestatus="4"
+    stoponctrlc="F"
+    vendor="altera.ovpworld.org"
+    verbose="F"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Bare Metal Platform for an Xilinx Nios_II Processor using SystemC TLM2.0 as infrastructure.
+    The bare metal platform instantiates a single Nios_II processor instance.
+    
+    It creates two memories; program memory from 0x10000000 to 0x000FFFFF.
+                               stack memory from 0x17ff0000 to 0x17ffffff.
+
+    The TLM2.0 platform can be passed any application compiled to an Xilinx Nios_II elf format, an optional
+    second argument argument to specify the execution stop time.
+    
+    platform.OS.exe application.CROSS.elf [stop time milliseconds]
+    
+    Where OS is Linux or Windows."/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Limitations">
+        <doctext name="txt"
+            text="BareMetal platform for execution of Nios_II binary files compiled with CodeSourcery CrossCompiler toolchain."/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="None"/>
+    </docsection>
+    <processorinstance mips="100.000000"
+        name="cpu1">
+        <vlnvreference name="nios_ii"
+            vendor="altera.ovpworld.org"/>
+        <extlibrary directLoad="T"
+            name="nios_iiNewlib_0">
+            <vlnvreference name="nios_iiNewlib"
+                vendor="altera.ovpworld.org"/>
+        </extlibrary>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="INSTRUCTION"/>
+        <busmasterportconnection connection="bus1"
+            hiaddress="0xffffffff"
+            name="DATA"/>
+    </processorinstance>
+    <bus addresswidth="32"
+        name="bus1"/>
+    <memoryinstance name="ram1">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x100fffff"
+            loaddress="0x10000000"
+            name="sp1"/>
+    </memoryinstance>
+    <memoryinstance name="ram2">
+        <vlnvreference name="ram"/>
+        <busslaveportconnection connection="bus1"
+            hiaddress="0x17ffffff"
+            loaddress="0x17ff0000"
+            name="sp1"/>
+    </memoryinstance>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </hw>

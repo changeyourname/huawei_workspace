@@ -1,0 +1,4 @@
+install RUNTIME OVPsim CpuManager
+install or1k.toolchain
+imperas RUNTIME CpuManager
+imperas or1k.toolchain

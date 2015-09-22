@@ -1,0 +1,1951 @@
+/*
+ * Copyright (c) 2005-2014 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                              Version 99999999
+//                          Thu Nov 15 12:14:46 2012
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#include <string.h>
+#include <stdlib.h>
+
+#include "icm/icmCpuManager.h"
+
+// Function Prototypes early declaration
+static void parseArgs(int argc, char **argv);
+
+// valid command line
+const char *usage = "<application name>";
+char  *application; // the application to load
+
+icmProcessorP createPlatform(void) {
+
+////////////////////////////////////////////////////////////////////////////////
+
+    icmInitPlatform(ICM_VERSION, ICM_ENABLE_IMPERAS_INTERCEPTS, 0, 0, "RenesasUPD70F3441");
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  Bus vfb_b
+////////////////////////////////////////////////////////////////////////////////
+
+    icmBusP vfb_b = icmNewBus( "vfb_b", 28);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                Processor CPU
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CPU_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        0,    // vendor
+        0,    // library
+        "v850",    // name
+        0,    // version
+        "model"     // model
+    );
+
+    icmAttrListP CPU_attr = icmNewAttrList();
+
+    icmAddStringAttr(CPU_attr, "variant", "V850ES");
+    icmAddDoubleAttr(CPU_attr, "mips", 128.000000);
+
+    icmProcessorP CPU_c = icmNewProcessor(
+        "CPU",   // name
+        "v850",   // type
+        0,   // cpuId
+        0x0, // flags
+         28,   // address bits
+        CPU_path,   // model
+        "modelAttrs",   // symbol
+        0x0,   // procAttrs
+        CPU_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectProcessorBusses( CPU_c, vfb_b, vfb_b );
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE LOGIC
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *LOGIC_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "UPD70F3441Logic",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP LOGIC_attr = icmNewAttrList();
+
+
+    icmPseP LOGIC_p = icmNewPSE(
+        "LOGIC",   // name
+        LOGIC_path,   // model
+        LOGIC_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( LOGIC_p, vfb_b, "LOGICP0", 0, 0xffff6d0, 0xffff6d3);
+
+    icmConnectPSEBus( LOGIC_p, vfb_b, "LOGICP1", 0, 0xffff400, 0xffff475);
+
+    icmConnectPSEBus( LOGIC_p, vfb_b, "LOGICP2", 0, 0xffff888, 0xffff893);
+
+    icmConnectPSEBus( LOGIC_p, vfb_b, "LOGICP3", 0, 0xffff1fc, 0xffff1fc);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE INTC
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *INTC_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "intc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP INTC_attr = icmNewAttrList();
+
+
+    icmPseP INTC_p = icmNewPSE(
+        "INTC",   // name
+        INTC_path,   // model
+        INTC_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( INTC_p, vfb_b, "INTCP0", 0, 0xffff100, 0xffff1fb);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                   PSE CRC
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CRC_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "crc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CRC_attr = icmNewAttrList();
+
+
+    icmPseP CRC_p = icmNewPSE(
+        "CRC",   // name
+        CRC_path,   // model
+        CRC_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CRC_p, vfb_b, "CRCP0", 0, 0xfe00000, 0xfe0007f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 PSE CLKGEN
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CLKGEN_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "clkgen",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CLKGEN_attr = icmNewAttrList();
+
+
+    icmPseP CLKGEN_p = icmNewPSE(
+        "CLKGEN",   // name
+        CLKGEN_path,   // model
+        CLKGEN_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CLKGEN_p, vfb_b, "CLKGENP0", 0, 0xffff860, 0xffff860);
+
+    icmConnectPSEBus( CLKGEN_p, vfb_b, "CLKGENP1", 0, 0xffffca0, 0xffffca0);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                   PSE BCU
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *BCU_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "bcu",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP BCU_attr = icmNewAttrList();
+
+
+    icmPseP BCU_p = icmNewPSE(
+        "BCU",   // name
+        BCU_path,   // model
+        BCU_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( BCU_p, vfb_b, "BCUP0", 0, 0xffff060, 0xffff06f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE MEMC
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *MEMC_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "memc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP MEMC_attr = icmNewAttrList();
+
+
+    icmPseP MEMC_p = icmNewPSE(
+        "MEMC",   // name
+        MEMC_path,   // model
+        MEMC_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( MEMC_p, vfb_b, "MEMCP0", 0, 0xffff480, 0xffff48f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 PSE UARTC0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *UARTC0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "uartc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP UARTC0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(UARTC0_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(UARTC0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(UARTC0_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(UARTC0_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(UARTC0_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(UARTC0_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(UARTC0_attr, "PCLK7", 262144);
+    icmAddUns64Attr(UARTC0_attr, "PCLK9", 65536);
+
+    icmAddUns64Attr(UARTC0_attr, "finishOnDisconnect", 1);
+    icmAddUns64Attr(UARTC0_attr, "console", 1);
+
+    icmPseP UARTC0_p = icmNewPSE(
+        "UARTC0",   // name
+        UARTC0_path,   // model
+        UARTC0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( UARTC0_p, vfb_b, "UARTP0", 0, 0xffffa00, 0xffffa0f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 PSE UARTC1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *UARTC1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "uartc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP UARTC1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(UARTC1_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(UARTC1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(UARTC1_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(UARTC1_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(UARTC1_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(UARTC1_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(UARTC1_attr, "PCLK7", 262144);
+    icmAddUns64Attr(UARTC1_attr, "PCLK9", 65536);
+
+    icmAddUns64Attr(UARTC1_attr, "finishOnDisconnect", 1);
+    icmAddUns64Attr(UARTC1_attr, "console", 1);
+
+    icmPseP UARTC1_p = icmNewPSE(
+        "UARTC1",   // name
+        UARTC1_path,   // model
+        UARTC1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( UARTC1_p, vfb_b, "UARTP0", 0, 0xffffa20, 0xffffa2f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 PSE UARTC2
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *UARTC2_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "uartc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP UARTC2_attr = icmNewAttrList();
+
+    icmAddUns64Attr(UARTC2_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(UARTC2_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(UARTC2_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(UARTC2_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(UARTC2_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(UARTC2_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(UARTC2_attr, "PCLK7", 262144);
+    icmAddUns64Attr(UARTC2_attr, "PCLK9", 65536);
+
+    icmAddUns64Attr(UARTC2_attr, "finishOnDisconnect", 1);
+    icmAddUns64Attr(UARTC2_attr, "console", 1);
+
+    icmPseP UARTC2_p = icmNewPSE(
+        "UARTC2",   // name
+        UARTC2_path,   // model
+        UARTC2_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( UARTC2_p, vfb_b, "UARTP0", 0, 0xffffa40, 0xffffa4f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE CSIB0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CSIB0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "csib",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CSIB0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(CSIB0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(CSIB0_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(CSIB0_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(CSIB0_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(CSIB0_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(CSIB0_attr, "PCLK6", 524288);
+
+    icmPseP CSIB0_p = icmNewPSE(
+        "CSIB0",   // name
+        CSIB0_path,   // model
+        CSIB0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CSIB0_p, vfb_b, "CSIBP0", 0, 0xffffd00, 0xffffd07);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE CSIB1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CSIB1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "csib",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CSIB1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(CSIB1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(CSIB1_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(CSIB1_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(CSIB1_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(CSIB1_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(CSIB1_attr, "PCLK6", 524288);
+
+    icmPseP CSIB1_p = icmNewPSE(
+        "CSIB1",   // name
+        CSIB1_path,   // model
+        CSIB1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CSIB1_p, vfb_b, "CSIBP0", 0, 0xffffd20, 0xffffd27);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE CSIE0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CSIE0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "csie",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CSIE0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(CSIE0_attr, "PCLK0", 33554432);
+
+    icmPseP CSIE0_p = icmNewPSE(
+        "CSIE0",   // name
+        CSIE0_path,   // model
+        CSIE0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CSIE0_p, vfb_b, "CSIEP0", 0, 0xffffd40, 0xffffd5f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE CSIE1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *CSIE1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "csie",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP CSIE1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(CSIE1_attr, "PCLK0", 33554432);
+
+    icmPseP CSIE1_p = icmNewPSE(
+        "CSIE1",   // name
+        CSIE1_path,   // model
+        CSIE1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( CSIE1_p, vfb_b, "CSIEP0", 0, 0xffffd80, 0xffffd9f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE ADC0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *ADC0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "adc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP ADC0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(ADC0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(ADC0_attr, "sample", 100);
+
+    icmPseP ADC0_p = icmNewPSE(
+        "ADC0",   // name
+        ADC0_path,   // model
+        ADC0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( ADC0_p, vfb_b, "ADCP0", 0, 0xffff200, 0xffff22f);
+
+    icmConnectPSEBus( ADC0_p, vfb_b, "ADCP1", 0, 0xffff270, 0xffff270);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE ADC1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *ADC1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "adc",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP ADC1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(ADC1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(ADC1_attr, "sample", 100);
+
+    icmPseP ADC1_p = icmNewPSE(
+        "ADC1",   // name
+        ADC1_path,   // model
+        ADC1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( ADC1_p, vfb_b, "ADCP0", 0, 0xffff240, 0xffff26f);
+
+    icmConnectPSEBus( ADC1_p, vfb_b, "ADCP1", 0, 0xffff272, 0xffff272);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA0_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA0_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA0_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA0_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA0_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA0_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA0_attr, "PCLK9", 65536);
+
+    icmPseP TAA0_p = icmNewPSE(
+        "TAA0",   // name
+        TAA0_path,   // model
+        TAA0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA0_p, vfb_b, "TAAP0", 0, 0xffff600, 0xffff60f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA1_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA1_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA1_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA1_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA1_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA1_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA1_attr, "PCLK9", 65536);
+
+    icmPseP TAA1_p = icmNewPSE(
+        "TAA1",   // name
+        TAA1_path,   // model
+        TAA1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA1_p, vfb_b, "TAAP0", 0, 0xffff610, 0xffff61f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA2
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA2_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA2_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA2_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA2_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA2_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA2_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA2_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA2_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA2_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA2_attr, "PCLK9", 65536);
+
+    icmPseP TAA2_p = icmNewPSE(
+        "TAA2",   // name
+        TAA2_path,   // model
+        TAA2_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA2_p, vfb_b, "TAAP0", 0, 0xffff620, 0xffff62f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA3
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA3_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA3_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA3_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA3_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA3_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA3_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA3_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA3_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA3_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA3_attr, "PCLK9", 65536);
+
+    icmPseP TAA3_p = icmNewPSE(
+        "TAA3",   // name
+        TAA3_path,   // model
+        TAA3_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA3_p, vfb_b, "TAAP0", 0, 0xffff630, 0xffff63f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA4
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA4_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA4_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA4_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA4_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA4_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA4_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA4_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA4_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA4_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA4_attr, "PCLK9", 65536);
+
+    icmPseP TAA4_p = icmNewPSE(
+        "TAA4",   // name
+        TAA4_path,   // model
+        TAA4_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA4_p, vfb_b, "TAAP0", 0, 0xffff640, 0xffff64f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA5
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA5_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA5_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA5_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA5_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA5_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA5_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA5_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA5_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA5_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA5_attr, "PCLK9", 65536);
+
+    icmPseP TAA5_p = icmNewPSE(
+        "TAA5",   // name
+        TAA5_path,   // model
+        TAA5_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA5_p, vfb_b, "TAAP0", 0, 0xffff650, 0xffff65f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA6
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA6_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA6_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA6_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA6_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA6_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA6_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA6_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA6_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA6_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA6_attr, "PCLK9", 65536);
+
+    icmPseP TAA6_p = icmNewPSE(
+        "TAA6",   // name
+        TAA6_path,   // model
+        TAA6_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA6_p, vfb_b, "TAAP0", 0, 0xffff660, 0xffff66f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA7
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA7_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA7_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA7_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA7_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA7_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA7_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA7_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA7_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA7_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA7_attr, "PCLK9", 65536);
+
+    icmPseP TAA7_p = icmNewPSE(
+        "TAA7",   // name
+        TAA7_path,   // model
+        TAA7_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA7_p, vfb_b, "TAAP0", 0, 0xffff670, 0xffff67f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA8
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA8_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA8_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA8_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA8_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA8_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA8_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA8_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA8_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA8_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA8_attr, "PCLK9", 65536);
+
+    icmPseP TAA8_p = icmNewPSE(
+        "TAA8",   // name
+        TAA8_path,   // model
+        TAA8_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA8_p, vfb_b, "TAAP0", 0, 0xffff680, 0xffff68f);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TAA9
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TAA9_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "taa",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TAA9_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TAA9_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TAA9_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TAA9_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TAA9_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TAA9_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TAA9_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TAA9_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TAA9_attr, "PCLK9", 65536);
+
+    icmPseP TAA9_p = icmNewPSE(
+        "TAA9",   // name
+        TAA9_path,   // model
+        TAA9_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TAA9_p, vfb_b, "TAAP0", 0, 0xffff6b0, 0xffff6bf);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TMS0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TMS0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "tms",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TMS0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TMS0_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TMS0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TMS0_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TMS0_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TMS0_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TMS0_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TMS0_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TMS0_attr, "PCLK9", 65536);
+
+    icmPseP TMS0_p = icmNewPSE(
+        "TMS0",   // name
+        TMS0_path,   // model
+        TMS0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TMS0_p, vfb_b, "TMSP0", 0, 0xffff580, 0xffff5a9);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TMS1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TMS1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "tms",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TMS1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TMS1_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TMS1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TMS1_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TMS1_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TMS1_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TMS1_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TMS1_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TMS1_attr, "PCLK9", 65536);
+
+    icmPseP TMS1_p = icmNewPSE(
+        "TMS1",   // name
+        TMS1_path,   // model
+        TMS1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TMS1_p, vfb_b, "TMSP0", 0, 0xffff5c0, 0xffff5e9);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TMT0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TMT0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "tmt",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TMT0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TMT0_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TMT0_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TMT0_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TMT0_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TMT0_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TMT0_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TMT0_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TMT0_attr, "PCLK9", 65536);
+
+    icmPseP TMT0_p = icmNewPSE(
+        "TMT0",   // name
+        TMT0_path,   // model
+        TMT0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TMT0_p, vfb_b, "TMTP0", 0, 0xffff690, 0xffff69f);
+
+    icmConnectPSEBus( TMT0_p, vfb_b, "TMTP1", 0, 0xffff990, 0xffff991);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE TMT1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *TMT1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "tmt",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP TMT1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(TMT1_attr, "PCLK0", 33554432);
+    icmAddUns64Attr(TMT1_attr, "PCLK1", 16777216);
+    icmAddUns64Attr(TMT1_attr, "PCLK2", 8388608);
+    icmAddUns64Attr(TMT1_attr, "PCLK3", 4194304);
+    icmAddUns64Attr(TMT1_attr, "PCLK4", 2097152);
+    icmAddUns64Attr(TMT1_attr, "PCLK5", 1048576);
+    icmAddUns64Attr(TMT1_attr, "PCLK7", 262144);
+    icmAddUns64Attr(TMT1_attr, "PCLK9", 65536);
+
+    icmPseP TMT1_p = icmNewPSE(
+        "TMT1",   // name
+        TMT1_path,   // model
+        TMT1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( TMT1_p, vfb_b, "TMTP0", 0, 0xffff6a0, 0xffff6af);
+
+    icmConnectPSEBus( TMT1_p, vfb_b, "TMTP1", 0, 0xffff9a0, 0xffff9a1);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE RNG0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *RNG0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "rng",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP RNG0_attr = icmNewAttrList();
+
+
+    icmPseP RNG0_p = icmNewPSE(
+        "RNG0",   // name
+        RNG0_path,   // model
+        RNG0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( RNG0_p, vfb_b, "RNGP0", 0, 0xffff700, 0xffff701);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE BRG0
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *BRG0_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "brg",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP BRG0_attr = icmNewAttrList();
+
+    icmAddUns64Attr(BRG0_attr, "PCLK", 16777216);
+
+    icmPseP BRG0_p = icmNewPSE(
+        "BRG0",   // name
+        BRG0_path,   // model
+        BRG0_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( BRG0_p, vfb_b, "BRGP0", 0, 0xffffdc0, 0xffffdc1);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE BRG1
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *BRG1_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "brg",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP BRG1_attr = icmNewAttrList();
+
+    icmAddUns64Attr(BRG1_attr, "PCLK", 16777216);
+
+    icmPseP BRG1_p = icmNewPSE(
+        "BRG1",   // name
+        BRG1_path,   // model
+        BRG1_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( BRG1_p, vfb_b, "BRGP0", 0, 0xffffdd0, 0xffffdd1);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                  PSE BRG2
+////////////////////////////////////////////////////////////////////////////////
+
+    const char *BRG2_path = icmGetVlnvString(
+        0,    // path (0 if from the product directory)
+        "renesas.ovpworld.org",    // vendor
+        "peripheral",    // library
+        "brg",    // name
+        "1.0",    // version
+        "pse"     // model
+    );
+
+    icmAttrListP BRG2_attr = icmNewAttrList();
+
+    icmAddUns64Attr(BRG2_attr, "PCLK", 33554432);
+
+    icmPseP BRG2_p = icmNewPSE(
+        "BRG2",   // name
+        BRG2_path,   // model
+        BRG2_attr,   // attrlist
+        0,   // semihost file
+        0    // semihost symbol
+    );
+
+    icmConnectPSEBus( BRG2_p, vfb_b, "BRGP0", 0, 0xffffde0, 0xffffde1);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                              Memory CodeFlash
+////////////////////////////////////////////////////////////////////////////////
+
+    icmMemoryP CodeFlash_m = icmNewMemory("CodeFlash_m", 0x7, 0xf7fff);
+
+    icmConnectMemoryToBus( vfb_b, "sp1", CodeFlash_m, 0x0);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                              Memory DataFlash
+////////////////////////////////////////////////////////////////////////////////
+
+    icmMemoryP DataFlash_m = icmNewMemory("DataFlash_m", 0x7, 0x7fff);
+
+    icmConnectMemoryToBus( vfb_b, "sp1", DataFlash_m, 0x3e00000);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 Memory iRam
+////////////////////////////////////////////////////////////////////////////////
+
+    icmMemoryP iRam_m = icmNewMemory("iRam_m", 0x7, 0xefff);
+
+    icmConnectMemoryToBus( vfb_b, "sp1", iRam_m, 0x3ff0000);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                   Bridge bridge_vfb_0x03FF0000_0x0FFF0000
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNewBusBridge(vfb_b, vfb_b, "bridge_vfb_0x03FF0000_0x0FFF0000", "sp", "mp", 0x3ff0000, 0x3ffefff, 0xfff0000);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                   Bridge bridge_vfb_0x0FFFF58A_0x0FFFFB48
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNewBusBridge(vfb_b, vfb_b, "bridge_vfb_0x0FFFF58A_0x0FFFFB48", "sp", "mp", 0xffff58a, 0xffff593, 0xffffb48);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                   Bridge bridge_vfb_0x0FFFF598_0x0FFFFB56
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNewBusBridge(vfb_b, vfb_b, "bridge_vfb_0x0FFFF598_0x0FFFFB56", "sp", "mp", 0xffff598, 0xffff59f, 0xffffb56);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                   Bridge bridge_vfb_0x0FFFF5CA_0x0FFFFBC8
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNewBusBridge(vfb_b, vfb_b, "bridge_vfb_0x0FFFF5CA_0x0FFFFBC8", "sp", "mp", 0xffff5ca, 0xffff5d3, 0xffffbc8);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                   Bridge bridge_vfb_0x0FFFF5D8_0x0FFFFBD6
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNewBusBridge(vfb_b, vfb_b, "bridge_vfb_0x0FFFF5D8_0x0FFFFBD6", "sp", "mp", 0xffff5d8, 0xffff5df, 0xffffbd6);
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                 CONNECTIONS
+////////////////////////////////////////////////////////////////////////////////
+
+    icmNetP INTRESET_n = icmNewNet("INTRESET_n" );
+
+    icmConnectProcessorNet( CPU_c, INTRESET_n, "reset", ICM_INPUT);
+
+    icmConnectPSENet( INTC_p, INTRESET_n, "RESET", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTNMI_n = icmNewNet("INTNMI_n" );
+
+    icmConnectProcessorNet( CPU_c, INTNMI_n, "nmi0", ICM_INPUT);
+
+    icmConnectPSENet( INTC_p, INTNMI_n, "NMI0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINTP_n = icmNewNet("INTINTP_n" );
+
+    icmConnectProcessorNet( CPU_c, INTINTP_n, "intp", ICM_INPUT);
+
+    icmConnectPSENet( INTC_p, INTINTP_n, "INTP", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTMIRETI_n = icmNewNet("INTMIRETI_n" );
+
+    icmConnectProcessorNet( CPU_c, INTMIRETI_n, "mireti", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTMIRETI_n, "MIRETI", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINTACK_n = icmNewNet("INTINTACK_n" );
+
+    icmConnectProcessorNet( CPU_c, INTINTACK_n, "intack", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINTACK_n, "INTACK", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTNMI0_n = icmNewNet("INTNMI0_n" );
+
+    icmConnectPSENet( LOGIC_p, INTNMI0_n, "NMIOUT", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTNMI0_n, "NMI_00", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT0_n = icmNewNet("INTINT0_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT0_n, "INT0", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT0_n, "INT_00", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT1_n = icmNewNet("INTINT1_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT1_n, "INT1", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT1_n, "INT_01", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC0R_n = icmNewNet("INTUC0R_n" );
+
+    icmConnectPSENet( LOGIC_p, INTUC0R_n, "INTUC0R", ICM_INPUT);
+
+    icmConnectPSENet( UARTC0_p, INTUC0R_n, "INTUCR", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT6_n = icmNewNet("INTINT6_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT6_n, "INT6", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT6_n, "INT_06", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC1R_n = icmNewNet("INTUC1R_n" );
+
+    icmConnectPSENet( LOGIC_p, INTUC1R_n, "INTUC1R", ICM_INPUT);
+
+    icmConnectPSENet( UARTC1_p, INTUC1R_n, "INTUCR", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT7_n = icmNewNet("INTINT7_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT7_n, "INT7", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT7_n, "INT_07", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTBRG0_n = icmNewNet("INTBRG0_n" );
+
+    icmConnectPSENet( LOGIC_p, INTBRG0_n, "INTBRG0", ICM_INPUT);
+
+    icmConnectPSENet( BRG0_p, INTBRG0_n, "INTBRG", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTBRG1_n = icmNewNet("INTBRG1_n" );
+
+    icmConnectPSENet( LOGIC_p, INTBRG1_n, "INTBRG1", ICM_INPUT);
+
+    icmConnectPSENet( BRG1_p, INTBRG1_n, "INTBRG", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT75_n = icmNewNet("INTINT75_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT75_n, "INT75", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT75_n, "INT_75", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB0T_n = icmNewNet("INTCB0T_n" );
+
+    icmConnectPSENet( LOGIC_p, INTCB0T_n, "INTCB0T", ICM_INPUT);
+
+    icmConnectPSENet( CSIB0_p, INTCB0T_n, "INTCBT", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC2T_n = icmNewNet("INTUC2T_n" );
+
+    icmConnectPSENet( LOGIC_p, INTUC2T_n, "INTUC2T", ICM_INPUT);
+
+    icmConnectPSENet( UARTC2_p, INTUC2T_n, "INTUCT", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT99_n = icmNewNet("INTINT99_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT99_n, "INT99", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT99_n, "INT_99", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB0R_n = icmNewNet("INTCB0R_n" );
+
+    icmConnectPSENet( LOGIC_p, INTCB0R_n, "INTCB0R", ICM_INPUT);
+
+    icmConnectPSENet( CSIB0_p, INTCB0R_n, "INTCBR", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC2R_n = icmNewNet("INTUC2R_n" );
+
+    icmConnectPSENet( LOGIC_p, INTUC2R_n, "INTUC2R", ICM_INPUT);
+
+    icmConnectPSENet( UARTC2_p, INTUC2R_n, "INTUCR", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT100_n = icmNewNet("INTINT100_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT100_n, "INT100", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT100_n, "INT_100", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB0RE_n = icmNewNet("INTCB0RE_n" );
+
+    icmConnectPSENet( LOGIC_p, INTCB0RE_n, "INTCB0RE", ICM_INPUT);
+
+    icmConnectPSENet( CSIB0_p, INTCB0RE_n, "INTCBRE", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC2RE_n = icmNewNet("INTUC2RE_n" );
+
+    icmConnectPSENet( LOGIC_p, INTUC2RE_n, "INTUC2RE", ICM_INPUT);
+
+    icmConnectPSENet( UARTC2_p, INTUC2RE_n, "INTUCRE", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT101_n = icmNewNet("INTINT101_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT101_n, "INT101", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT101_n, "INT_101", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTINT116_n = icmNewNet("INTINT116_n" );
+
+    icmConnectPSENet( LOGIC_p, INTINT116_n, "INT116", ICM_OUTPUT);
+
+    icmConnectPSENet( INTC_p, INTINT116_n, "INT_116", ICM_INPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0OV_n = icmNewNet("INTTS0OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0OV_n, "INT_15", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0OV_n, "INTTSOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC0_n = icmNewNet("INTTS0CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC0_n, "INT_16", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC0_n, "INTTSCC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC1_n = icmNewNet("INTTS0CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC1_n, "INT_17", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC1_n, "INTTSCC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC2_n = icmNewNet("INTTS0CC2_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC2_n, "INT_18", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC2_n, "INTTSCC2", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC3_n = icmNewNet("INTTS0CC3_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC3_n, "INT_19", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC3_n, "INTTSCC3", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC4_n = icmNewNet("INTTS0CC4_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC4_n, "INT_20", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC4_n, "INTTSCC4", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CC5_n = icmNewNet("INTTS0CC5_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CC5_n, "INT_21", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CC5_n, "INTTSCC5", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0CD0_n = icmNewNet("INTTS0CD0_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0CD0_n, "INT_22", ICM_INPUT);
+
+    icmConnectPSENet( ADC0_p, INTTS0CD0_n, "INTTS0CD", ICM_INPUT);
+
+    icmConnectPSENet( ADC1_p, INTTS0CD0_n, "INTTS0CD", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0CD0_n, "INTTSCD0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0OD_n = icmNewNet("INTTS0OD_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0OD_n, "INT_23", ICM_INPUT);
+
+    icmConnectPSENet( ADC0_p, INTTS0OD_n, "INTTS0OD", ICM_INPUT);
+
+    icmConnectPSENet( ADC1_p, INTTS0OD_n, "INTTS0OD", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0OD_n, "INTTSOD", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0ER_n = icmNewNet("INTTS0ER_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0ER_n, "INT_24", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0ER_n, "INTTSER", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS0WN_n = icmNewNet("INTTS0WN_n" );
+
+    icmConnectPSENet( INTC_p, INTTS0WN_n, "INT_25", ICM_INPUT);
+
+    icmConnectPSENet( TMS0_p, INTTS0WN_n, "INTTSWN", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1OV_n = icmNewNet("INTTS1OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1OV_n, "INT_26", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1OV_n, "INTTSOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC0_n = icmNewNet("INTTS1CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC0_n, "INT_27", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC0_n, "INTTSCC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC1_n = icmNewNet("INTTS1CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC1_n, "INT_28", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC1_n, "INTTSCC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC2_n = icmNewNet("INTTS1CC2_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC2_n, "INT_29", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC2_n, "INTTSCC2", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC3_n = icmNewNet("INTTS1CC3_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC3_n, "INT_30", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC3_n, "INTTSCC3", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC4_n = icmNewNet("INTTS1CC4_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC4_n, "INT_31", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC4_n, "INTTSCC4", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CC5_n = icmNewNet("INTTS1CC5_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CC5_n, "INT_32", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CC5_n, "INTTSCC5", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1CD0_n = icmNewNet("INTTS1CD0_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1CD0_n, "INT_33", ICM_INPUT);
+
+    icmConnectPSENet( ADC0_p, INTTS1CD0_n, "INTTS1CD", ICM_INPUT);
+
+    icmConnectPSENet( ADC1_p, INTTS1CD0_n, "INTTS1CD", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1CD0_n, "INTTSCD0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1OD_n = icmNewNet("INTTS1OD_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1OD_n, "INT_34", ICM_INPUT);
+
+    icmConnectPSENet( ADC0_p, INTTS1OD_n, "INTTS1OD", ICM_INPUT);
+
+    icmConnectPSENet( ADC1_p, INTTS1OD_n, "INTTS1OD", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1OD_n, "INTTSOD", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1ER_n = icmNewNet("INTTS1ER_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1ER_n, "INT_35", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1ER_n, "INTTSER", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTS1WN_n = icmNewNet("INTTS1WN_n" );
+
+    icmConnectPSENet( INTC_p, INTTS1WN_n, "INT_36", ICM_INPUT);
+
+    icmConnectPSENet( TMS1_p, INTTS1WN_n, "INTTSWN", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT0OV_n = icmNewNet("INTTT0OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTT0OV_n, "INT_37", ICM_INPUT);
+
+    icmConnectPSENet( TMT0_p, INTTT0OV_n, "INTTTOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT0CC0_n = icmNewNet("INTTT0CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTT0CC0_n, "INT_38", ICM_INPUT);
+
+    icmConnectPSENet( TMT0_p, INTTT0CC0_n, "INTTTCC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT0CC1_n = icmNewNet("INTTT0CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTT0CC1_n, "INT_39", ICM_INPUT);
+
+    icmConnectPSENet( TMT0_p, INTTT0CC1_n, "INTTTCC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT0EC_n = icmNewNet("INTTT0EC_n" );
+
+    icmConnectPSENet( INTC_p, INTTT0EC_n, "INT_40", ICM_INPUT);
+
+    icmConnectPSENet( TMT0_p, INTTT0EC_n, "INTTTEC", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT1OV_n = icmNewNet("INTTT1OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTT1OV_n, "INT_41", ICM_INPUT);
+
+    icmConnectPSENet( TMT1_p, INTTT1OV_n, "INTTTOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT1CC0_n = icmNewNet("INTTT1CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTT1CC0_n, "INT_42", ICM_INPUT);
+
+    icmConnectPSENet( TMT1_p, INTTT1CC0_n, "INTTTCC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT1CC1_n = icmNewNet("INTTT1CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTT1CC1_n, "INT_43", ICM_INPUT);
+
+    icmConnectPSENet( TMT1_p, INTTT1CC1_n, "INTTTCC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTT1EC_n = icmNewNet("INTTT1EC_n" );
+
+    icmConnectPSENet( INTC_p, INTTT1EC_n, "INT_44", ICM_INPUT);
+
+    icmConnectPSENet( TMT1_p, INTTT1EC_n, "INTTTEC", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA0OV_n = icmNewNet("INTTAA0OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA0OV_n, "INT_45", ICM_INPUT);
+
+    icmConnectPSENet( TAA0_p, INTTAA0OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA0CC0_n = icmNewNet("INTTAA0CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA0CC0_n, "INT_46", ICM_INPUT);
+
+    icmConnectPSENet( TAA0_p, INTTAA0CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA0CC1_n = icmNewNet("INTTAA0CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA0CC1_n, "INT_47", ICM_INPUT);
+
+    icmConnectPSENet( TAA0_p, INTTAA0CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA1OV_n = icmNewNet("INTTAA1OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA1OV_n, "INT_48", ICM_INPUT);
+
+    icmConnectPSENet( TAA1_p, INTTAA1OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA1CC0_n = icmNewNet("INTTAA1CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA1CC0_n, "INT_49", ICM_INPUT);
+
+    icmConnectPSENet( TAA1_p, INTTAA1CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA1CC1_n = icmNewNet("INTTAA1CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA1CC1_n, "INT_50", ICM_INPUT);
+
+    icmConnectPSENet( TAA1_p, INTTAA1CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA2OV_n = icmNewNet("INTTAA2OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA2OV_n, "INT_51", ICM_INPUT);
+
+    icmConnectPSENet( TAA2_p, INTTAA2OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA2CC0_n = icmNewNet("INTTAA2CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA2CC0_n, "INT_52", ICM_INPUT);
+
+    icmConnectPSENet( TAA2_p, INTTAA2CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA2CC1_n = icmNewNet("INTTAA2CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA2CC1_n, "INT_53", ICM_INPUT);
+
+    icmConnectPSENet( TAA2_p, INTTAA2CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA3OV_n = icmNewNet("INTTAA3OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA3OV_n, "INT_54", ICM_INPUT);
+
+    icmConnectPSENet( TAA3_p, INTTAA3OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA3CC0_n = icmNewNet("INTTAA3CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA3CC0_n, "INT_55", ICM_INPUT);
+
+    icmConnectPSENet( TAA3_p, INTTAA3CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA3CC1_n = icmNewNet("INTTAA3CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA3CC1_n, "INT_56", ICM_INPUT);
+
+    icmConnectPSENet( TAA3_p, INTTAA3CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA4OV_n = icmNewNet("INTTAA4OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA4OV_n, "INT_57", ICM_INPUT);
+
+    icmConnectPSENet( TAA4_p, INTTAA4OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA4CC0_n = icmNewNet("INTTAA4CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA4CC0_n, "INT_58", ICM_INPUT);
+
+    icmConnectPSENet( TAA4_p, INTTAA4CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA4CC1_n = icmNewNet("INTTAA4CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA4CC1_n, "INT_59", ICM_INPUT);
+
+    icmConnectPSENet( TAA4_p, INTTAA4CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA5OV_n = icmNewNet("INTTAA5OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA5OV_n, "INT_60", ICM_INPUT);
+
+    icmConnectPSENet( TAA5_p, INTTAA5OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA5CC0_n = icmNewNet("INTTAA5CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA5CC0_n, "INT_61", ICM_INPUT);
+
+    icmConnectPSENet( TAA5_p, INTTAA5CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA5CC1_n = icmNewNet("INTTAA5CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA5CC1_n, "INT_62", ICM_INPUT);
+
+    icmConnectPSENet( TAA5_p, INTTAA5CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA6OV_n = icmNewNet("INTTAA6OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA6OV_n, "INT_63", ICM_INPUT);
+
+    icmConnectPSENet( TAA6_p, INTTAA6OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA6CC0_n = icmNewNet("INTTAA6CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA6CC0_n, "INT_64", ICM_INPUT);
+
+    icmConnectPSENet( TAA6_p, INTTAA6CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA6CC1_n = icmNewNet("INTTAA6CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA6CC1_n, "INT_65", ICM_INPUT);
+
+    icmConnectPSENet( TAA6_p, INTTAA6CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA7OV_n = icmNewNet("INTTAA7OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA7OV_n, "INT_66", ICM_INPUT);
+
+    icmConnectPSENet( TAA7_p, INTTAA7OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA7CC0_n = icmNewNet("INTTAA7CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA7CC0_n, "INT_67", ICM_INPUT);
+
+    icmConnectPSENet( TAA7_p, INTTAA7CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA7CC1_n = icmNewNet("INTTAA7CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA7CC1_n, "INT_68", ICM_INPUT);
+
+    icmConnectPSENet( TAA7_p, INTTAA7CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA8OV_n = icmNewNet("INTTAA8OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA8OV_n, "INT_69", ICM_INPUT);
+
+    icmConnectPSENet( TAA8_p, INTTAA8OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA8CC0_n = icmNewNet("INTTAA8CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA8CC0_n, "INT_70", ICM_INPUT);
+
+    icmConnectPSENet( TAA8_p, INTTAA8CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA8CC1_n = icmNewNet("INTTAA8CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA8CC1_n, "INT_71", ICM_INPUT);
+
+    icmConnectPSENet( TAA8_p, INTTAA8CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA9OV_n = icmNewNet("INTTAA9OV_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA9OV_n, "INT_72", ICM_INPUT);
+
+    icmConnectPSENet( TAA9_p, INTTAA9OV_n, "INTTAAOV", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA9CC0_n = icmNewNet("INTTAA9CC0_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA9CC0_n, "INT_73", ICM_INPUT);
+
+    icmConnectPSENet( TAA9_p, INTTAA9CC0_n, "INTTAACC0", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTTAA9CC1_n = icmNewNet("INTTAA9CC1_n" );
+
+    icmConnectPSENet( INTC_p, INTTAA9CC1_n, "INT_74", ICM_INPUT);
+
+    icmConnectPSENet( TAA9_p, INTTAA9CC1_n, "INTTAACC1", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTBRG2_n = icmNewNet("INTBRG2_n" );
+
+    icmConnectPSENet( INTC_p, INTBRG2_n, "INT_76", ICM_INPUT);
+
+    icmConnectPSENet( BRG2_p, INTBRG2_n, "INTBRG", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB1T_n = icmNewNet("INTCB1T_n" );
+
+    icmConnectPSENet( INTC_p, INTCB1T_n, "INT_102", ICM_INPUT);
+
+    icmConnectPSENet( CSIB1_p, INTCB1T_n, "INTCBT", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB1R_n = icmNewNet("INTCB1R_n" );
+
+    icmConnectPSENet( INTC_p, INTCB1R_n, "INT_103", ICM_INPUT);
+
+    icmConnectPSENet( CSIB1_p, INTCB1R_n, "INTCBR", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTCB1RE_n = icmNewNet("INTCB1RE_n" );
+
+    icmConnectPSENet( INTC_p, INTCB1RE_n, "INT_104", ICM_INPUT);
+
+    icmConnectPSENet( CSIB1_p, INTCB1RE_n, "INTCBRE", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC0RE_n = icmNewNet("INTUC0RE_n" );
+
+    icmConnectPSENet( INTC_p, INTUC0RE_n, "INT_109", ICM_INPUT);
+
+    icmConnectPSENet( UARTC0_p, INTUC0RE_n, "INTUCRE", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC0T_n = icmNewNet("INTUC0T_n" );
+
+    icmConnectPSENet( INTC_p, INTUC0T_n, "INT_110", ICM_INPUT);
+
+    icmConnectPSENet( UARTC0_p, INTUC0T_n, "INTUCT", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC1RE_n = icmNewNet("INTUC1RE_n" );
+
+    icmConnectPSENet( INTC_p, INTUC1RE_n, "INT_111", ICM_INPUT);
+
+    icmConnectPSENet( UARTC1_p, INTUC1RE_n, "INTUCRE", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTUC1T_n = icmNewNet("INTUC1T_n" );
+
+    icmConnectPSENet( INTC_p, INTUC1T_n, "INT_112", ICM_INPUT);
+
+    icmConnectPSENet( UARTC1_p, INTUC1T_n, "INTUCT", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTAD0_n = icmNewNet("INTAD0_n" );
+
+    icmConnectPSENet( INTC_p, INTAD0_n, "INT_113", ICM_INPUT);
+
+    icmConnectPSENet( ADC0_p, INTAD0_n, "INTAD", ICM_OUTPUT);
+
+////////////////////////////////////////////////////////////////////////////////
+    icmNetP INTAD1_n = icmNewNet("INTAD1_n" );
+
+    icmConnectPSENet( INTC_p, INTAD1_n, "INT_114", ICM_INPUT);
+
+    icmConnectPSENet( ADC1_p, INTAD1_n, "INTAD", ICM_OUTPUT);
+
+    return CPU_c;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                                   M A I N
+////////////////////////////////////////////////////////////////////////////////
+
+int main(int argc, char *argv[]) {
+
+    parseArgs(argc, argv);
+
+    // the constructor
+    icmProcessorP processor = createPlatform();
+
+    // load the application executable file into processor memory space
+    if(!icmLoadProcessorMemory(processor, application, ICM_LOAD_DEFAULT, False, True)) {
+        return -1;
+    }
+
+    // run till the end
+    icmSimulatePlatform();
+    icmTerminate();
+    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//
+// Parse the argument list and set variables
+//
+static void parseArgs(int argc, char **argv)
+{
+    // check for the application program name argument
+    if((argc<2) || (argc>3)) {
+        icmPrintf(
+           "usage: %s %s\n\n",
+            argv[0], usage
+        );
+        exit(1);
+    }
+    application = argv[1];
+}

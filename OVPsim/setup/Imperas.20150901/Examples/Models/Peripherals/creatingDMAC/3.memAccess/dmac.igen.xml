@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    destructor="destructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="dmac"
+    vendor="ovpworld.org"
+    version="1.0">
+    <documentation name="Description">DMAC peripheral model</documentation>
+    <busmasterport addresswidth="32"
+        name="MREAD">
+        <documentation name="Description">DMA Registers Master Port - Read</documentation>
+    </busmasterport>
+    <busmasterport addresswidth="32"
+        name="MWRITE">
+        <documentation name="Description">DMA Registers Master Port - Write</documentation>
+    </busmasterport>
+    <busslaveport addresswidth="32"
+        mustbeconnected="T"
+        name="DMACSP"
+        size="0x140">
+        <documentation name="Description">DMA Registers Slave Port</documentation>
+        <addressblock name="ab8"
+            size="0x40"
+            width="8">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="intStatus"
+                readfunction="regRd8"
+                width="8">
+                <documentation name="Description">internal status</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="intTCstatus"
+                offset="0x4"
+                readfunction="regRd8"
+                width="8"
+                writefunction="TCclearWr">
+                <documentation name="Description">internal TC status</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="intErrStatus"
+                offset="0xc"
+                readfunction="regRd8"
+                width="8"
+                writefunction="errClearWr">
+                <documentation name="Description">internal error status</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="rawTCstatus"
+                offset="0x14"
+                readfunction="regRd8"
+                width="8">
+                <documentation name="Description">raw TC status</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="rawErrStatus"
+                offset="0x18"
+                readfunction="regRd8"
+                width="8">
+                <documentation name="Description">raw error status</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="enbldChns"
+                offset="0x1c"
+                readfunction="regRd8"
+                width="8">
+                <documentation name="Description">enabled channels</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="config"
+                offset="0x30"
+                readfunction="regRd8"
+                width="8"
+                writefunction="configWr">
+                <field bitoffset="0"
+                    name="burstSize"
+                    width="2"/>
+                <documentation name="Description">configuration</documentation>
+            </memorymappedregister>
+        </addressblock>
+        <addressblock name="ab32ch0"
+            offset="0x100"
+            size="0x20"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="srcAddr"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 0 source address</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="dstAddr"
+                offset="0x4"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 0 dest address</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LLI"
+                offset="0x8"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 0 LLI</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="control"
+                offset="0xc"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <field bitoffset="0"
+                    name="transferSize"
+                    width="12"/>
+                <documentation name="Description">channel 0 control</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="config"
+                offset="0x10"
+                readfunction="regRd32"
+                width="32"
+                writefunction="configCh0Wr">
+                <field name="enable"
+                    width="1"/>
+                <field bitoffset="15"
+                    name="inten"
+                    width="1"/>
+                <field bitoffset="18"
+                    name="halt"
+                    width="1"/>
+                <documentation name="Description">channel 0 configuration</documentation>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="14"/>
+                <field bitoffset="16"
+                    name="__pad16"
+                    width="2"/>
+            </memorymappedregister>
+        </addressblock>
+        <addressblock name="ab32ch1"
+            offset="0x120"
+            size="0x20"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="srcAddr"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 1 source address</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="dstAddr"
+                offset="0x4"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 1 dest address</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="LLI"
+                offset="0x8"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <documentation name="Description">channel 1 LLI</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="control"
+                offset="0xc"
+                readfunction="regRd32"
+                width="32"
+                writefunction="regWr32">
+                <field bitoffset="0"
+                    name="transferSize"
+                    width="12"/>
+                <documentation name="Description">channel 1 control</documentation>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="config"
+                offset="0x10"
+                readfunction="regRd32"
+                width="32"
+                writefunction="configCh1Wr">
+                <field name="enable"
+                    width="1"/>
+                <field bitoffset="18"
+                    name="halt"
+                    width="1"/>
+                <documentation name="Description">channel 1 configuration</documentation>
+                <field bitoffset="1"
+                    name="__pad1"
+                    width="17"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

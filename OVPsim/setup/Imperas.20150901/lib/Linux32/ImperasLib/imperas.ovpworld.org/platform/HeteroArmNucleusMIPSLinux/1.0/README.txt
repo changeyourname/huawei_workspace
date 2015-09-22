@@ -1,0 +1,76 @@
+Copyright (c) 2005-2015 Imperas Ltd. All Rights Reserved.
+
+Name
+----
+    imperas.ovpworld.org/platform/HeteroArmNucleusMIPSLinux/1.0
+
+
+Attributes that can be overridden
+---------------------------------
+    mipsle1/variant
+    mipsle1/vectoredinterrupt
+    mipsle1/config1MMUSizeM1
+    Core_Board_SDRAM_promInit/kernel
+    Core_Board_SDRAM_promInit/boardid
+    Core_Board_SDRAM_promInit/initrd
+    Core_Board_SDRAM_promInit/command
+    PIIX4/PCIslot
+    PIIX4-IDE/PCIslot
+    PIIX4-IDE/PCIfunction
+    PIIX4-IDE/Drive0Name
+    PIIX4-IDE/Drive1Name
+    PIIX4-IDE/Drive2Name
+    PCI_USB/PCIslot
+    PCI_USB/PCIfunction
+    PCI_PM/PCIslot
+    PCI_PM/PCIfunction
+    PCI_NET/PCIslot
+    PCI_NET/PCIfunction
+    PCI_NET/pollDelay
+    PCI_NET/redir
+    PCI_NET/tftpPrefix
+    PCI_NET/ethereal
+    intCtrlMaster/spen
+    intCtrlSlave/spen
+    vga/scanDelay
+    vga/PCIslot
+    vga/title
+    vga/noGraphics
+    Ps2Control/pollPeriod
+    Ps2Control/disableInput
+    Ps2Control/grabDisable
+    mrtc/timefromhost
+    uartTTY0/infile
+    uartTTY0/outfile
+    uartTTY0/portnum
+    uartTTY0/console
+    uartTTY1/infile
+    uartTTY1/outfile
+    uartTTY1/portnum
+    uartTTY1/console
+    uartCBUS/infile
+    uartCBUS/outfile
+    uartCBUS/portnum
+    maltaFpga/stoponsoftreset
+    armSub1arm1/variant
+    armSub1arm1/compatibility
+    armSub1arm1/showHiddenRegs
+    armSub1arm1/override_debugMask
+    armSub1kb1/isMouse
+    armSub1kb1/grabDisable
+    armSub1ms1/isMouse
+    armSub1ms1/grabDisable
+    armSub1uart1/variant
+    armSub1uart1/outfile
+    armSub1uart1/finishOnDisconnect
+    armSub1uart2/variant
+    armSub1uart2/finishOnDisconnect
+    armSub1lcd/scanDelay
+    armSub1lcd/noGraphics
+    armSub1smartLoader/kernel
+    armSub1smartLoader/initrd
+    armSub1smartLoader/command
+    armSub1smartLoader/physicalbase
+    armSub1smartLoader/memsize
+    armSub1smartLoader/disable
+

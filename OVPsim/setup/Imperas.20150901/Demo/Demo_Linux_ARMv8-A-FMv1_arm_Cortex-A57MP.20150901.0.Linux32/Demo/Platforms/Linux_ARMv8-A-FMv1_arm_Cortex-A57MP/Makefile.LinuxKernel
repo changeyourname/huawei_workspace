@@ -1,0 +1,57 @@
+# Build Linux arm64 kernel and DTBs
+
+# GCC Crosscompiler
+#  (from: http://releases.linaro.org/13.11/components/toolchain/binaries/$(GCC_VERSION).tar.xz)
+GCC_HOME=/home/tools/local/Linux32
+GCC_VERSION=gcc-linaro-aarch64-linux-gnu-4.8-2013.11
+_CROSS_COMPILE=aarch64-linux-gnu-
+
+# Set up path to use normal host compiler and cross compiler
+PATH:=/usr/bin:$(GCC_HOME)/$(GCC_VERSION)/bin:$(PATH)
+
+LINARO=linaro-tracking
+KERNEL_VERSION=$(LINARO)
+
+# Device tree file to use
+DTB_V1=foundation-v8.dtb
+DTB_V2=fvp-foundation-gicv2legacy-psci.dtb
+
+all: Image-$(KERNEL_VERSION) vmlinux-$(KERNEL_VERSION) $(DTB_V1)-$(KERNEL_VERSION) $(DTB_V2)-$(KERNEL_VERSION)
+
+# Linaro kernel
+Image-$(LINARO): linux-$(LINARO)/arch/arm64/boot/Image
+	cp $< $@
+
+vmlinux-$(LINARO): linux-$(LINARO)/vmlinux
+	cp $< $@
+
+# Linaro DTBs
+$(DTB_V1)-$(LINARO): linux-$(LINARO)/arch/arm64/boot/dts/$(DTB_V1)
+	cp $< $@
+$(DTB_V2)-$(LINARO): linux-$(LINARO)/arch/arm64/boot/dts/$(DTB_V2)
+	cp $< $@
+
+linux-$(LINARO)/arch/arm64/boot/Image linux-$(LINARO)/vmlinux linux-$(LINARO)/arch/arm64/boot/dts/$(DTB): linux-$(LINARO)/.config 
+	make -C linux-$(LINARO) ARCH=arm64 CROSS_COMPILE=$(_CROSS_COMPILE) CONFIG_DEBUG_INFO=1 Image dtbs
+
+linux-$(LINARO)/.config: | linux-$(LINARO)
+	(cd linux-$(LINARO); ARCH=arm64 scripts/kconfig/merge_config.sh \
+		linaro/configs/linaro-base.conf \
+		linaro/configs/linaro-base64.conf \
+		linaro/configs/distribution.conf \
+		linaro/configs/vexpress64.conf \
+		linaro/configs/kvm-host.conf \
+		linaro/configs/kvm-guest.conf )
+
+linux-$(LINARO):
+	git clone http://git.linaro.org/kernel/linux-$(LINARO).git
+	(cd linux-$(LINARO); git checkout ll_20140321.0)
+
+# clean Linux kernel directory
+clean:
+	make -C linux-$(KERNEL_VERSION) ARCH=arm64 clean
+
+# Clean all sources, leaving only images
+realclean:
+	rm -r linux-$(LINARO) 
+

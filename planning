@@ -1,0 +1,3 @@
+-- For start, it is agreed that we would have our own SystemC environment at the end that will use our custom Cache models integrated with OVP virtual platforms. These
+   OVP platform models will have to be encapsulated via TLM2.0 wrappers in order to be used in our environment. These OVP models would basically serve as testbench stimuli 
+   to our cache model (22/09/2015)

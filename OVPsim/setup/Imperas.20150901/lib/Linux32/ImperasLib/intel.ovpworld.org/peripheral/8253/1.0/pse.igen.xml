@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="8253"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="intel.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="Intel 8253 Programmable Interval Timer (PIT)"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"
+            text="This model has sufficient functionality to allow a Linux Kernel to Boot on the MIPS:MALTA platform.
+           Not all modes are supported."/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Reference">
+        <doctext name="txt"
+            text="Intel 8253 Datasheet. MIPS Malta Platform Reference Guide."/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x4">
+        <addressblock name="reg"
+            size="0x4"
+            width="8">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CTR0"
+                readfunction="readCTR0"
+                width="8"
+                writefunction="writeCTR0"/>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CTR1"
+                offset="0x1"
+                readfunction="readCTR1"
+                width="8"
+                writefunction="writeCTR1"/>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CTR2"
+                offset="0x2"
+                readfunction="readCTR2"
+                width="8"
+                writefunction="writeCTR2"/>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CNTL"
+                offset="0x3"
+                readfunction="readCNTL"
+                width="8"
+                writefunction="writeCNTL">
+                <field name="BCD"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="M"
+                    width="3"/>
+                <field bitoffset="4"
+                    name="RW"
+                    width="2"/>
+                <field bitoffset="6"
+                    name="SC"
+                    width="2"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="clk0"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="gate0"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="out0"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="clk1"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="gate1"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="out1"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="clk2"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="gate2"
+        type="input"
+        updatefunctionargument="0"/>
+    <netport name="out2"
+        type="output"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisGPIO"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x40">
+        <addressblock name="ab"
+            size="0x18"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PDOR"
+                width="32"
+                writefunction="writeDOR">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Data Output Register, offset: 0x0 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PDO"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PSOR"
+                offset="0x4"
+                width="32"
+                writefunction="writeSOR">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Set Output Register, offset: 0x4 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PTSO"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PCOR"
+                offset="0x8"
+                width="32"
+                writefunction="writeCOR">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Clear Output Register, offset: 0x8 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PTCO"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="PTOR"
+                offset="0xc"
+                width="32"
+                writefunction="writeTOR">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Toggle Output Register, offset: 0xC "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PTTO"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="PDIR"
+                offset="0x10"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Data Input Register, offset: 0x10 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PDI"
+                    width="32"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="PDDR"
+                offset="0x14"
+                width="32"
+                writefunction="writeDDR">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="Port Data Direction Register, offset: 0x14 "/>
+                </docsection>
+                <field bitoffset="0"
+                    name="PDD"
+                    width="32"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunction="resetCB"
+        updatefunctionargument="0"/>
+    <netport name="Input"
+        type="input"
+        updatefunction="inputCB"
+        updatefunctionargument="0"/>
+    <netport name="Output"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="OutputMask"
+        type="output"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

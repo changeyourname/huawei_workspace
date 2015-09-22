@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisRFVBAT"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x20"
+            width="32">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGA"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGB"
+                offset="0x4"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGC"
+                offset="0x8"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGD"
+                offset="0xc"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGE"
+                offset="0x10"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGF"
+                offset="0x14"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGG"
+                offset="0x18"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="REGH"
+                offset="0x1c"
+                width="32">
+                <reset mask="4294967295"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="VBAT register file register, array offset: 0x0, array step: 0x4 "/>
+                </docsection>
+                <field bitoffset="24"
+                    name="HH"
+                    width="8"/>
+                <field bitoffset="16"
+                    name="HL"
+                    width="8"/>
+                <field bitoffset="8"
+                    name="LH"
+                    width="8"/>
+                <field name="LL"
+                    width="8"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

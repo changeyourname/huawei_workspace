@@ -1,0 +1,144 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "pse.igen.h"
+//////////////////////////////// Callback stubs ////////////////////////////////
+
+PPM_NET_CB(P_SCKE) {
+    // YOUR CODE HERE (P_SCKE)
+}
+
+PPM_NET_CB(P_SIE) {
+    // YOUR CODE HERE (P_SIE)
+}
+
+PPM_REG_READ_CB(readRX) {
+    // YOUR CODE HERE (readRX)
+    return *(Uns16*)user;
+}
+
+PPM_REG_READ_CB(readTX) {
+    // YOUR CODE HERE (readTX)
+    return *(Uns16*)user;
+}
+
+PPM_REG_WRITE_CB(writeCS) {
+    // YOUR CODE HERE (writeCS)
+    *(Uns16*)user = (*(Uns16*)user & 0xfff0) | (data & 0xf);
+}
+
+PPM_REG_WRITE_CB(writeCTL0) {
+    // YOUR CODE HERE (writeCTL0)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeCTL1) {
+    // YOUR CODE HERE (writeCTL1)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeCTL2) {
+    // YOUR CODE HERE (writeCTL2)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeCTL3) {
+    // YOUR CODE HERE (writeCTL3)
+    *(Uns8*)user = (*(Uns8*)user & 0xf0) | (data & 0xf);
+}
+
+PPM_REG_WRITE_CB(writeCTL4) {
+    // YOUR CODE HERE (writeCTL4)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT0) {
+    // YOUR CODE HERE (writeOPT0)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT1) {
+    // YOUR CODE HERE (writeOPT1)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT2) {
+    // YOUR CODE HERE (writeOPT2)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT3) {
+    // YOUR CODE HERE (writeOPT3)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT4) {
+    // YOUR CODE HERE (writeOPT4)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT5) {
+    // YOUR CODE HERE (writeOPT5)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT6) {
+    // YOUR CODE HERE (writeOPT6)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeOPT7) {
+    // YOUR CODE HERE (writeOPT7)
+    *(Uns16*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeSTR) {
+    // YOUR CODE HERE (writeSTR)
+    *(Uns8*)user = data;
+}
+
+PPM_REG_WRITE_CB(writeTX) {
+    // YOUR CODE HERE (writeTX)
+    *(Uns16*)user = data;
+}
+
+PPM_CONSTRUCTOR_CB(constructor) {
+    // YOUR CODE HERE (pre constructor)
+    periphConstructor();
+    // YOUR CODE HERE (post constructor)
+}
+
+
+PPM_SAVE_STATE_FN(peripheralSaveState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+
+PPM_RESTORE_STATE_FN(peripheralRestoreState) {
+    bhmMessage("E", "PPM_RSNI", "Model does not implement save/restore");
+}
+

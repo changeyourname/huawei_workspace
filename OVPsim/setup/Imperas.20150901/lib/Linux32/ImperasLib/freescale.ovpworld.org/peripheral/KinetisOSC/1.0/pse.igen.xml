@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="KinetisOSC"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="freescale.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x1"
+            width="8">
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="CR"
+                offset="0x0"
+                width="8"
+                writemask="175">
+                <reset mask="255"
+                    name="Reset"/>
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="OSC Control Register, offset: 0x0 "/>
+                </docsection>
+                <field bitoffset="7"
+                    name="ERCLKEN"
+                    width="1"/>
+                <field bitoffset="5"
+                    name="EREFSTEN"
+                    width="1"/>
+                <field name="SC16P"
+                    width="1"/>
+                <field bitoffset="3"
+                    name="SC2P"
+                    width="1"/>
+                <field bitoffset="2"
+                    name="SC4P"
+                    width="1"/>
+                <field bitoffset="1"
+                    name="SC8P"
+                    width="1"/>
+                <field bitoffset="4"
+                    name="__pad4"
+                    width="1"/>
+                <field bitoffset="6"
+                    name="__pad6"
+                    width="1"/>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="Reset"
+        type="input"
+        updatefunctionargument="0"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>
