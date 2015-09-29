@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <peripheral constructor="constructor"
+    imagefile="pse.pse"
+    library="peripheral"
+    name="IntICP"
+    releasestatus="4"
+    saveRestore="F"
+    vendor="arm.ovpworld.org"
+    version="1.0"
+    visibility="0">
+    <docsection name="doc"
+        text="Description">
+        <doctext name="txt"
+            text="ARM Integrator Board interrupt controller"/>
+    </docsection>
+    <docsection name="doc_1"
+        text="Limitations">
+        <doctext name="txt"
+            text="none"/>
+    </docsection>
+    <docsection name="doc_2"
+        text="Reference">
+        <doctext name="txt"
+            text="Integrator User Guide Compact Platform Baseboard HBI-0086 (DUI 0159B)"/>
+    </docsection>
+    <docsection name="doc_3"
+        text="Licensing">
+        <doctext name="txt"
+            text="Open Source Apache 2.0"/>
+    </docsection>
+    <busslaveport addresswidth="32"
+        name="bport1"
+        size="0x1000">
+        <addressblock name="ab"
+            size="0x1000"
+            width="32">
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="status"
+                readfunction="readIRQ"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="IRQ_STATUS"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="level"
+                offset="0x4"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="IRQ_RAWSTAT"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="enable"
+                offset="0x8"
+                width="32"
+                writefunction="writeSET">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="IRQ_ENABLE_SET"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="clr"
+                offset="0xc"
+                width="32"
+                writefunction="writeCLR">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="IRQ_ENABLE_CLR"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="rw"
+                isvolatile="T"
+                name="softset"
+                offset="0x10"
+                readfunction="readLEV"
+                width="32"
+                writefunction="writeSST">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="INT_SOFTSET"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="softclr"
+                offset="0x14"
+                width="32"
+                writefunction="writeSCL">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="INT_SOFTCLR"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="frqstat"
+                offset="0x20"
+                readfunction="readFIQ"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="FRQ_STATUS"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="r"
+                isvolatile="T"
+                name="rawstat"
+                offset="0x24"
+                readfunction="readLevel"
+                width="32">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="FRQ_RAWSTAT"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="fiqen"
+                offset="0x28"
+                width="32"
+                writefunction="writeFIQS">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="FIQ_ENABLESET"/>
+                </docsection>
+            </memorymappedregister>
+            <memorymappedregister access="w"
+                isvolatile="T"
+                name="fiqenclr"
+                offset="0x2c"
+                width="32"
+                writefunction="writeFIQC">
+                <docsection name="doc"
+                    text="Description">
+                    <doctext name="txt"
+                        text="FRQ_ENABLECLR"/>
+                </docsection>
+            </memorymappedregister>
+        </addressblock>
+    </busslaveport>
+    <netport name="irq"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="fiq"
+        type="output"
+        updatefunctionargument="0"/>
+    <netport name="ir0"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="0"/>
+    <netport name="ir1"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="1"/>
+    <netport name="ir2"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="2"/>
+    <netport name="ir3"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="3"/>
+    <netport name="ir4"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="4"/>
+    <netport name="ir5"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="5"/>
+    <netport name="ir6"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="6"/>
+    <netport name="ir7"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="7"/>
+    <netport name="ir8"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="8"/>
+    <netport name="ir9"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="9"/>
+    <netport name="ir10"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="10"/>
+    <netport name="ir11"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="11"/>
+    <netport name="ir12"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="12"/>
+    <netport name="ir13"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="13"/>
+    <netport name="ir14"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="14"/>
+    <netport name="ir15"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="15"/>
+    <netport name="ir16"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="16"/>
+    <netport name="ir17"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="17"/>
+    <netport name="ir18"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="18"/>
+    <netport name="ir19"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="19"/>
+    <netport name="ir20"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="20"/>
+    <netport name="ir21"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="21"/>
+    <netport name="ir22"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="22"/>
+    <netport name="ir23"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="23"/>
+    <netport name="ir24"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="24"/>
+    <netport name="ir25"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="25"/>
+    <netport name="ir26"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="26"/>
+    <netport name="ir27"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="27"/>
+    <netport name="ir28"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="28"/>
+    <netport name="ir29"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="29"/>
+    <netport name="ir30"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="30"/>
+    <netport name="ir31"
+        type="input"
+        updatefunction="irqUpdate"
+        updatefunctionargument="31"/>
+    <fileversion major="1"
+        minor="0"
+        name="_version_0"/>
+ </peripheral>

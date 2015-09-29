@@ -1,0 +1,51 @@
+17:55:49 **** Build of configuration Debug for project custom_sysc_memory ****
+make all 
+Building file: ../ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.d" -MT"ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.d" -o "ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o" "../ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp"
+Finished building: ../ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
+ 
+Building file: ../ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.d" -MT"ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.d" -o "ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o" "../ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp"
+Finished building: ../ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
+ 
+Building file: ../ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.d" -MT"ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.d" -o "ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o" "../ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp"
+Finished building: ../ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
+ 
+Building file: ../ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.d" -MT"ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.d" -o "ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o" "../ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp"
+Finished building: ../ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+ 
+Building file: ../ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.d" -MT"ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.d" -o "ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.o" "../ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.cpp"
+Finished building: ../ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.cpp
+ 
+Building file: ../icmCpuManager.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"icmCpuManager.d" -MT"icmCpuManager.d" -o "icmCpuManager.o" "../icmCpuManager.cpp"
+Finished building: ../icmCpuManager.cpp
+ 
+Building file: ../my_mem.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"my_mem.d" -MT"my_mem.d" -o "my_mem.o" "../my_mem.cpp"
+../my_mem.cpp: In member function ‘void my_mem::b_transport(tlm::tlm_generic_payload&, sc_core::sc_time&)’:
+../my_mem.cpp:27:30: warning: unused variable ‘response_status’ [-Wunused-variable]
+     tlm::tlm_response_status response_status = tlm::TLM_OK_RESPONSE;
+                              ^
+Finished building: ../my_mem.cpp
+ 
+Building file: ../platform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.d" -o "platform.o" "../platform.cpp"
+Finished building: ../platform.cpp
+ 
+Building target: platform.exe
+Invoking: GCC C++ Linker
+g++ -L/usr/local/systemc-2.3.1/lib-linux -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -m32 -o "platform.exe"  ./ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o  ./ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o  ./ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o  ./ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o  ./ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.o  ./icmCpuManager.o ./my_mem.o ./platform.o   -lsystemc -lRuntimeLoader
+Finished building target: platform.exe
+ 

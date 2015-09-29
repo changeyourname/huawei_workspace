@@ -1,0 +1,232 @@
+10:48:34 **** Build of configuration Debug for project hello_world ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world
+Invoking: Sourcery CodeBench C++ Linker
+arm-none-linux-gnueabi-g++ -pthread -Xlinker -Map="hello_world.map" -mcpu=cortex-a9 -o "hello_world" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: hello_world
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "hello_world"
+   text	   data	    bss	    dec	    hex	filename
+   1271	    316	      4	   1591	    637	hello_world
+ 
+10:48:43 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+10:50:13 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+10:50:56 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+../main.c: In function 'main':
+../main.c:14:1: error: expected ';' before '}' token
+ }
+ ^
+make: *** [main.o] Error 1
+10:51:00 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world
+Invoking: Sourcery CodeBench C++ Linker
+arm-none-linux-gnueabi-g++ -pthread -Xlinker -Map="hello_world.map" -mcpu=cortex-a9 -o "hello_world" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: hello_world
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "hello_world"
+   text	   data	    bss	    dec	    hex	filename
+   1271	    316	      4	   1591	    637	hello_world
+ 
+10:56:46 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+10:56:46 **** Build of configuration Debug for project hello_world_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-linux-gnueabi-gcc -pthread -Xlinker -Map="hello_world_C.map" -mcpu=cortex-a9 -o "hello_world_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: hello_world_C
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "hello_world_C"
+   text	   data	    bss	    dec	    hex	filename
+   1246	    300	      4	   1550	    60e	hello_world_C
+ 
+11:01:09 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+11:01:09 **** Incremental Build of configuration Debug for project hello_world_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-linux-gnueabi-gcc -pthread -Xlinker -Map="hello_world_C.map" -mcpu=cortex-a9 -o "hello_world_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: hello_world_C
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "hello_world_C"
+   text	   data	    bss	    dec	    hex	filename
+   1262	    300	      4	   1566	    61e	hello_world_C
+ 
+11:20:03 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+11:20:03 **** Incremental Build of configuration Debug for project hello_world_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-eabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -fno-common -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-eabi-gcc -Xlinker -Map="hello_world_C.map" -o "hello_world_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start; defaulting to 00008018
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-stdio.o): In function `__sread':
+stdio.c:(.text+0x14): undefined reference to `_read'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-stdio.o): In function `__sseek':
+stdio.c:(.text+0x50): undefined reference to `_lseek'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-stdio.o): In function `__swrite':
+stdio.c:(.text+0x9c): undefined reference to `_lseek'
+stdio.c:(.text+0xb8): undefined reference to `_write'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-stdio.o): In function `__sclose':
+stdio.c:(.text+0xcc): undefined reference to `_close'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-makebuf.o): In function `__smakebuf_r':
+makebuf.c:(.text+0x80): undefined reference to `_fstat'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-__stdiobufferinghelp.o): In function `__init_stdio_buffer':
+__stdiobufferinghelp.c:(.text+0x78): undefined reference to `_isatty'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-freer.o): In function `_malloc_trim_r':
+mallocr.c:(.text+0x54): undefined reference to `_sbrk'
+mallocr.c:(.text+0x6c): undefined reference to `_sbrk'
+mallocr.c:(.text+0x7c): undefined reference to `_sbrk'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/libc.a(lib_a-mallocr.o): In function `_malloc_r':
+mallocr.c:(.text+0x454): undefined reference to `_sbrk'
+mallocr.c:(.text+0x4f4): undefined reference to `_sbrk'
+collect2: error: ld returned 1 exit status
+make: *** [hello_world_C] Error 1
+11:23:11 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+11:23:11 **** Build of configuration Debug for project hello_world_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-eabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -fno-common -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: hello_world_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-eabi-gcc -Xlinker -Map="hello_world_C.map" -T zynq7000-ram-hosted.ld -mcpu=cortex-a9 -o "hello_world_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: hello_world_C
+ 
+make --no-print-directory post-build
+arm-none-eabi-size "hello_world_C"
+   text	   data	    bss	    dec	    hex	filename
+  10408	   1064	    808	  12280	   2ff8	hello_world_C
+ 
+11:26:44 **** Build of configuration Debug for project helloWorld_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -pthread -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+../main.c: In function 'main':
+../main.c:13:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+Finished building: ../main.c
+ 
+Building target: helloWorld_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-linux-gnueabi-gcc -pthread -Xlinker -Map="helloWorld_C.map" -mcpu=cortex-a9 -o "helloWorld_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: helloWorld_C
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "helloWorld_C"
+   text	   data	    bss	    dec	    hex	filename
+   1238	    300	      4	   1542	    606	helloWorld_C
+ 
+11:26:44 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+11:40:08 **** Build of configuration Debug for project helloWorld_C ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-linux-gnueabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -fcommon -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: helloWorld_C
+Invoking: Sourcery CodeBench C Linker
+arm-none-linux-gnueabi-gcc -Xlinker -Map="helloWorld_C.map" -mcpu=cortex-a9 -o "helloWorld_C" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+Finished building target: helloWorld_C
+ 
+make --no-print-directory post-build
+arm-none-linux-gnueabi-size "helloWorld_C"
+   text	   data	    bss	    dec	    hex	filename
+   1230	    292	      4	   1526	    5f6	helloWorld_C
+ 
+11:40:08 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+12:04:09 **** Incremental Build of configuration Debug for project helloWorld_C ****
+make all 
+make: Nothing to be done for `all'.
+12:04:09 **** Build of configuration Debug for project helloWorld_debug ****
+make all 
+Building file: ../main.c
+Invoking: Sourcery CodeBench C Compiler
+arm-none-eabi-gcc -O0 -g3 -Wall -c -fmessage-length=0 -fno-common -MMD -MP -MF"main.d" -MT"main.d" -mcpu=cortex-a9 -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: helloWorld_debug
+Invoking: Sourcery CodeBench C Linker
+arm-none-eabi-gcc -Xlinker -Map="helloWorld_debug.map" -mcpu=cortex-a9 -o "helloWorld_debug" "@objs.rsp" "@user_objs.rsp" "@libs.rsp"
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start; defaulting to 00008018
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-stdio.o): In function `__sread':
+stdio.c:(.text+0x14): undefined reference to `_read'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-stdio.o): In function `__sseek':
+stdio.c:(.text+0x4c): undefined reference to `_lseek'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-stdio.o): In function `__swrite':
+stdio.c:(.text+0x98): undefined reference to `_lseek'
+stdio.c:(.text+0xb8): undefined reference to `_write'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-stdio.o): In function `__sclose':
+stdio.c:(.text+0xc0): undefined reference to `_close'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-makebuf.o): In function `__smakebuf_r':
+makebuf.c:(.text+0x80): undefined reference to `_fstat'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-__stdiobufferinghelp.o): In function `__init_stdio_buffer':
+__stdiobufferinghelp.c:(.text+0x78): undefined reference to `_isatty'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-freer.o): In function `_malloc_trim_r':
+mallocr.c:(.text+0x54): undefined reference to `_sbrk'
+mallocr.c:(.text+0x6c): undefined reference to `_sbrk'
+mallocr.c:(.text+0x7c): undefined reference to `_sbrk'
+/home/uzair/mgc/embedded/codebench/bin/../lib/gcc/arm-none-eabi/4.9.1/../../../../arm-none-eabi/lib/armv5te/libc.a(lib_a-mallocr.o): In function `_malloc_r':
+mallocr.c:(.text+0x454): undefined reference to `_sbrk'
+mallocr.c:(.text+0x4f4): undefined reference to `_sbrk'
+collect2: error: ld returned 1 exit status
+make: *** [helloWorld_debug] Error 1
+12:04:09 **** Incremental Build of configuration Debug for project hello_world ****
+make all 
+make: Nothing to be done for `all'.
+12:08:34 **** Incremental Build of configuration Debug for project helloWorld_C ****
+make all 
+make: Nothing to be done for `all'.

@@ -1,0 +1,11 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../arm.ovpworld.org/platform/ArmIntegratorCP_TLM2.0/1.0/platform/Build/Linux32/usr/platform.o 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+

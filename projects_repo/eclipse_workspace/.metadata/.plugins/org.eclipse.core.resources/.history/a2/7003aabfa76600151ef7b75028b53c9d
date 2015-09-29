@@ -1,0 +1,24 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../renesas.ovpworld.org/semihosting/v850Newlib/1.0/model/v850Newlib.c 
+
+OBJS += \
+./renesas.ovpworld.org/semihosting/v850Newlib/1.0/model/v850Newlib.o 
+
+C_DEPS += \
+./renesas.ovpworld.org/semihosting/v850Newlib/1.0/model/v850Newlib.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+renesas.ovpworld.org/semihosting/v850Newlib/1.0/model/%.o: ../renesas.ovpworld.org/semihosting/v850Newlib/1.0/model/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

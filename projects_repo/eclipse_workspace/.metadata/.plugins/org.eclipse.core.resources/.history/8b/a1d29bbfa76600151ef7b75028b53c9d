@@ -1,0 +1,27 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.attrs.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.c 
+
+OBJS += \
+./arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.attrs.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.o 
+
+C_DEPS += \
+./arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.attrs.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/SmartLoaderArmLinux.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/%.o: ../arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

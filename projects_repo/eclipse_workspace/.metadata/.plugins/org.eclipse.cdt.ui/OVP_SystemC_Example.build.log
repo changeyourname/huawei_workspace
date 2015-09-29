@@ -1,0 +1,87 @@
+16:04:22 **** Incremental Build of configuration Debug for project OVP_SystemC_Example ****
+make all 
+Building target: OVP_SystemC_Example
+Invoking: GCC C++ Linker
+g++ -L/usr/local/systemc-2.3.1/lib-linux64 -o "OVP_SystemC_Example"  ./main.o   -lsystemc
+./main.o: In function `simple::simple(sc_core::sc_module_name)':
+/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/OVP_SystemC_Example/Debug/../main.cpp:70: undefined reference to `icmTLMPlatform::icmTLMPlatform(sc_core::sc_module_name, icmInitAttrsE, char const*, unsigned int)'
+/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/OVP_SystemC_Example/Debug/../main.cpp:70: undefined reference to `ram::ram(sc_core::sc_module_name, char const*, unsigned long long, unsigned int)'
+/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/OVP_SystemC_Example/Debug/../main.cpp:70: undefined reference to `ram::ram(sc_core::sc_module_name, char const*, unsigned long long, unsigned int)'
+./main.o: In function `icmCpuManager::icmPlatform::~icmPlatform()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:81: undefined reference to `icmCpuManager::icmCpuManagerItem::~icmCpuManagerItem()'
+./main.o: In function `icmCpuManager::icmBusObject::~icmBusObject()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:341: undefined reference to `icmCpuManager::icmCpuManagerItem::~icmCpuManagerItem()'
+./main.o: In function `icmCpuManager::icmNetObject::~icmNetObject()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:582: undefined reference to `icmCpuManager::icmCpuManagerItem::~icmCpuManagerItem()'
+./main.o: In function `icmCpuManager::icmProcessorObject::~icmProcessorObject()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:775: undefined reference to `icmCpuManager::icmCpuManagerItem::~icmCpuManagerItem()'
+./main.o: In function `icmCpuManager::icmPseObject::~icmPseObject()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:1267: undefined reference to `icmCpuManager::icmCpuManagerItem::~icmCpuManagerItem()'
+./main.o: In function `time_advance::~time_advance()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp:94: undefined reference to `vtable for time_advance'
+./main.o: In function `icmTLMPlatform::~icmTLMPlatform()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp:157: undefined reference to `vtable for icmTLMPlatform'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp:157: undefined reference to `vtable for icmTLMPlatform'
+./main.o: In function `or1k::getModel()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:39: undefined reference to `icmGetVlnvString'
+./main.o: In function `or1k::getSHL()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:43: undefined reference to `icmGetVlnvString'
+./main.o: In function `icmCpu::~icmCpu()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:230: undefined reference to `vtable for icmCpu'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:230: undefined reference to `vtable for icmCpu'
+./main.o: In function `or1k::or1k(sc_core::sc_module_name, unsigned int, icmNewProcAttrsE, icmCpuManager::icmAttrListObject*, char const*, unsigned int, bool, unsigned int)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpu::icmCpu(sc_core::sc_module_name, unsigned int, char const*, char const*, char const*, char const*, icmNewProcAttrsE, icmCpuManager::icmAttrListObject*, unsigned int, bool, unsigned int)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuMasterPort::icmCpuMasterPort(icmCpu*, char const*, unsigned int)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuMasterPort::icmCpuMasterPort(icmCpu*, char const*, unsigned int)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuInterrupt::icmCpuInterrupt(char const*, icmCpu*)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuInterrupt::icmCpuInterrupt(char const*, icmCpu*)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuInterrupt::icmCpuInterrupt(char const*, icmCpu*)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuInterrupt::icmCpuInterrupt(char const*, icmCpu*)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:72: undefined reference to `icmCpuInterrupt::icmCpuInterrupt(char const*, icmCpu*)'
+./main.o: In function `or1k::before_end_of_elaboration()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:77: undefined reference to `icmCpuMasterPort::bindIfNotBound()'
+./main.o: In function `or1k::dmi(bool)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:83: undefined reference to `icmCpuMasterPort::invalidateDMI()'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/processor/or1k/1.0/tlm2.0/processor.igen.hpp:84: undefined reference to `icmCpuMasterPort::invalidateDMI()'
+./main.o: In function `_16550::getModel()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/national.ovpworld.org/peripheral/16550/1.0/tlm2.0/pse.igen.hpp:43: undefined reference to `icmGetVlnvString'
+./main.o: In function `_16550::_16550(sc_core::sc_module_name, icmCpuManager::icmAttrListObject*)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/national.ovpworld.org/peripheral/16550/1.0/tlm2.0/pse.igen.hpp:55: undefined reference to `icmPeripheral::icmPeripheral(sc_core::sc_module_name, char const*, char const*, icmCpuManager::icmAttrListObject*)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/national.ovpworld.org/peripheral/16550/1.0/tlm2.0/pse.igen.hpp:55: undefined reference to `icmSlavePort::icmSlavePort(icmPeripheral*, char const*, unsigned long)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/national.ovpworld.org/peripheral/16550/1.0/tlm2.0/pse.igen.hpp:55: undefined reference to `icmInputNetPort::icmInputNetPort(icmPeripheral*, sc_core::sc_module_name)'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/national.ovpworld.org/peripheral/16550/1.0/tlm2.0/pse.igen.hpp:55: undefined reference to `icmOutputNetPort::icmOutputNetPort(icmPeripheral*, char const*)'
+./main.o: In function `simple::attrsForuart1()':
+/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/OVP_SystemC_Example/Debug/../main.cpp:52: undefined reference to `icmCpuManager::icmAttrListObject::icmAttrListObject()'
+/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/OVP_SystemC_Example/Debug/../main.cpp:53: undefined reference to `icmCpuManager::icmAttrListObject::addAttr(char const*, char const*)'
+./main.o: In function `decoder<2, 3>::setDecode(int, unsigned long, unsigned long)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:99: undefined reference to `icmPrintf'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:109: undefined reference to `icmPrintf'
+./main.o: In function `decoder<2, 3>::initiatorBTransport(int, tlm::tlm_generic_payload&, sc_core::sc_time&)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:160: undefined reference to `icmPrintf'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:176: undefined reference to `icmPrintf'
+./main.o: In function `decoder<2, 3>::transportDebug(int, tlm::tlm_generic_payload&)':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:193: undefined reference to `icmPrintf'
+./main.o:/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:207: more undefined references to `icmPrintf' follow
+./main.o:(.rodata._ZTV4or1k[_ZTV4or1k]+0xa8): undefined reference to `icmCpu::icmCpuThread()'
+./main.o:(.rodata._ZTI4or1k[_ZTI4or1k]+0x10): undefined reference to `typeinfo for icmCpu'
+./main.o: In function `icmCpuInterrupt::~icmCpuInterrupt()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `vtable for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `vtable for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `vtable for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `VTT for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `VTT for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `VTT for icmCpuInterrupt'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:62: undefined reference to `VTT for icmCpuInterrupt'
+./main.o: In function `icmInputNetPort::~icmInputNetPort()':
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `vtable for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `vtable for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `vtable for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `VTT for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `VTT for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `VTT for icmInputNetPort'
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.hpp:232: undefined reference to `VTT for icmInputNetPort'
+collect2: error: ld returned 1 exit status
+make: *** [OVP_SystemC_Example] Error 1
+
+16:04:22 Build Finished (took 156ms)
+

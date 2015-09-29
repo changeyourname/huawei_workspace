@@ -1,0 +1,84 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeAttrs.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeBus.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfigList.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDebug.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecode.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecodeUser.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDisassemble.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDoc.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeExceptions.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeInfo.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMain.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorph.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphFP.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphUser.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeParameters.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazePorts.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeSemiHost.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeTLB.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUser.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUtils.c \
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeVM.c 
+
+OBJS += \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeAttrs.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeBus.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfigList.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDebug.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecode.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecodeUser.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDisassemble.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDoc.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeExceptions.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeInfo.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMain.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorph.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphFP.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphUser.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeParameters.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazePorts.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeSemiHost.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeTLB.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUser.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUtils.o \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeVM.o 
+
+C_DEPS += \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeAttrs.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeBus.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfigList.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDebug.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecode.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDecodeUser.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDisassemble.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeDoc.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeExceptions.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeInfo.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMain.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorph.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphFP.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeMorphUser.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeParameters.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazePorts.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeSemiHost.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeTLB.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUser.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeUtils.d \
+./xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeVM.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+xilinx.ovpworld.org/processor/microblaze/1.0/model/%.o: ../xilinx.ovpworld.org/processor/microblaze/1.0/model/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

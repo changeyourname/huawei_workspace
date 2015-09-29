@@ -1,0 +1,20 @@
+xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfigList.d: \
+ ../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfigList.c \
+ ../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfig.h \
+ /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/impTypes.h \
+ /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/hostMacros.h \
+ ../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeTypeRefs.h \
+ /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/typeMacros.h \
+ ../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeVariant.h
+
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeConfig.h:
+
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/impTypes.h:
+
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/hostMacros.h:
+
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeTypeRefs.h:
+
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/typeMacros.h:
+
+../xilinx.ovpworld.org/processor/microblaze/1.0/model/microblazeVariant.h:

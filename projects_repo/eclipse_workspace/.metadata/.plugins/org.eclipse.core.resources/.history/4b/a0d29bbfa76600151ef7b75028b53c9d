@@ -1,0 +1,51 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/SmartLoaderArm64Linux.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_empty_tree.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_ro.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_rw.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_strerror.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_sw.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_wip.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.attrs.igen.c \
+../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.igen.c 
+
+OBJS += \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/SmartLoaderArm64Linux.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_empty_tree.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_ro.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_rw.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_strerror.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_sw.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_wip.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.attrs.igen.o \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.igen.o 
+
+C_DEPS += \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/SmartLoaderArm64Linux.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_empty_tree.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_ro.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_rw.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_strerror.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_sw.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/fdt_wip.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.attrs.igen.d \
+./arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/pse.igen.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/%.o: ../arm.ovpworld.org/peripheral/SmartLoaderArm64Linux/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

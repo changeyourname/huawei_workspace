@@ -12,4 +12,5 @@ ${ARM_VERSATILE_EXPRESS_PLATFORM}.${IMPERAS_ARCH}.exe \
        --zimage zImage --initrd fs.img \
        --boot smpboot.ARM_CORTEX_A9.elf  \
        --verbose  \
-       --nographics --uart0port auto
+       --nographics \
+       --uart0port auto

@@ -1,0 +1,17 @@
+/*
+ * main.cpp
+ *
+ *  Created on: Sep 23, 2015
+ *      Author: uzair
+ */
+
+#include "systemc.h"
+/*#include <stdio.h>
+
+int sc_main() {
+	printf("hello world\n\r");
+	return 0;
+}*/
+
+
+

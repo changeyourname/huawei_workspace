@@ -1,0 +1,84 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Attrs.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Bus.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Debug.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Decode.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Disassemble.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Main.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Morph.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphFP.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphUser.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Parameters.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Ports.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32SemiHost.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Utils.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32VM.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32ConfigList.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32DecodeUser.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Doc.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Exceptions.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Info.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR.c \
+../power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR_400.c 
+
+OBJS += \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Attrs.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Bus.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Debug.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Decode.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Disassemble.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Main.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Morph.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphFP.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphUser.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Parameters.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Ports.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32SemiHost.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Utils.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32VM.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32ConfigList.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32DecodeUser.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Doc.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Exceptions.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Info.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR.o \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR_400.o 
+
+C_DEPS += \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Attrs.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Bus.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Debug.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Decode.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Disassemble.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Main.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Morph.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphFP.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32MorphUser.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Parameters.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Ports.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32SemiHost.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32Utils.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/link.ppc32VM.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32ConfigList.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32DecodeUser.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Doc.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Exceptions.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32Info.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR.d \
+./power.ovpworld.org/processor/powerpc32_400/1.0/model/ppc32SPR_400.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+power.ovpworld.org/processor/powerpc32_400/1.0/model/%.o: ../power.ovpworld.org/processor/powerpc32_400/1.0/model/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

@@ -1,0 +1,81 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Attrs.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Bus.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850ConfigList.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Debug.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Decode.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850DecodeUser.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Disassemble.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Doc.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Exceptions.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Info.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Main.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Morph.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850MorphFP.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850MorphSPR.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850MorphUser.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Parameters.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Ports.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850SemiHost.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850Utils.c \
+../renesas.ovpworld.org/processor/v850/1.0/model/v850VM.c 
+
+OBJS += \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Attrs.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Bus.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850ConfigList.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Debug.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Decode.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850DecodeUser.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Disassemble.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Doc.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Exceptions.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Info.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Main.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Morph.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphFP.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphSPR.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphUser.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Parameters.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Ports.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850SemiHost.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Utils.o \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850VM.o 
+
+C_DEPS += \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Attrs.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Bus.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850ConfigList.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Debug.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Decode.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850DecodeUser.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Disassemble.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Doc.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Exceptions.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Info.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Main.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Morph.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphFP.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphSPR.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850MorphUser.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Parameters.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Ports.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850SemiHost.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850Utils.d \
+./renesas.ovpworld.org/processor/v850/1.0/model/v850VM.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+renesas.ovpworld.org/processor/v850/1.0/model/%.o: ../renesas.ovpworld.org/processor/v850/1.0/model/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

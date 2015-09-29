@@ -1,0 +1,30 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/GD5446.attrs.c \
+../cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/pci.c \
+../cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/vga.c 
+
+OBJS += \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/GD5446.attrs.o \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/pci.o \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/vga.o 
+
+C_DEPS += \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/GD5446.attrs.d \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/pci.d \
+./cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/vga.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/%.o: ../cirrus.ovpworld.org/peripheral/GD5446/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

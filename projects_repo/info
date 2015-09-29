@@ -1,0 +1,47 @@
+-- you can compile a given OVP platform (generated using ICM API) by using the makefile provided in OVP installation directory
+   e.g "$> make -f <path to Makefile.platform> SRC=<path to platform top level file which you want to compile>" would generate an executable for OVPsim to execute to simulate the platform
+   
+   Suppose you are in directory "/A" containing OVP ICM my_platform.c then 
+            "$> make -f $(IMPERAS_HOME)/ImperasLib/buildutils/Makefile.platform SRC=my_platform.c NOVLNV=1" would produce "platform.Linux32.exe" for OVPsim to use
+            by default SRC is platform.c so if your platform is named platform.c, then following is sufficient:
+            "$> make -f $(IMPERAS_HOME)/ImperasLib/buildutils/Makefile.platform NOVLNV=1"
+            
+-- if successful in creating the platform simulation executable then you can use:
+    "$> chmod +x <path to platform executable>" to be able to execute it on terminal
+    "$> ./<path to platform executable> --help" to get the various command line options.....you can also find out useful command line options using the pdf (doc folder) of the platform simulation model
+    e.g "$> chmod +x platform.Linux32.exe"
+        "$> ./platform.Linux32.exe --variant ArmVersatileExpress-CA9/cpu=Cortex-A9MPx4 --zimage zImage --initrd fs.img --boot smpboot.ARM_CORTEX_A9.elf --verbose --nographics --uart0port auto" for ARM Versatile Express-CA9 platform simulation model
+        
+        
+                        
+-- if you are cross-compiling for ARM Linux GNU using MentorGraphics' Sourcery CodeBench IDE targeting ARM based OVP then don't include support for -pthread library in compiler build options as the native linux
+   running on the ARM-over-OVP is quite primitive and doesnt support pthreads...using pthreads for such a case though can lead into segmentation faults even in hello-world applications!!
+
+
+-- for debugging your custom applications that you would later cross-compile for OVP processors, you can use Sourcery CodeBench IDE. Within the IDE's project make a new debug configuration; and in "Main" tab, disable "Copy and launch application on remote system" option
+   and then in the "Debugger" tab select Debug interface: "Soucery CodeBench QEMU User-Space Emulator"; then simply Debug to use traditional Eclipse debugging; the printfs can be seen on Eclipse console!!    
+   
+   
+   
+-- In order to run a SystemC simulation you will compile the SystemC and OVP files to create a single simulation executable. In the case of OVP this will also load models from the OVP installation at runtime. 
+   All of the libraries and models used must be consistent i.e. 32-bit or 64-bit. As OVP is only released as a 32-bit installation from OVPWorld you will need to build SystemC 32-bit libraries. 
+   So, the SystemC executable you build will be 32-bit and so you will run in a 32-bit compatibility mode on your 64-bit host system. 
+   
+   
+   
+-- "./ArmIntegratorCP_tlm2.0.Linux32.exe v Cortex-A9UP" for running the SystemC ArmIntegratorCP Demo.....you have to supply the correct variant Cortex-A9UP otherwise linux kernel won't boot properly on the platform!!
+
+
+-- for building OVP based SystemC platforms in your own SystemC environments don't forget to include the library: -lRuntimeLoader (present in $IMPERAS_HOME/bin/Linux32) for ICM API in your make file...for building project in IDE this library should be added in Build settings
+   also for building projects in IDE, you may have to import some source modules from Imperas Library...which modules to import exactly can be found by using the Makefile for TLM platform provided by Imperas in "$IMPERAS_HOME/ImperasLib/buildutils" with VERBOSE=1 option e.g for 
+   ARMIntegratorCP_TLM platform we have to include source modules for icmCpuManager, tlmMemory, tlmMmc, tlmPeripheral, tlmProcessor, tlmPlatform and the top-level harness itself within the Eclipse IDE
+
+
+
+
+
+
+
+
+
+

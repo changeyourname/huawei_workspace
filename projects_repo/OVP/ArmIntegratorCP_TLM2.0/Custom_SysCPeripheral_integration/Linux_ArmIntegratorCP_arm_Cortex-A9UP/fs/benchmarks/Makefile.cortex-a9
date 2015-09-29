@@ -1,0 +1,30 @@
+CFLAGS_VFP  = -O3 -march=armv7-a -mtune=cortex-a9 -ftree-vectorize -mfloat-abi=softfp -mfpu=vfp
+CFLAGS_NEON = -O3 -march=armv7-a -mtune=cortex-a9 -ftree-vectorize -mfloat-abi=softfp -mfpu=neon
+CFLAGS_SOFT = -O3 -march=armv7-a -mtune=cortex-a9                  -msoft-float
+
+ifeq ($(TOOLDIR),)
+  IMPERAS_ERROR := $(error "You must define the TOOLDIR variable")
+endif
+  
+ROOT=$(TOOLDIR)/bin/arm-none-linux-gnueabi
+
+CC=$(ROOT)-gcc
+
+LDFLAGS=-lm
+
+SRC = $(wildcard *.c)
+EXE = $(SRC:.c=.vfp.exe) $(SRC:.c=.neon.exe) $(SRC:.c=.soft.exe)
+
+all: $(EXE)
+
+%.vfp.exe: %.c
+	$(CC) $(CFLAGS_VFP) -o $@ $< $(LDFLAGS)
+
+%.neon.exe: %.c
+	$(CC) $(CFLAGS_NEON) -o $@ $< $(LDFLAGS)
+
+%.soft.exe: %.c
+	$(CC) $(CFLAGS_SOFT) -o $@ $< $(LDFLAGS)
+
+clean::
+	rm -f $(EXE)

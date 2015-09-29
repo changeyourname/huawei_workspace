@@ -1,0 +1,103 @@
+Constructing.
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Copyright (c) 2005-2015 Imperas Software Ltd.  Contains Imperas Proprietary Information.
+Licensed Software, All Rights Reserved.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+OVPsim started: Mon Sep 28 10:54:51 2015
+
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/ovpworld.org/processor/or1k/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/ovpworld.org/semihosting/or1kNewlib/1.0/model.so'
+Using SystemC TLM2.0 Memory with DMI
+Info (OR_OF) Target 'top.cpu1' has object file read from '../application/int.OR1K.elf'
+Info (OR_PH) Program Headers:
+Info (OR_PH) Type           Offset     VirtAddr   PhysAddr   FileSiz    MemSiz     Flags Align
+Info (OR_PD) LOAD           0x00002000 0x00000000 0x00000000 0x0000cfcc 0x0000cfcc R-E   2000
+Info (OR_PD) LOAD           0x0000efcc 0x0000efcc 0x0000efcc 0x00000868 0x00000874 RW-   2000
+Starting sc_main (reset asserted).
+Info (16550_BRS) top.uart1: baud rate=1152000  parity=N  data bits=5  total bits=7 character delay=6usec
+*** De-assert reset. ***
+
+TEST: main starts
+TEST: Initialise:
+TEST: Enable UART:
+Interrupt Handler 0x02 (1)
+Character sent
+TEST: main send string
+TEST: Send String: Hello World
+
+Send char H (0x48)
+Interrupt Handler 0x02 (2)
+Character sent
+Send char e (0x65)
+Interrupt Handler 0x02 (3)
+Character sent
+Send char l (0x6c)
+Interrupt Handler 0x02 (4)
+Character sent
+Send char l (0x6c)
+Interrupt Handler 0x02 (5)
+Character sent
+Send char o (0x6f)
+Interrupt Handler 0x02 (6)
+Character sent
+Send char   (0x20)
+Interrupt Handler 0x02 (7)
+Character sent
+Send char W (0x57)
+Interrupt Handler 0x02 (8)
+Character sent
+Send char o (0x6f)
+Interrupt Handler 0x02 (9)
+Character sent
+Send char r (0x72)
+Interrupt Handler 0x02 (10)
+Character sent
+Send char l (0x6c)
+Interrupt Handler 0x02 (11)
+Character sent
+Send char d (0x64)
+Interrupt Handler 0x02 (12)
+Character sent
+Send char 
+ (0x0a)
+Interrupt Handler 0x02 (13)
+Character sent
+TEST: main done
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+Info 
+Info ---------------------------------------------------
+Info PSE SIMULATION TIME STATISTICS
+Info    0.00 seconds: PSE THREAD 'top.uart1'
+Info    0.04 seconds: PSE 'top.uart1' (and 74 terminated callbacks)
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'top.cpu1' STATISTICS
+Info   Type                  : or1k
+Info   Nominal MIPS          : 100
+Info   Final program counter : 0x138
+Info   Simulated instructions: 78,651
+Info   Simulated MIPS        : run too short for meaningful result
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info SIMULATION TIME STATISTICS
+Info   Simulated time        : 0.79 seconds
+Info   User time             : 0.04 seconds
+Info   System time           : 0.00 seconds
+Info   Elapsed time          : 0.04 seconds
+Info   Real time ratio       : 20.56x faster
+Info ---------------------------------------------------
+
+OVPsim finished: Mon Sep 28 10:54:51 2015
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+Finished sc_main.

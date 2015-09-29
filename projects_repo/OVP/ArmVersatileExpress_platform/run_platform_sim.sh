@@ -1,0 +1,1 @@
+./ImperasLib_source/platform/platform.Linux32.exe --variant ArmVersatileExpress-CA9/cpu=Cortex-A9MPx4 --zimage zImage --initrd fs.img --boot smpboot.ARM_CORTEX_A9.elf --verbose --nographics --uart0port auto

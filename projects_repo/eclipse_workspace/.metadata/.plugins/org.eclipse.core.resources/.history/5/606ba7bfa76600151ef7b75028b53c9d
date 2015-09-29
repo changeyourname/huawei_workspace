@@ -1,0 +1,36 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/delta.c \
+../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.attrs.igen.c \
+../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.igen.c \
+../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtio-blk.c \
+../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtq.c 
+
+OBJS += \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/delta.o \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.attrs.igen.o \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.igen.o \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtio-blk.o \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtq.o 
+
+C_DEPS += \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/delta.d \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.attrs.igen.d \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/pse.igen.d \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtio-blk.d \
+./ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/virtq.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/%.o: ../ovpworld.org/peripheral/VirtioBlkMMIO/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

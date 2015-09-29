@@ -1,0 +1,27 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../national.ovpworld.org/peripheral/16450/1.0/pse/16450.attrs.c \
+../national.ovpworld.org/peripheral/16450/1.0/pse/16450.c 
+
+OBJS += \
+./national.ovpworld.org/peripheral/16450/1.0/pse/16450.attrs.o \
+./national.ovpworld.org/peripheral/16450/1.0/pse/16450.o 
+
+C_DEPS += \
+./national.ovpworld.org/peripheral/16450/1.0/pse/16450.attrs.d \
+./national.ovpworld.org/peripheral/16450/1.0/pse/16450.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+national.ovpworld.org/peripheral/16450/1.0/pse/%.o: ../national.ovpworld.org/peripheral/16450/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

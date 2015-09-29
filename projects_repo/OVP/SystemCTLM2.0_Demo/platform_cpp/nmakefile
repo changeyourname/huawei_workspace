@@ -1,0 +1,158 @@
+# Build the support objects needed to run TLM2.0 on Ovpsim
+# Build the user's platform
+# Objects and exes are put in the cwd
+
+############################ YOUR SYSTEMC & TLM ###############################
+# Set these to your SystemC and TLM installations
+# SYSTEMC_HOME = 
+# TLM_HOME     = 
+
+# If SYSTEMC is set and SYSTEMC_HOME is not then use SYSTEMC
+!IFNDEF SYSTEMC_HOME
+!IFDEF SYSTEMC
+SYSTEMC_HOME=$(SYSTEMC)
+!ENDIF
+!ENDIF
+
+############################# INPUT PARAMETERS ################################
+# (Edit these to include more or different platform source files)
+
+!IFDEF PLATFORM 
+!ELSE
+PLATFORM=platform
+!ENDIF
+
+!IFDEF PLATFORM_OBJECTS
+!ELSE
+PLATFORM_OBJECTS=$(OBJDIRUSR)/$(PLATFORM).obj
+!ENDIF
+
+!IFDEF MODEL_INCLUDES
+!ELSE
+MODEL_INCLUDES=
+!ENDIF
+
+!IFDEF VERBOSE
+V=
+!ELSE
+V=@
+!ENDIF
+
+########################### END INPUT PARAMETERS ##############################
+
+ICM_INC         = $(IMPERAS_HOME)/ImpPublic/include/host
+IMP_LIB_INC     = $(IMPERAS_HOME)/ImperasLib/source
+IMPERAS_LIB     = $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)
+
+SYSTEMC_INC     = $(SYSTEMC_HOME)/include
+
+CFLAGS  = /GR /vmg /MTd /EHsc /nologo /W3 /DSC_INCLUDE_DYNAMIC_PROCESSES \
+          /D_CRT_SECURE_NO_WARNINGS /D_CRT_SECURE_NO_DEPRECATE \
+          /D_CRT_NONSTDC_NO_DEPRECATE \
+          /wd 4267
+
+LDFLAGS = /SUBSYSTEM:CONSOLE /nologo \
+          /LIBPATH:$(SYSTEMC_LIB_DIR) systemc.lib \
+          /LIBPATH:$(IMPERAS_LIB) libRuntimeLoader.lib \
+          $(OTHER_ARCHIVES) \
+          /ignore:4075
+
+CPP     = cl.exe
+LD      = link.exe
+MKDIR  	= mkdir
+
+SUPPORT_INCS = -I$(ICM_INC) \
+	           -I$(SYSTEMC_INC) \
+	           -I$(IMP_LIB_INC) \
+	           $(MODEL_INCLUDES)
+
+TLM_MEM      = $(IMP_LIB_INC)/ovpworld.org/memory/ram/1.0/tlm2.0
+TLM_MMC      = $(IMP_LIB_INC)/ovpworld.org/modelSupport/tlmMMC/1.0/tlm2.0
+TLM_PERIPH   = $(IMP_LIB_INC)/ovpworld.org/modelSupport/tlmPeripheral/1.0/tlm2.0
+TLM_PROC     = $(IMP_LIB_INC)/ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0
+TLM_PLAT     = $(IMP_LIB_INC)/ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0
+
+CPP_DEPENDS = \
+    $(TLM_MEM)/tlmMemory.cpp \
+    $(TLM_MEM)/tlmMemory.hpp \
+    $(TLM_MMC)/tlmMmc.cpp \
+    $(TLM_MMC)/tlmMmc.hpp \
+    $(TLM_PERIPH)/tlmPeripheral.cpp \
+    $(TLM_PERIPH)/tlmPeripheral.hpp \
+    $(TLM_PROC)/tlmProcessor.cpp \
+    $(TLM_PROC)/tlmProcessor.hpp \
+    $(TLM_PLAT)/tlmPlatform.cpp \
+    $(TLM_PLAT)/tlmPlatform.hpp
+
+OBJDIRSYS = Build/$(IMPERAS_ARCH)/tlm
+OBJDIRUSR = Build/$(IMPERAS_ARCH)/usr
+
+SUPPORT_OBJS    = \
+	$(OBJDIRSYS)/tlmMmc.obj \
+	$(OBJDIRSYS)/tlmPeripheral.obj \
+	$(OBJDIRSYS)/tlmPlatform.obj \
+	$(OBJDIRSYS)/tlmProcessor.obj \
+	$(OBJDIRSYS)/tlmMemory.obj \
+	$(OBJDIRSYS)/icmCpuManager.obj
+
+PLATFORM_EXE    = $(PLATFORM).$(IMPERAS_ARCH).exe
+ARCHIVE         = $(OBJDIRSYS)/tlmSupport.lib
+
+################################### RULES #####################################
+
+all: Build/$(IMPERAS_ARCH)/tlm Build/$(IMPERAS_ARCH)/usr $(PLATFORM_EXE)
+
+Build/$(IMPERAS_ARCH)/tlm Build/$(IMPERAS_ARCH)/usr:
+	- $(V) $(MKDIR) Build
+	- $(V) $(MKDIR) Build\$(IMPERAS_ARCH)
+	- $(V) $(MKDIR) Build\$(IMPERAS_ARCH)\tlm
+	- $(V) $(MKDIR) Build\$(IMPERAS_ARCH)\usr
+
+$(OBJDIRSYS)/tlmMemory.obj: $(TLM_MEM)/tlmMemory.cpp $(TLM_MEM)/tlmMemory.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRSYS)/tlmMmc.obj: $(TLM_MMC)/tlmMmc.cpp $(TLM_MMC)/tlmMmc.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRSYS)/tlmPeripheral.obj: $(TLM_PERIPH)/tlmPeripheral.cpp $(TLM_PERIPH)/tlmPeripheral.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRSYS)/tlmProcessor.obj: $(TLM_PROC)/tlmProcessor.cpp $(TLM_PROC)/tlmProcessor.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRSYS)/tlmPlatform.obj: $(TLM_PLAT)/tlmPlatform.cpp $(TLM_PLAT)/tlmPlatform.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRSYS)/icmCpuManager.obj: $(IMPERAS_HOME)/ImpPublic/source/host/icm/icmCpuManager.cpp $(IMPERAS_HOME)/ImpPublic/include/host/icm/icmCpuManager.hpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(OBJDIRUSR)/$(PLATFORM).obj: $(PLATFORM).cpp
+	@    echo # Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+$(PLATFORM_OBJECTS): $(PLATFORM).cpp $(CPP_DEPENDS)
+
+.cpp{$(OBJDIRUSR)}.obj:
+	$(V) echo Compiling $@
+	$(V) $(CPP) -c $(SUPPORT_INCS) $(CFLAGS) %s /Fo"$@"
+
+# rule for the executable
+$(PLATFORM_EXE): $(ARCHIVE) $(PLATFORM_OBJECTS) $(IMPERAS_HOME)/bin/$(IMPERAS_ARCH)/libRuntimeLoader.dll
+	@    echo # Linking $@
+	$(V) $(LD) /OUT:$@ $(PLATFORM_OBJECTS) $(LDFLAGS) $(ARCHIVE)
+
+# archive contains TLM support code
+$(ARCHIVE): $(SUPPORT_OBJS)
+	$(V) lib /OUT:"$@" $(SUPPORT_OBJS)
+
+clean:
+	rm -f *.obj *.exe
+	rm -rf $(PLATFORM_OBJECTS)
+	rm -rf $(SUPPORT_OBJS)
+	

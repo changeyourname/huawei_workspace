@@ -1,0 +1,19 @@
+TOOLCHAIN_PREFIX?=/home/targetos/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/2011.03-41/bin/arm-none-linux-gnueabi-
+
+SRC = $(wildcard *.c)
+EXE = $(patsubst %.c, %.exe, $(SRC))
+FLAGS  = -lm -static
+
+all: $(EXE) cjpeg.exe djpeg.exe 
+
+jpeg-6a/%jpeg:
+	make -C jpeg-6a $(notdir $@)
+	
+%jpeg.exe: jpeg-6a/%jpeg
+	cp $< $@
+
+%.exe: %.c
+	$(TOOLCHAIN_PREFIX)gcc -o $@ $< $(FLAGS)
+
+clean:
+	rm -f $(EXE)

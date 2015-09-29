@@ -1,0 +1,30 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/GT6412x.attrs.c \
+../marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/pci.c \
+../marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/sysControl.c 
+
+OBJS += \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/GT6412x.attrs.o \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/pci.o \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/sysControl.o 
+
+C_DEPS += \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/GT6412x.attrs.d \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/pci.d \
+./marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/sysControl.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/%.o: ../marvell.ovpworld.org/peripheral/GT6412x/1.0/pse/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/target -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+
