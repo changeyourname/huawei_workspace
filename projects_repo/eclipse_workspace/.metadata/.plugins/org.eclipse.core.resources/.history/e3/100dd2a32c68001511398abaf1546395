@@ -1,0 +1,31 @@
+/*
+ * tlm_wrapper_bridge.cpp
+ *
+ *  Created on: Sep 30, 2015
+ *      Author: uzair
+ */
+
+
+#include "tlm_wrapper_bridge.hpp"
+#include <stdio.h>
+
+//#define DO_LOGGING
+
+tlm_wrapper_bridge::tlm_wrapper_bridge(sc_core::sc_module_name name)
+		: sc_module(name), m_isocket("m_isocket"), m_tsocket("m_tsocket")	{
+	m_tsocket.register_b_transport(this, &tlm_wrapper_bridge::b_transport);
+}
+
+
+void tlm_wrapper_bridge::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
+#ifdef DO_LOGGING
+	printf("Got a new memory transaction!!\r\n");
+	printf("Addr = 0x%x, command = %d, data_length = %d\r\n", payload.get_address(), payload.get_command(), payload.get_data_length());
+#endif
+	printf("WRAPPER: req_no:%d, payload_ptr:0x%x, addr:0x%x, command:%d, length:%d, data_ptr:0x%x, ", m_req_no, &payload, payload.get_address(), payload.get_command(), payload.get_data_length(), payload.get_data_ptr());
+
+	// forwarding to main memory module via the initiator socket
+	m_isocket->b_transport(payload, delay);
+
+	return;
+}

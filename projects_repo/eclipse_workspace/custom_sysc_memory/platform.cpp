@@ -27,7 +27,7 @@
 #include "ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp"
 #include "ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp"
 #include "ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.hpp"
-//#include "my_mem.hpp"
+#include "my_mem.hpp"
 #include "arm.ovpworld.org/processor/arm/1.0/tlm2.0/processor.igen.hpp"
 #include "arm.ovpworld.org/peripheral/CoreModule9x6/1.0/tlm2.0/pse.igen.hpp"
 #include "arm.ovpworld.org/peripheral/IntICP/1.01/tlm2.0/pse.igen.hpp"
@@ -59,7 +59,8 @@ class ArmIntegratorCP : public sc_core::sc_module {
 
     icmTLMPlatform        Platform;
     decoder             <3,16> bus1;
-    ram                   ram1;
+    //ram                   ram1;
+    my_mem				  ram1;
     ram                   ambaDummy;
     arm                   arm1;
     CoreModule9x6         cm;
@@ -214,7 +215,8 @@ ArmIntegratorCP::ArmIntegratorCP (
     bus1.initiator_socket[11](mmci.bport1.socket); // Peripheral
     bus1.setDecode(11, 0x1c000000, 0x1c000fff);
 
-    bus1.initiator_socket[12](ram1.sp1); // Memory
+    //bus1.initiator_socket[12](ram1.sp1); // Memory
+    bus1.initiator_socket[12](ram1.m_tsocket); // Memory
     bus1.setDecode(12, 0x0, 0x7ffffff);
 
     bus1.initiator_socket[13](ambaDummy.sp1); // Memory

@@ -1,0 +1,60 @@
+#include "my_mem.hpp"
+#include <stdio.h>
+
+my_mem::my_mem(sc_core::sc_module_name name, const char *memory_socket, sc_dt::uint64 high_address, unsigned int memory_width)
+		:	sc_core::sc_module(name), m_tsocket("m_tsocket"), m_ram("m_ram", memory_socket, high_address, memory_width), m_bridge("m_bridge") {
+	// hierarchical connect this module's socket to bridge's socket
+	m_tsocket(m_bridge.m_tsocket);
+
+	// connect bridge with memory module
+	m_bridge.m_isocket(m_ram.sp1);
+
+	// disabling dmi on tlmMemory module
+	//m_ram.dmi(false);
+}
+
+
+
+tlm::tlm_sync_enum my_mem::nb_transport_fw(tlm::tlm_generic_payload &trans, tlm::tlm_phase& phase, sc_core::sc_time& t) {
+	// not implemented!!
+	printf("ERROR in my_mem.nb_transport_fw()!!\r\n");
+	assert(0);
+
+	return tlm::TLM_COMPLETED;
+}
+
+
+void my_mem::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
+	// not implemented!!
+	printf("ERROR in my_mem.b_transport()!!\r\n");
+	assert(0);
+
+	return;
+}
+
+
+bool my_mem::get_direct_mem_ptr(tlm::tlm_generic_payload& trans, tlm::tlm_dmi& dmi_data) {
+	// not implemented!!
+	printf("ERROR in my_mem.get_direct_mem_ptr()!!\r\n");
+	assert(0);
+
+	return false;
+}
+
+
+
+unsigned int my_mem::transport_dbg(tlm::tlm_generic_payload &trans) {
+	// not implemented!!
+	printf("ERROR in my_mem.transport_dbg()!!\r\n");
+	assert(0);
+
+	return 0;
+}
+
+
+
+
+
+
+
+
