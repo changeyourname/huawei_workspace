@@ -4,11 +4,15 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/memory/ram"/>
+			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/source"/>
+			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org"/>
+			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport"/>
 			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/source/host/icm"/>
+			<item value="/home/uzair/Desktop/ArmVersatileExpress_CA9_TLM2/1.0/tlm2.0"/>
 			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source"/>
 			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/source/host"/>
 			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic"/>
-			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org"/>
 			<item value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/memory/ram/1.0/tlm2.0"/>
 		</list>
 	</section>

@@ -1,0 +1,603 @@
+/*
+ * Copyright (c) 2005-2015 Imperas Software Ltd., www.imperas.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied.
+ *
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//                W R I T T E N   B Y   I M P E R A S   I G E N
+//
+//                             Version 20150901.0
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// This file constructs the platform.
+// This file should NOT need to be edited.
+
+#include "ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp"
+#include "ovpworld.org/memory/ram/1.0/tlm2.0/tlmMemory.hpp"
+#include "arm.ovpworld.org/processor/arm/1.0/tlm2.0/arm_Cortex-A9MPx1.igen.hpp"
+#include "arm.ovpworld.org/peripheral/VexpressSysRegs/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/SysCtrlSP810/1.0/tlm2.0/pse.igen.hpp"
+#include "ovpworld.org/peripheral/dummyPort/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/AaciPL041/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/MmciPL181/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/KbPL050/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/UartPL011/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/WdtSP805/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/TimerSP804/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/SerBusDviRegs/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/RtcPL031/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/CompactFlashRegs/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/LcdPL110/1.0/tlm2.0/pse.igen.hpp"
+#include "ovpworld.org/peripheral/DynamicBridge/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/DMemCtrlPL341/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/SMemCtrlPL354/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/TzpcBP147/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/L2CachePL310/1.0/tlm2.0/pse.igen.hpp"
+#include "intel.ovpworld.org/peripheral/NorFlash48F4400/1.0/tlm2.0/pse.igen.hpp"
+#include "smsc.ovpworld.org/peripheral/LAN9118/1.0/tlm2.0/pse.igen.hpp"
+#include "philips.ovpworld.org/peripheral/ISP1761/1.0/tlm2.0/pse.igen.hpp"
+#include "arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/tlm2.0/pse.igen.hpp"
+////////////////////////////////////////////////////////////////////////////////
+//                     ArmVersatileExpress_CA9_TLM2 Class
+////////////////////////////////////////////////////////////////////////////////
+
+class ArmVersatileExpress_CA9_TLM2 : public sc_core::sc_module {
+
+  public:
+    ArmVersatileExpress_CA9_TLM2 (sc_core::sc_module_name name);
+
+    icmTLMPlatform        Platform;
+    arm_Cortex_A9MPx1     cpu;
+    decoder             <2,35> tzBus;
+    decoder             <36,39> pBus;
+    decoder             <2,1> ddr2bus;
+    ram                   sram1;
+    ram                   vram1;
+    ram                   ddr2ram;
+    VexpressSysRegs       sysRegs;
+    SysCtrlSP810          sysCtrl;
+    dummyPort             sbpci0;
+    AaciPL041             aac1;
+    MmciPL181             mmc1;
+    KbPL050               kb1;
+    KbPL050               ms1;
+    UartPL011             uart0;
+    UartPL011             uart1;
+    UartPL011             uart2;
+    UartPL011             uart3;
+    WdtSP805              wdt1;
+    TimerSP804            timer01;
+    TimerSP804            timer23;
+    SerBusDviRegs         dvi1;
+    RtcPL031              rtc1;
+    CompactFlashRegs      cf1;
+    LcdPL110              clcd;
+    LcdPL110              lcd1;
+    DynamicBridge         lcd1NS;
+    DMemCtrlPL341         dmc1;
+    DynamicBridge         dmc1NS;
+    SMemCtrlPL354         smc1;
+    DynamicBridge         smc1NS;
+    dummyPort             scc1;
+    DynamicBridge         scc1NS;
+    TimerSP804            timer45;
+    DynamicBridge         timer45NS;
+    WdtSP805              wdt2;
+    DynamicBridge         wdt2NS;
+    TzpcBP147             tzpc;
+    dummyPort             gpio0;
+    dummyPort             faxi1;
+    DynamicBridge         faxi1NS;
+    dummyPort             saxi1;
+    DynamicBridge         saxi1NS;
+    L2CachePL310          l2regs;
+    NorFlash48F4400       nor0;
+    NorFlash48F4400       nor1;
+    LAN9118               eth0;
+    ISP1761               usb0;
+    SmartLoaderArmLinux   smartLoader;
+
+
+    icmAttrListObject *attrsForcpu() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("variant", "Cortex-A9MPx1");
+        userAttrs->addAttr("compatibility", "ISA");
+        userAttrs->addAttr("UAL", (int)1);
+        userAttrs->addAttr("showHiddenRegs", (int)0);
+        userAttrs->addAttr("override_CBAR", (int)0x1e000000);
+        userAttrs->addAttr("endian", "little");
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForsysRegs() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("SYS_PROCID0", (int)0x0c000191);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForkb1() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("isKeyboard", (int)1);
+        userAttrs->addAttr("grabDisable", (int)1);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForms1() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("isMouse", (int)1);
+        userAttrs->addAttr("grabDisable", (int)1);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForuart0() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("variant", "ARM");
+        userAttrs->addAttr("outfile", "uart0.log");
+        userAttrs->addAttr("finishOnDisconnect", (int)1);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForuart1() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("variant", "ARM");
+        userAttrs->addAttr("outfile", "uart1.log");
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForuart2() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("variant", "ARM");
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForuart3() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("variant", "ARM");
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForclcd() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("resolution", "xga");
+        userAttrs->addAttr("noGraphics", (int)1);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForlcd1() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("resolution", "xga");
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForlcd1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x10020000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099780194304ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsFordmc1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e0000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099780980736ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForsmc1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e1000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099780984832ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForscc1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e2000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099780988928ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsFortimer45NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e4000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099780997120ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForwdt2NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e5000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099781001216ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForfaxi1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100e9000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099781017600ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForsaxi1NS() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("mpLoAddress", (int)0x100ea000);
+        userAttrs->addAttr("spLoAddress", (Uns64)1099781021696ULL);
+        userAttrs->addAttr("portSize", (int)0x1000);
+        return userAttrs;
+    }
+
+    icmAttrListObject *attrsForsmartLoader() {
+        icmAttrListObject *userAttrs = new icmAttrListObject;
+        userAttrs->addAttr("command", "mem=512M raid=noautodetect console=ttyAMA0,38400n8 vmalloc=256MB devtmpfs.mount=0");
+        userAttrs->addAttr("physicalbase", (int)0x60000000);
+        userAttrs->addAttr("memsize", (int)0x20000000);
+        userAttrs->addAttr("boardid", (int)0x8e0);
+        return userAttrs;
+    }
+
+    DecoderProcDesc *proc_desc_for_decoder(bool cpu_attached, unsigned int cpu_instr_socketId, icmProcessorObject *proc_handle, unsigned int num_cores) {
+    	DecoderProcDesc *proc_desc = new DecoderProcDesc(cpu_attached, cpu_instr_socketId, proc_handle, num_cores);
+    	return proc_desc;
+    }
+}; /* ArmVersatileExpress_CA9_TLM2 */
+
+////////////////////////////////////////////////////////////////////////////////
+//                  ArmVersatileExpress_CA9_TLM2 Constructor
+////////////////////////////////////////////////////////////////////////////////
+
+ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_name name)
+    : sc_core::sc_module (name)
+    , Platform ("icm", ICM_INIT_DEFAULT | ICM_STOP_ON_CTRLC)
+	, cpu ( "cpu", 0, ICM_ATTR_SIMEX, attrsForcpu() )
+    , tzBus("tzBus", proc_desc_for_decoder(true, 0, (icmProcessorObject *)&cpu, 4))
+    , pBus("pBus", proc_desc_for_decoder(false, 0, NULL, 0))				// no CPU connected with this bus
+    , ddr2bus("ddr2bus", proc_desc_for_decoder(false, 0, NULL, 0))			// no CPU connected with this bus
+    , sram1 ("sram1", "sp1", 0x3ffffff)
+    , vram1 ("vram1", "sp1", 0x7fffff)
+    , ddr2ram ("ddr2ram", "sp1", 0x1fffffff)
+    , sysRegs ("sysRegs", attrsForsysRegs())
+    , sysCtrl ("sysCtrl")
+    , sbpci0 ("sbpci0")
+    , aac1 ("aac1")
+    , mmc1 ("mmc1")
+    , kb1 ("kb1", attrsForkb1())
+    , ms1 ("ms1", attrsForms1())
+    , uart0 ("uart0", attrsForuart0())
+    , uart1 ("uart1", attrsForuart1())
+    , uart2 ("uart2", attrsForuart2())
+    , uart3 ("uart3", attrsForuart3())
+    , wdt1 ("wdt1")
+    , timer01 ("timer01")
+    , timer23 ("timer23")
+    , dvi1 ("dvi1")
+    , rtc1 ("rtc1")
+    , cf1 ("cf1")
+    , clcd ("clcd", attrsForclcd())
+    , lcd1 ("lcd1", attrsForlcd1())
+    , lcd1NS ("lcd1NS", attrsForlcd1NS())
+    , dmc1 ("dmc1")
+    , dmc1NS ("dmc1NS", attrsFordmc1NS())
+    , smc1 ("smc1")
+    , smc1NS ("smc1NS", attrsForsmc1NS())
+    , scc1 ("scc1")
+    , scc1NS ("scc1NS", attrsForscc1NS())
+    , timer45 ("timer45")
+    , timer45NS ("timer45NS", attrsFortimer45NS())
+    , wdt2 ("wdt2")
+    , wdt2NS ("wdt2NS", attrsForwdt2NS())
+    , tzpc ("tzpc")
+    , gpio0 ("gpio0")
+    , faxi1 ("faxi1")
+    , faxi1NS ("faxi1NS", attrsForfaxi1NS())
+    , saxi1 ("saxi1")
+    , saxi1NS ("saxi1NS", attrsForsaxi1NS())
+    , l2regs ("l2regs")
+    , nor0 ("nor0")
+    , nor1 ("nor1")
+    , eth0 ("eth0")
+    , usb0 ("usb0")
+    , smartLoader ("smartLoader", attrsForsmartLoader())
+{
+
+    // tzBus masters
+    cpu.INSTRUCTION.socket(tzBus.target_socket[0]);
+    cpu.DATA.socket(tzBus.target_socket[1]);
+
+    // tzBus slaves
+    tzBus.initiator_socket[0](lcd1NS.sp.socket); // Peripheral
+    tzBus.setDecode(0, 0x0, 0x0);
+
+    tzBus.initiator_socket[1](dmc1NS.sp.socket); // Peripheral
+    tzBus.setDecode(1, 0x0, 0x0);
+
+    tzBus.initiator_socket[2](smc1NS.sp.socket); // Peripheral
+    tzBus.setDecode(2, 0x0, 0x0);
+
+    tzBus.initiator_socket[3](scc1NS.sp.socket); // Peripheral
+    tzBus.setDecode(3, 0x0, 0x0);
+
+    tzBus.initiator_socket[4](timer45NS.sp.socket); // Peripheral
+    tzBus.setDecode(4, 0x0, 0x0);
+
+    tzBus.initiator_socket[5](wdt2NS.sp.socket); // Peripheral
+    tzBus.setDecode(5, 0x0, 0x0);
+
+    tzBus.initiator_socket[6](faxi1NS.sp.socket); // Peripheral
+    tzBus.setDecode(6, 0x0, 0x0);
+
+    tzBus.initiator_socket[7](saxi1NS.sp.socket); // Peripheral
+    tzBus.setDecode(7, 0x0, 0x0);
+
+    tzBus.initiator_socket[8](pBus.target_socket[9]); // Bridge
+    tzBus.setDecode(8, 0x0, 0xffffffff);
+
+    tzBus.initiator_socket[9](pBus.target_socket[10]); // Bridge
+    tzBus.setDecode(9, 0x10010000000ULL, 0x10010000fffULL);
+
+    tzBus.initiator_socket[10](pBus.target_socket[11]); // Bridge
+    tzBus.setDecode(10, 0x10010001000ULL, 0x10010001fffULL);
+
+    tzBus.initiator_socket[11](pBus.target_socket[12]); // Bridge
+    tzBus.setDecode(11, 0x10010004000ULL, 0x10010004fffULL);
+
+    tzBus.initiator_socket[12](pBus.target_socket[13]); // Bridge
+    tzBus.setDecode(12, 0x10010005000ULL, 0x10010005fffULL);
+
+    tzBus.initiator_socket[13](pBus.target_socket[14]); // Bridge
+    tzBus.setDecode(13, 0x10010006000ULL, 0x10010006fffULL);
+
+    tzBus.initiator_socket[14](pBus.target_socket[15]); // Bridge
+    tzBus.setDecode(14, 0x10010007000ULL, 0x10010007fffULL);
+
+    tzBus.initiator_socket[15](pBus.target_socket[16]); // Bridge
+    tzBus.setDecode(15, 0x10010009000ULL, 0x10010009fffULL);
+
+    tzBus.initiator_socket[16](pBus.target_socket[17]); // Bridge
+    tzBus.setDecode(16, 0x1001000a000ULL, 0x1001000afffULL);
+
+    tzBus.initiator_socket[17](pBus.target_socket[18]); // Bridge
+    tzBus.setDecode(17, 0x1001000b000ULL, 0x1001000bfffULL);
+
+    tzBus.initiator_socket[18](pBus.target_socket[19]); // Bridge
+    tzBus.setDecode(18, 0x1001000c000ULL, 0x1001000cfffULL);
+
+    tzBus.initiator_socket[19](pBus.target_socket[20]); // Bridge
+    tzBus.setDecode(19, 0x1001000f000ULL, 0x1001000ffffULL);
+
+    tzBus.initiator_socket[20](pBus.target_socket[21]); // Bridge
+    tzBus.setDecode(20, 0x10010011000ULL, 0x10010011fffULL);
+
+    tzBus.initiator_socket[21](pBus.target_socket[22]); // Bridge
+    tzBus.setDecode(21, 0x10010012000ULL, 0x10010012fffULL);
+
+    tzBus.initiator_socket[22](pBus.target_socket[23]); // Bridge
+    tzBus.setDecode(22, 0x10010016000ULL, 0x10010016fffULL);
+
+    tzBus.initiator_socket[23](pBus.target_socket[24]); // Bridge
+    tzBus.setDecode(23, 0x10010017000ULL, 0x10010017fffULL);
+
+    tzBus.initiator_socket[24](pBus.target_socket[25]); // Bridge
+    tzBus.setDecode(24, 0x1001001a000ULL, 0x1001001afffULL);
+
+    tzBus.initiator_socket[25](pBus.target_socket[26]); // Bridge
+    tzBus.setDecode(25, 0x1001001f000ULL, 0x1001001ffffULL);
+
+    tzBus.initiator_socket[26](pBus.target_socket[27]); // Bridge
+    tzBus.setDecode(26, 0x1001e00a000ULL, 0x1001e00afffULL);
+
+    tzBus.initiator_socket[27](pBus.target_socket[28]); // Bridge
+    tzBus.setDecode(27, 0x10040000000ULL, 0x10043ffffffULL);
+
+    tzBus.initiator_socket[28](pBus.target_socket[29]); // Bridge
+    tzBus.setDecode(28, 0x10044000000ULL, 0x10047ffffffULL);
+
+    tzBus.initiator_socket[29](pBus.target_socket[30]); // Bridge
+    tzBus.setDecode(29, 0x10048000000ULL, 0x1004bffffffULL);
+
+    tzBus.initiator_socket[30](pBus.target_socket[31]); // Bridge
+    tzBus.setDecode(30, 0x1004c000000ULL, 0x1004c7fffffULL);
+
+    tzBus.initiator_socket[31](pBus.target_socket[32]); // Bridge
+    tzBus.setDecode(31, 0x1004e000000ULL, 0x1004e000fffULL);
+
+    tzBus.initiator_socket[32](pBus.target_socket[33]); // Bridge
+    tzBus.setDecode(32, 0x1004f000000ULL, 0x1004f00ffffULL);
+
+    tzBus.initiator_socket[33](pBus.target_socket[34]); // Bridge
+    tzBus.setDecode(33, 0x10080000000ULL, 0x1009fffffffULL);
+
+    tzBus.initiator_socket[34](pBus.target_socket[35]); // Bridge
+    tzBus.setDecode(34, 0x10000000000ULL, 0x10003ffffffULL);
+
+
+    // pBus masters
+    lcd1NS.mp.socket(pBus.target_socket[0]);
+    dmc1NS.mp.socket(pBus.target_socket[1]);
+    smc1NS.mp.socket(pBus.target_socket[2]);
+    scc1NS.mp.socket(pBus.target_socket[3]);
+    timer45NS.mp.socket(pBus.target_socket[4]);
+    wdt2NS.mp.socket(pBus.target_socket[5]);
+    faxi1NS.mp.socket(pBus.target_socket[6]);
+    saxi1NS.mp.socket(pBus.target_socket[7]);
+    smartLoader.mport.socket(pBus.target_socket[8]);
+
+    // pBus slaves
+    pBus.initiator_socket[0](sysRegs.bport1.socket); // Peripheral
+    pBus.setDecode(0, 0x10000000, 0x10000fff);
+
+    pBus.initiator_socket[1](sysCtrl.bport1.socket); // Peripheral
+    pBus.setDecode(1, 0x10001000, 0x10001fff);
+
+    pBus.initiator_socket[2](sbpci0.bport1.socket); // Peripheral
+    pBus.setDecode(2, 0x10002000, 0x10002fff);
+
+    pBus.initiator_socket[3](aac1.bport1.socket); // Peripheral
+    pBus.setDecode(3, 0x10004000, 0x10004fff);
+
+    pBus.initiator_socket[4](mmc1.bport1.socket); // Peripheral
+    pBus.setDecode(4, 0x10005000, 0x10005fff);
+
+    pBus.initiator_socket[5](kb1.bport1.socket); // Peripheral
+    pBus.setDecode(5, 0x10006000, 0x10006fff);
+
+    pBus.initiator_socket[6](ms1.bport1.socket); // Peripheral
+    pBus.setDecode(6, 0x10007000, 0x10007fff);
+
+    pBus.initiator_socket[7](uart0.bport1.socket); // Peripheral
+    pBus.setDecode(7, 0x10009000, 0x10009fff);
+
+    pBus.initiator_socket[8](uart1.bport1.socket); // Peripheral
+    pBus.setDecode(8, 0x1000a000, 0x1000afff);
+
+    pBus.initiator_socket[9](uart2.bport1.socket); // Peripheral
+    pBus.setDecode(9, 0x1000b000, 0x1000bfff);
+
+    pBus.initiator_socket[10](uart3.bport1.socket); // Peripheral
+    pBus.setDecode(10, 0x1000c000, 0x1000cfff);
+
+    pBus.initiator_socket[11](wdt1.bport1.socket); // Peripheral
+    pBus.setDecode(11, 0x1000f000, 0x1000ffff);
+
+    pBus.initiator_socket[12](timer01.bport1.socket); // Peripheral
+    pBus.setDecode(12, 0x10011000, 0x10011fff);
+
+    pBus.initiator_socket[13](timer23.bport1.socket); // Peripheral
+    pBus.setDecode(13, 0x10012000, 0x10012fff);
+
+    pBus.initiator_socket[14](dvi1.bport1.socket); // Peripheral
+    pBus.setDecode(14, 0x10016000, 0x10016fff);
+
+    pBus.initiator_socket[15](rtc1.bport1.socket); // Peripheral
+    pBus.setDecode(15, 0x10017000, 0x10017fff);
+
+    pBus.initiator_socket[16](cf1.bport1.socket); // Peripheral
+    pBus.setDecode(16, 0x1001a000, 0x1001afff);
+
+    pBus.initiator_socket[17](clcd.bport1.socket); // Peripheral
+    pBus.setDecode(17, 0x1001f000, 0x1001ffff);
+
+    pBus.initiator_socket[18](clcd.memory.socket); // Peripheral
+    pBus.setDecode(18, 0x0, 0x0);
+
+    pBus.initiator_socket[19](lcd1.bport1.socket); // Peripheral
+    pBus.setDecode(19, 0x10020000, 0x10020fff);
+
+    pBus.initiator_socket[20](lcd1.memory.socket); // Peripheral
+    pBus.setDecode(20, 0x0, 0x0);
+
+    pBus.initiator_socket[21](dmc1.bport1.socket); // Peripheral
+    pBus.setDecode(21, 0x100e0000, 0x100e0fff);
+
+    pBus.initiator_socket[22](smc1.bport1.socket); // Peripheral
+    pBus.setDecode(22, 0x100e1000, 0x100e1fff);
+
+    pBus.initiator_socket[23](scc1.bport1.socket); // Peripheral
+    pBus.setDecode(23, 0x100e2000, 0x100e2fff);
+
+    pBus.initiator_socket[24](timer45.bport1.socket); // Peripheral
+    pBus.setDecode(24, 0x100e4000, 0x100e4fff);
+
+    pBus.initiator_socket[25](wdt2.bport1.socket); // Peripheral
+    pBus.setDecode(25, 0x100e5000, 0x100e5fff);
+
+    pBus.initiator_socket[26](tzpc.bport1.socket); // Peripheral
+    pBus.setDecode(26, 0x100e6000, 0x100e6fff);
+
+    pBus.initiator_socket[27](gpio0.bport1.socket); // Peripheral
+    pBus.setDecode(27, 0x100e8000, 0x100e8fff);
+
+    pBus.initiator_socket[28](faxi1.bport1.socket); // Peripheral
+    pBus.setDecode(28, 0x100e9000, 0x100e9fff);
+
+    pBus.initiator_socket[29](saxi1.bport1.socket); // Peripheral
+    pBus.setDecode(29, 0x100ea000, 0x100eafff);
+
+    pBus.initiator_socket[30](l2regs.bport1.socket); // Peripheral
+    pBus.setDecode(30, 0x1e00a000, 0x1e00afff);
+
+    pBus.initiator_socket[31](nor0.flash.socket); // Peripheral
+    pBus.setDecode(31, 0x40000000, 0x43ffffff);
+
+    pBus.initiator_socket[32](nor1.flash.socket); // Peripheral
+    pBus.setDecode(32, 0x44000000, 0x47ffffff);
+
+    pBus.initiator_socket[33](eth0.bport1.socket); // Peripheral
+    pBus.setDecode(33, 0x4e000000, 0x4e000fff);
+
+    pBus.initiator_socket[34](usb0.bport1.socket); // Peripheral
+    pBus.setDecode(34, 0x4f000000, 0x4f00ffff);
+
+    pBus.initiator_socket[35](sram1.sp1); // Memory
+    pBus.setDecode(35, 0x48000000, 0x4bffffff);
+
+    pBus.initiator_socket[36](vram1.sp1); // Memory
+    pBus.setDecode(36, 0x4c000000, 0x4c7fffff);
+
+    pBus.initiator_socket[37](ddr2bus.target_socket[0]); // Bridge
+    pBus.setDecode(37, 0x60000000, 0x7fffffff);
+
+    pBus.initiator_socket[38](ddr2bus.target_socket[1]); // Bridge
+    pBus.setDecode(38, 0x0, 0x3ffffff);
+
+
+    // ddr2bus masters
+
+    // ddr2bus slaves
+    ddr2bus.initiator_socket[0](ddr2ram.sp1); // Memory
+    ddr2bus.setDecode(0, 0x0, 0x1fffffff);
+
+
+    // Net connections
+    timer01.irq(cpu.SPI34);
+    timer23.irq(cpu.SPI35);
+    rtc1.irq(cpu.SPI36);
+    uart0.irq(cpu.SPI37);
+    uart1.irq(cpu.SPI38);
+    uart2.irq(cpu.SPI39);
+    uart3.irq(cpu.SPI40);
+    mmc1.irq0(cpu.SPI41);
+    mmc1.irq1(cpu.SPI42);
+    kb1.irq(cpu.SPI44);
+    ms1.irq(cpu.SPI45);
+    clcd.irq(cpu.SPI46);
+    eth0.irq(cpu.SPI47);
+    usb0.hc_irq(cpu.SPI48);
+    lcd1.irq(cpu.SPI76);
+    timer45.irq(cpu.SPI80);
+    mmc1.cardin(sysRegs.cardin);
+    mmc1.wprot(sysRegs.wprot);
+    tzpc.TZPCDECPROT1_4(lcd1NS.enable);
+    tzpc.TZPCDECPROT0_0(dmc1NS.enable);
+    tzpc.TZPCDECPROT0_1(smc1NS.enable);
+    tzpc.TZPCDECPROT0_2(scc1NS.enable);
+    tzpc.TZPCDECPROT0_4(timer45NS.enable);
+    tzpc.TZPCDECPROT0_5(wdt2NS.enable);
+    tzpc.TZPCDECPROT0_9(faxi1NS.enable);
+    tzpc.TZPCDECPROT0_10(saxi1NS.enable);
+
+    //cpu.dmi(false);
+}

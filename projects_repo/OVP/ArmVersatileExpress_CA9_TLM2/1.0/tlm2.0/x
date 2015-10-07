@@ -1,0 +1,144 @@
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Copyright (c) 2005-2015 Imperas Software Ltd.  Contains Imperas Proprietary Information.
+Licensed Software, All Rights Reserved.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+OVPsim started: Mon Oct  5 13:11:58 2015
+
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/processor/arm/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/MmciPL181/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/KbPL050/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/LcdPL110/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/philips.ovpworld.org/peripheral/ISP1761/1.0/model.so'
+Info (OR_OF) Target 'ArmVersatileExpress-CA9/pBus' has object file read from 'smpboot.ARM_CORTEX_A9.elf'
+Info (OR_PH) Program Headers:
+Info (OR_PH) Type           Offset     VirtAddr   PhysAddr   FileSiz    MemSiz     Flags Align
+Info (OR_PD) LOAD           0x00000000 0x60000000 0x60000000 0x0000107c 0x0000107c R-E   8000
+Info (ArmVersatileExpress-CA9_LAF) Linux loaded on ArmVersatileExpress-CA9/cpu_CPU0 (start address set to 0x60000000)
+Info (ArmVersatileExpress-CA9_LAF) Linux loaded on ArmVersatileExpress-CA9/cpu_CPU1 (start address set to 0x60000000)
+Info (ArmVersatileExpress-CA9_LAF) Linux loaded on ArmVersatileExpress-CA9/cpu_CPU2 (start address set to 0x60000000)
+Info (ArmVersatileExpress-CA9_LAF) Linux loaded on ArmVersatileExpress-CA9/cpu_CPU3 (start address set to 0x60000000)
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU1': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU2': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU2': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress-CA9/cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Info (PSE_SER) Socket disconnected - terminating simulation
+Info 
+Info ---------------------------------------------------
+Info PSE SIMULATION TIME STATISTICS
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/timer01'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/timer01'
+Info    0.05 seconds: PSE THREAD 'ArmVersatileExpress-CA9/eth0'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/lcd1'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/clcd'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/uart3'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/uart2'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress-CA9/uart1'
+Info    0.03 seconds: PSE THREAD 'ArmVersatileExpress-CA9/ms1'
+Info    0.04 seconds: PSE THREAD 'ArmVersatileExpress-CA9/kb1'
+Info    0.20 seconds: PSE 'ArmVersatileExpress-CA9/smartLoader' (and 35 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/usb0' (and 1 terminated thread, 56 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/eth0' (and 205 terminated callbacks)
+Info    0.90 seconds: PSE 'ArmVersatileExpress-CA9/nor1' (and 6 terminated callbacks)
+Info    0.66 seconds: PSE 'ArmVersatileExpress-CA9/nor0' (and 6 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/l2regs' (and 17 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/saxi1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/saxi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/faxi1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/faxi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/gpio0' (and 10 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/tzpc' (and 53 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/wdt2NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/wdt2' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/timer45NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/timer45' (and 4 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/scc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/scc1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/smc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/smc1' (and 10 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/dmc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/dmc1' (and 10 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/lcd1NS' (and 15 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/lcd1' (and 39 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/clcd' (and 21 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/cf1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/rtc1' (and 18 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/dvi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/timer23' (and 4 terminated callbacks)
+Info    0.02 seconds: PSE 'ArmVersatileExpress-CA9/timer01' (and 16,536 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/wdt1' (and 10 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/uart3' (and 40 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/uart2' (and 40 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/uart1' (and 40 terminated callbacks)
+Info    0.11 seconds: PSE 'ArmVersatileExpress-CA9/uart0' (and 1 terminated thread, 13,094 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/ms1' (and 528 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/kb1' (and 70 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/mmc1' (and 30 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress-CA9/aac1' (and 10 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/sbpci0' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress-CA9/sysCtrl' (and 4 terminated callbacks)
+Info    0.04 seconds: PSE 'ArmVersatileExpress-CA9/sysRegs' (and 75,287 terminated callbacks)
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress-CA9/cpu_CPU0' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 448
+Info   Final program counter : 0x8001d668
+Info   Simulated instructions: 1,055,635,080
+Info   Simulated MIPS        : 246.6
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress-CA9/cpu_CPU1' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 448
+Info   Final program counter : 0x8001d668
+Info   Simulated instructions: 93,793,940
+Info   Simulated MIPS        : 21.9
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress-CA9/cpu_CPU2' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 448
+Info   Final program counter : 0x8001d668
+Info   Simulated instructions: 111,450,060
+Info   Simulated MIPS        : 26.0
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress-CA9/cpu_CPU3' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 448
+Info   Final program counter : 0x8001d668
+Info   Simulated instructions: 84,602,397
+Info   Simulated MIPS        : 19.8
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info TOTAL
+Info   Simulated instructions: 1,345,481,477
+Info   Simulated MIPS        : 314.4
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info SIMULATION TIME STATISTICS
+Info   Simulated time        : 163.02 seconds
+Info   User time             : 4.22 seconds
+Info   System time           : 0.06 seconds
+Info   Elapsed time          : 4.30 seconds
+Info   Real time ratio       : 37.91x faster
+Info ---------------------------------------------------
+
+OVPsim finished: Mon Oct  5 13:12:04 2015
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+

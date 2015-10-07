@@ -1,6 +1,29 @@
-09:55:00 **** Incremental Build of configuration Debug for project custom_sysc_memory ****
+13:41:24 **** Build of configuration Debug for project custom_sysc_memory ****
 make all 
-make: Nothing to be done for `all'.
+Building file: ../my_mem.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"my_mem.d" -MT"my_mem.d" -o "my_mem.o" "../my_mem.cpp"
+Finished building: ../my_mem.cpp
+ 
+Building file: ../platform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -O0 -g3 -Wall -m32 -c -fmessage-length=0 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.d" -o "platform.o" "../platform.cpp"
+../platform.cpp: In constructor ‘ArmIntegratorCP::ArmIntegratorCP(sc_core::sc_module_name, bootConfig, bool, int, const char*)’:
+../platform.cpp:173:44: error: no matching function for call to ‘decoder<3, 16>::decoder(const char [5])’
+     , lcdDummy("lcdDummy", "sp1", 0x1000000)
+                                            ^
+../platform.cpp:173:44: note: candidates are:
+In file included from ../platform.cpp:28:0:
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:98:2: note: decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name, DecoderProcDesc*) [with int NR_OF_INITIATORS = 3; int NR_OF_TARGETS = 16]
+  decoder(sc_core::sc_module_name name, DecoderProcDesc *proc_desc)
+  ^
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:98:2: note:   candidate expects 2 arguments, 1 provided
+In file included from ../platform.cpp:28:0:
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:80:7: note: decoder<3, 16>::decoder(const decoder<3, 16>&)
+ class decoder : public sc_core::sc_module
+       ^
+/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:80:7: note:   no known conversion for argument 1 from ‘const char [5]’ to ‘const decoder<3, 16>&’
+make: *** [platform.o] Error 1
 
-09:55:00 Build Finished (took 57ms)
+13:41:26 Build Finished (took 1s.662ms)
 

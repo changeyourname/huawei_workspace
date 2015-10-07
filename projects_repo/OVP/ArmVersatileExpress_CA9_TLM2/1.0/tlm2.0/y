@@ -1,0 +1,159 @@
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Copyright (c) 2005-2015 Imperas Software Ltd.  Contains Imperas Proprietary Information.
+Licensed Software, All Rights Reserved.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+OVPsim started: Mon Oct  5 13:12:46 2015
+
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/processor/arm/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/semihosting/armNewlib/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/MmciPL181/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/KbPL050/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/LcdPL110/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/philips.ovpworld.org/peripheral/ISP1761/1.0/model.so'
+Info (OR_OF) Target 'ArmVersatileExpress_CA9_TLM2.cpu' has object file read from 'smpboot.ARM_CORTEX_A9.elf'
+Info (OR_PH) Program Headers:
+Info (OR_PH) Type           Offset     VirtAddr   PhysAddr   FileSiz    MemSiz     Flags Align
+Info (OR_PD) LOAD           0x00000000 0x60000000 0x60000000 0x0000107c 0x0000107c R-E   8000
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU0 (start address set to 0x80000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU1 (start address set to 0x80000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU2 (start address set to 0x80000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU3 (start address set to 0x80000000)
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+...
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Assertion Failed (ARM_EXCEPTION_PAX) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' 0x60001000 00000000 andeq   r0,r0,r0: external prefetch abort for address 0x60001000
+Info 
+Info ---------------------------------------------------
+Info PSE SIMULATION TIME STATISTICS
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.eth0'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.lcd1'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.clcd'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.uart3'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.uart2'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.uart1'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.uart0'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.ms1'
+Info    0.00 seconds: PSE THREAD 'ArmVersatileExpress_CA9_TLM2.kb1'
+Info    0.34 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.smartLoader' (and 35 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.usb0' (and 1 terminated thread, 12 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.eth0' (and 20 terminated callbacks)
+Info    0.53 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.nor1' (and 6 terminated callbacks)
+Info    0.56 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.nor0' (and 6 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.l2regs' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.saxi1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.saxi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.faxi1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.faxi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.gpio0' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.tzpc' (and 53 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.wdt2NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.wdt2' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.timer45NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.timer45' (and 4 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.scc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.scc1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.smc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.smc1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.dmc1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.dmc1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.lcd1NS' (and 15 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.lcd1' (and 21 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.clcd' (and 21 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.cf1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.rtc1' (and 4 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.dvi1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.timer23' (and 4 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.timer01' (and 4 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.wdt1' (and 2 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.uart3' (and 28 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.uart2' (and 28 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.uart1' (and 28 terminated callbacks)
+Info    0.04 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.uart0' (and 28 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.ms1' (and 18 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.kb1' (and 18 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.mmc1' (and 13 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.aac1' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.sbpci0' (and 2 terminated callbacks)
+Info    0.00 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.sysCtrl' (and 2 terminated callbacks)
+Info    0.01 seconds: PSE 'ArmVersatileExpress_CA9_TLM2.sysRegs' (and 9 terminated callbacks)
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU0' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 100
+Info   Final program counter : 0xc
+Info   Simulated instructions: 273,247
+Info   Simulated MIPS        : 0.2
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU1' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 100
+Info   Final program counter : 0x10
+Info   Simulated instructions: 300,000
+Info   Simulated MIPS        : 0.2
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU2' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 100
+Info   Final program counter : 0x10
+Info   Simulated instructions: 300,000
+Info   Simulated MIPS        : 0.2
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3' STATISTICS
+Info   Type                  : arm (Cortex-A9MPx4)
+Info   Nominal MIPS          : 100
+Info   Final program counter : 0x10
+Info   Simulated instructions: 300,000
+Info   Simulated MIPS        : 0.2
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info TOTAL
+Info   Simulated instructions: 1,173,247
+Info   Simulated MIPS        : 1.0
+Info ---------------------------------------------------
+Info 
+Info ---------------------------------------------------
+Info SIMULATION TIME STATISTICS
+Info   Simulated time        : 0.00 seconds
+Info   User time             : 0.84 seconds
+Info   System time           : 0.38 seconds
+Info   Elapsed time          : 1.21 seconds
+Info ---------------------------------------------------
+
+OVPsim finished: Mon Oct  5 13:12:49 2015
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+

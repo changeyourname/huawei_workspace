@@ -1,4 +1,4 @@
-10:59:33 **** Incremental Build of configuration Debug for project systemc_helloworld ****
+13:41:26 **** Incremental Build of configuration Debug for project systemc_helloworld ****
 make all 
 Building target: systemc_helloworld
 Invoking: GCC C++ Linker
@@ -9,5 +9,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -o "systemc_helloworld"  ./main.o   -ls
 collect2: error: ld returned 1 exit status
 make: *** [systemc_helloworld] Error 1
 
-10:59:33 Build Finished (took 58ms)
+13:41:26 Build Finished (took 58ms)
 

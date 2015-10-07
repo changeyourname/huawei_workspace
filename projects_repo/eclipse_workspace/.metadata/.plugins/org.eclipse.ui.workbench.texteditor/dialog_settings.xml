@@ -2,23 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
-		<item value="326" key="DIALOG_Y_ORIGIN"/>
-		<item value="968" key="DIALOG_X_ORIGIN"/>
+		<item value="101" key="DIALOG_Y_ORIGIN"/>
 		<item value="435" key="DIALOG_HEIGHT"/>
+		<item value="1036" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Int64" key="selection"/>
+		<item value="getSMPI" key="selection"/>
 		<list key="findhistory">
+			<item value="getSMPI"/>
+			<item value="getName"/>
+			<item value="icmProcessorS"/>
+			<item value="_proc"/>
+			<item value="trace"/>
+			<item value="options.trace"/>
+			<item value="platform"/>
 			<item value="Int64"/>
-			<item value="ppmBusPort"/>
-			<item value="ppmAttrTypes.h"/>
-			<item value="ram"/>
 		</list>
 		<list key="replacehistory">
 		</list>
