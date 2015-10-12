@@ -258,11 +258,6 @@ class ArmVersatileExpress_CA9_TLM2 : public sc_core::sc_module {
         userAttrs->addAttr("boardid", (int)0x8e0);
         return userAttrs;
     }
-
-    DecoderProcDesc *proc_desc_for_decoder(bool cpu_attached, unsigned int cpu_instr_socketId, icmProcessorObject *proc_handle, unsigned int num_cores) {
-    	DecoderProcDesc *proc_desc = new DecoderProcDesc(cpu_attached, cpu_instr_socketId, proc_handle, num_cores);
-    	return proc_desc;
-    }
 }; /* ArmVersatileExpress_CA9_TLM2 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -273,9 +268,9 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     : sc_core::sc_module (name)
     , Platform ("icm", ICM_INIT_DEFAULT | ICM_STOP_ON_CTRLC)
 	, cpu ( "cpu", 0, ICM_ATTR_SIMEX, attrsForcpu() )
-    , tzBus("tzBus", proc_desc_for_decoder(true, 0, (icmProcessorObject *)&cpu, 4))
-    , pBus("pBus", proc_desc_for_decoder(false, 0, NULL, 0))				// no CPU connected with this bus
-    , ddr2bus("ddr2bus", proc_desc_for_decoder(false, 0, NULL, 0))			// no CPU connected with this bus
+    , tzBus("tzBus")
+    , pBus("pBus")				// no CPU connected with this bus
+    , ddr2bus("ddr2bus")			// no CPU connected with this bus
     , sram1 ("sram1", "sp1", 0x3ffffff)
     , vram1 ("vram1", "sp1", 0x7fffff)
     , ddr2ram ("ddr2ram", "sp1", 0x1fffffff)
@@ -599,5 +594,5 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     tzpc.TZPCDECPROT0_9(faxi1NS.enable);
     tzpc.TZPCDECPROT0_10(saxi1NS.enable);
 
-    cpu.dmi(false);
+    //cpu.dmi(false);
 }

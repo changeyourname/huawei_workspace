@@ -1,4 +1,4 @@
-17:42:47 **** Build of configuration Debug for project ArmVersatileExpress ****
+16:14:44 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -30,6 +30,11 @@ Invoking: GCC C++ Compiler
 g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"1.0/tlm2.0/tlmMemory.d" -MT"1.0/tlm2.0/tlmMemory.d" -o "1.0/tlm2.0/tlmMemory.o" "../1.0/tlm2.0/tlmMemory.cpp"
 Finished building: ../1.0/tlm2.0/tlmMemory.cpp
  
+Building file: ../my_icmCpuMasterPort.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"my_icmCpuMasterPort.d" -MT"my_icmCpuMasterPort.d" -o "my_icmCpuMasterPort.o" "../my_icmCpuMasterPort.cpp"
+Finished building: ../my_icmCpuMasterPort.cpp
+ 
 Building file: ../platform.cpp
 Invoking: GCC C++ Compiler
 g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.d" -o "platform.o" "../platform.cpp"
@@ -37,6 +42,6 @@ Finished building: ../platform.cpp
  
 Building target: ArmVersatileExpress
 Invoking: GCC C++ Linker
-g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/usr/local/systemc-2.3.1/lib-linux/ -m32 -o "ArmVersatileExpress"  ./modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o  ./modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o  ./modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o  ./modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o  ./host/icm/icmCpuManager.o  ./1.0/tlm2.0/tlmMemory.o  ./platform.o   -lsystemc -lRuntimeLoader
+g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/usr/local/systemc-2.3.1/lib-linux/ -m32 -o "ArmVersatileExpress"  ./modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o  ./modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o  ./modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o  ./modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o  ./host/icm/icmCpuManager.o  ./1.0/tlm2.0/tlmMemory.o  ./my_icmCpuMasterPort.o ./platform.o   -lsystemc -lRuntimeLoader
 Finished building target: ArmVersatileExpress
  
