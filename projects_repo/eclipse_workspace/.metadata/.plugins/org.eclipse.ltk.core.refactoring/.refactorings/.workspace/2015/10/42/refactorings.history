@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;ArmVersatileExpress/my_icmCpuMasterPort&apos;" deleteContents="false" description="Delete resource &apos;ArmVersatileExpress/my_icmCpuMasterPort&apos;" element1="/ArmVersatileExpress/my_icmCpuMasterPort" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1444649580854"/>
+</session>

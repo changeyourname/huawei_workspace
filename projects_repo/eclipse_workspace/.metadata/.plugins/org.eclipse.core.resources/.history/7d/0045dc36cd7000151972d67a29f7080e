@@ -1,0 +1,78 @@
+/*
+ * my_icmCpuMasterPort.cpp
+ *
+ *  Created on: Oct 12, 2015
+ *      Author: uzair
+ */
+
+#include "my_icmCpuMasterPort.hpp"
+
+#define CASE_STRING(_n)   case tlm::_n : s = # _n;          break;
+
+const char *my_icmCpuMasterPort::response() {
+    const char *s = "???";
+    switch (m_trans.get_response_status()) {
+        CASE_STRING(TLM_OK_RESPONSE);
+        CASE_STRING(TLM_INCOMPLETE_RESPONSE);
+        CASE_STRING(TLM_GENERIC_ERROR_RESPONSE);
+        CASE_STRING(TLM_ADDRESS_ERROR_RESPONSE);
+        CASE_STRING(TLM_COMMAND_ERROR_RESPONSE);
+        CASE_STRING(TLM_BURST_ERROR_RESPONSE);
+        CASE_STRING(TLM_BYTE_ENABLE_ERROR_RESPONSE);
+    }
+    return s;
+}
+
+
+my_icmCpuMasterPort::my_icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits)
+    : m_addrBits(addrBits)
+    , m_name      (strdup(CONCAT2(cpu->name(), name)))
+    , m_bus       (CONCAT2(m_name, "m_bus"      ), m_addrBits)
+    , m_zero_delay(SC_ZERO_TIME)
+    , m_cpu       (cpu)
+    , m_maxBytes  (8)
+    , m_isocket      (name)
+{
+    m_initiator = new icmInitiatorExtension();
+    m_trans.set_extension(m_initiator);
+
+    cbTryDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&icmCpuMasterPort::readTryDMI,
+         (icmMemCallback::writeCallback)&icmCpuMasterPort::writeTryDMI,
+         (void*)this // this master port
+    );
+
+    cbNoDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&icmCpuMasterPort::readNoDMI,
+         (icmMemCallback::writeCallback)&icmCpuMasterPort::writeNoDMI,
+         (void*)this // this master port
+    );
+
+    cbRdDMI = new icmMemCallback(
+         0,
+         (icmMemCallback::writeCallback)&icmCpuMasterPort::writeNoDMI,
+         (void*)this // this master port
+    );
+
+    cbWrDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&icmCpuMasterPort::readNoDMI,
+         0,
+         (void*)this // this master port
+    );
+
+    cbRWDMI = new icmMemCallback(
+         0,
+         0,
+         (void*)this // this master port
+    );
+    m_bus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
+
+    //((icmProcessorObject *)cpu)->icmCpuManager::icmProcessorObject::connect(name, m_bus);
+    icmPrintf("%s\r\n", icmGetProcessorName(m_smp_core, NULL));
+    icmConnectProcessorBusByName(m_smp_core, name, m_bus.getBus());
+    icmPrintBusConnections(m_bus.getBus());
+    assert(0);
+
+    // let target call back to invalidate DMI
+    socket.register_invalidate_direct_mem_ptr(this, & icmCpuMasterPort::invalidate_direct_mem_ptr);
+}

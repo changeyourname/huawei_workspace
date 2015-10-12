@@ -1,0 +1,535 @@
+/*
+ * my_icmCpuMasterPort.cpp
+ *
+ *  Created on: Oct 12, 2015
+ *      Author: uzair
+ */
+
+#include "my_icmCpuMasterPort.hpp"
+#include "ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp"
+#include "ovpworld.org/modelSupport/tlmDummySlavePort/1.0/tlm2.0/tlmDummySlavePort.hpp"
+#include "ovpworld.org/modelSupport/tlmInitiatorExtension/1.0/tlm2.0/tlmInitiatorExtension.hpp"
+
+
+#define CONCAT2(s1,s2) ((string) s1 + "_" + (string) s2).c_str()
+
+//
+// Local utility
+//
+static void printBytes(Uns8 *ptr, Uns32 bytes) {
+    icmPrintf("{");
+    Uns32 i;
+    for(i = 0; i < bytes; i++, ptr++) {
+        if(i == 0) {
+            icmPrintf("%02x", *ptr);
+        } else {
+            icmPrintf(",%02x", *ptr);
+        }
+    }
+    icmPrintf("}");
+}
+
+
+#define CASE_STRING(_n)   case tlm::_n : s = # _n;          break;
+const char *my_icmCpuMasterPort::response() {
+    const char *s = "???";
+    switch (m_trans.get_response_status()) {
+        CASE_STRING(TLM_OK_RESPONSE);
+        CASE_STRING(TLM_INCOMPLETE_RESPONSE);
+        CASE_STRING(TLM_GENERIC_ERROR_RESPONSE);
+        CASE_STRING(TLM_ADDRESS_ERROR_RESPONSE);
+        CASE_STRING(TLM_COMMAND_ERROR_RESPONSE);
+        CASE_STRING(TLM_BURST_ERROR_RESPONSE);
+        CASE_STRING(TLM_BYTE_ENABLE_ERROR_RESPONSE);
+    }
+    return s;
+}
+
+
+my_icmCpuMasterPort::my_icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits, icmProcessorP smp_core)
+    : m_addrBits(addrBits)
+    , m_name      (strdup(CONCAT2(cpu->name(), name)))
+    //, m_bus       (CONCAT2(m_name, "m_bus"      ), m_addrBits)
+	, m_IBus      ("m_IBus", m_addrBits)
+	, m_DBus      ("m_DBus", m_addrBits)
+	, m_GICRegBus ("m_GICRegBus", m_addrBits)
+    , m_zero_delay(sc_core::SC_ZERO_TIME)
+    , m_cpu       (cpu)
+	, m_smp_core  (smp_core)
+    , m_maxBytes  (8)
+    , m_IBUS_isocket ("ibus")
+	, m_DBUS_isocket ("Dbus")
+	, m_GICRegBUS_isocket ("GICbus")
+{
+    m_initiator = new icmInitiatorExtension();
+    m_trans.set_extension(m_initiator);
+
+    cbTryDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&my_icmCpuMasterPort::readTryDMI,
+         (icmMemCallback::writeCallback)&my_icmCpuMasterPort::writeTryDMI,
+         (void*)this // this master port
+    );
+
+    cbNoDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&my_icmCpuMasterPort::readNoDMI,
+         (icmMemCallback::writeCallback)&my_icmCpuMasterPort::writeNoDMI,
+         (void*)this // this master port
+    );
+
+    cbRdDMI = new icmMemCallback(
+         0,
+         (icmMemCallback::writeCallback)&my_icmCpuMasterPort::writeNoDMI,
+         (void*)this // this master port
+    );
+
+    cbWrDMI = new icmMemCallback(
+         (icmMemCallback::readCallback)&my_icmCpuMasterPort::readNoDMI,
+         0,
+         (void*)this // this master port
+    );
+
+    cbRWDMI = new icmMemCallback(
+         0,
+         0,
+         (void*)this // this master port
+    );
+    //m_bus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
+    //((icmProcessorObject *)cpu)->icmCpuManager::icmProcessorObject::connect(name, m_bus);
+    m_IBus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
+    m_DBus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
+    m_GICRegBus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
+    //((icmProcessorObject *)cpu)->icmCpuManager::icmProcessorObject::connect(m_IBus, m_DBus);
+    //((icmProcessorObject *)cpu)->icmCpuManager::icmProcessorObject::connect("GICRegisters", m_GICRegBus);
+
+    icmPrintf("CPU:%d\r\n", icmGetSMPIndex(m_smp_core));
+
+    icmConnectProcessorBusses(m_smp_core, m_IBus.getBus(), m_DBus.getBus());
+    icmConnectProcessorBusByName(m_smp_core, "GICRegisters", m_GICRegBus.getBus());
+
+    // let target call back to invalidate DMI
+    m_IBUS_isocket.register_invalidate_direct_mem_ptr(this, & my_icmCpuMasterPort::invalidate_direct_mem_ptr);
+    m_DBUS_isocket.register_invalidate_direct_mem_ptr(this, & my_icmCpuMasterPort::invalidate_direct_mem_ptr);
+    m_GICRegBUS_isocket.register_invalidate_direct_mem_ptr(this, & my_icmCpuMasterPort::invalidate_direct_mem_ptr);
+}
+
+
+//
+// Static read callback that will try DMI
+//
+void my_icmCpuMasterPort::readTryDMI(
+      Addr          address,
+      Uns32         bytes,
+      void         *value,
+      void         *userData,
+      void         *processor
+) {
+    my_icmCpuMasterPort *classPtr = (my_icmCpuMasterPort*)userData;
+    bool              first    = true;
+    unsigned char    *p        = (unsigned char *)value;
+    while (bytes) {
+        Uns32 readBytes = (bytes > classPtr->m_maxBytes) ? classPtr->m_maxBytes : bytes;
+        classPtr->readUpcall(address, p, readBytes, processor, first, true);
+        p       += readBytes;
+        address += readBytes;
+        bytes   -= readBytes;
+    }
+}
+
+
+
+//
+// Static write callback that will try DMI
+//
+void my_icmCpuMasterPort::writeTryDMI(
+      Addr          address,
+      Uns32         bytes,
+      const void   *value,
+      void         *userData,
+      void         *processor
+) {
+    my_icmCpuMasterPort *classPtr = (my_icmCpuMasterPort*)userData;
+    bool              first    = true;
+    unsigned char     *p       = (unsigned char *)value;
+    while (bytes) {
+        Uns32 wrBytes = (bytes > classPtr->m_maxBytes) ? classPtr->m_maxBytes : bytes;
+        classPtr->writeUpcall(address, p, wrBytes, processor, first, true);
+        p       += wrBytes;
+        address += wrBytes;
+        bytes   -= wrBytes;
+    }
+}
+
+//
+// Static read callback that will NOT try DMI. This replaces the TryDMI version
+// after a DMI failure
+//
+void my_icmCpuMasterPort::readNoDMI(
+      Addr          address,
+      Uns32         bytes,
+      void         *value,
+      void         *userData,
+      void         *processor
+) {
+    my_icmCpuMasterPort *classPtr = (my_icmCpuMasterPort*)userData;
+    bool              first    = true;
+    unsigned char    *p        = (unsigned char *)value;
+    while (bytes) {
+        Uns32 readBytes = (bytes > classPtr->m_maxBytes) ? classPtr->m_maxBytes : bytes;
+        classPtr->readUpcall(address, p, readBytes, processor, first, false);
+        p       += readBytes;
+        address += readBytes;
+        bytes   -= readBytes;
+    }
+}
+
+//
+// Static write callback that will NOT try DMI. This replaces the TryDMI version
+// after a DMI failure
+//
+void my_icmCpuMasterPort::writeNoDMI(
+      Addr          address,
+      Uns32         bytes,
+      const void   *value,
+      void         *userData,
+      void         *processor
+) {
+    my_icmCpuMasterPort *classPtr = (my_icmCpuMasterPort*)userData;
+    bool              first    = true;
+    unsigned char     *p       = (unsigned char *)value;
+    while (bytes) {
+        Uns32 wrBytes = (bytes > classPtr->m_maxBytes) ? classPtr->m_maxBytes : bytes;
+        classPtr->writeUpcall(address, p, wrBytes, processor, first, false);
+        p       += wrBytes;
+        address += wrBytes;
+        bytes   -= wrBytes;
+    }
+}
+
+
+// try for dmi
+void my_icmCpuMasterPort::tryDmi(Addr addr, Bool read) {
+
+    tlm::tlm_dmi tmpr;
+    tlm::tlm_dmi tmpw;
+
+    if(m_cpu->traceBuses()) {
+        icmPrintf( "TLM: %s DMI REQUEST [" FMT_Ax "]\n",m_name, addr);
+    }
+    bool ok, rok, wok;
+    m_trans.set_address( addr );
+    m_trans.set_read();
+    ok   = m_IBUS_isocket->get_direct_mem_ptr(m_trans, tmpr);
+    rok  = ok && tmpr.is_read_allowed();
+
+    m_trans.set_address( addr );
+    m_trans.set_write();
+    ok  = m_IBUS_isocket->get_direct_mem_ptr(m_trans, tmpw);
+    wok = ok && tmpw.is_write_allowed();
+
+    Addr  lor  = tmpr.get_start_address();
+    Addr  hir  = tmpr.get_end_address();
+    Addr  low  = tmpw.get_start_address();
+    Addr  hiw  = tmpw.get_end_address();
+
+    if(lor!=low || hir!=hiw) {
+        icmPrintf(
+            "TLM: %s DMI read [" FMT_Ax "-" FMT_Ax "] != write [" FMT_Ax "-" FMT_Ax "]\n",
+            m_name, lor, hir, low, hiw
+        );
+        // invalidate the largest range. Not sure what else we could do.
+        if(low < lor) lor = low;
+        if(hiw < hir) hir = hiw;
+        rok = wok = false;
+    }
+
+    void           *ptr = 0;
+    icmMemCallback *cb;
+    bool            enableDMI = rok || wok;
+
+    if(rok && wok) {
+        cb = cbRWDMI;
+    } else if (rok) {
+        cb = cbRdDMI;
+    } else if (wok) {
+        cb = cbWrDMI;
+    } else {
+        cb = cbNoDMI;
+    }
+
+    if(enableDMI) {
+        ptr = tmpr.get_dmi_ptr();
+    }
+
+    m_IBus.mapExternalNativeMemory("DMI", ptr, ICM_PRIV_RWX, lor, hir, cb);
+
+    if(!m_cpu->traceBuses()) {
+
+        // no action
+
+    } else if(enableDMI) {
+
+        const char *access;
+
+        if(rok && wok) {
+            access = "RWX";
+        } else if(rok) {
+            access = "RX";
+        } else {
+            access = "W";
+        }
+
+        icmPrintf(
+            "TLM: %s DMI ENABLED [" FMT_Ax "-" FMT_Ax "] %s\n",
+            m_name, lor, hir, access
+        );
+
+    } else {
+
+        icmPrintf( "TLM: %s DMI DENIED [" FMT_Ax "-" FMT_Ax "]\n", m_name, lor, hir);
+    }
+}
+
+
+
+//! This is the entry point used by ::staticReadUpcall(). Constructs a
+//! Generic transactional payload for the read, then passes it to the target.
+
+//! @param addr      The address for the write
+//! @param value     Pointer to data
+//! @param bytes     Bytes for this transaction
+//! @param processor If non-zero, this access should be simulated, if not it should be a back-door access
+
+void my_icmCpuMasterPort::readUpcall(Addr addr, unsigned char *p, Uns32 bytes, void *processor, bool &first, bool tryDMI)
+{
+    Bool ok = True;
+
+    // set initiator for this transaction
+    m_initiator->m_initiator = processor;
+
+    m_trans.set_read();
+    m_trans.set_address( addr );
+    m_trans.set_data_length(bytes);
+    m_trans.set_data_ptr(p);
+    m_trans.set_streaming_width(bytes);
+    m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+    m_trans.set_dmi_allowed(false);
+
+    if(m_cpu->traceBuses()) {
+        const char *type = processor ? "sim" : "dbg";
+    	icmPrintf("TLM: %s %s read %d bytes [" FMT_Ax "]\n", m_name, type, bytes, addr);
+    }
+
+    if (processor) {
+
+        // This is the call to make the transaction
+    	m_IBUS_isocket->b_transport( m_trans, m_zero_delay );
+        // Now the transaction has been made
+
+        if (m_trans.get_response_status() == tlm::TLM_OK_RESPONSE) {
+            if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
+                m_trans.set_read();
+                tryDmi(addr, true);
+                first = false;
+            }
+        } else {
+            // Notify simulator that the access failed
+            icmAbortRead((icmProcessorP)processor, addr);
+            ok = False;
+        }
+
+    } else {
+        // This is the call to make the debug transaction
+        Uns32 actual = m_IBUS_isocket->transport_dbg(m_trans);
+        // The debug transaction has been made
+
+        if (actual == bytes) {
+            // Try DMI in DBG transaction as well as transport
+            if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
+                m_trans.set_read();
+                tryDmi(addr, false);
+                first = false;
+            }
+        } else {
+            ok = False;
+            icmAbortRead(0, addr);
+        }
+    }
+
+    if (p != m_trans.get_data_ptr()) {
+
+        if (!m_warn_data_ptr) {
+            icmPrintf(
+                "%s has detected that the data pointer in the TLM transaction object was modified by a target. This is illegal.\n",
+                m_cpu->name()
+            );
+            m_warn_data_ptr = True;
+        }
+
+        // pointer was wrong, so copy data to where we are expecting it to end up
+        //memcpy(p, m_trans.get_data_ptr(), m_trans.get_data_length());
+    }
+
+    if(m_cpu->traceBuses() || (m_cpu->traceBusErrors() && !ok)) {
+        icmPrintf("TLM: %s %s [" FMT_Ax "] ", m_name, response(), addr);
+        if(ok) {
+            printBytes(p, bytes);
+        }
+        icmPrintf("\n");
+    }
+}
+
+
+// This is the entry point used by icmCpu::write.
+//  Constructs a generic transactional payload for the write, then passes the target.
+
+//! @param addr      The address for the write
+//! @param value     Pointer to data
+//! @param bytes     Bytes for this transaction
+//! @param processor If non-zero, this access should be simulated, if not it should be a back-door access
+
+void my_icmCpuMasterPort::writeUpcall(Addr addr, const unsigned char *p, Uns32 bytes, void *processor, bool &first, bool tryDMI)
+{
+    // set initiator for this transaction
+    m_initiator->m_initiator = processor;
+
+    m_trans.set_write();
+    m_trans.set_address( addr );
+    m_trans.set_data_length(bytes);
+    m_trans.set_data_ptr((unsigned char*)p);
+    m_trans.set_streaming_width(bytes);
+    m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+    m_trans.set_dmi_allowed(false);
+
+    if(m_cpu->traceBuses()) {
+        const char *type = processor ? "sim" : "dbg";
+    	icmPrintf("TLM: %s %s write %d bytes [" FMT_Ax "] ", m_name, type, bytes, addr);
+    	printBytes((Uns8*)p, bytes);
+        icmPrintf("\n");
+    }
+    if (processor) {
+        // Call the transport method
+    	m_IBUS_isocket->b_transport( m_trans, m_zero_delay );
+        // Transport done
+        if (m_trans.get_response_status() == tlm::TLM_OK_RESPONSE) {
+            if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
+                m_trans.set_write();
+                tryDmi(addr, false);
+                first = false;
+            }
+        } else {
+            // Notify simulator that the access failed
+            icmAbortWrite((icmProcessorP)processor, addr);
+        }
+        if(m_cpu->traceBuses() || (m_cpu->traceBusErrors() && m_trans.get_response_status() != tlm::TLM_OK_RESPONSE)) {
+            icmPrintf("TLM: %s %s\n", m_name, response());
+        }
+    } else {
+        // Call the debug method
+        Uns32 actual = m_IBUS_isocket->transport_dbg(m_trans);
+        // debug done
+        if (actual == bytes) {
+            if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
+                tryDmi(addr, false);
+                first = false;
+            }
+            if(m_cpu->traceBuses()) {
+                icmPrintf( "TLM: %s dbg complete\n", m_name);
+            }
+        } else {
+            icmAbortWrite(0, addr);
+            if(m_cpu->traceBuses() || m_cpu->traceBusErrors()) {
+                icmPrintf( "TLM: %s dbg failed (expected:%u wrote:%u)\n", m_name, bytes, actual);
+            }
+        }
+    }
+    if (p != m_trans.get_data_ptr() && !m_warn_data_ptr) {
+        icmPrintf(
+            "%s has detected that the data pointer in the TLM transaction object was modified by a target. This is illegal.\n",
+            m_name
+        );
+        m_warn_data_ptr = True;
+    }
+}
+
+
+
+
+
+// This region will be local memory in OVP
+void my_icmCpuMasterPort::mapLocalMemory(Addr low, Addr high, icmBusObject* &localBus) {
+    if(localBus == 0) {
+        localBus = new icmBusObject("localMemoryBus", m_addrBits);
+
+        // create entire memory space
+        Addr bytesM1 = maxValue(m_addrBits);
+        localBus->mapLocalMemory("localMemory" , ICM_PRIV_RWX, 0, bytesM1);
+    }
+
+    // map this region
+    m_IBus.bridge(*localBus, low, high, low);
+}
+
+// This region will be native memory
+void my_icmCpuMasterPort::mapNativeMemory(unsigned char *ptr, Addr low, Addr high, icmPriv priv) {
+    m_IBus.mapNativeMemory(ptr, priv, low, high);
+}
+
+void my_icmCpuMasterPort::unmapNativeMemory(Addr low, Addr high) {
+    m_IBus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, low, high, cbTryDMI);
+}
+
+void my_icmCpuMasterPort::invalidate_direct_mem_ptr(sc_dt::uint64 start_range, sc_dt::uint64 end_range) {
+    unmapNativeMemory(start_range, end_range);
+    if(m_cpu->traceBuses()) {
+        icmPrintf( "TLM: %s DMI invalidate [" FMT_Ax "-" FMT_Ax "]\n", m_name, (Addr)start_range, (Addr)end_range);
+    }
+}
+
+//
+// Use this when there is no default master port
+//
+void my_icmCpuMasterPort::bindIfNotBound() {
+    if (m_IBUS_isocket.size() == 0) {
+        icmDummySlavePort *dummy=new icmDummySlavePort();
+        m_IBUS_isocket(dummy->socket);
+    }
+}
+
+//
+// Use this when there is a default master port (and it works)
+//
+void my_icmCpuMasterPort::bindIfNotBound(my_icmCpuMasterPort *dflt) {
+    if (m_IBUS_isocket.size() == 0) {
+        icmDummySlavePort *dummy=new icmDummySlavePort();
+        m_IBUS_isocket(dummy->socket);
+        m_dflt = dflt;
+    }
+}
+
+//
+// Invalidate the whole DMI region
+//
+void my_icmCpuMasterPort::invalidateDMI(void) {
+    unmapNativeMemory(0,  maxValue(m_addrBits));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
