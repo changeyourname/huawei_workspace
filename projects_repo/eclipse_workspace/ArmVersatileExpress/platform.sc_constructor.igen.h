@@ -54,6 +54,11 @@
 #include "smsc.ovpworld.org/peripheral/LAN9118/1.0/tlm2.0/pse.igen.hpp"
 #include "philips.ovpworld.org/peripheral/ISP1761/1.0/tlm2.0/pse.igen.hpp"
 #include "arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/tlm2.0/pse.igen.hpp"
+#include "cache_controller.hpp"
+
+#define NUM_SMP_CORES 4
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //                     ArmVersatileExpress_CA9_TLM2 Class
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +70,7 @@ class ArmVersatileExpress_CA9_TLM2 : public sc_core::sc_module {
 
     icmTLMPlatform        Platform;
     arm_Cortex_A9MPx1     cpu;
+    cache_controller      cache_cntrl;
     decoder             <2,35> tzBus;
     decoder             <36,39> pBus;
     decoder             <2,1> ddr2bus;
@@ -267,7 +273,8 @@ class ArmVersatileExpress_CA9_TLM2 : public sc_core::sc_module {
 ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_name name)
     : sc_core::sc_module (name)
     , Platform ("icm", ICM_INIT_DEFAULT | ICM_STOP_ON_CTRLC)
-	, cpu ( "cpu", 0, ICM_ATTR_SIMEX, attrsForcpu() )
+	, cpu ( "cpu", 0, (unsigned int) NUM_SMP_CORES, ICM_ATTR_SIMEX, attrsForcpu() )
+	, cache_cntrl("cache_controller", (unsigned int) NUM_SMP_CORES)
     , tzBus("tzBus")
     , pBus("pBus")				// no CPU connected with this bus
     , ddr2bus("ddr2bus")			// no CPU connected with this bus
@@ -318,9 +325,18 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     , smartLoader ("smartLoader", attrsForsmartLoader())
 {
 
-    // tzBus masters
-    cpu.INSTRUCTION.socket(tzBus.target_socket[0]);
-    cpu.DATA.socket(tzBus.target_socket[1]);
+
+    /*cpu.INSTRUCTION.socket(tzBus.target_socket[0]);
+    cpu.DATA.socket(tzBus.target_socket[1]);*/
+	for (int i=0; i<NUM_SMP_CORES; i++) {
+		cpu.INSTRUCTION.m_isocket[i]->bind((*cache_cntrl.m_tsocket[i]));
+		cpu.DATA.m_isocket[i]->bind((*cache_cntrl.m_tsocket[i+4]));
+		cpu.GICRegisters.m_isocket[i]->bind((*cache_cntrl.m_tsocket[i+8]));
+	}
+
+	// tzBus masters
+	cache_cntrl.m_Ibus_isocket(tzBus.target_socket[0]);
+	cache_cntrl.m_Dbus_isocket(tzBus.target_socket[1]);
 
     // tzBus slaves
     tzBus.initiator_socket[0](lcd1NS.sp.socket); // Peripheral
@@ -594,5 +610,5 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     tzpc.TZPCDECPROT0_9(faxi1NS.enable);
     tzpc.TZPCDECPROT0_10(saxi1NS.enable);
 
-    //cpu.dmi(false);
+    cpu.dmi(false);
 }

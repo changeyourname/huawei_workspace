@@ -151,6 +151,7 @@ class arm_Cortex_A9MPx1 : public icmCpu
     arm_Cortex_A9MPx1(
         sc_module_name        name,
         const unsigned int    ID,
+		Uns32                 num_smp_cores,
         icmNewProcAttrs       attrs        = ICM_ATTR_DEFAULT,
         icmAttrListObject    *attrList    = NULL,
         const char           *semiHost    = NULL,
@@ -159,9 +160,9 @@ class arm_Cortex_A9MPx1 : public icmCpu
         Uns32                 cpuFlags    = 0
      )
     : icmCpu(name, ID, "arm", getModel(), 0, semiHost ? ((0 == strlen(semiHost)) ? 0 : semiHost) : getSHL(), attrs, attrList, addressBits, dmi, cpuFlags)
-    , INSTRUCTION (this, "INSTRUCTION", 32)
-    , DATA (this, "DATA", 32)
-    , GICRegisters (this, "GICRegisters", 32)
+    , INSTRUCTION (this, "INSTRUCTION", 32, num_smp_cores)
+    , DATA (this, "DATA", 32, num_smp_cores)
+    , GICRegisters (this, "GICRegisters", 32, num_smp_cores)
     , SPI32("SPI32", this)
     , SPI33("SPI33", this)
     , SPI34("SPI34", this)

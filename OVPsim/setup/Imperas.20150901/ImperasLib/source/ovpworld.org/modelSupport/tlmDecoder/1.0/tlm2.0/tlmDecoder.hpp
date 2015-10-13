@@ -155,6 +155,11 @@ private:
         Addr orig        = trans.get_address();
         Addr offset;
         int  portId      = getPortId(orig, offset);
+
+        if (SocketId == 0 && trans.get_command() == tlm::TLM_READ_COMMAND && NR_OF_TARGETS == 35) {
+        	printf("(DEC..ACTUAL) addr:0x%08x\r\n", trans.get_address());
+        }
+
         if(portId >= 0) {
             if(m_trace) {
                 icmPrintf("TLM: %s decode:0x" FMT_64x " -> initiator_socket[%d]\n",
@@ -188,6 +193,12 @@ private:
         Addr orig        = trans.get_address();
         Addr offset;
         int  portId      = getPortId(orig, offset);
+
+
+        if (SocketId == 0 && trans.get_command() == tlm::TLM_READ_COMMAND && NR_OF_TARGETS == 35) {
+        	printf("(DEC..DEBUG) addr:0x%08x\r\n", trans.get_address());
+        }
+
         if(portId >= 0) {
             if(m_trace) {
                 icmPrintf("TLM: %s dbg decode:0x" FMT_64x " -> initiator_socket[%d]\n",

@@ -17,7 +17,8 @@
  *
  */
 
-#include "ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
+//#include "ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
+#include "tlmProcessor.hpp"
 #include "ovpworld.org/modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.hpp"
 #include "ovpworld.org/modelSupport/tlmDummySlavePort/1.0/tlm2.0/tlmDummySlavePort.hpp"
 #include "ovpworld.org/modelSupport/tlmInitiatorExtension/1.0/tlm2.0/tlmInitiatorExtension.hpp"
@@ -105,17 +106,27 @@ const char *icmCpuMasterPort::response() {
     return s;
 }
 
-icmCpuMasterPort::icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits)
+icmCpuMasterPort::icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits, Uns32 num_smp_cores)
     : m_addrBits(addrBits)
     , m_name      (strdup(CONCAT2(cpu->name(), name)))
     , m_bus       (CONCAT2(m_name, "m_bus"      ), m_addrBits)
     , m_zero_delay(SC_ZERO_TIME)
     , m_cpu       (cpu)
     , m_maxBytes  (8)
-    , socket      (name)
+	, m_num_smp_cores (num_smp_cores)
 {
     m_initiator = new icmInitiatorExtension();
     m_trans.set_extension(m_initiator);
+
+    m_isocket.reserve(m_num_smp_cores);
+
+    for (Uns32 i=0; i<m_num_smp_cores; i++) {
+    	char socket_name[20];
+    	sprintf(socket_name, "m_isocket[%d]", i);
+    	m_isocket.push_back(new tlm_utils::simple_initiator_socket_tagged<icmCpuMasterPort>(socket_name));
+        // let target call back to invalidate DMI
+        m_isocket[i]->register_invalidate_direct_mem_ptr(this, &icmCpuMasterPort::invalidate_direct_mem_ptr, i);
+    }
 
     cbTryDMI = new icmMemCallback(
          (icmMemCallback::readCallback)&icmCpuMasterPort::readTryDMI,
@@ -149,9 +160,6 @@ icmCpuMasterPort::icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits
     m_bus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, 0, maxValue(m_addrBits), cbTryDMI);
 
     ((icmProcessorObject *)cpu)->icmCpuManager::icmProcessorObject::connect(name, m_bus);
-
-    // let target call back to invalidate DMI
-    socket.register_invalidate_direct_mem_ptr(this, & icmCpuMasterPort::invalidate_direct_mem_ptr);
 }
 
 //
@@ -257,12 +265,14 @@ void icmCpuMasterPort::tryDmi(Addr addr, Bool read) {
     bool ok, rok, wok;
     m_trans.set_address( addr );
     m_trans.set_read();
-    ok   = socket->get_direct_mem_ptr(m_trans, tmpr);
+    //ok   = socket->get_direct_mem_ptr(m_trans, tmpr);
+    ok = (*m_isocket[0])->get_direct_mem_ptr(m_trans, tmpr);
     rok  = ok && tmpr.is_read_allowed();
 
     m_trans.set_address( addr );
     m_trans.set_write();
-    ok  = socket->get_direct_mem_ptr(m_trans, tmpw);
+    //ok  = socket->get_direct_mem_ptr(m_trans, tmpw);
+    ok = (*m_isocket[0])->get_direct_mem_ptr(m_trans, tmpr);
     wok = ok && tmpw.is_write_allowed();
 
     Addr  lor  = tmpr.get_start_address();
@@ -359,7 +369,8 @@ void icmCpuMasterPort::readUpcall(Addr addr, unsigned char *p, Uns32 bytes, void
     if (processor) {
 
         // This is the call to make the transaction
-        socket->b_transport( m_trans, m_zero_delay );
+        //socket->b_transport( m_trans, m_zero_delay );
+    	(*m_isocket[0])->b_transport(m_trans, m_zero_delay);
         // Now the transaction has been made
 
         if (m_trans.get_response_status() == tlm::TLM_OK_RESPONSE) {
@@ -376,7 +387,8 @@ void icmCpuMasterPort::readUpcall(Addr addr, unsigned char *p, Uns32 bytes, void
 
     } else {
         // This is the call to make the debug transaction
-        Uns32 actual = socket->transport_dbg(m_trans);
+        //Uns32 actual = socket->transport_dbg(m_trans);
+    	Uns32 actual = (*m_isocket[0])->transport_dbg(m_trans);
         // The debug transaction has been made
 
         if (actual == bytes) {
@@ -445,7 +457,8 @@ void icmCpuMasterPort::writeUpcall(Addr addr, const unsigned char *p, Uns32 byte
     }
     if (processor) {
         // Call the transport method
-        socket->b_transport( m_trans, m_zero_delay );
+        //socket->b_transport( m_trans, m_zero_delay );
+    	(*m_isocket[0])->b_transport(m_trans, m_zero_delay);
         // Transport done
         if (m_trans.get_response_status() == tlm::TLM_OK_RESPONSE) {
             if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
@@ -462,7 +475,8 @@ void icmCpuMasterPort::writeUpcall(Addr addr, const unsigned char *p, Uns32 byte
         }
     } else {
         // Call the debug method
-        Uns32 actual = socket->transport_dbg(m_trans);
+        //Uns32 actual = socket->transport_dbg(m_trans);
+    	Uns32 actual = (*m_isocket[0])->transport_dbg(m_trans);
         // debug done
         if (actual == bytes) {
             if (tryDMI && first && m_cpu->dmi() && m_trans.is_dmi_allowed()) {
@@ -512,7 +526,7 @@ void icmCpuMasterPort::unmapNativeMemory(Addr low, Addr high) {
     m_bus.mapExternalNativeMemory("DMI", 0, ICM_PRIV_RWX, low, high, cbTryDMI);
 }
 
-void icmCpuMasterPort::invalidate_direct_mem_ptr(sc_dt::uint64 start_range, sc_dt::uint64 end_range) {
+void icmCpuMasterPort::invalidate_direct_mem_ptr(int SocketId, sc_dt::uint64 start_range, sc_dt::uint64 end_range) {
     unmapNativeMemory(start_range, end_range);
     if(m_cpu->traceBuses()) {
         icmPrintf( "TLM: %s DMI invalidate [" FMT_Ax "-" FMT_Ax "]\n", m_name, (Addr)start_range, (Addr)end_range);
@@ -523,21 +537,35 @@ void icmCpuMasterPort::invalidate_direct_mem_ptr(sc_dt::uint64 start_range, sc_d
 // Use this when there is no default master port
 //
 void icmCpuMasterPort::bindIfNotBound() {
-    if (socket.size() == 0) {
+    /*if (socket.size() == 0) {
         icmDummySlavePort *dummy=new icmDummySlavePort();
         socket(dummy->socket);
-    }
+    }*/
+
+	for (int i=0; i<m_num_smp_cores; i++) {
+		if (m_isocket[i]->size() == 0) {
+			icmDummySlavePort *dummy = new icmDummySlavePort();
+			(*m_isocket[i])(dummy->socket);
+		}
+	}
 }
 
 //
 // Use this when there is a default master port (and it works)
 //
 void icmCpuMasterPort::bindIfNotBound(icmCpuMasterPort *dflt) {
-    if (socket.size() == 0) {
+    /*if (socket.size() == 0) {
         icmDummySlavePort *dummy=new icmDummySlavePort();
         socket(dummy->socket);
         m_dflt = dflt;
-    }
+    }*/
+	for (int i=0; i<m_num_smp_cores; i++) {
+		if (m_isocket[i]->size() == 0) {
+			icmDummySlavePort *dummy = new icmDummySlavePort();
+			(*m_isocket[i])(dummy->socket);
+			m_dflt = dflt;
+		}
+	}
 }
 
 //

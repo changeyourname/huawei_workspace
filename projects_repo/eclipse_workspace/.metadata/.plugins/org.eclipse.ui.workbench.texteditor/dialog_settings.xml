@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="getSMPI" key="selection"/>
+		<item value="transportDebug" key="selection"/>
 		<list key="findhistory">
+			<item value="transportDebug"/>
+			<item value="(DEC..DEBUG)"/>
+			<item value="transport_dbg"/>
+			<item value="invalidate_direct_mem_ptr"/>
+			<item value="NR_OF_INITIATOR"/>
 			<item value="getSMPI"/>
 			<item value="getName"/>
 			<item value="icmProcessorS"/>
-			<item value="_proc"/>
-			<item value="trace"/>
-			<item value="options.trace"/>
-			<item value="platform"/>
-			<item value="Int64"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -102,7 +102,7 @@ private:
 //
 class icmCpuMasterPort
 {
-    typedef tlm_utils::simple_initiator_socket<icmCpuMasterPort> socketType;
+    //typedef tlm_utils::simple_initiator_socket<icmCpuMasterPort> socketType;
 
 private:
     Uns32                    m_addrBits;      // number of address bits
@@ -114,8 +114,8 @@ private:
     Uns32                    m_maxBytes;      // max bytes per transaction
     icmCpuMasterPort        *m_dflt;          // alternative port for if this is unbound.
     icmInitiatorExtension   *m_initiator;
-    tlm::tlm_generic_payload m_trans;         // transactions cannot be deferred
-                                              // so only one of these is needed.
+    tlm::tlm_generic_payload m_trans;         // transactions cannot be deferred so only one of these is needed.
+    Uns32                    m_num_smp_cores;
 
     icmMemCallback *cbTryDMI;
     icmMemCallback *cbNoDMI;
@@ -172,7 +172,7 @@ private:
     /// Invalidate this DMI region
     /// @param low       Lower extent of the region.
     /// @param high      Upper extent of the region.
-    void invalidate_direct_mem_ptr(sc_dt::uint64 start_range, sc_dt::uint64 end_range);
+    void invalidate_direct_mem_ptr(int SocketId, sc_dt::uint64 start_range, sc_dt::uint64 end_range);
 
 public:
 
@@ -181,14 +181,18 @@ public:
     /// @param name     Namer of bus port as appears in OVP model.
     /// @param addrBits Number of address bits supported by this port.
 
-    icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits);
+    icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits, Uns32 num_smp_cores);
 
     /// Destructor (not usually called explicitly).
     ~icmCpuMasterPort() {}
 
-    /// The TLM initiator socket. This name  must be used in the
+    /*/// The TLM initiator socket. This name  must be used in the
     /// binding in the platform.
-    socketType socket;
+    socketType socket;*/
+
+    // Modifying the TLM sockets to correspond to each of individual SMP core inside the Processor rather than only one socket/bus for the processor
+    std::vector< tlm_utils::simple_initiator_socket_tagged<icmCpuMasterPort> * > m_isocket;
+
 
     /// Memory mapping function. Note that any region within the processor's address
     /// space not mapped by one of these functions will default to TLM memory.
