@@ -1,4 +1,4 @@
-13:19:06 **** Build of configuration Debug for project ArmVersatileExpress ****
+13:46:21 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -52,21 +52,8 @@ In file included from ../cache_controller.cpp:8:0:
 ../cache_controller.cpp:10:1: warning:   when initialized here [-Wreorder]
  cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores)
  ^
-../cache_controller.cpp: In member function ‘void cache_controller::b_transport(int, tlm::tlm_generic_payload&, sc_core::sc_time&)’:
-../cache_controller.cpp:31:70: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-    printf("(CC..IBUS..ACTUAL) addr:0x%08x\r\n", payload.get_address());
-                                                                      ^
-../cache_controller.cpp:41:70: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-    printf("(CC..DBUS..ACTUAL) addr:0x%08x\r\n", payload.get_address());
-                                                                      ^
 ../cache_controller.cpp: In member function ‘unsigned int cache_controller::transport_dbg(int, tlm::tlm_generic_payload&)’:
-../cache_controller.cpp:55:69: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-    printf("(CC..IBUS..DEBUG) addr:0x%08x\r\n", payload.get_address());
-                                                                     ^
-../cache_controller.cpp:70:69: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-    printf("(CC..DBUS..DEBUG) addr:0x%08x\r\n", payload.get_address());
-                                                                     ^
-../cache_controller.cpp:76:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:49:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 Finished building: ../cache_controller.cpp
@@ -74,44 +61,6 @@ Finished building: ../cache_controller.cpp
 Building file: ../platform.cpp
 Invoking: GCC C++ Compiler
 g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.d" -o "platform.o" "../platform.cpp"
-In file included from ../platform.sc_constructor.igen.h:32:0,
-                 from ../platform.cpp:42:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘void decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::initiatorBTransport(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&, sc_core::sc_time&) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 35; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:84:49:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 35]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:160:69: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..ACTUAL) addr:0x%08x\r\n", trans.get_address());
-                                                                     ^
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘unsigned int decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transportDebug(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 35; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:85:51:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 35]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:199:68: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..DEBUG) addr:0x%08x\r\n", trans.get_address());
-                                                                    ^
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘void decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::initiatorBTransport(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&, sc_core::sc_time&) [with int NR_OF_INITIATORS = 36; int NR_OF_TARGETS = 39; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:84:49:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 36; int NR_OF_TARGETS = 39]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:160:69: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..ACTUAL) addr:0x%08x\r\n", trans.get_address());
-                                                                     ^
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘unsigned int decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transportDebug(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&) [with int NR_OF_INITIATORS = 36; int NR_OF_TARGETS = 39; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:85:51:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 36; int NR_OF_TARGETS = 39]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:199:68: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..DEBUG) addr:0x%08x\r\n", trans.get_address());
-                                                                    ^
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘void decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::initiatorBTransport(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&, sc_core::sc_time&) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 1; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:84:49:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 1]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:160:69: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..ACTUAL) addr:0x%08x\r\n", trans.get_address());
-                                                                     ^
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp: In instantiation of ‘unsigned int decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transportDebug(int, decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type&) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 1; decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::transaction_type = tlm::tlm_generic_payload]’:
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:85:51:   required from ‘decoder<NR_OF_INITIATORS, NR_OF_TARGETS>::decoder(sc_core::sc_module_name) [with int NR_OF_INITIATORS = 2; int NR_OF_TARGETS = 1]’
-../platform.sc_constructor.igen.h:325:56:   required from here
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/ovpworld.org/modelSupport/tlmDecoder/1.0/tlm2.0/tlmDecoder.hpp:199:68: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-          printf("(DEC..DEBUG) addr:0x%08x\r\n", trans.get_address());
-                                                                    ^
 Finished building: ../platform.cpp
  
 Building target: ArmVersatileExpress
@@ -120,5 +69,5 @@ g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/
 Finished building target: ArmVersatileExpress
  
 
-13:19:14 Build Finished (took 8s.20ms)
+13:46:29 Build Finished (took 7s.972ms)
 
