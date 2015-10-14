@@ -26,6 +26,7 @@
 								<option id="gnu.cpp.compiler.option.other.other.334673174" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1634586306" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host"/>
 									<listOptionValue builtIn="false" value="/usr/local/systemc-2.3.1/include"/>
 								</option>

@@ -102,8 +102,9 @@ private:
 //
 class icmCpuMasterPort
 {
-    //typedef tlm_utils::simple_initiator_socket<icmCpuMasterPort> socketType;
-
+public:
+	enum identifier {INSTRUCTION, DATA, GICRegisters};				// identifier to distinguish individual Ports in instance
+	static int last_smp_found;										// class variable to keep track of last cpu found via INSTRUCTION port so that other ports can use this info
 private:
     Uns32                    m_addrBits;      // number of address bits
     const char              *m_name;
@@ -116,6 +117,8 @@ private:
     icmInitiatorExtension   *m_initiator;
     tlm::tlm_generic_payload m_trans;         // transactions cannot be deferred so only one of these is needed.
     Uns32                    m_num_smp_cores;
+    unsigned int 			*m_ICount_hist;
+    identifier               m_ID;
 
     icmMemCallback *cbTryDMI;
     icmMemCallback *cbNoDMI;
@@ -174,16 +177,17 @@ private:
     /// @param high      Upper extent of the region.
     void invalidate_direct_mem_ptr(int SocketId, sc_dt::uint64 start_range, sc_dt::uint64 end_range);
 
-
+    icmProcessorP getFirstLeafProc(icmProcessorP parent);				// recursively find the first leaf node from passed parent node
+    bool ICount_hist_lookup(icmProcessorP proc);						// for the passed proc, returns true if its ICount has increased else false
+    unsigned int findSMPCPU();						// this will iterate over all the leaf cores in the platform CPU and see if the current leaf core issued the instruction fetch request using its Instruction Count and past history of counts
 
 public:
-
     /// The constructor.
     /// @param pse      Pointer to PSE.
     /// @param name     Namer of bus port as appears in OVP model.
     /// @param addrBits Number of address bits supported by this port.
 
-    icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits, Uns32 num_smp_cores);
+    icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits, Uns32 num_smp_cores, icmCpuMasterPort::identifier ID);
 
     /// Destructor (not usually called explicitly).
     ~icmCpuMasterPort() {}
@@ -351,5 +355,13 @@ public:
     /// @param dmi        New state
     virtual void dmi(bool on) = 0;
 };
+
+
+
+
+
+
+
+
 
 #endif

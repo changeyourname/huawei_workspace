@@ -51,7 +51,7 @@
 #ifndef ARM_OVPWORLD_ORG_PROCESSOR_ARM_CORTEX_A9MPX1__1_0
 #define ARM_OVPWORLD_ORG_PROCESSOR_ARM_CORTEX_A9MPX1__1_0
 
-#include "ovpworld.org/modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
+#include "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
 using namespace sc_core;
 
 class arm_Cortex_A9MPx1 : public icmCpu
@@ -160,9 +160,9 @@ class arm_Cortex_A9MPx1 : public icmCpu
         Uns32                 cpuFlags    = 0
      )
     : icmCpu(name, ID, "arm", getModel(), 0, semiHost ? ((0 == strlen(semiHost)) ? 0 : semiHost) : getSHL(), attrs, attrList, addressBits, dmi, cpuFlags)
-    , INSTRUCTION (this, "INSTRUCTION", 32, num_smp_cores)
-    , DATA (this, "DATA", 32, num_smp_cores)
-    , GICRegisters (this, "GICRegisters", 32, num_smp_cores)
+    , INSTRUCTION (this, "INSTRUCTION", 32, num_smp_cores, icmCpuMasterPort::INSTRUCTION)
+    , DATA (this, "DATA", 32, num_smp_cores, icmCpuMasterPort::DATA)
+    , GICRegisters (this, "GICRegisters", 32, num_smp_cores, icmCpuMasterPort::GICRegisters)
     , SPI32("SPI32", this)
     , SPI33("SPI33", this)
     , SPI34("SPI34", this)
