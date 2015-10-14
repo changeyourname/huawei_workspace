@@ -610,5 +610,5 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     tzpc.TZPCDECPROT0_9(faxi1NS.enable);
     tzpc.TZPCDECPROT0_10(saxi1NS.enable);
 
-    //cpu.dmi(false);
+    cpu.dmi(false);
 }

@@ -15,6 +15,7 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 		m_Ibus_isocket("m_Ibus_isocket"),
 		m_Dbus_isocket("m_Dbus_isocket"),
 		m_dmi_mode(true),
+		//m_dmi_mode(false),
 		m_do_dmi(false)
 {
 	m_tsocket.reserve(m_num_smp_cores*3);					// 3 groups: INSTRUCTION, DATA, GICREGISTERS
@@ -33,10 +34,10 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 
 
 void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-	unsigned int mem_req_offset = payload.get_address() - MEM_BASE;
-
+	bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
 	// first trying out DMI
-	if (m_do_dmi) {
+	if (m_do_dmi && mem_transaction) {
+		unsigned int mem_req_offset = payload.get_address() - MEM_BASE;
 		// doing dmi
 		if (payload.get_command() == tlm::TLM_READ_COMMAND) {
 			assert(m_dmi_data.is_read_allowed());
@@ -57,7 +58,7 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 		}
 
 		// if set in dmi mode then looking out for possiblity for using dmi
-		if (m_dmi_mode) {
+		if (m_dmi_mode && mem_transaction) {
 			// checking if there is possibility to use dmi for future accesses
 			if (payload.is_dmi_allowed()) {
 				// getting dmi pointer and noting that we should use dmi from now on
@@ -78,6 +79,10 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payload &payload) {
 	if (m_do_dmi) {
 		// doing dmi
+		if (payload.get_address()<0x60000000 && payload.get_address()>=0x80000000) {
+			assert(0);				// any instruction for execution should always be fetched from system memory (DDR2 MEM @ 0x60000000 with size 512MB in this specific platform)
+		}
+
 		unsigned int mem_req_offset = payload.get_address() - MEM_BASE;
 		if (payload.get_command() == tlm::TLM_READ_COMMAND) {
 			assert(m_dmi_data.is_read_allowed());
@@ -87,6 +92,7 @@ unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payl
 			std::memcpy(m_dmi_data.get_dmi_ptr()+mem_req_offset, payload.get_data_ptr(), payload.get_data_length());
 		}
 		payload.set_response_status(tlm::TLM_OK_RESPONSE);
+		//printf("(DBG) 0x%08x\r\n", payload.get_address());
 	} else {
 		// accessing debug interface via the bus
 		if (SocketId<4) {			// request from INSTRUCTION BUS
@@ -101,6 +107,7 @@ unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payl
 
 
 void cache_controller::invalidate_direct_mem_ptr(sc_dt::uint64 start_range,  sc_dt::uint64 end_range) {
+	assert(0);
 	// invalidating DMI for every smp core
 	for (int i=0; i<m_num_smp_cores; i++) {
 		(*m_tsocket[i])->invalidate_direct_mem_ptr(start_range, end_range);

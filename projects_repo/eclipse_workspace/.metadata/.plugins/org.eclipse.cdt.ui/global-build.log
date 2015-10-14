@@ -1,4 +1,4 @@
-17:37:02 **** Build of configuration Debug for project ArmVersatileExpress ****
+13:44:44 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -52,12 +52,17 @@ In file included from ../cache_controller.cpp:8:0:
 ../cache_controller.cpp:12:1: warning:   when initialized here [-Wreorder]
  cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores)
  ^
+../cache_controller.cpp: In member function ‘void cache_controller::b_transport(int, tlm::tlm_generic_payload&, sc_core::sc_time&)’:
+../cache_controller.cpp:37:92: warning: integer overflow in expression [-Woverflow]
+  bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+                                                                                            ^
+../cache_controller.cpp:37:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
 ../cache_controller.cpp: In member function ‘unsigned int cache_controller::transport_dbg(int, tlm::tlm_generic_payload&)’:
-../cache_controller.cpp:100:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:106:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 ../cache_controller.cpp: In member function ‘bool cache_controller::get_direct_mem_ptr(int, tlm::tlm_generic_payload&, tlm::tlm_dmi&)’:
-../cache_controller.cpp:123:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:130:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 Finished building: ../cache_controller.cpp
