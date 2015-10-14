@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../cache_controller.cpp \
 ../platform.cpp 
 
 OBJS += \
+./cache_controller.o \
 ./platform.o 
 
 CPP_DEPS += \
+./cache_controller.d \
 ./platform.d 
 
 

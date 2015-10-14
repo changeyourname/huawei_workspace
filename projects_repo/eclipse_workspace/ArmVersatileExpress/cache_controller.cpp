@@ -15,8 +15,8 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 		m_Ibus_isocket("m_Ibus_isocket"),
 		m_Dbus_isocket("m_Dbus_isocket"),
 		m_dmi_mode(true),
-		//m_dmi_mode(false),
-		m_do_dmi(false)
+		m_do_dmi(false),
+		m_req_count(0)
 {
 	m_tsocket.reserve(m_num_smp_cores*3);					// 3 groups: INSTRUCTION, DATA, GICREGISTERS
 	for (int i=0; i<m_num_smp_cores*3; i++) {
@@ -77,12 +77,10 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 
 
 unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payload &payload) {
+	bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+	assert(mem_transaction);				// instruction should always be fetched from (MEM_BASE --> MEM_BASE + MEM_SIZE)
 	if (m_do_dmi) {
 		// doing dmi
-		if (payload.get_address()<0x60000000 && payload.get_address()>=0x80000000) {
-			assert(0);				// any instruction for execution should always be fetched from system memory (DDR2 MEM @ 0x60000000 with size 512MB in this specific platform)
-		}
-
 		unsigned int mem_req_offset = payload.get_address() - MEM_BASE;
 		if (payload.get_command() == tlm::TLM_READ_COMMAND) {
 			assert(m_dmi_data.is_read_allowed());
@@ -107,7 +105,6 @@ unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payl
 
 
 void cache_controller::invalidate_direct_mem_ptr(sc_dt::uint64 start_range,  sc_dt::uint64 end_range) {
-	assert(0);
 	// invalidating DMI for every smp core
 	for (int i=0; i<m_num_smp_cores; i++) {
 		(*m_tsocket[i])->invalidate_direct_mem_ptr(start_range, end_range);

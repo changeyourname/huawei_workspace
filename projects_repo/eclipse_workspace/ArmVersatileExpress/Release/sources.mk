@@ -24,10 +24,10 @@ C_UPPER_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 1.0/tlm2.0 \
+. \
 host/icm \
 modelSupport/tlmMMC/1.0/tlm2.0 \
 modelSupport/tlmPeripheral/1.0/tlm2.0 \
 modelSupport/tlmPlatform/1.0/tlm2.0 \
 modelSupport/tlmProcessor/1.0/tlm2.0 \
-. \
 

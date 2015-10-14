@@ -1,4 +1,4 @@
-13:44:44 **** Build of configuration Debug for project ArmVersatileExpress ****
+14:02:43 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -58,11 +58,15 @@ In file included from ../cache_controller.cpp:8:0:
                                                                                             ^
 ../cache_controller.cpp:37:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
 ../cache_controller.cpp: In member function ‘unsigned int cache_controller::transport_dbg(int, tlm::tlm_generic_payload&)’:
-../cache_controller.cpp:106:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:80:92: warning: integer overflow in expression [-Woverflow]
+  bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+                                                                                            ^
+../cache_controller.cpp:80:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache_controller.cpp:104:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 ../cache_controller.cpp: In member function ‘bool cache_controller::get_direct_mem_ptr(int, tlm::tlm_generic_payload&, tlm::tlm_dmi&)’:
-../cache_controller.cpp:130:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:127:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 Finished building: ../cache_controller.cpp
@@ -78,5 +82,5 @@ g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/
 Finished building target: ArmVersatileExpress
  
 
-13:44:52 Build Finished (took 8s.69ms)
+14:02:51 Build Finished (took 8s.69ms)
 

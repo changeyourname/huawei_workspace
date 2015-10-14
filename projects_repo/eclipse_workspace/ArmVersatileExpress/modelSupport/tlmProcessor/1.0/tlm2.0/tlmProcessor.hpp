@@ -174,6 +174,8 @@ private:
     /// @param high      Upper extent of the region.
     void invalidate_direct_mem_ptr(int SocketId, sc_dt::uint64 start_range, sc_dt::uint64 end_range);
 
+
+
 public:
 
     /// The constructor.

@@ -27,6 +27,7 @@ private:
 	bool m_dmi_mode;
 	bool m_do_dmi;
 	tlm::tlm_dmi m_dmi_data;
+	int m_req_count;			// for debugging
 
 	void b_transport(int SocektId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
 	unsigned int transport_dbg(int SocketId, tlm::tlm_generic_payload &payload);
