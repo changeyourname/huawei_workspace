@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
 		<item value="591" key="DIALOG_Y_ORIGIN"/>
-		<item value="435" key="DIALOG_HEIGHT"/>
 		<item value="1169" key="DIALOG_X_ORIGIN"/>
+		<item value="435" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="true" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="-&gt;b_transport" key="selection"/>
+		<item value="PAGE_SIZE" key="selection"/>
 		<list key="findhistory">
+			<item value="PAGE_SIZE"/>
+			<item value="10000"/>
+			<item value="icmGetProcessorICount"/>
+			<item value="IC"/>
+			<item value="findSMPCPU"/>
+			<item value="icmProcessorObject"/>
+			<item value="b_transport"/>
 			<item value="-&gt;b_transport"/>
-			<item value="cbRWDMI"/>
-			<item value="todo"/>
-			<item value="NR_OF_TARGETS"/>
-			<item value="getDMIPointer"/>
-			<item value="get_direct_mem_ptr"/>
-			<item value="tryDmi"/>
-			<item value="get_dire"/>
 		</list>
 		<list key="replacehistory">
 		</list>

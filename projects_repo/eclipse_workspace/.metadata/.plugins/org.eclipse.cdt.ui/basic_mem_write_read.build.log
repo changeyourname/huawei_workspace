@@ -1,4 +1,4 @@
-15:33:31 **** Build of configuration Debug for project basic_mem_write_read ****
+17:05:47 **** Build of configuration Debug for project basic_mem_write_read ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
@@ -17,9 +17,9 @@ Finished building: basic_mem_write_read.hex
 Invoking: Cross ARM GNU Print Size
 arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
    text	   data	    bss	    dec	    hex	filename
-   2983	    320	      4	   3307	    ceb	basic_mem_write_read.elf
+   2513	    328	      4	   2845	    b1d	basic_mem_write_read.elf
 Finished building: basic_mem_write_read.siz
  
 
-15:33:31 Build Finished (took 108ms)
+17:05:47 Build Finished (took 107ms)
 

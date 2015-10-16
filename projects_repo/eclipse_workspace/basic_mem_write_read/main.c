@@ -23,10 +23,32 @@
 #define FILESIZE (NUMINTS * sizeof(int))
 #define PAGE_SIZE 4096
 
+#define USER_MEM_BASE 0x70000000
+
 
 int main(int argc, char *argv[])
 {
-	int count = 0;
+	int global_smp_cpu_mem_baseaddr[4] = {USER_MEM_BASE, USER_MEM_BASE+0x2000, USER_MEM_BASE+0x4000, USER_MEM_BASE+0x6000};
+	int smp_cpu;
+	// getting the cpu affinity from the user
+	if (argc < 2) {
+		perror("proc affinity not provided");
+		exit(-1);
+	} else {
+		smp_cpu = atoi(argv[1]);
+	}
+	printf("got smp_cpu:%d\r\n", smp_cpu);
+	int this_smp_baseaddr = global_smp_cpu_mem_baseaddr[smp_cpu];
+
+    // setting this process to only run on passed smp-cpu
+	cpu_set_t mask;
+	CPU_ZERO(&mask);
+	CPU_SET(smp_cpu, &mask);
+	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
+		printf("ERROR in setting cpu affinity\r\n");
+		exit(-1);
+	}
+
     // making a virtual mapping of /dev/mem to this process address space
     int *mem_map;
     int mem_fd = open("/dev/mem", O_RDWR);
@@ -40,121 +62,24 @@ int main(int argc, char *argv[])
     	exit(-1);
     }
 
-    mem_map = mmap(0, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, 0x70000000);
+    //mem_map = mmap(0, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, this_smp_baseaddr);
+    // making a mapping from physical memory to this process address space for 1024 bytes only
+    mem_map = mmap(0, 1024, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, this_smp_baseaddr);
     if (mem_map == MAP_FAILED) {
     	close(mem_fd);
     	perror("Error mmapping the file");
     	exit(EXIT_FAILURE);
     }
 
-    // setting this process to only run on CPU1
-	cpu_set_t mask;
-	CPU_ZERO(&mask);
-	CPU_SET(1, &mask);
-	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
-		printf("ERROR in setting cpu affinity\r\n");
-		exit(-1);
-	}
-
-    // to notify the OVP platform model that linux has been booted with cpu-affinity being set
-    mem_map[0] = 0xffffff00;
-
-	// burn cpu1
-	while(count < 1000) {
-		mem_map[0] = count;
-		count++;
-	}
-
-	count = 0;
+    // indicating to OVP simulation infrastructrue that linux has been booted and will now go into task
+    mem_map[0] = 0x12345678;
 
 
-    // setting this process to only run on CPU3
-	CPU_ZERO(&mask);
-	CPU_SET(3, &mask);
-	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
-		printf("ERROR in setting cpu affinity\r\n");
-		exit(-1);
-	}
-
-    // to notify the OVP platform model that linux has been booted with cpu-affinity being set
-    mem_map[0] = 0xffffff00;
-
-	// burn cpu3
-	while(count < 1000) {
-		mem_map[0] = count;
-		count++;
-	}
-
-	count = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-    // setting this process to only run on CPU0
-	CPU_ZERO(&mask);
-	CPU_SET(0, &mask);
-	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
-		printf("ERROR in setting cpu affinity\r\n");
-		exit(-1);
-	}
-
-    // to notify the OVP platform model that linux has been booted with cpu-affinity being set
-    mem_map[0] = 0xffffff00;
-
-	// burn cpu0
-	while(count < 1000) {
-		mem_map[0] = count;
-		count++;
-	}
-
-
-	count = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-    // setting this process to only run on CPU2
-	CPU_ZERO(&mask);
-	CPU_SET(2, &mask);
-	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
-		printf("ERROR in setting cpu affinity\r\n");
-		exit(-1);
-	}
-
-    // to notify the OVP platform model that linux has been booted with cpu-affinity being set
-    mem_map[0] = 0xffffff00;
-
-	// burn cpu2
-	while(count < 1000) {
-		mem_map[0] = count;
-		count++;
-	}
-
-
-	count = 0;
-
-
-
-
-
-
-
+    // writing randomly within this smp-cpu allocated memory space
+    int offset;
+    while(1) {
+    	mem_map[rand()%1024] = 0x98765432;
+    }
 
 
     if (munmap(mem_map, FILESIZE) == -1) {

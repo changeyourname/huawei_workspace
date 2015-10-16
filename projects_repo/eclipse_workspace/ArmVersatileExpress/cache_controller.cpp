@@ -36,15 +36,22 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 
 
 void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-	if (payload.get_command()==tlm::TLM_WRITE_COMMAND && SocketId>=4 && payload.get_address()==0x70000000) {
-		unsigned char *ptr = payload.get_data_ptr();
-		printf("ID:%d..", SocketId-4);
-		printf("val[0]:0x%02x | ", *ptr);
-		printf("val[1]:0x%02x | ", *(ptr+1));
-		printf("val[2]:0x%02x | ", *(ptr+2));
-		printf("val[3]:0x%02x\r\n", *(ptr+3));
+	if (payload.get_command()==tlm::TLM_WRITE_COMMAND && SocketId>=4 && !m_debug) {
+		if ((SocketId==4 && payload.get_address()==0x70000000) || (SocketId==5 && payload.get_address()==0x70002000) || (SocketId==6 && payload.get_address()==0x70004000) || (SocketId==7 && payload.get_address()==0x70006000)) {
+			m_debug = true;
+		}
+	}
 
-		m_debug = true;
+	if (m_debug && payload.get_command()==tlm::TLM_WRITE_COMMAND && SocketId>=4) {
+		unsigned char *ptr = payload.get_data_ptr();
+		if ((payload.get_address()>=0x70000000 && payload.get_address()<0x70002000) || (payload.get_address()>=0x70002000 && payload.get_address()<0x70004000) || (payload.get_address()>=0x70004000 && payload.get_address()<0x70006000) || (payload.get_address()>=0x70006000 && payload.get_address()<0x70008000)) {
+			printf("ID:%d..", SocketId-4);
+			printf("addr:0x%08x        ", payload.get_address());
+			printf("val[0]:0x%02x | ", *ptr);
+			printf("val[1]:0x%02x | ", *(ptr+1));
+			printf("val[2]:0x%02x | ", *(ptr+2));
+			printf("val[3]:0x%02x\r\n", *(ptr+3));
+		}
 	}
 
 
