@@ -117,8 +117,9 @@ private:
     icmInitiatorExtension   *m_initiator;
     tlm::tlm_generic_payload m_trans;         // transactions cannot be deferred so only one of these is needed.
     Uns32                    m_num_smp_cores;
-    unsigned int 			*m_ICount_hist;
+    Uns64 					*m_ICount_hist;
     identifier               m_ID;
+
 
     icmMemCallback *cbTryDMI;
     icmMemCallback *cbNoDMI;

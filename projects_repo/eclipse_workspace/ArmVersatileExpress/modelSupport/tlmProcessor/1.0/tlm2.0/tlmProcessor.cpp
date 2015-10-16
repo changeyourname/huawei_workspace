@@ -121,7 +121,7 @@ icmCpuMasterPort::icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits
     m_trans.set_extension(m_initiator);
 
     m_isocket.reserve(m_num_smp_cores);
-    m_ICount_hist = new unsigned int[m_num_smp_cores];
+    m_ICount_hist = new Uns64[m_num_smp_cores];
 
     for (Uns32 i=0; i<m_num_smp_cores; i++) {
     	char socket_name[20];
@@ -575,9 +575,10 @@ icmProcessorP icmCpuMasterPort::getFirstLeafProc(icmProcessorP parentP) {			// r
 }
 
 bool icmCpuMasterPort::ICount_hist_lookup(icmProcessorP proc) {
-	if (icmGetProcessorICount(proc) != m_ICount_hist[icmGetSMPIndex(proc)]) {		// at first i compared with 1-increment but it could happen that there are instructions in cpu which are not issued on decoder like "*** FETCH EXCEPTION *** "(from OVP trace disassembler) etc but iCount would have been incremented
+	Uns64 proc_ICount = icmGetProcessorICount(proc);
+	if (proc_ICount != m_ICount_hist[icmGetSMPIndex(proc)]) {		// at first i compared with 1-increment but it could happen that there are instructions in cpu which are not issued on decoder like "*** FETCH EXCEPTION *** "(from OVP trace disassembler) etc but iCount would have been incremented
 																				// i.e for subsequent instructions the iCount will have incremented twice not just by 1 so program would break hence for now using this new comparator if (*** != iCount) {...}.....this is all verified by running simulation
-		m_ICount_hist[icmGetSMPIndex(proc)]++;
+		m_ICount_hist[icmGetSMPIndex(proc)] = proc_ICount;
 		return true;
 	} else {
 		return false;

@@ -12,6 +12,7 @@
 #include <tlm>
 #include <tlm_utils/simple_target_socket.h>
 #include <tlm_utils/simple_initiator_socket.h>
+#include "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
 
 class cache_controller : public sc_core::sc_module {
 public:
@@ -20,7 +21,7 @@ public:
 	tlm_utils::simple_initiator_socket<cache_controller> m_Ibus_isocket;
 	tlm_utils::simple_initiator_socket<cache_controller> m_Dbus_isocket;
 
-	cache_controller(sc_core::sc_module_name name, int num_smp_cores);
+	cache_controller(sc_core::sc_module_name name, int num_smp_cores, icmCpu *cpu);
 
 private:
 	int m_num_smp_cores;
@@ -28,6 +29,8 @@ private:
 	bool m_do_dmi;
 	tlm::tlm_dmi m_dmi_data;
 	int m_req_count;			// for debugging
+	bool m_debug;
+	icmCpu *m_cpu;
 
 	void b_transport(int SocektId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
 	unsigned int transport_dbg(int SocketId, tlm::tlm_generic_payload &payload);

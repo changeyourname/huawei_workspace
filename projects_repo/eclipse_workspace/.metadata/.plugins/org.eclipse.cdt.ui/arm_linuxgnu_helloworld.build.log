@@ -1,0 +1,25 @@
+15:16:42 **** Build of configuration Debug for project arm_linuxgnu_helloworld ****
+make all 
+Building file: ../main.c
+Invoking: Cross ARM C Compiler
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: arm_linuxgnu_helloworld.elf
+Invoking: Cross ARM C Linker
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"arm_linuxgnu_helloworld.map" -o "arm_linuxgnu_helloworld.elf"  ./main.o   
+Finished building target: arm_linuxgnu_helloworld.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "arm_linuxgnu_helloworld.elf"  "arm_linuxgnu_helloworld.hex"
+Finished building: arm_linuxgnu_helloworld.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "arm_linuxgnu_helloworld.elf"
+   text	   data	    bss	    dec	    hex	filename
+   1138	    284	      4	   1426	    592	arm_linuxgnu_helloworld.elf
+Finished building: arm_linuxgnu_helloworld.siz
+ 
+
+15:16:42 Build Finished (took 111ms)
+
