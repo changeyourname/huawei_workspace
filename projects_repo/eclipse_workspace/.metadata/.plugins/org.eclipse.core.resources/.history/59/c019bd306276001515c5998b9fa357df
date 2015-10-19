@@ -54,8 +54,6 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 		}
 	}*/
 
-	static int count = 0;
-
 	// checking for startup_app to have run on linux/platform...the startup_app writes 0x12345678 @ 0x70000000 platform physical address
 	if (payload.get_command() == tlm::TLM_WRITE_COMMAND && SocketId >= 4 && !m_debug) {
 		if (payload.get_address() == 0x70000000) {
@@ -64,21 +62,6 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 				m_debug = true;
 				printf("i detect running of startup_app on linux/platform\r\n");
 			}
-		}
-	}
-
-	if (m_debug && payload.get_command()==tlm::TLM_WRITE_COMMAND && SocketId>=4) {
-		unsigned char *ptr = payload.get_data_ptr();
-		if ((payload.get_address()>=0x70000000 && payload.get_address()<0x70002000) || (payload.get_address()>=0x70002000 && payload.get_address()<0x70004000) || (payload.get_address()>=0x70004000 && payload.get_address()<0x70006000) || (payload.get_address()>=0x70006000 && payload.get_address()<0x70008000)) {
-			count++;
-			assert(count != 50000);
-
-			printf("ID:%d..", SocketId-4);
-			printf("addr:0x%08x        ", payload.get_address());
-			printf("val[0]:0x%02x | ", *ptr);
-			printf("val[1]:0x%02x | ", *(ptr+1));
-			printf("val[2]:0x%02x | ", *(ptr+2));
-			printf("val[3]:0x%02x\r\n", *(ptr+3));
 		}
 	}
 

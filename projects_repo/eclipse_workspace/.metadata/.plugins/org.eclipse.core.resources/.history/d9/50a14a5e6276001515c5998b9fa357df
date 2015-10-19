@@ -71,7 +71,6 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 		unsigned char *ptr = payload.get_data_ptr();
 		if ((payload.get_address()>=0x70000000 && payload.get_address()<0x70002000) || (payload.get_address()>=0x70002000 && payload.get_address()<0x70004000) || (payload.get_address()>=0x70004000 && payload.get_address()<0x70006000) || (payload.get_address()>=0x70006000 && payload.get_address()<0x70008000)) {
 			count++;
-			assert(count != 50000);
 
 			printf("ID:%d..", SocketId-4);
 			printf("addr:0x%08x        ", payload.get_address());
