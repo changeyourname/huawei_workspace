@@ -1,4 +1,4 @@
-12:53:35 **** Build of configuration Debug for project ArmVersatileExpress ****
+14:41:58 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -70,23 +70,20 @@ In file included from ../cache_controller.cpp:8:0:
  cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores, icmCpu *cpu)
  ^
 ../cache_controller.cpp: In member function ‘void cache_controller::b_transport(int, tlm::tlm_generic_payload&, sc_core::sc_time&)’:
-../cache_controller.cpp:49:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-    printf("addr:0x%08x        ", payload.get_address());
-                                                       ^
-../cache_controller.cpp:59:92: warning: integer overflow in expression [-Woverflow]
+../cache_controller.cpp:70:92: warning: integer overflow in expression [-Woverflow]
   bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
                                                                                             ^
-../cache_controller.cpp:59:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache_controller.cpp:70:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
 ../cache_controller.cpp: In member function ‘unsigned int cache_controller::transport_dbg(int, tlm::tlm_generic_payload&)’:
-../cache_controller.cpp:105:92: warning: integer overflow in expression [-Woverflow]
+../cache_controller.cpp:116:92: warning: integer overflow in expression [-Woverflow]
   bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
                                                                                             ^
-../cache_controller.cpp:105:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-../cache_controller.cpp:130:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:116:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache_controller.cpp:141:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 ../cache_controller.cpp: In member function ‘bool cache_controller::get_direct_mem_ptr(int, tlm::tlm_generic_payload&, tlm::tlm_dmi&)’:
-../cache_controller.cpp:153:1: warning: control reaches end of non-void function [-Wreturn-type]
+../cache_controller.cpp:164:1: warning: control reaches end of non-void function [-Wreturn-type]
  }
  ^
 Finished building: ../cache_controller.cpp
@@ -102,5 +99,5 @@ g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/
 Finished building target: ArmVersatileExpress
  
 
-12:53:44 Build Finished (took 8s.371ms)
+14:42:06 Build Finished (took 8s.122ms)
 

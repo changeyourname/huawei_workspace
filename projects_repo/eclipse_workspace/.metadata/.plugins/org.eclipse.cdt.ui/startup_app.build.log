@@ -1,0 +1,29 @@
+14:41:07 **** Build of configuration Debug for project startup_app ****
+make all 
+Building file: ../main.c
+Invoking: Cross ARM C Compiler
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+../main.c: In function 'main':
+../main.c:36:6: warning: implicit declaration of function 'close' [-Wimplicit-function-declaration]
+      close(mem_fd);
+      ^
+Finished building: ../main.c
+ 
+Building target: startup_app.elf
+Invoking: Cross ARM C Linker
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"startup_app.map" -o "startup_app.elf"  ./main.o   
+Finished building target: startup_app.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "startup_app.elf"  "startup_app.hex"
+Finished building: startup_app.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "startup_app.elf"
+   text	   data	    bss	    dec	    hex	filename
+   1938	    312	      4	   2254	    8ce	startup_app.elf
+Finished building: startup_app.siz
+ 
+
+14:41:07 Build Finished (took 111ms)
+
