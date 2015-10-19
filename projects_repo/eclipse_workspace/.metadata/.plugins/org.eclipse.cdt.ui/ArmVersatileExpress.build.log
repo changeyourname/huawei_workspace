@@ -1,6 +1,106 @@
-17:06:52 **** Incremental Build of configuration Debug for project ArmVersatileExpress ****
+12:53:35 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
-make: Nothing to be done for `all'.
+Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.d" -MT"modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o" -o "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o" "../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp"
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp: In member function ‘unsigned int icmCpuMasterPort::findSMPCPU()’:
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp:608:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for (int i=1; i<m_num_smp_cores; i++) {
+                  ^
+In file included from /usr/include/c++/4.8/cassert:43:0,
+                 from /usr/local/systemc-2.3.1/include/sysc/utils/sc_pq.h:32,
+                 from /usr/local/systemc-2.3.1/include/sysc/kernel/sc_simcontext.h:36,
+                 from /usr/local/systemc-2.3.1/include/sysc/kernel/sc_wait.h:32,
+                 from /usr/local/systemc-2.3.1/include/sysc/kernel/sc_module.h:37,
+                 from /usr/local/systemc-2.3.1/include/systemc:72,
+                 from /usr/local/systemc-2.3.1/include/tlm:21,
+                 from /usr/local/systemc-2.3.1/include/tlm.h:20,
+                 from ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:25,
+                 from ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp:21:
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp:610:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+   assert(icmGetSMPIndex(leaf_proc) == i);
+                                       ^
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp: In member function ‘void icmCpuMasterPort::bindIfNotBound()’:
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp:629:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for (int i=0; i<m_num_smp_cores; i++) {
+                  ^
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp: In member function ‘void icmCpuMasterPort::bindIfNotBound(icmCpuMasterPort*)’:
+../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp:646:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for (int i=0; i<m_num_smp_cores; i++) {
+                  ^
+Finished building: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
+ 
+Building file: ../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.d" -MT"modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o" -o "modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o" "../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp"
+Finished building: ../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
+ 
+Building file: ../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.d" -MT"modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o" -o "modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o" "../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp"
+Finished building: ../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
+ 
+Building file: ../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.d" -MT"modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o" -o "modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o" "../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp"
+Finished building: ../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+ 
+Building file: ../host/icm/icmCpuManager.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"host/icm/icmCpuManager.d" -MT"host/icm/icmCpuManager.o" -o "host/icm/icmCpuManager.o" "../host/icm/icmCpuManager.cpp"
+Finished building: ../host/icm/icmCpuManager.cpp
+ 
+Building file: ../1.0/tlm2.0/tlmMemory.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"1.0/tlm2.0/tlmMemory.d" -MT"1.0/tlm2.0/tlmMemory.o" -o "1.0/tlm2.0/tlmMemory.o" "../1.0/tlm2.0/tlmMemory.cpp"
+Finished building: ../1.0/tlm2.0/tlmMemory.cpp
+ 
+Building file: ../cache_controller.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"cache_controller.d" -MT"cache_controller.o" -o "cache_controller.o" "../cache_controller.cpp"
+In file included from ../cache_controller.cpp:8:0:
+../cache_controller.hpp: In constructor ‘cache_controller::cache_controller(sc_core::sc_module_name, int, icmCpu*)’:
+../cache_controller.hpp:27:6: warning: ‘cache_controller::m_num_smp_cores’ will be initialized after [-Wreorder]
+  int m_num_smp_cores;
+      ^
+../cache_controller.hpp:21:55: warning:   ‘tlm_utils::simple_initiator_socket<cache_controller> cache_controller::m_Ibus_isocket’ [-Wreorder]
+  tlm_utils::simple_initiator_socket<cache_controller> m_Ibus_isocket;
+                                                       ^
+../cache_controller.cpp:12:1: warning:   when initialized here [-Wreorder]
+ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores, icmCpu *cpu)
+ ^
+../cache_controller.cpp: In member function ‘void cache_controller::b_transport(int, tlm::tlm_generic_payload&, sc_core::sc_time&)’:
+../cache_controller.cpp:49:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+    printf("addr:0x%08x        ", payload.get_address());
+                                                       ^
+../cache_controller.cpp:59:92: warning: integer overflow in expression [-Woverflow]
+  bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+                                                                                            ^
+../cache_controller.cpp:59:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache_controller.cpp: In member function ‘unsigned int cache_controller::transport_dbg(int, tlm::tlm_generic_payload&)’:
+../cache_controller.cpp:105:92: warning: integer overflow in expression [-Woverflow]
+  bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+                                                                                            ^
+../cache_controller.cpp:105:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache_controller.cpp:130:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+../cache_controller.cpp: In member function ‘bool cache_controller::get_direct_mem_ptr(int, tlm::tlm_generic_payload&, tlm::tlm_dmi&)’:
+../cache_controller.cpp:153:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+Finished building: ../cache_controller.cpp
+ 
+Building file: ../platform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.o" -o "platform.o" "../platform.cpp"
+Finished building: ../platform.cpp
+ 
+Building target: ArmVersatileExpress
+Invoking: GCC C++ Linker
+g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/usr/local/systemc-2.3.1/lib-linux/ -m32 -o "ArmVersatileExpress"  ./modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o  ./modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o  ./modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o  ./modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o  ./host/icm/icmCpuManager.o  ./1.0/tlm2.0/tlmMemory.o  ./cache_controller.o ./platform.o   -lsystemc -lRuntimeLoader
+Finished building target: ArmVersatileExpress
+ 
 
-17:06:52 Build Finished (took 57ms)
+12:53:44 Build Finished (took 8s.371ms)
 

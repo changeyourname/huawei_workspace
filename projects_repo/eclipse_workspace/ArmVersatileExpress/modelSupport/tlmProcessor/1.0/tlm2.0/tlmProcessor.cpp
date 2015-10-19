@@ -125,7 +125,7 @@ icmCpuMasterPort::icmCpuMasterPort(icmCpu *cpu, const char *name, Uns32 addrBits
 
     for (Uns32 i=0; i<m_num_smp_cores; i++) {
     	char socket_name[20];
-    	sprintf(socket_name, "m_isocket[%d]", i);
+    	sprintf(socket_name, "m_isocket[%d]_%d", i, m_ID);
     	m_isocket.push_back(new tlm_utils::simple_initiator_socket_tagged<icmCpuMasterPort>(socket_name));
         // let target call back to invalidate DMI
         m_isocket[i]->register_invalidate_direct_mem_ptr(this, &icmCpuMasterPort::invalidate_direct_mem_ptr, i);
