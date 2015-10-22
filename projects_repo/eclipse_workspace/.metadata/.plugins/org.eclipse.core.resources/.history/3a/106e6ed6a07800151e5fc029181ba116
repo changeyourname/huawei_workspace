@@ -1,0 +1,54 @@
+/*
+ * main.cpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+
+
+#include <tlm>
+#include <tlm_utils/simple_initiator_socket.h>
+#include <stdio.h>
+#include "cache.hpp"
+
+class req_generator : public sc_core::sc_module {
+public:
+	tlm_utils::simple_initiator_socket<req_generator> m_isocket;
+
+	SC_HAS_PROCESS(req_generator);
+	req_generator(sc_core::sc_module_name name)
+		:	m_isocket("m_isocket")
+	{
+		SC_THREAD(main);
+	}
+
+	void main() {
+		int count = 0;
+		while(1) {
+			wait(10, sc_core::SC_NS);
+
+			tlm::tlm_generic_payload trans;
+			sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+			trans.set_read();
+			trans.set_address(0x107);
+			m_isocket->b_transport(trans, delay);
+
+			count++;
+			if (count == 2) {
+				assert(0);
+			}
+		}
+	}
+};
+
+int sc_main(int argc, char *argv[]) {
+	req_generator m_req("m_req");
+	cache m_cache("m_cache");
+
+	m_req.m_isocket(m_cache.m_tsocket);
+
+	sc_core::sc_start();
+	return 0;
+}

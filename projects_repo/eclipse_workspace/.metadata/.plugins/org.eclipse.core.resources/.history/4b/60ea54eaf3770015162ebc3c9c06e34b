@@ -1,0 +1,27 @@
+/*
+ * cache.hpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+// implementation of simple cache model that is designed to be integrated with the processor model or any other mem access request generating agent
+
+#ifndef CACHE_HPP_
+#define CACHE_HPP_
+
+#include <tlm>
+#include <tlm_utils/simple_target_socket.h>
+
+
+class cache : public sc_core::sc_module {
+public:
+	tlm_utils::simple_target_socket<cache> t_socket;
+
+	cache(sc_core::sc_module_name name);
+};
+
+
+
+#endif /* CACHE_HPP_ */

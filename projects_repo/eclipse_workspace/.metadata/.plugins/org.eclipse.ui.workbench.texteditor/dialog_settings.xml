@@ -2,8 +2,8 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
-		<item value="591" key="DIALOG_Y_ORIGIN"/>
-		<item value="1169" key="DIALOG_X_ORIGIN"/>
+		<item value="296" key="DIALOG_Y_ORIGIN"/>
+		<item value="883" key="DIALOG_X_ORIGIN"/>
 		<item value="435" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
@@ -13,18 +13,20 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="PAGE_SIZE" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
+			<item value="lru"/>
+			<item value="lur"/>
+			<item value="m_num_of_sets"/>
+			<item value="unsigned int"/>
+			<item value="uint32_t"/>
+			<item value="Platform"/>
+			<item value="mips"/>
 			<item value="PAGE_SIZE"/>
-			<item value="10000"/>
-			<item value="icmGetProcessorICount"/>
-			<item value="IC"/>
-			<item value="findSMPCPU"/>
-			<item value="icmProcessorObject"/>
-			<item value="b_transport"/>
-			<item value="-&gt;b_transport"/>
 		</list>
 		<list key="replacehistory">
+			<item value="uint32_t"/>
+			<item value="u"/>
 		</list>
 	</section>
 </section>

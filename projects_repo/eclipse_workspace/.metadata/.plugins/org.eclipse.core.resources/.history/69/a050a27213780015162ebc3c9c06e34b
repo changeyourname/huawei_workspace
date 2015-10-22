@@ -1,0 +1,93 @@
+/*
+ * cache.cpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+
+
+#include "cache.hpp"
+#include <math.h>
+
+cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, cache::eviction_policy evict_pol)
+	:	m_total_cache_size(total_cache_size),
+		m_cache_line_size(cache_line_size),
+		m_num_of_sets(total_cache_size/(cache_line_size*num_of_ways)),
+		m_num_of_ways(num_of_ways),
+		m_tsocket("m_tsocket"),
+		m_write_back(write_back),
+		m_evict(evict_pol)
+{
+	m_tsocket.register_b_transport(this, &cache::b_transport);
+
+	m_cache_lines.resize(m_num_of_sets);
+	for (uint32_t i=0; i<m_num_of_sets; i++) {
+		m_cache_lines[i].resize(m_num_of_ways);
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+			m_cache_lines[i][j].valid = false;
+		}
+	}
+
+	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected to occur in real cache organizations
+	// if this does occur though then cache would be inefficient as it will have slots for memory words which actually dont exist in memory......cache will be bigger than memory!
+	assert(log2((double) m_num_of_sets) <= log2((double) MEM_SIZE));
+}
+
+
+void cache::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
+	addr_t addr = payload.get_address();
+	tlm::tlm_command cmd = payload.get_command();
+	int way_free = -1;
+
+	// finding out the cache set for this address for lookup
+	uint32_t set = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE))) & ((1 << (uint32_t) log2((double)m_num_of_sets)) - 1);
+	// as well as the tag
+	addr_t tag = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE) + log2((double) m_num_of_sets)));
+
+	// cache lookup for the found tag
+	for (int i=0; i<m_num_of_ways; i++) {
+		if (m_cache_lines[set][i].valid == true) {
+			if (m_cache_lines[set][i].tag == tag) {
+				printf("cache hit @ 0x%08x\r\n", addr);
+
+				if (cmd == tlm::TLM_WRITE_COMMAND) {	// write hit
+					if (m_write_back) {
+						m_cache_lines[set][i].dirty = true;
+					} else {
+						// TODO: write this word data to higher memory hierarchy i.e write-through operation
+					}
+				} else if (cmd == tlm::TLM_READ_COMMAND) {	// read hit
+					// TODO: update payload data from memory
+				}
+
+				// for eviction policy management
+				switch(m_evict) {
+					case LRU:
+						m_cache_lines[set][i].evict_tag = 0;
+						for (int j=0; j<m_num_of_ways; j++) {
+							m_cache_lines[set][j].evict_tag = min(m_num_of_ways,m_cache_lines[set][j].evict_tag+1);
+						}
+						break;
+					case LFU:
+						m_cache_lines[set][i].evict_tag++;
+						break;
+					case RAND:
+						break;
+					default:
+						assert(0);
+				}
+			}
+
+			return;
+		} else {
+			way_free = i;
+		}
+	}
+	printf("cache miss @ 0x%08x\r\n", addr);
+
+
+}
+
+// TODO: model timing for various cache scenarios

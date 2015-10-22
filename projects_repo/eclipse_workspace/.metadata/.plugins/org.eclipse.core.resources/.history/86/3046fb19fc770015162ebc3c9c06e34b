@@ -1,0 +1,65 @@
+/*
+ * cache.hpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+// implementation of simple cache model that is designed to be integrated with the processor model or any other mem access request generating agent
+
+#ifndef CACHE_HPP_
+#define CACHE_HPP_
+
+#include <tlm>
+#include <tlm_utils/simple_target_socket.h>
+#include <stdint.h>
+
+#define WORD_SIZE 4			// in bytes
+#define MEM_ADDRESSING 32	// or 64
+#if MEM_ADDRESSING == 32
+	typedef uint32_t addr_t;
+#elif
+	typedef uint64_t addr_t;
+#endif
+
+
+struct cache_line {
+	bool valid;
+	bool dirty;
+	unsigned int tag;
+	unsigned int LRU_tag;
+};
+
+
+class cache : public sc_core::sc_module {
+public:
+	tlm_utils::simple_target_socket<cache> m_tsocket;
+
+	cache(sc_core::sc_module_name name, unsigned int total_cache_size=65536, unsigned int cache_line_size=8, unsigned int num_of_ways=2);
+	void b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
+private:
+	unsigned int m_total_cache_size;
+	unsigned int m_cache_line_size;
+	unsigned int m_num_of_sets;
+	unsigned int m_num_of_ways;
+	std::vector< std::vector<cache_line> > m_cache_lines;
+};
+
+
+
+#endif /* CACHE_HPP_ */
+
+
+
+#if 0
+
+TOTAL_CACHE_SIZE (in bytes)
+CACHE_BLOCK_SIZE (in bytes)
+NUM_OF_SETS
+NUM_OF_WAYS
+
+
+
+
+#endif

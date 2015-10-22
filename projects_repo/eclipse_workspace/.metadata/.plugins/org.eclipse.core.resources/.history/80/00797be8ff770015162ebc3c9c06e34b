@@ -1,0 +1,17 @@
+/*
+ * main.cpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+
+
+#include <tlm>
+#include <stdio.h>
+
+int sc_main(int argc, char *argv[]) {
+	printf("Hello World!\r\n");
+	return 0;
+}

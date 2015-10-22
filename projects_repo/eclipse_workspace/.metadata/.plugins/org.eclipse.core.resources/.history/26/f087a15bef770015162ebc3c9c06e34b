@@ -1,0 +1,18 @@
+/*
+ * cache.hpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+// implementation of simple cache model that is designed to be integrated with the processor model or any other mem access request generating agent
+
+#ifndef CACHE_HPP_
+#define CACHE_HPP_
+
+
+
+
+
+#endif /* CACHE_HPP_ */
