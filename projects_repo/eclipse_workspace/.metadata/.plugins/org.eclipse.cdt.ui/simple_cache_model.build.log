@@ -1,4 +1,4 @@
-18:49:43 **** Build of configuration Debug for project simple_cache_model ****
+10:04:32 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -25,13 +25,13 @@ In file included from ../cache.cpp:11:0:
 ../cache.cpp:89:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
        for (int j=0; j<m_num_of_ways; j++) {
                        ^
-../cache.cpp:110:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:111:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
   printf("cache miss for 0x%08x", payload.get_address());
                                                        ^
-../cache.cpp:118:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:119:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
      for (int j=0; j<m_num_of_ways; j++) {
                      ^
-../cache.cpp:130:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:131:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
      for (int j=1; j<m_num_of_ways; j++) {
                      ^
 Finished building: ../cache.cpp
@@ -47,5 +47,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o
 Finished building target: simple_cache_model
  
 
-18:49:44 Build Finished (took 1s.759ms)
+10:04:34 Build Finished (took 1s.813ms)
 

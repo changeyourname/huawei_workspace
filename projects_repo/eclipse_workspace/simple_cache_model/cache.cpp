@@ -85,12 +85,13 @@ void cache::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &del
 				// for eviction policy management
 				switch(m_evict) {
 					case LRU:
-						m_cache_lines[set][i].evict_tag = 0;
+						//m_cache_lines[set][i].evict_tag = 0;
 						for (int j=0; j<m_num_of_ways; j++) {
-							if (m_cache_lines[set][j].valid == true) {
+							if (i!=j && m_cache_lines[set][j].valid==true && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
 								m_cache_lines[set][j].evict_tag = std::min(m_num_of_ways,(uint32_t) m_cache_lines[set][j].evict_tag+1);
 							}
 						}
+						m_cache_lines[set][i].evict_tag = 0;
 						break;
 					case LFU:
 						m_cache_lines[set][i].evict_tag++;
