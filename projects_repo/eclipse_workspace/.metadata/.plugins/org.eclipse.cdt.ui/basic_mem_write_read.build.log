@@ -1,25 +1,35 @@
-17:05:47 **** Build of configuration Debug for project basic_mem_write_read ****
+15:26:35 **** Build of configuration Debug for project basic_mem_write_read ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
 arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-Finished building: ../main.c
- 
-Building target: basic_mem_write_read.elf
-Invoking: Cross ARM C Linker
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read.map" -o "basic_mem_write_read.elf"  ./main.o   
-Finished building target: basic_mem_write_read.elf
- 
-Invoking: Cross ARM GNU Create Flash Image
-arm-none-linux-gnueabi-objcopy -O ihex "basic_mem_write_read.elf"  "basic_mem_write_read.hex"
-Finished building: basic_mem_write_read.hex
- 
-Invoking: Cross ARM GNU Print Size
-arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
-   text	   data	    bss	    dec	    hex	filename
-   2513	    328	      4	   2845	    b1d	basic_mem_write_read.elf
-Finished building: basic_mem_write_read.siz
- 
+error: A valid Sourcery CodeBench license key could not be found.
 
-17:05:47 Build Finished (took 107ms)
+Refer to the Getting Started guide included with Sourcery CodeBench
+for instructions on how to obtain and install a license key.
+
+For technical support for Sourcery CodeBench, visit:
+  https://sourcery.mentor.com/GNUToolchain/
+
+For information about license keys and the GPL, visit:
+  https://sourcery.mentor.com/GNUToolchain/kbentry55
+
+The license manager error is:
+
+Cannot find license file.
+ The license files (or license server system network addresses) attempted are 
+listed below.  Use LM_LICENSE_FILE to use a different license file,
+ or contact your software provider for a license file.
+Feature:       gcc_ARM_GNULinux
+Filename:      /home/uzair/mgc/embedded/codebench/libexec/gcc/arm-none-linux-gnueabi/4.9.1/../../../../license/arm-none-linux-gnueabi
+License path:  /home/uzair/mgc/embedded/codebench/libexec/gcc/arm-none-linux-gnueabi/4.9.1/../../../../license/arm-none-linux-gnueabi:
+FLEXnet Licensing error:-1,359.  System Error: 2 "No such file or directory"
+For further information, refer to the FLEXnet Licensing documentation,
+available at "www.flexerasoftware.com".
+
+Your host ID(s) are: ecb1d74a0f25
+arm-none-linux-gnueabi-gcc: error: /home/uzair/mgc/embedded/codebench/bin/../libexec/gcc/arm-none-linux-gnueabi/4.9.1/cs-license: non-zero exit status
+make: *** [main.o] Error 1
+
+15:26:35 Build Finished (took 210ms)
 

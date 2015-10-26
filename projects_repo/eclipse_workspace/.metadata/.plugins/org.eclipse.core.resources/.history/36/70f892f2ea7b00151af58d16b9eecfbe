@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <sys/time.h>
+
+int main (int argc, char** argv) {
+    struct timeval tval;
+
+    gettimeofday (&tvalBefore, NULL);
+    int i =0;
+    while ( i < 1000) {
+        i ++;
+    }
+
+    gettimeofday (&tvalAfter, NULL);
+
+    /*printf("Time in microseconds: %0.3f microseconds\n",
+            (float)(tvalAfter.tv_sec - tvalBefore.tv_sec)
+          );*/
+
+
+    printf("%0.3f\r\n", tvalAfter.tv_sec);
+
+    return 0;
+}

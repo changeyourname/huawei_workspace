@@ -13,7 +13,8 @@
 #include <algorithm>
 
 cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, cache::eviction_policy evict_pol)
-	:	m_total_cache_size(total_cache_size),
+	:	sc_module(name),
+		m_total_cache_size(total_cache_size),
 		m_cache_line_size(cache_line_size),
 		m_num_of_sets(total_cache_size/(cache_line_size*num_of_ways)),
 		m_num_of_ways(num_of_ways),
@@ -38,13 +39,14 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 	m_mem = new unsigned char[MEM_SIZE];				// 512 MB system memory
 
 
-	printf("CACHE_CONFIG \r\n----------\r\n");
-	printf("total_cache_size:%dB", m_total_cache_size);
+	printf("CACHE_CONFIG \r\n");
+	printf(name);
+	printf("..total_cache_size:%dB", m_total_cache_size);
 	printf("..cache_block_size:%dB", m_cache_line_size);
 	printf("..num_of_sets:%d", m_num_of_sets);
 	printf("..num_of_ways:%d", m_num_of_ways);
 	printf("..write_back:%d", m_write_back);
-	printf("..evict_policy:%d\r\n------------------------\r\n\r\n", m_evict);
+	printf("..evict_policy:%d\r\n\r\n", m_evict);
 
 }
 
@@ -85,13 +87,12 @@ void cache::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &del
 				// for eviction policy management
 				switch(m_evict) {
 					case LRU:
-						//m_cache_lines[set][i].evict_tag = 0;
 						for (int j=0; j<m_num_of_ways; j++) {
 							if (i!=j && m_cache_lines[set][j].valid==true && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
 								m_cache_lines[set][j].evict_tag = std::min(m_num_of_ways,(uint32_t) m_cache_lines[set][j].evict_tag+1);
 							}
 						}
-						m_cache_lines[set][i].evict_tag = 0;
+						m_cache_lines[set][i].evict_tag = 1;
 						break;
 					case LFU:
 						m_cache_lines[set][i].evict_tag++;
@@ -144,12 +145,9 @@ void cache::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &del
 	}
 
 	m_cache_lines[set][way_free].valid = true;
+	m_cache_lines[set][way_free].dirty = false;
 	m_cache_lines[set][way_free].tag = tag;
-	if (m_evict == LRU) {
-		m_cache_lines[set][way_free].evict_tag = m_num_of_ways;
-	} else if (m_evict == LFU) {
-		m_cache_lines[set][way_free].evict_tag = 0;
-	}
+	m_cache_lines[set][way_free].evict_tag = (m_evict == LRU) ? m_num_of_ways : 0;
 
 	if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss
 		if (m_write_back) {
@@ -159,7 +157,6 @@ void cache::b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &del
 	} else if (cmd == tlm::TLM_READ_COMMAND) {			// read miss
 		std::memcpy(data, &m_mem[req_addr], len);
 	}
-
 }
 
 // TODO: model timing for various cache scenarios

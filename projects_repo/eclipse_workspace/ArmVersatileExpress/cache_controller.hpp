@@ -13,6 +13,7 @@
 #include <tlm_utils/simple_target_socket.h>
 #include <tlm_utils/simple_initiator_socket.h>
 #include "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
+#include "cache.hpp"
 
 class cache_controller : public sc_core::sc_module {
 public:
@@ -31,6 +32,8 @@ private:
 	int m_req_count;			// for debugging
 	bool m_debug;
 	icmCpu *m_cpu;
+	std::vector< cache * > m_icaches;
+	std::vector< cache * > m_dcaches;
 
 	void b_transport(int SocektId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
 	unsigned int transport_dbg(int SocketId, tlm::tlm_generic_payload &payload);

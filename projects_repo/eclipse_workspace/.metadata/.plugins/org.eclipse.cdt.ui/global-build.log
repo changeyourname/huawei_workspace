@@ -1,48 +1,22 @@
-10:04:32 **** Build of configuration Debug for project simple_cache_model ****
+17:45:55 **** Build of configuration Debug for project arm_linux_gnu_test ****
 make all 
-Building file: ../cache.cpp
-Invoking: GCC C++ Compiler
-g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"cache.d" -MT"cache.o" -o "cache.o" "../cache.cpp"
-In file included from ../cache.cpp:11:0:
-../cache.hpp: In constructor ‘cache::cache(sc_core::sc_module_name, uint32_t, uint32_t, uint32_t, bool, cache::eviction_policy)’:
-../cache.hpp:52:11: warning: ‘cache::m_num_of_ways’ will be initialized after [-Wreorder]
-  uint32_t m_num_of_ways;
-           ^
-In file included from ../cache.cpp:11:0:
-../cache.hpp:42:41: warning:   ‘tlm_utils::simple_target_socket<cache> cache::m_tsocket’ [-Wreorder]
-  tlm_utils::simple_target_socket<cache> m_tsocket;
-                                         ^
-../cache.cpp:15:1: warning:   when initialized here [-Wreorder]
- cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, cache::eviction_policy evict_pol)
- ^
-../cache.cpp: In member function ‘void cache::b_transport(tlm::tlm_generic_payload&, sc_core::sc_time&)’:
-../cache.cpp:70:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-  for (int i=0; i<m_num_of_ways; i++) {
-                  ^
-../cache.cpp:73:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-     printf("cache hit for 0x%08x", payload.get_address());
-                                                         ^
-../cache.cpp:89:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-       for (int j=0; j<m_num_of_ways; j++) {
-                       ^
-../cache.cpp:111:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-  printf("cache miss for 0x%08x", payload.get_address());
-                                                       ^
-../cache.cpp:119:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int j=0; j<m_num_of_ways; j++) {
-                     ^
-../cache.cpp:131:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int j=1; j<m_num_of_ways; j++) {
-                     ^
-Finished building: ../cache.cpp
+Building file: ../main.c
+Invoking: Cross ARM C Compiler
+armeb-linux-gnueabihf-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -c -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+Finished building: ../main.c
  
-Building file: ../main.cpp
-Invoking: GCC C++ Compiler
-g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
-Finished building: ../main.cpp
+Building target: arm_linux_gnu_test.elf
+Invoking: Cross ARM C Linker
+armeb-linux-gnueabihf-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"arm_linux_gnu_test.map" -o "arm_linux_gnu_test.elf"  ./main.o   
+Finished building target: arm_linux_gnu_test.elf
  
-Building target: simple_cache_model
-Invoking: GCC C++ Linker
-g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o ./main.o   -lsystemc
-Finished building target: simple_cache_model
+Invoking: Cross ARM GNU Create Flash Image
+armeb-linux-gnueabihf-objcopy -O ihex "arm_linux_gnu_test.elf"  "arm_linux_gnu_test.hex"
+Finished building: arm_linux_gnu_test.hex
+ 
+Invoking: Cross ARM GNU Print Size
+armeb-linux-gnueabihf-size --format=berkeley "arm_linux_gnu_test.elf"
+   text	   data	    bss	    dec	    hex	filename
+    816	    276	      4	   1096	    448	arm_linux_gnu_test.elf
+Finished building: arm_linux_gnu_test.siz
  

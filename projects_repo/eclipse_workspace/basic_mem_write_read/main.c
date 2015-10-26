@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 	}
 	printf("got smp_cpu:%d\r\n", smp_cpu);
 	int this_smp_baseaddr = global_smp_cpu_mem_baseaddr[smp_cpu];
+	clock_t begin, end;
+	double time_spent;
 
     // setting this process to only run on passed smp-cpu
 	cpu_set_t mask;
@@ -71,14 +73,18 @@ int main(int argc, char *argv[])
     	exit(EXIT_FAILURE);
     }
 
-    // indicating to OVP simulation infrastructrue that linux has been booted and will now go into task
-    mem_map[0] = 0x12345678;
-
-
     // writing randomly within this smp-cpu allocated memory space
     int offset;
     while(1) {
-    	mem_map[rand()%1024] = 0x98765432;
+    	begin = clock();
+    	for (int i=0; i<100000; i++) {
+    		mem_map[rand()%1024] = 0x98765432;
+    	}
+    	end = clock();
+    	time_spent = (double) (end-begin)/CLOCKS_PER_SEC;
+
+    	printf("(SMP%d) ", smp_cpu);
+		printf("time_spent for task:%.8f\r\n", time_spent);
     }
 
 
@@ -90,9 +96,6 @@ int main(int argc, char *argv[])
     return 0;
 
 }
-
-
-
 
 
 

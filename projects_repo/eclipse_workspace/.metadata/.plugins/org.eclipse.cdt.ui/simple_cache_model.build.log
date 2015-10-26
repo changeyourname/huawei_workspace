@@ -1,4 +1,4 @@
-10:04:32 **** Build of configuration Debug for project simple_cache_model ****
+12:21:58 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -15,23 +15,26 @@ In file included from ../cache.cpp:11:0:
 ../cache.cpp:15:1: warning:   when initialized here [-Wreorder]
  cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, cache::eviction_policy evict_pol)
  ^
+../cache.cpp:43:13: warning: format not a string literal and no format arguments [-Wformat-security]
+  printf(name);
+             ^
 ../cache.cpp: In member function ‘void cache::b_transport(tlm::tlm_generic_payload&, sc_core::sc_time&)’:
-../cache.cpp:70:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:72:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
   for (int i=0; i<m_num_of_ways; i++) {
                   ^
-../cache.cpp:73:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:75:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
      printf("cache hit for 0x%08x", payload.get_address());
                                                          ^
-../cache.cpp:89:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:90:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
        for (int j=0; j<m_num_of_ways; j++) {
                        ^
-../cache.cpp:111:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:112:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
   printf("cache miss for 0x%08x", payload.get_address());
                                                        ^
-../cache.cpp:119:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:120:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
      for (int j=0; j<m_num_of_ways; j++) {
                      ^
-../cache.cpp:131:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+../cache.cpp:132:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
      for (int j=1; j<m_num_of_ways; j++) {
                      ^
 Finished building: ../cache.cpp
@@ -47,5 +50,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o
 Finished building target: simple_cache_model
  
 
-10:04:34 Build Finished (took 1s.813ms)
+12:22:00 Build Finished (took 1s.809ms)
 
