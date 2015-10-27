@@ -1,0 +1,46 @@
+#! /bin/sh
+
+mkdir -p /proc
+mount -t proc proc /proc
+mkdir -p /sys
+mount -t sysfs sysfs /sys
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+hostname Imperas
+
+# ifconfig lo 127.0.0.1 up
+# This board doesn't have a hardware clock, so system time is way off.
+# The bugsybox dhcp client doesn't work when the clock is wrong.
+# Oh well.
+# ifconfig eth0 10.0.2.15 up
+# rdate 10.0.2.2
+# ip route add default via 10.0.2.2
+
+
+
+echo "########################"
+echo "# Starting benchmarks #"
+echo "########################"
+
+# continuously run benchmark(s)
+doBench() {
+    while [ 1 ] ; do
+        echo "Run: '$2'"
+        $2
+        if [ "$3" != "" ]; then
+             echo "Run: '$3'"
+             $3
+        fi
+    done 2>&1 | sed "s|^|$1: |g" > /dev/ttyAMA1
+}
+
+# continuously run a benchmark set as background jobs
+doBench P1 "/benchmarks/testdir/fibonacci.exe" &
+doBench P2 "/benchmarks/testdir/fibonacci.exe" &
+doBench P3 "/benchmarks/testdir/fibonacci.exe" &
+doBench P4 "/benchmarks/testdir/fibonacci.exe" &
+
+# cannot finish the init script
+wait

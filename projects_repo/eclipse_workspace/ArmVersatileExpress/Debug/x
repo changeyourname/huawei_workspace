@@ -1,0 +1,55 @@
+
+
+OVPsim (32-Bit) v20150901.0 Open Virtual Platform simulator from www.OVPworld.org.
+Copyright (c) 2005-2015 Imperas Software Ltd.  Contains Imperas Proprietary Information.
+Licensed Software, All Rights Reserved.
+Visit www.IMPERAS.com for multicore debug, verification and analysis solutions.
+
+OVPsim started: Mon Oct 26 14:09:12 2015
+
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/processor/arm/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/semihosting/armNewlib/1.0/model.so'
+CACHE_CONFIG 
+m_icache[0]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_dcache[0]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_icache[1]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_dcache[1]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_icache[2]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_dcache[2]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_icache[3]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+CACHE_CONFIG 
+m_dcache[3]..total_cache_size:65536B..cache_block_size:16B..num_of_sets:1024..num_of_ways:4..write_back:1..evict_policy:0
+
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/MmciPL181/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/KbPL050/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/arm.ovpworld.org/peripheral/LcdPL110/1.0/model.so'
+Info (OP_AL) Found attribute symbol 'modelAttrs' in file '/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/lib/Linux32/ImperasLib/philips.ovpworld.org/peripheral/ISP1761/1.0/model.so'
+Info (OR_OF) Target 'ArmVersatileExpress_CA9_TLM2.cpu' has object file read from 'smpboot.ARM_CORTEX_A9.elf'
+Info (OR_PH) Program Headers:
+Info (OR_PH) Type           Offset     VirtAddr   PhysAddr   FileSiz    MemSiz     Flags Align
+Info (OR_PD) LOAD           0x00000000 0x60000000 0x60000000 0x0000107c 0x0000107c R-E   8000
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU0 (start address set to 0x60000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU1 (start address set to 0x60000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU2 (start address set to 0x60000000)
+Info (ArmVersatileExpress_CA9_TLM2_LAF) Linux loaded on ArmVersatileExpress_CA9_TLM2.cpu_CPU3 (start address set to 0x60000000)
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU1': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU2': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU2': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+Warning (ARM_CP_TLBMBD3) CPU 'ArmVersatileExpress_CA9_TLM2.cpu_CPU3': TLB maintenance broadcast ignored by ACTLR.SMP=0
+detect the running of startup_app on linux/platform
