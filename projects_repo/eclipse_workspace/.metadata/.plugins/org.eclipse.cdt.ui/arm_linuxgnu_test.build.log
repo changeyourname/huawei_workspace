@@ -1,0 +1,25 @@
+10:12:57 **** Build of configuration Debug for project arm_linuxgnu_test ****
+make all 
+Building file: ../main.c
+Invoking: Cross ARM C Compiler
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: arm_linuxgnu_test.elf
+Invoking: Cross ARM C Linker
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"arm_linuxgnu_test.map" -o "arm_linuxgnu_test.elf"  ./main.o   
+Finished building target: arm_linuxgnu_test.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "arm_linuxgnu_test.elf"  "arm_linuxgnu_test.hex"
+Finished building: arm_linuxgnu_test.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "arm_linuxgnu_test.elf"
+   text	   data	    bss	    dec	    hex	filename
+   1000	    284	      4	   1288	    508	arm_linuxgnu_test.elf
+Finished building: arm_linuxgnu_test.siz
+ 
+
+10:12:57 Build Finished (took 57ms)
+

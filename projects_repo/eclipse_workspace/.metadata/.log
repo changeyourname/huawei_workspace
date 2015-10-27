@@ -2333,3 +2333,16 @@ java.util.ConcurrentModificationException
 	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1470)
 	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:46)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+!SESSION 2015-10-27 09:50:49.394 -----------------------------------------------
+eclipse.buildId=4.5.1.M20150904-0015
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.cpp.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.cpp.product
+
+!ENTRY org.eclipse.cdt.core 1 0 2015-10-27 10:08:58.840
+!MESSAGE Indexed 'arm_linuxgnu_test' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2015-10-27 10:22:07.011
+!MESSAGE Indexed 'basic_mem_write_read_with_timing' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)

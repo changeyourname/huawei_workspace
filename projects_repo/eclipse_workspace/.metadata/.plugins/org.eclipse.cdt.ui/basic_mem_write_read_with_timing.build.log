@@ -1,0 +1,25 @@
+10:23:19 **** Build of configuration Debug for project basic_mem_write_read_with_timing ****
+make all 
+Building file: ../main.c
+Invoking: Cross ARM C Compiler
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: basic_mem_write_read_with_timing.elf
+Invoking: Cross ARM C Linker
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read_with_timing.map" -o "basic_mem_write_read_with_timing.elf"  ./main.o   
+Finished building target: basic_mem_write_read_with_timing.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "basic_mem_write_read_with_timing.elf"  "basic_mem_write_read_with_timing.hex"
+Finished building: basic_mem_write_read_with_timing.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read_with_timing.elf"
+   text	   data	    bss	    dec	    hex	filename
+   4655	    332	      4	   4991	   137f	basic_mem_write_read_with_timing.elf
+Finished building: basic_mem_write_read_with_timing.siz
+ 
+
+10:23:19 Build Finished (took 108ms)
+

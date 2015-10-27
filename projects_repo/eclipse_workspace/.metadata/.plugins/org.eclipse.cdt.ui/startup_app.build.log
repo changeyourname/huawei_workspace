@@ -1,4 +1,4 @@
-16:58:18 **** Build of configuration Debug for project startup_app ****
+09:51:31 **** Build of configuration Debug for project startup_app ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
@@ -35,5 +35,5 @@ Your host ID(s) are: ecb1d74a0f25
 arm-none-linux-gnueabi-gcc: error: /home/uzair/mgc/embedded/codebench/bin/../libexec/gcc/arm-none-linux-gnueabi/4.9.1/cs-license: non-zero exit status
 make: *** [main.o] Error 1
 
-16:58:18 Build Finished (took 118ms)
+09:51:31 Build Finished (took 58ms)
 
