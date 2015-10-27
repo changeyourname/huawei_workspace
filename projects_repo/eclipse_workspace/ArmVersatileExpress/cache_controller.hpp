@@ -22,7 +22,7 @@ public:
 	tlm_utils::simple_initiator_socket<cache_controller> m_Ibus_isocket;
 	tlm_utils::simple_initiator_socket<cache_controller> m_Dbus_isocket;
 
-	cache_controller(sc_core::sc_module_name name, int num_smp_cores, icmCpu *cpu);
+	cache_controller(sc_core::sc_module_name name, int num_smp_cores);
 
 private:
 	int m_num_smp_cores;
@@ -31,7 +31,6 @@ private:
 	tlm::tlm_dmi m_dmi_data;
 	int m_req_count;			// for debugging
 	bool m_debug;
-	icmCpu *m_cpu;
 	std::vector< cache * > m_icaches;
 	std::vector< cache * > m_dcaches;
 

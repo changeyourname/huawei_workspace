@@ -274,7 +274,7 @@ ArmVersatileExpress_CA9_TLM2::ArmVersatileExpress_CA9_TLM2 ( sc_core::sc_module_
     : sc_core::sc_module (name)
     , Platform ("icm", ICM_INIT_DEFAULT | ICM_STOP_ON_CTRLC)
 	, cpu ( "cpu", 0, (unsigned int) NUM_SMP_CORES, ICM_ATTR_SIMEX, attrsForcpu() )
-	, cache_cntrl("cache_controller", (unsigned int) NUM_SMP_CORES, &cpu)
+	, cache_cntrl("cache_controller", (unsigned int) NUM_SMP_CORES)
     , tzBus("tzBus")
     , pBus("pBus")				// no CPU connected with this bus
     , ddr2bus("ddr2bus")			// no CPU connected with this bus

@@ -71,8 +71,8 @@ public:
 
 int sc_main(int argc, char *argv[]) {
 	req_generator m_req("m_req");
-	//cache m_cache("m_cache", 1024, 8, 4);
-	cache m_cache("m_cache", 65536, 16, 4);
+	//cache m_cache("m_cache", 65536, 16, 4);
+	cache_controller m_cc()
 
 	m_req.m_isocket(m_cache.m_tsocket);
 

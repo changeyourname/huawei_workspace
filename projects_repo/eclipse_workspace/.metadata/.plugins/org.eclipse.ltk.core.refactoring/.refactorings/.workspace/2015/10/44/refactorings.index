@@ -2,3 +2,5 @@
 1445873866418	Delete resource 'arm_linux_gnu_test'
 1445936893129	Delete resource 'arm_linux_gnu_test'
 1445938578768	Delete 3 resources
+1445940352735	Delete resource 'simple_cache_model/debug_target.hpp'
+1445940362803	Delete resource 'simple_cache_model/debug.cpp'

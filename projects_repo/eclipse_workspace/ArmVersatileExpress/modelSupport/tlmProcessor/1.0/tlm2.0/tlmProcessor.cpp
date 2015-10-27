@@ -605,7 +605,7 @@ unsigned int icmCpuMasterPort::findSMPCPU() {			// this will iterate over all th
 	}
 
 	// going over siblings
-	for (int i=1; i<m_num_smp_cores; i++) {
+	for (uint32_t i=1; i<m_num_smp_cores; i++) {
 		leaf_proc = icmGetSMPNextSibling(leaf_proc);
 		assert(icmGetSMPIndex(leaf_proc) == i);
     	if (ICount_hist_lookup(leaf_proc)) {
@@ -626,7 +626,7 @@ void icmCpuMasterPort::bindIfNotBound() {
         socket(dummy->socket);
     }*/
 
-	for (int i=0; i<m_num_smp_cores; i++) {
+	for (uint32_t i=0; i<m_num_smp_cores; i++) {
 		if (m_isocket[i]->size() == 0) {
 			icmDummySlavePort *dummy = new icmDummySlavePort();
 			(*m_isocket[i])(dummy->socket);
@@ -643,7 +643,7 @@ void icmCpuMasterPort::bindIfNotBound(icmCpuMasterPort *dflt) {
         socket(dummy->socket);
         m_dflt = dflt;
     }*/
-	for (int i=0; i<m_num_smp_cores; i++) {
+	for (uint32_t i=0; i<m_num_smp_cores; i++) {
 		if (m_isocket[i]->size() == 0) {
 			icmDummySlavePort *dummy = new icmDummySlavePort();
 			(*m_isocket[i])(dummy->socket);

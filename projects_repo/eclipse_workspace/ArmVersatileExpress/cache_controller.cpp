@@ -9,16 +9,15 @@
 
 #define MEM_BASE 0x60000000 		// physical base address for DDR2 RAM in our platform (in agreement with already built linux kernel)
 
-cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores, icmCpu *cpu)
+cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cores)
 	:	sc_core::sc_module(name),
-		m_num_smp_cores(num_smp_cores),
 		m_Ibus_isocket("m_Ibus_isocket"),
 		m_Dbus_isocket("m_Dbus_isocket"),
+		m_num_smp_cores(num_smp_cores),
 		m_dmi_mode(true),
 		m_do_dmi(false),
 		m_req_count(0),
-		m_debug(false),
-		m_cpu(cpu)
+		m_debug(false)
 {
 	m_tsocket.reserve(m_num_smp_cores*3);					// 3 groups: INSTRUCTION, DATA, GICREGISTERS
 	m_icaches.reserve(m_num_smp_cores);
@@ -81,7 +80,7 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 	}
 
 
-	bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+	bool mem_transaction = (payload.get_address()>=(uint64_t)MEM_BASE && payload.get_address()<(uint64_t)MEM_BASE+0x20000000);
 
 
 	// updating cache stuff
@@ -143,7 +142,7 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payload &payload) {
 	// this debug interface will only be used by INSTRUCTION port for simulation efficiency
 
-	bool mem_transaction = (payload.get_address()>=MEM_BASE && payload.get_address()<MEM_BASE+0x20000000);
+	bool mem_transaction = (payload.get_address()>=(uint64_t)MEM_BASE && payload.get_address()<(uint64_t)MEM_BASE+0x20000000);
 	assert(mem_transaction);				// instruction should always be fetched from (MEM_BASE --> MEM_BASE + MEM_SIZE)
 	if (m_do_dmi) {
 		// doing dmi
@@ -168,6 +167,8 @@ unsigned int cache_controller::transport_dbg(int SocketId, tlm::tlm_generic_payl
 			return m_Dbus_isocket->transport_dbg(payload);
 		}
 	}
+
+	return 1;
 }
 
 
@@ -191,6 +192,8 @@ bool cache_controller::get_direct_mem_ptr(int SocketId, tlm::tlm_generic_payload
 	} else {
 		// gicregisters interface
 	}
+
+	return false;
 }
 
 
