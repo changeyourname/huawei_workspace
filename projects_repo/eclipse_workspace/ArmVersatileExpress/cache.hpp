@@ -26,11 +26,11 @@
 #endif
 
 // cache timings
-#define CACHE_LOOKUP_DELAY sc_core::sc_time(10, sc_core::SC_NS)
-#define WR_CACHE_DELAY sc_core::sc_time(50, sc_core::SC_NS)
-#define RD_CACHE_DELAY sc_core::sc_time(50, sc_core::SC_NS)
-#define MEM2CACHE_LINE_DELAY sc_core::sc_time(2000, sc_core::SC_NS)
-#define CACHE2MEM_LINE_DELAY sc_core::sc_time(200, sc_core::SC_NS)
+#define CACHE_LOOKUP_DELAY sc_core::sc_time(1, sc_core::SC_NS)
+#define WR_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
+#define RD_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
+#define MEM2CACHE_LINE_DELAY sc_core::sc_time(200, sc_core::SC_NS)
+#define CACHE2MEM_LINE_DELAY sc_core::sc_time(20, sc_core::SC_NS)
 
 
 
