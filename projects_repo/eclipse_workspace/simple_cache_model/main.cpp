@@ -42,13 +42,13 @@ public:
 	void main() {
 		//unsigned char *mem_no_cache = new unsigned char[MEM_SIZE];
 		req_type req_stimuli[NUM_REQ] = {
-									{0x12345678, tlm::TLM_READ_COMMAND},
-									{0x1234567c, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
-									{0x00005678, tlm::TLM_READ_COMMAND},
-									{0x0fff5678, tlm::TLM_READ_COMMAND},
-									{0x1fff5678, tlm::TLM_READ_COMMAND},
-									{0x10ff5678, tlm::TLM_READ_COMMAND}
-								  };
+											{0x12345678, tlm::TLM_READ_COMMAND},
+											{0x1234567c, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
+											{0x00005678, tlm::TLM_READ_COMMAND},
+											{0x0fff5678, tlm::TLM_READ_COMMAND},
+											{0x1fff5678, tlm::TLM_READ_COMMAND},
+											{0x10ff5678, tlm::TLM_READ_COMMAND}
+								  	  	};
 
 		while(1) {
 #if 0
@@ -125,7 +125,7 @@ public:
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_tsocket("m_tsocket"),
 			m_mem(mem),
-			m_cache("m_cache", 65536, 16, 4, false)
+			m_cache("m_cache", 65536, 16, 4)
 	{
 		m_tsocket.register_b_transport(this, &target::b_transport);
 	}

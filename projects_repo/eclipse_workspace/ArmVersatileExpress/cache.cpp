@@ -144,7 +144,7 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 
 	if (m_evict == LRU) {
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
-			if (way_free!=j && m_cache_lines[set][j].valid==true) {
+			if ((uint32_t)way_free!=j && m_cache_lines[set][j].valid==true) {
 				m_cache_lines[set][j].evict_tag++;
 			}
 			assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);

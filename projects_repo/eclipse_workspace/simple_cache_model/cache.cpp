@@ -46,7 +46,6 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 }
 
 void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-
 	for (uint32_t i=0; i<m_num_of_ways; i++) {
 		printf("valid:%d..", m_cache_lines[359][i].valid);
 		printf("dirty:%d..", m_cache_lines[359][i].dirty);
