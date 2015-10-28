@@ -79,8 +79,9 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 					case LRU:
 						for (uint32_t j=0; j<m_num_of_ways; j++) {
 							if (i!=j && m_cache_lines[set][j].valid==true && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
-								m_cache_lines[set][j].evict_tag = std::min(m_num_of_ways,(uint32_t) m_cache_lines[set][j].evict_tag+1);
+								m_cache_lines[set][j].evict_tag++;
 							}
+							assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
 						}
 						m_cache_lines[set][i].evict_tag = 1;
 						break;
@@ -140,7 +141,18 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 	m_cache_lines[set][way_free].valid = true;
 	m_cache_lines[set][way_free].dirty = false;
 	m_cache_lines[set][way_free].tag = tag;
-	m_cache_lines[set][way_free].evict_tag = (m_evict == LRU) ? m_num_of_ways : 0;
+
+	if (m_evict == LRU) {
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+			if (way_free!=j && m_cache_lines[set][j].valid==true) {
+				m_cache_lines[set][j].evict_tag++;
+			}
+			assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
+		}
+		m_cache_lines[set][way_free].evict_tag = 1;
+	} else {
+		m_cache_lines[set][way_free].evict_tag = 0;
+	}
 
 	delay += MEM2CACHE_LINE_DELAY;
 	if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss

@@ -1,39 +1,39 @@
-11:10:38 **** Build of configuration Debug for project simple_cache_model ****
+12:09:46 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
 g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"cache.d" -MT"cache.o" -o "cache.o" "../cache.cpp"
-../cache.cpp: In constructor ‘cache::cache(sc_core::sc_module_name, uint32_t, uint32_t, uint32_t, bool, cache::eviction_policy)’:
-../cache.cpp:38:13: warning: format not a string literal and no format arguments [-Wformat-security]
-  printf(name);
-             ^
 ../cache.cpp: In member function ‘void cache::update(tlm::tlm_generic_payload&, sc_core::sc_time&)’:
-../cache.cpp:62:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-  for (int i=0; i<m_num_of_ways; i++) {
+../cache.cpp:54:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+   printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
+                                                       ^
+../cache.cpp:78:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+     printf("cache hit for 0x%08x", payload.get_address());
+                                                         ^
+../cache.cpp:117:58: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+      printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
+                                                          ^
+../cache.cpp:127:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+  printf("cache miss for 0x%08x", payload.get_address());
+                                                       ^
+../cache.cpp:171:18: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    if (way_free!=j && m_cache_lines[set][j].valid==true) {
                   ^
-../cache.cpp:81:23: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-       for (int j=0; j<m_num_of_ways; j++) {
-                       ^
-../cache.cpp:112:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int j=0; j<m_num_of_ways; j++) {
-                     ^
-../cache.cpp:121:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-     for (int j=1; j<m_num_of_ways; j++) {
-                     ^
-../cache.cpp:49:9: warning: unused variable ‘req_addr’ [-Wunused-variable]
-  addr_t req_addr = (payload.get_address()/WORD_SIZE)*WORD_SIZE;      // rounded to word address
-         ^
+../cache.cpp:197:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+   printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
+                                                       ^
 Finished building: ../cache.cpp
  
-Building file: ../cache_controller.cpp
+Building file: ../main.cpp
 Invoking: GCC C++ Compiler
-g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"cache_controller.d" -MT"cache_controller.o" -o "cache_controller.o" "../cache_controller.cpp"
-In file included from ../cache_controller.cpp:18:0:
-../cache_controller.hpp:15:65: fatal error: modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp: No such file or directory
- #include "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp"
-                                                                 ^
-compilation terminated.
-make: *** [cache_controller.o] Error 1
+g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: simple_cache_model
+Invoking: GCC C++ Linker
+g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o ./main.o   -lsystemc
+Finished building target: simple_cache_model
+ 
 
-11:10:39 Build Finished (took 912ms)
+12:09:48 Build Finished (took 1s.711ms)
 

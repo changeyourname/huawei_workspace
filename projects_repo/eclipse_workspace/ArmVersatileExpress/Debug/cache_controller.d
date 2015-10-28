@@ -183,30 +183,6 @@ cache_controller.o: ../cache_controller.cpp ../cache_controller.hpp \
  /usr/local/systemc-2.3.1/include/tlm_utils/simple_target_socket.h \
  /usr/local/systemc-2.3.1/include/tlm_utils/peq_with_get.h \
  /usr/local/systemc-2.3.1/include/tlm_utils/simple_initiator_socket.h \
- ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp \
- /usr/local/systemc-2.3.1/include/tlm.h \
- /usr/local/systemc-2.3.1/include/tlm \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmVersion.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTypes.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/impTypes.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/hostMacros.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/ord/ordObjAttrs.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/ord/ordTypes.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/vmi/vmiTypes.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/vmi/vmiTyperefs.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/typeMacros.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmConstruct.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTypes.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmQuery.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmSimulatorSession.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmRuntime.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmDebugger.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmObjectfiles.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTrace.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmText.h \
- /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmDestruct.h \
  ../cache.hpp
 
 ../cache_controller.hpp:
@@ -578,53 +554,5 @@ cache_controller.o: ../cache_controller.cpp ../cache_controller.hpp \
 /usr/local/systemc-2.3.1/include/tlm_utils/peq_with_get.h:
 
 /usr/local/systemc-2.3.1/include/tlm_utils/simple_initiator_socket.h:
-
-../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:
-
-/usr/local/systemc-2.3.1/include/tlm.h:
-
-/usr/local/systemc-2.3.1/include/tlm:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.hpp:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmCpuManager.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmVersion.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTypes.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/impTypes.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/hostMacros.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/ord/ordObjAttrs.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/ord/ordTypes.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/vmi/vmiTypes.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/vmi/vmiTyperefs.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/hostapi/typeMacros.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmConstruct.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTypes.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmQuery.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmSimulatorSession.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmRuntime.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmDebugger.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmObjectfiles.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmTrace.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmText.h:
-
-/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host/icm/icmDestruct.h:
 
 ../cache.hpp:

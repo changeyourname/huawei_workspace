@@ -35,7 +35,7 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 
 
 	printf("CACHE_CONFIG \r\n");
-	printf(name);
+	std::cout << name;
 	printf("..total_cache_size:%dB", m_total_cache_size);
 	printf("..cache_block_size:%dB", m_cache_line_size);
 	printf("..num_of_sets:%d", m_num_of_sets);
@@ -46,7 +46,19 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 }
 
 void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-	addr_t req_addr = (payload.get_address()/WORD_SIZE)*WORD_SIZE;						// rounded to word address
+
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
+		printf("valid:%d..", m_cache_lines[359][i].valid);
+		printf("dirty:%d..", m_cache_lines[359][i].dirty);
+		printf("tag:0x%08x..", m_cache_lines[359][i].tag);
+		printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
+	}
+
+
+
+
+
+
 	addr_t addr = (payload.get_address()/m_cache_line_size)*m_cache_line_size;			// rounded to cache-block address
 	tlm::tlm_command cmd = payload.get_command();
 
@@ -59,12 +71,13 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 
 	delay += CACHE_LOOKUP_DELAY;
 	// cache lookup for the found tag
-	for (int i=0; i<m_num_of_ways; i++) {
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
 		if (m_cache_lines[set][i].valid == true) {
 			if (m_cache_lines[set][i].tag == tag) {
-				/*printf("(%s)..", name());
+				printf("(%s)..", name());
 				printf("cache hit for 0x%08x", payload.get_address());
-				printf("...set=%d\r\n", set);*/
+				printf("..tag=0x%08x", tag);
+				printf("...set=%d\r\n", set);
 
 				if (cmd == tlm::TLM_WRITE_COMMAND) {	// write hit
 					if (m_write_back) {
@@ -78,10 +91,11 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 				// for eviction policy management
 				switch(m_evict) {
 					case LRU:
-						for (int j=0; j<m_num_of_ways; j++) {
+						for (uint32_t j=0; j<m_num_of_ways; j++) {
 							if (i!=j && m_cache_lines[set][j].valid==true && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
-								m_cache_lines[set][j].evict_tag = std::min(m_num_of_ways,(uint32_t) m_cache_lines[set][j].evict_tag+1);
+								m_cache_lines[set][j].evict_tag++;
 							}
+							assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
 						}
 						m_cache_lines[set][i].evict_tag = 1;
 						break;
@@ -94,22 +108,31 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 						assert(0);
 				}
 
+
+				for (uint32_t i=0; i<m_num_of_ways; i++) {
+					printf("valid:%d..", m_cache_lines[359][i].valid);
+					printf("dirty:%d..", m_cache_lines[359][i].dirty);
+					printf("tag:0x%08x..", m_cache_lines[359][i].tag);
+					printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
+				}
+
 				return;
 			}
 		} else {
 			way_free = i;
 		}
 	}
-	/*printf("(%s)..", name());
+	printf("(%s)..", name());
 	printf("cache miss for 0x%08x", payload.get_address());
-	printf("...set=%d\r\n", set);*/
+	printf("..tag=0x%08x", tag);
+	printf("...set=%d\r\n", set);
 
 	if (way_free == -1) {
 		// do cache line replacement based on eviction policy
 		uint64_t tmp = 0;
 		switch(m_evict) {
 			case LRU:
-				for (int j=0; j<m_num_of_ways; j++) {
+				for (uint32_t j=0; j<m_num_of_ways; j++) {
 					if (m_cache_lines[set][j].evict_tag == m_num_of_ways) {
 						way_free = j;
 					}
@@ -118,7 +141,7 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 			case LFU:
 				tmp = m_cache_lines[set][0].evict_tag;
 				way_free = 0;
-				for (int j=1; j<m_num_of_ways; j++) {
+				for (uint32_t j=1; j<m_num_of_ways; j++) {
 					if (tmp > m_cache_lines[set][j].evict_tag) {
 						tmp = m_cache_lines[set][j].evict_tag;
 						way_free = j;
@@ -141,7 +164,17 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 	m_cache_lines[set][way_free].valid = true;
 	m_cache_lines[set][way_free].dirty = false;
 	m_cache_lines[set][way_free].tag = tag;
-	m_cache_lines[set][way_free].evict_tag = (m_evict == LRU) ? m_num_of_ways : 0;
+	if (m_evict == LRU) {
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+			if (way_free!=j && m_cache_lines[set][j].valid==true) {
+				m_cache_lines[set][j].evict_tag++;
+			}
+			assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
+		}
+		m_cache_lines[set][way_free].evict_tag = 1;
+	} else {
+		m_cache_lines[set][way_free].evict_tag = 0;
+	}
 
 	delay += MEM2CACHE_LINE_DELAY;
 	if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss
@@ -151,6 +184,14 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 		delay += WR_CACHE_DELAY;
 	} else if (cmd == tlm::TLM_READ_COMMAND) {			// read miss
 		delay += RD_CACHE_DELAY;
+	}
+
+
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
+		printf("valid:%d..", m_cache_lines[359][i].valid);
+		printf("dirty:%d..", m_cache_lines[359][i].dirty);
+		printf("tag:0x%08x..", m_cache_lines[359][i].tag);
+		printf("lru:%d\r\n", m_cache_lines[359][i].evict_tag);
 	}
 }
 

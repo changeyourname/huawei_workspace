@@ -234,9 +234,7 @@ platform.o: ../platform.cpp /usr/local/systemc-2.3.1/include/tlm.h \
  /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/smsc.ovpworld.org/peripheral/LAN9118/1.0/tlm2.0/pse.igen.hpp \
  /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/philips.ovpworld.org/peripheral/ISP1761/1.0/tlm2.0/pse.igen.hpp \
  /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/tlm2.0/pse.igen.hpp \
- ../cache_controller.hpp \
- ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp ../cache.hpp \
- ../platform.sc_clp.igen.h
+ ../cache_controller.hpp ../cache.hpp ../platform.sc_clp.igen.h
 
 /usr/local/systemc-2.3.1/include/tlm.h:
 
@@ -713,8 +711,6 @@ platform.o: ../platform.cpp /usr/local/systemc-2.3.1/include/tlm.h \
 /home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source/arm.ovpworld.org/peripheral/SmartLoaderArmLinux/1.0/tlm2.0/pse.igen.hpp:
 
 ../cache_controller.hpp:
-
-../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.hpp:
 
 ../cache.hpp:
 
