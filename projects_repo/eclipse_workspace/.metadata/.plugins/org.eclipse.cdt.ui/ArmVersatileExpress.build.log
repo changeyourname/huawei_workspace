@@ -1,4 +1,4 @@
-13:33:09 **** Build of configuration Debug for project ArmVersatileExpress ****
+15:26:10 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
@@ -51,5 +51,5 @@ g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/
 Finished building target: ArmVersatileExpress
  
 
-13:33:18 Build Finished (took 8s.826ms)
+15:26:20 Build Finished (took 10s.322ms)
 

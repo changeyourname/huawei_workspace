@@ -12,13 +12,14 @@
 #include <math.h>
 #include <algorithm>
 
-cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, cache::eviction_policy evict_pol)
+cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_pol)
 	:	sc_module(name),
 		m_total_cache_size(total_cache_size),
 		m_cache_line_size(cache_line_size),
 		m_num_of_sets(total_cache_size/(cache_line_size*num_of_ways)),
 		m_num_of_ways(num_of_ways),
 		m_write_back(write_back),
+		m_write_allocate(write_allocate),
 		m_evict(evict_pol)
 {
 	m_cache_lines.resize(m_num_of_sets);
@@ -41,6 +42,7 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 	printf("..num_of_sets:%d", m_num_of_sets);
 	printf("..num_of_ways:%d", m_num_of_ways);
 	printf("..write_back:%d", m_write_back);
+	printf("..write_allocate:%d", m_write_allocate);
 	printf("..evict_policy:%d\r\n\r\n", m_evict);
 
 }
@@ -68,6 +70,10 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 				if (cmd == tlm::TLM_WRITE_COMMAND) {	// write hit
 					if (m_write_back) {
 						m_cache_lines[set][i].dirty = true;
+					} else {
+						//delay += CACHE2MEM_LINE_DELAY;
+						// for write-through policy, we assume that there are write buffers b/w cache and higher memory hierarchy level so as to hide the write word delay to this cache
+						// hence delay not updated here
 					}
 					delay += WR_CACHE_DELAY;
 				} else if (cmd == tlm::TLM_READ_COMMAND) {	// read hit
@@ -104,64 +110,74 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 	printf("cache miss for 0x%08x", payload.get_address());
 	printf("...set=%d\r\n", set);*/
 
-	if (way_free == -1) {
-		// do cache line replacement based on eviction policy
-		uint64_t tmp = 0;
-		switch(m_evict) {
-			case LRU:
-				for (uint32_t j=0; j<m_num_of_ways; j++) {
-					if (m_cache_lines[set][j].evict_tag == m_num_of_ways) {
-						way_free = j;
-					}
-				}
-				break;
-			case LFU:
-				tmp = m_cache_lines[set][0].evict_tag;
-				way_free = 0;
-				for (uint32_t j=1; j<m_num_of_ways; j++) {
-					if (tmp > m_cache_lines[set][j].evict_tag) {
-						tmp = m_cache_lines[set][j].evict_tag;
-						way_free = j;
-					}
-				}
-				break;
-			case RAND:
-				way_free = rand()%4;
-				break;
-			default:
-				assert(0);
-		}
+	if (cmd == tlm::TLM_WRITE_COMMAND && !m_write_allocate) {
+		// if write miss and write-no-allocate policy being selected then not updating anything in cache for this case...just modeling delay for writing the word into main memory
 
-		// if the line to be evicted is dirty and cache policy is write-back then faking the cache line write to memory via timing modeling
-		if (m_write_back && m_cache_lines[set][way_free].dirty==true) {
-			delay += CACHE2MEM_LINE_DELAY;
-		}
-	}
-
-	m_cache_lines[set][way_free].valid = true;
-	m_cache_lines[set][way_free].dirty = false;
-	m_cache_lines[set][way_free].tag = tag;
-
-	if (m_evict == LRU) {
-		for (uint32_t j=0; j<m_num_of_ways; j++) {
-			if ((uint32_t)way_free!=j && m_cache_lines[set][j].valid==true) {
-				m_cache_lines[set][j].evict_tag++;
-			}
-			assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
-		}
-		m_cache_lines[set][way_free].evict_tag = 1;
+		delay += CACHE2MEM_LINE_DELAY;
 	} else {
-		m_cache_lines[set][way_free].evict_tag = 0;
-	}
+		if (way_free == -1) {
+			// do cache line replacement based on eviction policy
+			uint64_t tmp = 0;
+			switch(m_evict) {
+				case LRU:
+					for (uint32_t j=0; j<m_num_of_ways; j++) {
+						if (m_cache_lines[set][j].evict_tag == m_num_of_ways) {
+							way_free = j;
+						}
+					}
+					break;
+				case LFU:
+					tmp = m_cache_lines[set][0].evict_tag;
+					way_free = 0;
+					for (uint32_t j=1; j<m_num_of_ways; j++) {
+						if (tmp > m_cache_lines[set][j].evict_tag) {
+							tmp = m_cache_lines[set][j].evict_tag;
+							way_free = j;
+						}
+					}
+					break;
+				case RAND:
+					way_free = rand()%4;
+					break;
+				default:
+					assert(0);
+			}
 
-	delay += MEM2CACHE_LINE_DELAY;
-	if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss
-		if (m_write_back) {
-			m_cache_lines[set][way_free].dirty = true;
+			// if the line to be evicted is dirty and cache policy is write-back then faking the cache line write to memory via timing modeling
+			if (m_write_back && m_cache_lines[set][way_free].dirty==true) {
+				delay += CACHE2MEM_LINE_DELAY;
+			}
 		}
-		delay += WR_CACHE_DELAY;
-	} else if (cmd == tlm::TLM_READ_COMMAND) {			// read miss
-		delay += RD_CACHE_DELAY;
+
+		m_cache_lines[set][way_free].valid = true;
+		m_cache_lines[set][way_free].dirty = false;
+		m_cache_lines[set][way_free].tag = tag;
+
+		if (m_evict == LRU) {
+			for (uint32_t j=0; j<m_num_of_ways; j++) {
+				if ((uint32_t)way_free!=j && m_cache_lines[set][j].valid==true) {
+					m_cache_lines[set][j].evict_tag++;
+				}
+				assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
+			}
+			m_cache_lines[set][way_free].evict_tag = 1;
+		} else {
+			m_cache_lines[set][way_free].evict_tag = 0;
+		}
+
+		delay += MEM2CACHE_LINE_DELAY;
+		if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss
+			if (m_write_back) {
+				m_cache_lines[set][way_free].dirty = true;
+			} else {
+				//delay += CACHE2MEM_LINE_DELAY;
+				// for write-through policy, we assume that there are write buffers b/w cache and higher memory hierarchy level so as to hide the write word delay to this cache
+				// hence delay not updated here
+			}
+			delay += WR_CACHE_DELAY;
+		} else if (cmd == tlm::TLM_READ_COMMAND) {			// read miss
+			delay += RD_CACHE_DELAY;
+		}
 	}
 }
 

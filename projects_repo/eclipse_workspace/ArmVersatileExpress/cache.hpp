@@ -46,7 +46,7 @@ class cache : public sc_core::sc_module {
 public:
 	enum eviction_policy {LRU, LFU, RAND};
 
-	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, bool write_back=true, cache::eviction_policy evict_pol=LRU);
+	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
 	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
 private:
 	uint32_t m_total_cache_size;
@@ -54,6 +54,7 @@ private:
 	uint32_t m_num_of_sets;
 	uint32_t m_num_of_ways;
 	bool     m_write_back;
+	bool     m_write_allocate;
 	eviction_policy m_evict;
 	std::vector< std::vector<cache_line> > m_cache_lines;
 };

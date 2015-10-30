@@ -1,4 +1,4 @@
-13:33:09 **** Build of configuration Debug for project ArmVersatileExpress ****
+15:26:10 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
 Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
 Invoking: GCC C++ Compiler
