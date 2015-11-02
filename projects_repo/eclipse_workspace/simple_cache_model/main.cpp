@@ -118,6 +118,20 @@ public:
 
 #define WORD_SIZE 4
 
+#define L1_TO_L2_CACHEBLOCK_DELAY sc_core::sc_time(20, sc_core::SC_NS)
+#define L2_TO_L1_CACHEBLOCK_DELAY sc_core::sc_time(20, sc_core::SC_NS)
+
+#define L2_TO_MEM_CACHEBLOCK_DELAY sc_core::sc_time(40, sc_core::SC_NS)
+#define MEM_TO_L2_CACHEBLOCK_DELAY sc_core::sc_time(200, sc_core::SC_NS)
+
+#define L1_LOOKUP_DELAY sc_core::sc_time(1, sc_core::SC_NS)
+#define L1_READ_DELAY sc_core::sc_time(5, sc_core::SC_NS)
+#define L1_WRITE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
+
+#define L2_LOOKUP_DELAY sc_core::sc_time(2, sc_core::SC_NS)
+#define L2_READ_DELAY sc_core::sc_time(10, sc_core::SC_NS)
+#define L2_WRITE_DELAY sc_core::sc_time(10, sc_core::SC_NS)
+
 class target : public sc_core::sc_module {
 public:
 	tlm_utils::simple_target_socket<target> m_tsocket;
@@ -125,9 +139,26 @@ public:
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_tsocket("m_tsocket"),
 			m_mem(mem),
-			m_cache("m_cache", 65536, 16, 4)
+			m_l1cache_i("m_l1cache_i", 65536, 16, 4),
+			m_l1cache_d("m_l1cache_d", 65536, 16, 4),
+			m_l2cache("m_l2cache", 131072, 16, 8)
 	{
 		m_tsocket.register_b_transport(this, &target::b_transport);
+
+		m_l2cache.set_parent(NULL);
+		child_of_l2->reserve(2);
+		child_of_l2->push_back(&m_l1cache_i);
+		child_of_l2->push_back(&m_l1cache_d);
+		m_l2cache.set_children(child_of_l2);
+		m_l2cache.set_delays((sc_core::sc_time)MEM_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time)L2_TO_MEM_CACHEBLOCK_DELAY, (sc_core::sc_time) L2_LOOKUP_DELAY, (sc_core::sc_time) L2_WRITE_DELAY, (sc_core::sc_time) L2_READ_DELAY);
+
+		m_l1cache_i.set_parent(&m_l2cache);
+		m_l1cache_i.set_children(NULL);
+		m_l1cache_i.set_delays((sc_core::sc_time)L2_TO_L1_CACHEBLOCK_DELAY, (sc_core::sc_time)L1_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time) L1_LOOKUP_DELAY, (sc_core::sc_time) L1_WRITE_DELAY, (sc_core::sc_time) L1_READ_DELAY);
+
+		m_l1cache_d.set_parent(&m_l2cache);
+		m_l1cache_d.set_children(NULL);
+		m_l1cache_d.set_delays((sc_core::sc_time)L2_TO_L1_CACHEBLOCK_DELAY, (sc_core::sc_time)L1_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time) L1_LOOKUP_DELAY, (sc_core::sc_time) L1_WRITE_DELAY, (sc_core::sc_time) L1_READ_DELAY);
 	}
 
 	void b_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
@@ -138,7 +169,11 @@ public:
 
 		assert(addr>=0x00000000 && addr<0x20000000);
 
-		m_cache.update(payload, delay);
+		if (addr >= 10000000) {
+			m_l1cache_d.update(payload, delay);
+		} else {
+			m_l1cache_i.update(payload,delay);
+		}
 
 		if (cmd == tlm::TLM_WRITE_COMMAND) {
 			std::memcpy(&m_mem[addr], ptr, (unsigned long) len);
@@ -149,7 +184,10 @@ public:
 
 private:
 	unsigned char *m_mem;
-	cache m_cache;
+	cache m_l1cache_i;
+	cache m_l1cache_d;
+	cache m_l2cache;
+	std::vector< cache * > *child_of_l2;
 };
 
 
