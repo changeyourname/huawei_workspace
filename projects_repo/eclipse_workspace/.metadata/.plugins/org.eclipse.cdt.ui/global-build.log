@@ -1,4 +1,4 @@
-13:40:33 **** Build of configuration Debug for project simple_cache_model ****
+15:07:03 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -7,8 +7,14 @@ g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 
 ../cache.cpp:68:57: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
      printf("cache hit for 0x%08x", payload.get_address());
                                                          ^
-../cache.cpp:119:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:118:58: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+      printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
+                                                          ^
+../cache.cpp:128:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
   printf("cache miss for 0x%08x", payload.get_address());
+                                                       ^
+../cache.cpp:234:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+   printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
                                                        ^
 Finished building: ../cache.cpp
  

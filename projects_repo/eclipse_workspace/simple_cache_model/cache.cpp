@@ -73,17 +73,21 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 					if (!m_child) {
 						if (m_write_back) {
 							// for the lowest level cache, marking this block as dirty incase of write hit and write-back policy being used
-							m_cache_lines[set][i].dirty = true;
 							delay += m_write_cache_delay;
+							m_cache_lines[set][i].dirty = true;
 						} else {
 							//delay += m_downstream_cacheblock_delay;
 							// for write-through policy, we assume that there are write buffers b/w cache and higher level cache/memory module so as to hide the write word delay to this cache
 							// hence delay not updated here
 						}
 					} else {
-						// write miss in l1 cache but hit in higher level cache hierarchy so transferring this block to l1 and canceling dirtyness as l1 has the most updated data now
+						// write miss in l1 cache but hit in higher level cache hierarchy
+						if (m_cache_lines[set][i].dirty == true) {
+							// TODO: if the block found in higher level cache is dirty then writing back to memory
+							m_cache_lines[set][i].dirty = false;
+						}
+						// transfering the block to lower level cache
 						delay += m_read_cache_delay;
-						m_cache_lines[set][i].dirty = false;
 					}
 				} else if (cmd == tlm::TLM_READ_COMMAND) {	// read hit
 					delay += m_read_cache_delay;
@@ -107,6 +111,15 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 						break;
 					default:
 						assert(0);
+				}
+
+				for (uint32_t x=0; x<m_num_of_ways; x++) {
+					std::cout<<name()<<"_";
+					printf("way[%d]..", x);
+					printf("valid=%d..", m_cache_lines[set][x].valid);
+					printf("dirty=%d..", m_cache_lines[set][x].dirty);
+					printf("tag=0x%08x..", m_cache_lines[set][x].tag);
+					printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
 				}
 
 				return;
@@ -179,7 +192,8 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 			// for lower level caches, requesting the block from next higher cache in hierarchy
 			m_parent->update(payload, delay);
 		}
-		delay += m_upstream_cacheblock_delay;
+		delay += m_upstream_cacheblock_delay;			// cache block transfer delay
+		delay += m_write_cache_delay;
 
 		// caching this new block
 		m_cache_lines[set][way_free].valid = true;
@@ -214,6 +228,15 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 			delay += m_read_cache_delay;
 		}
 	}
+
+	for (uint32_t x=0; x<m_num_of_ways; x++) {
+		std::cout<<name()<<"_";
+		printf("way[%d]..", x);
+		printf("valid=%d..", m_cache_lines[set][x].valid);
+		printf("dirty=%d..", m_cache_lines[set][x].dirty);
+		printf("tag=0x%08x..", m_cache_lines[set][x].tag);
+		printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
+	}
 }
 
 
@@ -236,7 +259,7 @@ void cache::set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, s
 }
 
 void cache::handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay) {
-	delay += INVALIDATION_NOTIFICATION_DELAY;
+	delay += BACKINVALIDATION_NOTIFICATION_DELAY;
 	// request from the parent to invalidate this cache block if it is being cached here(inclusion property)..this will be called when the parent is going to evict this block
 
 	addr_t addr = (req_addr/m_cache_line_size)*m_cache_line_size;			// rounded to cache-block address
@@ -268,6 +291,8 @@ void cache::handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay
 			(*m_child)[i]->handle_invalidation_request(req_addr, delay);
 		}
 	}
+
+	//TODO: in the lowest level cache, if the block to be invalidated is dirty and cache is write-back then have to write that block to memory as well OR writeback that blcok to next higher cache......what if blocksize in higher cache > blocksize in this cache then have to evict multiple blocks in this scenario, how to do that????........what to do if this is not the lowest level cache with the dirty block??
 }
 
 
@@ -288,6 +313,28 @@ void cache::handle_writeback(addr_t req_addr) {
 		}
 	}
 }
+
+
+
+// TODO: model delays for cache block requests from lower level cache to higher level in cache hierarchy
+
+
+
+
+
+
+
+// TODO: FIFO replacement policy cache line
+// TODO: update the writeback cache with M,S,I state to deal with coherence issues
+
+
+
+// sofar no support for cache coherence
+// to avoid cache coherency problems in child caches sharing a common parent like split l1 (i/d) cache with unified l2 cache, the child caches (l1 i/d) should be made write through so that childs are not caching the same block with dirty state simultaneously with their own data
+
+
+
+
 
 
 

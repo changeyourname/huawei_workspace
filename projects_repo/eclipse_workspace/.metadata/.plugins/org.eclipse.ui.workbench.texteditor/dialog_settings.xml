@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
-		<item value="296" key="DIALOG_Y_ORIGIN"/>
+		<item value="356" key="DIALOG_Y_ORIGIN"/>
 		<item value="435" key="DIALOG_HEIGHT"/>
-		<item value="883" key="DIALOG_X_ORIGIN"/>
+		<item value="913" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
 		<item value="false" key="isRegEx"/>
-		<item value="true" key="casesensitive"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="printf(&quot;valid:%d..&quot;, m_cache_lines[359][i].valid);" key="selection"/>
+		<item value="TODO" key="selection"/>
 		<list key="findhistory">
+			<item value="todo"/>
+			<item value="cacheword"/>
+			<item value="delay"/>
+			<item value="CACHE2MEM_LINE_DELAY"/>
+			<item value="printf(&quot;valid:%d..&quot;, "/>
 			<item value="printf(&quot;valid:%d..&quot;, m_cache_lines[359][i].valid);"/>
 			<item value="lru"/>
 			<item value="lur"/>
-			<item value="m_num_of_sets"/>
-			<item value="unsigned int"/>
-			<item value="uint32_t"/>
-			<item value="Platform"/>
-			<item value="mips"/>
 		</list>
 		<list key="replacehistory">
 			<item value="uint32_t"/>

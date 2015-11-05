@@ -26,7 +26,7 @@ struct req_type {
 	unsigned char rd_data[4];
 };
 
-#define NUM_REQ 6
+#define NUM_REQ 4
 
 class req_generator : public sc_core::sc_module {
 public:
@@ -42,12 +42,15 @@ public:
 	void main() {
 		//unsigned char *mem_no_cache = new unsigned char[MEM_SIZE];
 		req_type req_stimuli[NUM_REQ] = {
+											{0x12345678, tlm::TLM_WRITE_COMMAND},
+											{0x12345678, tlm::TLM_WRITE_COMMAND},
 											{0x12345678, tlm::TLM_READ_COMMAND},
+											{0x12345678, tlm::TLM_READ_COMMAND},/*,
 											{0x1234567c, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
 											{0x00005678, tlm::TLM_READ_COMMAND},
 											{0x0fff5678, tlm::TLM_READ_COMMAND},
 											{0x1fff5678, tlm::TLM_READ_COMMAND},
-											{0x10ff5678, tlm::TLM_READ_COMMAND}
+											{0x10ff5678, tlm::TLM_READ_COMMAND}*/
 								  	  	};
 
 		while(1) {
@@ -132,6 +135,10 @@ public:
 #define L2_READ_DELAY sc_core::sc_time(10, sc_core::SC_NS)
 #define L2_WRITE_DELAY sc_core::sc_time(10, sc_core::SC_NS)
 
+#define L1_TO_CPU_DELAY sc_core::sc_time(10, sc_core::SC_NS)
+#define CPU_TO_L1_DELAY sc_core::sc_time(10, sc_core::SC_NS)
+
+
 class target : public sc_core::sc_module {
 public:
 	tlm_utils::simple_target_socket<target> m_tsocket;
@@ -139,13 +146,14 @@ public:
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_tsocket("m_tsocket"),
 			m_mem(mem),
-			m_l1cache_i("m_l1cache_i", 65536, 16, 4),
-			m_l1cache_d("m_l1cache_d", 65536, 16, 4),
+			m_l1cache_i("m_l1cache_i", 65536, 16, 4, false),			// has to make write-through as it share a parent cache
+			m_l1cache_d("m_l1cache_d", 65536, 16, 4, false),			// has to make write-thorugh as it share a parent cache
 			m_l2cache("m_l2cache", 131072, 16, 8)
 	{
 		m_tsocket.register_b_transport(this, &target::b_transport);
 
 		m_l2cache.set_parent(NULL);
+		child_of_l2 = new std::vector< cache * >;
 		child_of_l2->reserve(2);
 		child_of_l2->push_back(&m_l1cache_i);
 		child_of_l2->push_back(&m_l1cache_d);
@@ -169,10 +177,18 @@ public:
 
 		assert(addr>=0x00000000 && addr<0x20000000);
 
-		if (addr >= 10000000) {
+		static int count = 0;
+		count++;
+		if (payload.get_command() == tlm::TLM_WRITE_COMMAND) {
+			delay += CPU_TO_L1_DELAY;
+		}
+		if (count%2==0) {
 			m_l1cache_d.update(payload, delay);
 		} else {
-			m_l1cache_i.update(payload,delay);
+			m_l1cache_i.update(payload, delay);
+		}
+		if (payload.get_command() == tlm::TLM_READ_COMMAND) {
+			delay += L1_TO_CPU_DELAY;
 		}
 
 		if (cmd == tlm::TLM_WRITE_COMMAND) {

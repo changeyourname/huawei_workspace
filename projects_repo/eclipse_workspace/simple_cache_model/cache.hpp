@@ -26,13 +26,8 @@
 #endif
 
 // cache timings
-//#define CACHE_LOOKUP_DELAY sc_core::sc_time(1, sc_core::SC_NS)
-//#define WR_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
-//#define RD_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
-//#define MEM2CACHE_LINE_DELAY sc_core::sc_time(200, sc_core::SC_NS)
-//#define CACHE2MEM_LINE_DELAY sc_core::sc_time(20, sc_core::SC_NS)
 #define WRITEBACK_NOTIFICATION_DELAY sc_core::sc_time(10, sc_core::SC_NS);
-#define INVALIDATION_NOTIFICATION_DELAY sc_core::sc_time(10, sc_core::SC_NS);
+#define BACKINVALIDATION_NOTIFICATION_DELAY sc_core::sc_time(10, sc_core::SC_NS);
 
 
 struct cache_line {
@@ -66,8 +61,8 @@ private:
 	sc_core::sc_time m_lookup_delay;
 	sc_core::sc_time m_read_cache_delay;
 	sc_core::sc_time m_write_cache_delay;
-	sc_core::sc_time m_upstream_cacheblock_delay;
-	sc_core::sc_time m_downstream_cacheblock_delay;
+	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
+	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
 
 	void handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay);
 	void handle_writeback(addr_t req_addr);
@@ -85,12 +80,9 @@ private:
 // support for LRU, LFU, random eviction policy
 
 
-
-
-
-
-
-
+// this cache model implements strictly inclusive cache hierarchy
+// for inclusive property of cache, the ideas from "Parallel Computer Architecture: A Hardware/software Approach" (Culler, Singh, Gupta) are used especially content mentioned in chapter 5-6
+// turns out we have to include some inclusion info augmented with state bits for each cache block in the hierarchy as well
 
 
 
