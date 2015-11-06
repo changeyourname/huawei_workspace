@@ -1,4 +1,4 @@
-13:22:09 **** Build of configuration Debug for project simple_cache_model ****
+17:46:21 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -7,13 +7,14 @@ g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 
 ../cache.cpp:68:58: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
       printf("cache hit for 0x%08x", payload.get_address());
                                                           ^
-../cache.cpp:147:58: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
-      printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
-                                                          ^
-../cache.cpp:157:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:163:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
   printf("cache miss for 0x%08x", payload.get_address());
                                                        ^
-../cache.cpp:264:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:204:63: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+    printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
+                                                               ^
+../cache.cpp: In member function ‘void cache::print_cache_set(uint32_t)’:
+../cache.cpp:374:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
    printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
                                                        ^
 Finished building: ../cache.cpp
@@ -29,5 +30,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o
 Finished building target: simple_cache_model
  
 
-13:22:11 Build Finished (took 1s.812ms)
+17:46:22 Build Finished (took 1s.724ms)
 

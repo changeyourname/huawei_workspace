@@ -26,7 +26,7 @@ struct req_type {
 	unsigned char rd_data[4];
 };
 
-#define NUM_REQ 4
+#define NUM_REQ 5
 
 class req_generator : public sc_core::sc_module {
 public:
@@ -42,11 +42,11 @@ public:
 	void main() {
 		//unsigned char *mem_no_cache = new unsigned char[MEM_SIZE];
 		req_type req_stimuli[NUM_REQ] = {
-											{0x12345678, tlm::TLM_WRITE_COMMAND},
-											{0x12345678, tlm::TLM_WRITE_COMMAND},
 											{0x12345678, tlm::TLM_READ_COMMAND},
-											{0x12345678, tlm::TLM_READ_COMMAND},/*,
-											{0x1234567c, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
+											{0x12345078, tlm::TLM_READ_COMMAND},
+											{0x12345278, tlm::TLM_READ_COMMAND},
+											{0x12345478, tlm::TLM_READ_COMMAND},
+											{0x12345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}}/*,
 											{0x00005678, tlm::TLM_READ_COMMAND},
 											{0x0fff5678, tlm::TLM_READ_COMMAND},
 											{0x1fff5678, tlm::TLM_READ_COMMAND},
@@ -54,44 +54,6 @@ public:
 								  	  	};
 
 		while(1) {
-#if 0
-			tlm::tlm_generic_payload trans;
-			trans.set_address(rand()%0x20000000);
-			//printf("@0x%08x..", trans.get_address());
-			trans.set_data_length(4);
-			unsigned char *ptr = new unsigned char[4];
-			if (rand()%2) {
-				trans.set_read();
-				printf("RD..");
-			} else {
-				trans.set_write();
-				printf("WR..");
-				for (int i=0; i<3; i++) {
-					*(ptr+i) = rand();
-				}
-				/*printf("WR data..data[0]=0x%02x | ", *ptr);
-				printf("data[1]=0x%02x | ", *(ptr+1));
-				printf("data[2]=0x%02x | ", *(ptr+2));
-				printf("data[3]=0x%02x..", *(ptr+3));*/
-
-				//std::memcpy(&mem_no_cache[(trans.get_address()/4)*4], ptr, 4);				// for verification
-			}
-			trans.set_data_ptr(ptr);
-			sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-
-			m_isocket->b_transport(trans, delay);
-
-			if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-				/*printf("RD data..data[0]=0x%02x | ", *ptr);
-				printf("data[1]=0x%02x | ", *(ptr+1));
-				printf("data[2]=0x%02x | ", *(ptr+2));
-				printf("data[3]=0x%02x\r\n", *(ptr+3));*/
-				/*for (int i=0; i<4; i++) {
-					assert(mem_no_cache[(trans.get_address()/4)*4 + i] == *(ptr+i));		// for verification
-				}*/
-			}
-#endif
-
 			tlm::tlm_generic_payload trans;
 
 			trans.set_data_length(4);
@@ -114,7 +76,10 @@ public:
 				wait(2, sc_core::SC_NS);
 			}
 
-			assert(0);
+			//assert(0);
+			while(1) {
+				wait(1, sc_core::SC_MS);
+			}
 		}
 	}
 };
@@ -146,9 +111,9 @@ public:
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_tsocket("m_tsocket"),
 			m_mem(mem),
-			m_l1cache_i("m_l1cache_i", 65536, 16, 4, false),			// has to make write-through as it share a parent cache
-			m_l1cache_d("m_l1cache_d", 65536, 16, 4, false),			// has to make write-thorugh as it share a parent cache
-			m_l2cache("m_l2cache", 131072, 16, 8)
+			m_l1cache_i("m_l1cache_i", 1024, 16, 2, false),			// has to make write-through as it share a parent cache
+			m_l1cache_d("m_l1cache_d", 1024, 16, 2, false),			// has to make write-thorugh as it share a parent cache
+			m_l2cache("m_l2cache", 2048, 16, 4)
 	{
 		m_tsocket.register_b_transport(this, &target::b_transport);
 
@@ -178,7 +143,7 @@ public:
 		assert(addr>=0x00000000 && addr<0x20000000);
 
 		static int count = 0;
-		count++;
+		//count++;
 		if (payload.get_command() == tlm::TLM_WRITE_COMMAND) {
 			delay += CPU_TO_L1_DELAY;
 		}
@@ -196,6 +161,11 @@ public:
 		} else {
 			std::memcpy(ptr, &m_mem[addr], (unsigned long) len);
 		}
+	}
+
+	void print() {
+		m_l1cache_d.print_cache_set(7);
+		m_l2cache.print_cache_set(7);
 	}
 
 private:
@@ -218,6 +188,9 @@ int sc_main(int argc, char *argv[]) {
 	m_req.m_isocket(m_target.m_tsocket);
 
 	sc_core::sc_start(1, sc_core::SC_MS);
+
+	printf("END\r\n");
+	m_target.print();
 
 	return 0;
 }

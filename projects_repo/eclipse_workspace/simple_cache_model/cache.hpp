@@ -27,7 +27,6 @@
 
 // cache timings
 #define UPDATE_STATE_DELAY sc_core::sc_time(2, sc_core::SC_NS)
-#define WRITEBACK_DELAY sc_core::sc_time(20, sc_core::SC_NS)
 #define WRITE_THROUGH_DELAY sc_core::sc_time(0, sc_core::SC_NS)				// for write-through policy, we assume that there are write buffers b/w cache and higher level cache/memory module so as to hide the write word delay to this cache hence no delay associated for now
 
 
@@ -49,6 +48,8 @@ public:
 	void set_parent(cache *parent);
 	void set_children(std::vector< cache * > *child);
 	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
+
+	void print_cache_set(uint32_t set);
 private:
 	uint32_t m_total_cache_size;
 	uint32_t m_cache_line_size;
