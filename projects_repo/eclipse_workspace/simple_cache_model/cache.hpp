@@ -28,13 +28,12 @@
 // cache timings
 #define UPDATE_STATE_DELAY sc_core::sc_time(2, sc_core::SC_NS)
 #define WRITEBACK_DELAY sc_core::sc_time(20, sc_core::SC_NS)
+#define WRITE_THROUGH_DELAY sc_core::sc_time(0, sc_core::SC_NS)				// for write-through policy, we assume that there are write buffers b/w cache and higher level cache/memory module so as to hide the write word delay to this cache hence no delay associated for now
 
 
 struct cache_line {
 	enum cache_line_state {M, S, I, MBS};				// M=>Modified; S=>Shared;	I=>Invalid; MBS=>Modified-but-stale(for maintaining strictly inclusive nature of cache)........important only for WB configuration....for WT configuration just two states are used S(valid) and I(invalid)
 
-	//bool valid;
-	//bool dirty;
 	cache_line_state state;
 	addr_t tag;
 	uint64_t evict_tag;
@@ -46,7 +45,7 @@ public:
 	enum eviction_policy {LRU, LFU, RAND};
 
 	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
-	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
+	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through=false);
 	void set_parent(cache *parent);
 	void set_children(std::vector< cache * > *child);
 	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
@@ -67,8 +66,6 @@ private:
 	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
 	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
 
-	/*void handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay);
-	void handle_writeback(addr_t req_addr);*/
 	void update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay);
 };
 
