@@ -26,13 +26,16 @@
 #endif
 
 // cache timings
-#define WRITEBACK_NOTIFICATION_DELAY sc_core::sc_time(10, sc_core::SC_NS);
-#define BACKINVALIDATION_NOTIFICATION_DELAY sc_core::sc_time(10, sc_core::SC_NS);
+#define UPDATE_STATE_DELAY sc_core::sc_time(2, sc_core::SC_NS)
+#define WRITEBACK_DELAY sc_core::sc_time(20, sc_core::SC_NS)
 
 
 struct cache_line {
-	bool valid;
-	bool dirty;
+	enum cache_line_state {M, S, I, MBS};				// M=>Modified; S=>Shared;	I=>Invalid; MBS=>Modified-but-stale(for maintaining strictly inclusive nature of cache)........important only for WB configuration....for WT configuration just two states are used S(valid) and I(invalid)
+
+	//bool valid;
+	//bool dirty;
+	cache_line_state state;
 	addr_t tag;
 	uint64_t evict_tag;
 };
@@ -64,8 +67,9 @@ private:
 	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
 	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
 
-	void handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay);
-	void handle_writeback(addr_t req_addr);
+	/*void handle_invalidation_request(addr_t req_addr, sc_core::sc_time &delay);
+	void handle_writeback(addr_t req_addr);*/
+	void update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay);
 };
 
 
