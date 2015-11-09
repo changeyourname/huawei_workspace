@@ -1,113 +1,122 @@
 CACHE_CONFIG 
-m_l1cache_i..total_cache_size:1024B..cache_block_size:16B..num_of_sets:32..num_of_ways:2..write_back:0..write_allocate:1..evict_policy:0
+m_l1cache_i..total_cache_size:1024B..cache_block_size:16B..num_of_sets:32..num_of_ways:2..write_back:1..write_allocate:1..evict_policy:0
 
 CACHE_CONFIG 
-m_l1cache_d..total_cache_size:1024B..cache_block_size:16B..num_of_sets:32..num_of_ways:2..write_back:0..write_allocate:1..evict_policy:0
+m_l1cache_d..total_cache_size:1024B..cache_block_size:16B..num_of_sets:32..num_of_ways:2..write_back:1..write_allocate:1..evict_policy:0
 
 CACHE_CONFIG 
 m_l2cache..total_cache_size:2048B..cache_block_size:16B..num_of_sets:32..num_of_ways:4..write_back:1..write_allocate:1..evict_policy:0
 
-(m_target.m_l1cache_d)..cache miss for 0x12345678..tag=0x00091a2b...set=7
-(m_target.m_l2cache)..cache miss for 0x12345678..tag=0x00091a2b...set=7
+(m_target.m_l1cache_d)..cache miss for 0x10345678..tag=0x00081a2b...set=7
+(m_target.m_l2cache)..cache miss for 0x10345678..tag=0x00081a2b...set=7
 m_target.m_l2cache_way[0]..state=2..tag=0x00000000..lru=0
 m_target.m_l2cache_way[1]..state=2..tag=0x00000000..lru=0
 m_target.m_l2cache_way[2]..state=2..tag=0x00000000..lru=0
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2b..lru=1
+m_target.m_l2cache_way[3]..state=1..tag=0x00081a2b..lru=1
 m_target.m_l1cache_d_way[0]..state=2..tag=0x00000000..lru=0
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a2b..lru=1
+m_target.m_l1cache_d_way[1]..state=1..tag=0x00081a2b..lru=1
 delay:263 ns
 ---------------
-(m_target.m_l1cache_d)..cache miss for 0x12345078..tag=0x00091a28...set=7
-(m_target.m_l2cache)..cache miss for 0x12345078..tag=0x00091a28...set=7
+(m_target.m_l1cache_d)..cache miss for 0x10345078..tag=0x00081a28...set=7
+(m_target.m_l2cache)..cache miss for 0x10345078..tag=0x00081a28...set=7
 m_target.m_l2cache_way[0]..state=2..tag=0x00000000..lru=0
 m_target.m_l2cache_way[1]..state=2..tag=0x00000000..lru=0
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=1
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2b..lru=2
-m_target.m_l1cache_d_way[0]..state=1..tag=0x00091a28..lru=1
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a2b..lru=2
+m_target.m_l2cache_way[2]..state=1..tag=0x00081a28..lru=1
+m_target.m_l2cache_way[3]..state=1..tag=0x00081a2b..lru=2
+m_target.m_l1cache_d_way[0]..state=1..tag=0x00081a28..lru=1
+m_target.m_l1cache_d_way[1]..state=1..tag=0x00081a2b..lru=2
 delay:263 ns
 ---------------
-(m_target.m_l1cache_d)..cache miss for 0x12345278..tag=0x00091a29...set=7
-m_target.m_l1cache_d evicting way[1]..lru=2
-(m_target.m_l2cache)..cache miss for 0x12345278..tag=0x00091a29...set=7
+(m_target.m_l1cache_d)..cache miss for 0x10345278..tag=0x00081a29...set=7
+m_target.m_l1cache_d evicting way[1]..tag:0x00081a2b..lru=2
+(m_target.m_l2cache)..cache miss for 0x10345278..tag=0x00081a29...set=7
 m_target.m_l2cache_way[0]..state=2..tag=0x00000000..lru=0
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=1
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=2
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2b..lru=3
-m_target.m_l1cache_d_way[0]..state=1..tag=0x00091a28..lru=2
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a29..lru=1
+m_target.m_l2cache_way[1]..state=1..tag=0x00081a29..lru=1
+m_target.m_l2cache_way[2]..state=1..tag=0x00081a28..lru=2
+m_target.m_l2cache_way[3]..state=1..tag=0x00081a2b..lru=3
+m_target.m_l1cache_d_way[0]..state=1..tag=0x00081a28..lru=2
+m_target.m_l1cache_d_way[1]..state=1..tag=0x00081a29..lru=1
 delay:263 ns
 ---------------
-(m_target.m_l1cache_d)..cache miss for 0x12345478..tag=0x00091a2a...set=7
-m_target.m_l1cache_d evicting way[0]..lru=2
-(m_target.m_l2cache)..cache miss for 0x12345478..tag=0x00091a2a...set=7
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=1
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=2
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=3
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2b..lru=4
-m_target.m_l1cache_d_way[0]..state=1..tag=0x00091a2a..lru=1
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a29..lru=2
+(m_target.m_l1cache_d)..cache miss for 0x10345478..tag=0x00081a2a...set=7
+m_target.m_l1cache_d evicting way[0]..tag:0x00081a28..lru=2
+(m_target.m_l2cache)..cache miss for 0x10345478..tag=0x00081a2a...set=7
+m_target.m_l2cache_way[0]..state=1..tag=0x00081a2a..lru=1
+m_target.m_l2cache_way[1]..state=1..tag=0x00081a29..lru=2
+m_target.m_l2cache_way[2]..state=1..tag=0x00081a28..lru=3
+m_target.m_l2cache_way[3]..state=1..tag=0x00081a2b..lru=4
+m_target.m_l1cache_d_way[0]..state=1..tag=0x00081a2a..lru=1
+m_target.m_l1cache_d_way[1]..state=1..tag=0x00081a29..lru=2
 delay:263 ns
 ---------------
-(m_target.m_l1cache_d)..cache miss for 0x12345878..tag=0x00091a2c...set=7
-m_target.m_l1cache_d evicting way[1]..lru=2
-(m_target.m_l2cache)..cache miss for 0x12345878..tag=0x00091a2c...set=7
-m_target.m_l2cache evicting way[3]..lru=4
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=2
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=3
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=4
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2c..lru=1
-m_target.m_l1cache_d_way[0]..state=1..tag=0x00091a2a..lru=2
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a2c..lru=1
-delay:279 ns
+(m_target.m_l1cache_d)..cache miss for 0x10345878..tag=0x00081a2c...set=7
+m_target.m_l1cache_d evicting way[1]..tag:0x00081a29..lru=2
+(m_target.m_l2cache)..cache miss for 0x10345878..tag=0x00081a2c...set=7
+m_target.m_l2cache evicting way[3]..tag:0x00081a2b..lru=4
+m_target.m_l2cache_way[0]..state=1..tag=0x00081a2a..lru=2
+m_target.m_l2cache_way[1]..state=1..tag=0x00081a29..lru=3
+m_target.m_l2cache_way[2]..state=1..tag=0x00081a28..lru=4
+m_target.m_l2cache_way[3]..state=1..tag=0x00081a2c..lru=1
+m_target.m_l1cache_d_way[0]..state=1..tag=0x00081a2a..lru=2
+m_target.m_l1cache_d_way[1]..state=0..tag=0x00081a2c..lru=1
+delay:269 ns
 ---------------
-(m_target.m_l1cache_i)..cache miss for 0x12345078..tag=0x00091a28...set=7
-(m_target.m_l2cache)..cache hit for 0x12345078..tag=0x00091a28...set=7
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=3
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=4
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=1
-m_target.m_l2cache_way[3]..state=0..tag=0x00091a2c..lru=2
+(m_target.m_l1cache_i)..cache miss for 0x11345078..tag=0x00089a28...set=7
+(m_target.m_l2cache)..cache miss for 0x11345078..tag=0x00089a28...set=7
+m_target.m_l2cache evicting way[2]..tag:0x00081a28..lru=4
+m_target.m_l2cache_way[0]..state=1..tag=0x00081a2a..lru=3
+m_target.m_l2cache_way[1]..state=1..tag=0x00081a29..lru=4
+m_target.m_l2cache_way[2]..state=1..tag=0x00089a28..lru=1
+m_target.m_l2cache_way[3]..state=3..tag=0x00081a2c..lru=2
 m_target.m_l1cache_i_way[0]..state=2..tag=0x00000000..lru=0
-m_target.m_l1cache_i_way[1]..state=1..tag=0x00091a28..lru=1
-delay:53 ns
+m_target.m_l1cache_i_way[1]..state=1..tag=0x00089a28..lru=1
+delay:267 ns
 ---------------
-(m_target.m_l1cache_i)..cache miss for 0x12345278..tag=0x00091a29...set=7
-(m_target.m_l2cache)..cache hit for 0x12345278..tag=0x00091a29...set=7
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=4
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=1
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=2
-m_target.m_l2cache_way[3]..state=0..tag=0x00091a2c..lru=3
-m_target.m_l1cache_i_way[0]..state=1..tag=0x00091a29..lru=1
-m_target.m_l1cache_i_way[1]..state=1..tag=0x00091a28..lru=2
-delay:53 ns
+(m_target.m_l1cache_i)..cache miss for 0x11345278..tag=0x00089a29...set=7
+(m_target.m_l2cache)..cache miss for 0x11345278..tag=0x00089a29...set=7
+m_target.m_l2cache evicting way[1]..tag:0x00081a29..lru=4
+m_target.m_l2cache_way[0]..state=1..tag=0x00081a2a..lru=4
+m_target.m_l2cache_way[1]..state=1..tag=0x00089a29..lru=1
+m_target.m_l2cache_way[2]..state=1..tag=0x00089a28..lru=2
+m_target.m_l2cache_way[3]..state=3..tag=0x00081a2c..lru=3
+m_target.m_l1cache_i_way[0]..state=1..tag=0x00089a29..lru=1
+m_target.m_l1cache_i_way[1]..state=1..tag=0x00089a28..lru=2
+delay:267 ns
 ---------------
-(m_target.m_l1cache_i)..cache miss for 0x12345478..tag=0x00091a2a...set=7
-m_target.m_l1cache_i evicting way[1]..lru=2
-(m_target.m_l2cache)..cache hit for 0x12345478..tag=0x00091a2a...set=7
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=1
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=2
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=3
-m_target.m_l2cache_way[3]..state=0..tag=0x00091a2c..lru=4
-m_target.m_l1cache_i_way[0]..state=1..tag=0x00091a29..lru=2
-m_target.m_l1cache_i_way[1]..state=1..tag=0x00091a2a..lru=1
-delay:53 ns
+(m_target.m_l1cache_i)..cache miss for 0x11345478..tag=0x00089a2a...set=7
+m_target.m_l1cache_i evicting way[1]..tag:0x00089a28..lru=2
+(m_target.m_l2cache)..cache miss for 0x11345478..tag=0x00089a2a...set=7
+m_target.m_l2cache evicting way[0]..tag:0x00081a2a..lru=4
+m_target.m_l2cache_way[0]..state=1..tag=0x00089a2a..lru=1
+m_target.m_l2cache_way[1]..state=1..tag=0x00089a29..lru=2
+m_target.m_l2cache_way[2]..state=1..tag=0x00089a28..lru=3
+m_target.m_l2cache_way[3]..state=3..tag=0x00081a2c..lru=4
+m_target.m_l1cache_i_way[0]..state=1..tag=0x00089a29..lru=2
+m_target.m_l1cache_i_way[1]..state=1..tag=0x00089a2a..lru=1
+delay:267 ns
 ---------------
-(m_target.m_l1cache_i)..cache miss for 0x12345a78..tag=0x00091a2d...set=7
-m_target.m_l1cache_i evicting way[0]..lru=2
-(m_target.m_l2cache)..cache miss for 0x12345a78..tag=0x00091a2d...set=7
-m_target.m_l2cache evicting way[3]..lru=4
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=2
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=3
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=4
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2d..lru=1
-m_target.m_l1cache_i_way[0]..state=1..tag=0x00091a2d..lru=1
-m_target.m_l1cache_i_way[1]..state=1..tag=0x00091a2a..lru=2
+(m_target.m_l1cache_i)..cache miss for 0x11345a78..tag=0x00089a2d...set=7
+m_target.m_l1cache_i evicting way[0]..tag:0x00089a29..lru=2
+(m_target.m_l2cache)..cache miss for 0x11345a78..tag=0x00089a2d...set=7
+m_target.m_l2cache evicting way[3]..tag:0x00081a2c..lru=4
+lolz
+m_target.m_l2cache_way[0]..state=1..tag=0x00089a2a..lru=2
+m_target.m_l2cache_way[1]..state=1..tag=0x00089a29..lru=3
+m_target.m_l2cache_way[2]..state=1..tag=0x00089a28..lru=4
+m_target.m_l2cache_way[3]..state=1..tag=0x00089a2d..lru=1
+m_target.m_l1cache_i_way[0]..state=1..tag=0x00089a2d..lru=1
+m_target.m_l1cache_i_way[1]..state=1..tag=0x00089a2a..lru=2
 delay:307 ns
 ---------------
 END
-m_target.m_l1cache_d_way[0]..state=1..tag=0x00091a2a..lru=2
-m_target.m_l1cache_d_way[1]..state=1..tag=0x00091a2c..lru=1
-m_target.m_l2cache_way[0]..state=1..tag=0x00091a2a..lru=2
-m_target.m_l2cache_way[1]..state=1..tag=0x00091a29..lru=3
-m_target.m_l2cache_way[2]..state=1..tag=0x00091a28..lru=4
-m_target.m_l2cache_way[3]..state=1..tag=0x00091a2d..lru=1
+m_target.m_l1cache_d_way[0]..state=2..tag=0x00000000..lru=0
+m_target.m_l1cache_d_way[1]..state=2..tag=0x00000000..lru=0
+----
+m_target.m_l1cache_i_way[0]..state=1..tag=0x00089a2d..lru=1
+m_target.m_l1cache_i_way[1]..state=1..tag=0x00089a2a..lru=2
+----
+m_target.m_l2cache_way[0]..state=1..tag=0x00089a2a..lru=2
+m_target.m_l2cache_way[1]..state=1..tag=0x00089a29..lru=3
+m_target.m_l2cache_way[2]..state=1..tag=0x00089a28..lru=4
+m_target.m_l2cache_way[3]..state=1..tag=0x00089a2d..lru=1
+----

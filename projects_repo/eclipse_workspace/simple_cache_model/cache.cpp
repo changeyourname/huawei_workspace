@@ -201,6 +201,7 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 			// evicting the cache-block in way_free (found above)
 			std::cout<<name()<<" evicting ";
 			printf("way[%d]..", way_free);
+			printf("tag:0x%08x..", m_cache_lines[set][way_free].tag);
 			printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
 
 			if (m_cache_lines[set][way_free].state == cache_line::M) {
@@ -332,6 +333,7 @@ void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &
 				// first checking if block to be back invalidated actually exists in this cache
 				if (m_write_back && m_cache_lines[set][i].state==cache_line::M) {
 					// right now doing nothing as this block has already been written back by the parent that initiated the back-invalidation..but a better model would be to writeback this cache block from here using the passed pointer to the parent of the cache initiating back-invalidation
+					printf("lolz\r\n");
 				}
 				// invalidation of this block
 				m_cache_lines[set][i].state = cache_line::I;
@@ -344,7 +346,7 @@ void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &
 						}
 						assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
 					}
-					m_cache_lines[set][i].evict_tag = m_num_of_ways;
+					m_cache_lines[set][i].evict_tag = 0;
 				}
 				// going over all of its childs
 				if (m_child) {
@@ -388,7 +390,10 @@ void cache::print_cache_set(uint32_t set) {
 
 
 
-
+// TODO:
+// one possible issue could be in back invalidation
+// when i try to evict the block from a higher layer then i have the tag, set for that cache block in that cache block...then that needs to be translated into a address request that can be passed onto its child caches for back invalidation so that it can find that same block if it is caching it
+// this address translation is not clear as a higher level cache could be organized differently from child caches so "addr = {tag:set:word_offset:byte_offset}" in higher cache (current implementation) might not correspond to the same block in lower level child caches......need to think of a more generic solution to solve this problem
 
 
 

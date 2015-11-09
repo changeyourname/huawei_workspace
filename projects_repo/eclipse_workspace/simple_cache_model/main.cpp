@@ -42,15 +42,15 @@ public:
 	void main() {
 		//unsigned char *mem_no_cache = new unsigned char[MEM_SIZE];
 		req_type req_stimuli[NUM_REQ] = {
-											{0x12345678, tlm::TLM_READ_COMMAND},
-											{0x12345078, tlm::TLM_READ_COMMAND},
-											{0x12345278, tlm::TLM_READ_COMMAND},
-											{0x12345478, tlm::TLM_READ_COMMAND},
-											{0x12345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
-											{0x12345078, tlm::TLM_READ_COMMAND},
-											{0x12345278, tlm::TLM_READ_COMMAND},
-											{0x12345478, tlm::TLM_READ_COMMAND},
-											{0x12345a78, tlm::TLM_READ_COMMAND}
+											{0x10345678, tlm::TLM_READ_COMMAND},
+											{0x10345078, tlm::TLM_READ_COMMAND},
+											{0x10345278, tlm::TLM_READ_COMMAND},
+											{0x10345478, tlm::TLM_READ_COMMAND},
+											{0x10345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
+											{0x11345078, tlm::TLM_READ_COMMAND},
+											{0x11345278, tlm::TLM_READ_COMMAND},
+											{0x11345478, tlm::TLM_READ_COMMAND},
+											{0x11345a78, tlm::TLM_READ_COMMAND}
 								  	  	};
 
 		while(1) {
@@ -111,8 +111,8 @@ public:
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_tsocket("m_tsocket"),
 			m_mem(mem),
-			m_l1cache_i("m_l1cache_i", 1024, 16, 2, false),			// has to make write-through as it share a parent cache
-			m_l1cache_d("m_l1cache_d", 1024, 16, 2, false),			// has to make write-thorugh as it share a parent cache
+			m_l1cache_i("m_l1cache_i", 1024, 16, 2),			// has to make write-through as it share a parent cache
+			m_l1cache_d("m_l1cache_d", 1024, 16, 2),			// has to make write-thorugh as it share a parent cache
 			m_l2cache("m_l2cache", 2048, 16, 4)
 	{
 		m_tsocket.register_b_transport(this, &target::b_transport);
@@ -142,12 +142,12 @@ public:
 
 		assert(addr>=0x00000000 && addr<0x20000000);
 
-		static int count = 0;
-		count++;
+		/*static int count = 0;
+		count++;*/
 		if (payload.get_command() == tlm::TLM_WRITE_COMMAND) {
 			delay += CPU_TO_L1_DELAY;
 		}
-		if (count<=5) {
+		if (addr <= 0x11000000) {
 			m_l1cache_d.update(payload, delay);
 		} else {
 			m_l1cache_i.update(payload, delay);
