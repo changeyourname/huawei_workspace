@@ -1,4 +1,4 @@
-17:46:21 **** Build of configuration Debug for project simple_cache_model ****
+11:14:19 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -14,7 +14,7 @@ g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 
     printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
                                                                ^
 ../cache.cpp: In member function ‘void cache::print_cache_set(uint32_t)’:
-../cache.cpp:374:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
+../cache.cpp:376:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
    printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
                                                        ^
 Finished building: ../cache.cpp

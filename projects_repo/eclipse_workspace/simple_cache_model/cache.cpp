@@ -228,8 +228,9 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 			}
 			// BackInvalidation for maintaining strict inclusiveness
 			if (m_child) {
+				addr_t req_addr = ((m_cache_lines[set][way_free].tag << (uint32_t)(log2((double) m_num_of_sets))) | set) << (uint32_t)(log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE));
 				for (uint32_t i=0; i<m_child->size(); i++) {
-					(*m_child)[i]->update_state(2, payload.get_address(), delay);
+					(*m_child)[i]->update_state(2, req_addr, delay);
 				}
 			}
 		}
@@ -334,6 +335,7 @@ void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &
 				}
 				// invalidation of this block
 				m_cache_lines[set][i].state = cache_line::I;
+				m_cache_lines[set][i].tag = 0x0;
 				// replacement policy management stuff
 				if (m_evict == LRU) {
 					for (uint32_t j=0; j<m_num_of_ways; j++) {
@@ -355,8 +357,8 @@ void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &
 				assert(0);
 			}
 
+			break;
 		}
-		break;
 	}
 
 	// TODO: more accurate timing model for update state delay rather than a fixed value for every case

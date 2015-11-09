@@ -26,7 +26,7 @@ struct req_type {
 	unsigned char rd_data[4];
 };
 
-#define NUM_REQ 5
+#define NUM_REQ 9
 
 class req_generator : public sc_core::sc_module {
 public:
@@ -46,11 +46,11 @@ public:
 											{0x12345078, tlm::TLM_READ_COMMAND},
 											{0x12345278, tlm::TLM_READ_COMMAND},
 											{0x12345478, tlm::TLM_READ_COMMAND},
-											{0x12345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}}/*,
-											{0x00005678, tlm::TLM_READ_COMMAND},
-											{0x0fff5678, tlm::TLM_READ_COMMAND},
-											{0x1fff5678, tlm::TLM_READ_COMMAND},
-											{0x10ff5678, tlm::TLM_READ_COMMAND}*/
+											{0x12345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
+											{0x12345078, tlm::TLM_READ_COMMAND},
+											{0x12345278, tlm::TLM_READ_COMMAND},
+											{0x12345478, tlm::TLM_READ_COMMAND},
+											{0x12345a78, tlm::TLM_READ_COMMAND}
 								  	  	};
 
 		while(1) {
@@ -143,11 +143,11 @@ public:
 		assert(addr>=0x00000000 && addr<0x20000000);
 
 		static int count = 0;
-		//count++;
+		count++;
 		if (payload.get_command() == tlm::TLM_WRITE_COMMAND) {
 			delay += CPU_TO_L1_DELAY;
 		}
-		if (count%2==0) {
+		if (count<=5) {
 			m_l1cache_d.update(payload, delay);
 		} else {
 			m_l1cache_i.update(payload, delay);
@@ -165,7 +165,11 @@ public:
 
 	void print() {
 		m_l1cache_d.print_cache_set(7);
+		printf("----\r\n");
+		m_l1cache_i.print_cache_set(7);
+		printf("----\r\n");
 		m_l2cache.print_cache_set(7);
+		printf("----\r\n");
 	}
 
 private:
