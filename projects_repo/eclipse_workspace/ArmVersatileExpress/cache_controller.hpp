@@ -15,14 +15,6 @@
 #include "cache.hpp"
 
 class cache_controller : public sc_core::sc_module {
-public:
-	//TODO: use a multipassthroughsocket for target interface
-	std::vector< tlm_utils::simple_target_socket_tagged<cache_controller> * > m_tsocket;
-	tlm_utils::simple_initiator_socket<cache_controller> m_Ibus_isocket;
-	tlm_utils::simple_initiator_socket<cache_controller> m_Dbus_isocket;
-
-	cache_controller(sc_core::sc_module_name name, int num_smp_cores);
-
 private:
 	int m_num_smp_cores;
 	bool m_dmi_mode;
@@ -39,6 +31,14 @@ private:
 	bool get_direct_mem_ptr(int SocketId, tlm::tlm_generic_payload &payload, tlm::tlm_dmi &dmi_data);
 	bool set_dmi_mode(bool dmi_enable);
 	bool get_dmi_mode();
+
+public:
+	//TODO: use a multipassthroughsocket for target interface
+	std::vector< tlm_utils::simple_target_socket_tagged<cache_controller> * > m_tsocket;
+	tlm_utils::simple_initiator_socket<cache_controller> m_Ibus_isocket;
+	tlm_utils::simple_initiator_socket<cache_controller> m_Dbus_isocket;
+
+	cache_controller(sc_core::sc_module_name name, int num_smp_cores);
 };
 
 
@@ -54,7 +54,7 @@ private:
 // infrastructure for both of them i.e no separate handling for DMI for either of them
 
 
-
+// TODO: should delete the pushed back pointers in "vector< ClassName * > ..." before this vector gets out of scope or gets destroyed to avoid memory leaks
 
 
 #endif /* CACHE_CONTROLLER_HPP_ */
