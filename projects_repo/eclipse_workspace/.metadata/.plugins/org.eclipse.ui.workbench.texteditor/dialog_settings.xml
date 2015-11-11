@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
-		<item value="356" key="DIALOG_Y_ORIGIN"/>
-		<item value="913" key="DIALOG_X_ORIGIN"/>
+		<item value="146" key="DIALOG_Y_ORIGIN"/>
 		<item value="435" key="DIALOG_HEIGHT"/>
+		<item value="1056" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="&lt;= m_num_of_w" key="selection"/>
+		<item value="#define" key="selection"/>
 		<list key="findhistory">
+			<item value="#define"/>
+			<item value="num_smp_cores"/>
+			<item value="child_of_l2"/>
+			<item value="new"/>
+			<item value="m_mem"/>
 			<item value="&lt;= m_num_of_w"/>
 			<item value="evict_tag--"/>
 			<item value="set][j].evict_tag--"/>
-			<item value="update_state(2"/>
-			<item value="update_state("/>
-			<item value="todo"/>
-			<item value="cacheword"/>
-			<item value="delay"/>
 		</list>
 		<list key="replacehistory">
 			<item value="uint32_t"/>

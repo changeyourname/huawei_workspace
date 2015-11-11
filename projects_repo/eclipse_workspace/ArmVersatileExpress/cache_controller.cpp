@@ -17,11 +17,12 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 		m_dmi_mode(true),
 		m_do_dmi(false),
 		m_req_count(0),
-		m_debug(false)
+		m_debug(false),
+		m_l2cache("m_l2cache", 2097152, 16, 32)				// 2MB cache
 {
 	m_tsocket.reserve(m_num_smp_cores*3);					// 3 groups: INSTRUCTION, DATA, GICREGISTERS
-	m_icaches.reserve(m_num_smp_cores);
-	m_dcaches.reserve(m_num_smp_cores);
+	m_l1cache_i.reserve(m_num_smp_cores);
+	m_l1cache_d.reserve(m_num_smp_cores);
 
 	for (int i=0; i<m_num_smp_cores*3; i++) {
 		char socket_name[20];
@@ -31,18 +32,32 @@ cache_controller::cache_controller(sc_core::sc_module_name name, int num_smp_cor
 		m_tsocket[i]->register_transport_dbg(this, &cache_controller::transport_dbg, i);
 		m_tsocket[i]->register_get_direct_mem_ptr(this, &cache_controller::get_direct_mem_ptr, i);
 
+		// constructing l1 caches (split i/d pair for each smp)
 		if (i<m_num_smp_cores) {
-			sprintf(socket_name, "m_icache[%d]", i);
-			m_icaches.push_back(new cache(socket_name, 65536, 16, 4));
-			sprintf(socket_name, "m_dcache[%d]", i);
-			m_dcaches.push_back(new cache(socket_name, 65536, 16, 4));
+			sprintf(socket_name, "m_l1cache_i[%d]", i);
+			m_l1cache_i.push_back(new cache(socket_name, 65536, 16, 4, false));			// WT cache to avoid coherency issues b/w smp l1 caches as they all are sharing l2 cache
+			m_l1cache_i.set_parent(&m_l2cache);
+			m_l1cache_i.set_children(NULL);
+			m_l1cache_i.set_delays((sc_core::sc_time)L2_TO_L1_CACHEBLOCK_DELAY, (sc_core::sc_time)L1_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time) L1_LOOKUP_DELAY, (sc_core::sc_time) L1_WRITE_DELAY, (sc_core::sc_time) L1_READ_DELAY);
+
+			sprintf(socket_name, "m_l1cache_d[%d]", i);
+			m_l1cache_d.push_back(new cache(socket_name, 65536, 16, 4, false));			// WT cache to avoid coherency issues b/w smp l1 caches as they all are sharing l2 cache
+			m_l1cache_d.set_parent(&m_l2cache);
+			m_l1cache_d.set_children(NULL);
+			m_l1cache_d.set_delays((sc_core::sc_time)L2_TO_L1_CACHEBLOCK_DELAY, (sc_core::sc_time)L1_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time) L1_LOOKUP_DELAY, (sc_core::sc_time) L1_WRITE_DELAY, (sc_core::sc_time) L1_READ_DELAY);
 		}
 	}
+	// interconnecting l2 cache with l1 caches
+	m_l2cache.set_parent(NULL);
+	m_l2cache.set_children(l2Children);
+	m_l2cache.set_delays((sc_core::sc_time)MEM_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time)L2_TO_MEM_CACHEBLOCK_DELAY, (sc_core::sc_time) L2_LOOKUP_DELAY, (sc_core::sc_time) L2_WRITE_DELAY, (sc_core::sc_time) L2_READ_DELAY);
 
 	m_Ibus_isocket.register_invalidate_direct_mem_ptr(this, &cache_controller::invalidate_direct_mem_ptr);
 	m_Dbus_isocket.register_invalidate_direct_mem_ptr(this, &cache_controller::invalidate_direct_mem_ptr);
+}
 
-
+cache_controller::~cache_controller() {
+	//TODO
 }
 
 
@@ -75,6 +90,7 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 			if (*ptr==0x78 && *(ptr+1)==0x56 && *(ptr+2)==0x34 && *(ptr+3)==0x12) {
 				m_debug = true;
 				printf("detect the running of startup_app on linux/platform\r\n");
+				printf("cache system enabled from now on\r\n");
 			}
 		}
 	}

@@ -26,17 +26,14 @@
 #endif
 
 // cache timings
-#define CACHE_LOOKUP_DELAY sc_core::sc_time(1, sc_core::SC_NS)
-#define WR_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
-#define RD_CACHE_DELAY sc_core::sc_time(5, sc_core::SC_NS)
-#define MEM2CACHE_LINE_DELAY sc_core::sc_time(200, sc_core::SC_NS)
-#define CACHE2MEM_LINE_DELAY sc_core::sc_time(20, sc_core::SC_NS)
-
+#define UPDATE_STATE_DELAY sc_core::sc_time(2, sc_core::SC_NS)
+#define WRITE_THROUGH_DELAY sc_core::sc_time(0, sc_core::SC_NS)				// for write-through policy, we assume that there are write buffers b/w cache and higher level cache/memory module so as to hide the write word delay to this cache hence no delay associated for now
 
 
 struct cache_line {
-	bool valid;
-	bool dirty;
+	enum cache_line_state {M, S, I, MBS};				// M=>Modified; S=>Shared;	I=>Invalid; MBS=>Modified-but-stale(for maintaining strictly inclusive nature of cache)........important only for WB configuration....for WT configuration just two states are used S(valid) and I(invalid)
+
+	cache_line_state state;
 	addr_t tag;
 	uint64_t evict_tag;
 };
@@ -44,7 +41,6 @@ struct cache_line {
 
 class cache : public sc_core::sc_module {
 	enum eviction_policy {LRU, LFU, RAND};
-
 private:
 	uint32_t m_total_cache_size;
 	uint32_t m_cache_line_size;
@@ -54,10 +50,24 @@ private:
 	bool     m_write_allocate;
 	eviction_policy m_evict;
 	std::vector< std::vector<cache_line> > m_cache_lines;
+	cache *m_parent;
+	std::vector < cache * > *m_child;
+	sc_core::sc_time m_lookup_delay;
+	sc_core::sc_time m_read_cache_delay;
+	sc_core::sc_time m_write_cache_delay;
+	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
+	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
+
+	void update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay);
 
 public:
-	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
-	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay);
+	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, uint32_t num_of_children=0, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
+	~cache();
+	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through=false);
+	void set_parent(cache *parent);
+	void set_children(cache *child);
+	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
+	void print_cache_set(uint32_t set);
 };
 
 
@@ -68,20 +78,16 @@ public:
 
 
 // NOTES:
-// support for cache write-back or write-through
+// support for cache write-back or write-through; write-allocate or write-no-allocate
 // support for LRU, LFU, random eviction policy
 
 
+// this cache model implements strictly inclusive cache hierarchy
+// for inclusive property of cache, the ideas from "Parallel Computer Architecture: A Hardware/software Approach" (Culler, Singh, Gupta) are used especially content mentioned in chapter 5-6
+// turns out we have to include some inclusion info augmented with state bits for each cache block in the hierarchy as well
 
 
-
-
-
-
-
-
-
-
+// TODO: support for entire cache flush
 
 #endif /* CACHE_HPP_ */
 

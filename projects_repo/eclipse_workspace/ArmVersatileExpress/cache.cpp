@@ -12,7 +12,7 @@
 #include <math.h>
 #include <algorithm>
 
-cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_pol)
+cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, uint32_t num_of_children, bool write_back, bool write_allocate, cache::eviction_policy evict_pol)
 	:	sc_module(name),
 		m_total_cache_size(total_cache_size),
 		m_cache_line_size(cache_line_size),
@@ -26,8 +26,15 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 	for (uint32_t i=0; i<m_num_of_sets; i++) {
 		m_cache_lines[i].resize(m_num_of_ways);
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
-			m_cache_lines[i][j].valid = false;
+			m_cache_lines[i][j].state = cache_line::I;
 		}
+	}
+
+	m_child = new std::vector< cache * >;
+	if (!num_of_children) {
+		m_child = NULL;
+	} else {
+		m_child->reserve(num_of_children);
 	}
 
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected to occur in real cache organizations
@@ -47,44 +54,99 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 
 }
 
-void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-	addr_t addr = (payload.get_address()/m_cache_line_size)*m_cache_line_size;			// rounded to cache-block address
-	tlm::tlm_command cmd = payload.get_command();
+cache::~cache() {
+
+}
+
+void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through) {
 
 	int way_free = -1;
+	tlm::tlm_command cmd = payload.get_command();
 
+	addr_t addr = (payload.get_address()/m_cache_line_size)*m_cache_line_size;			// rounded to cache-block address
 	// finding out the cache set for this address for lookup
 	uint32_t set = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE))) & ((1 << (uint32_t) log2((double)m_num_of_sets)) - 1);
 	// as well as the tag
 	addr_t tag = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE) + log2((double) m_num_of_sets)));
 
-	delay += CACHE_LOOKUP_DELAY;
 	// cache lookup for the found tag
+	delay += m_lookup_delay;
 	for (uint32_t i=0; i<m_num_of_ways; i++) {
-		if (m_cache_lines[set][i].valid == true) {
+		if (m_cache_lines[set][i].state != cache_line::I) {			// checking for valid cache blocks (M or S)
 			if (m_cache_lines[set][i].tag == tag) {
-				/*printf("(%s)..", name());
-				printf("cache hit for 0x%08x", payload.get_address());
-				printf("...set=%d\r\n", set);*/
+				if (!write_through) {
+					printf("(%s)..", name());
+					printf("cache hit for 0x%08x", payload.get_address());
+					printf("..tag=0x%08x", tag);
+					printf("...set=%d\r\n", set);
+				}
+
 
 				if (cmd == tlm::TLM_WRITE_COMMAND) {	// write hit
-					if (m_write_back) {
-						m_cache_lines[set][i].dirty = true;
-					} else {
-						//delay += CACHE2MEM_LINE_DELAY;
-						// for write-through policy, we assume that there are write buffers b/w cache and higher memory hierarchy level so as to hide the write word delay to this cache
-						// hence delay not updated here
+					// checking to see if the request is from child for write-through/write-back
+					if (write_through) {
+						// writing the block to this cache
+						delay += m_write_cache_delay;
+						// this block can't be in invalid state
+						assert(m_cache_lines[set][i].state != cache_line::I);
+
+						if (!m_write_back) {
+							// if this cache is also write-through then writing-through to next higher level(.....part of write-back operation)
+							if (m_parent) {
+								m_parent->update(payload, delay, true);
+								delay += WRITE_THROUGH_DELAY;
+							} else {
+								delay += m_downstream_cacheblock_delay;
+							}
+						} else {
+							// if this cache is write-back then updating its state if required
+							if (m_cache_lines[set][i].state != cache_line::M) {
+								// either this is in MBS or S
+								m_cache_lines[set][i].state = cache_line::M;
+								if (m_cache_lines[set][i].state==cache_line::S) {
+									// if this is in S then b/c we are updating this to M so notifying the parent caches that this cache has the most updated data now........while for MBS this is not needed as parent blocks are all in MBS mode as well
+									m_parent->update_state(1, payload.get_address(), delay);
+								}
+							}
+						}
+
+						return;
 					}
-					delay += WR_CACHE_DELAY;
+
+					if (!m_child) {
+						// this is the first level cache
+						if (m_write_back) {
+							// for the lowest level cache, marking this block as dirty (state->M) incase of write hit and write-back policy being used incase it is already not have it modified
+							delay += m_write_cache_delay;
+							if (m_cache_lines[set][i].state == cache_line::S) {
+								// notifying the parent caches that this cache has the most updated data now
+								if (m_parent) {
+									m_parent->update_state(1, payload.get_address(), delay);
+								}
+								m_cache_lines[set][i].state = cache_line::M;
+							}
+						} else {
+							// writing through to next higher level(......normal write-through operation)
+							if (m_parent) {
+								m_parent->update(payload, delay, true);
+								delay += WRITE_THROUGH_DELAY;
+							}
+						}
+					} else {
+						// write miss in l1 cache but hit in higher level cache hierarchy
+						// reading the block (most updated block in cache hierarchy) for transferring to lower level cache
+						delay += m_read_cache_delay;
+					}
 				} else if (cmd == tlm::TLM_READ_COMMAND) {	// read hit
-					delay += RD_CACHE_DELAY;
+					// for read case we dont need to care for whether it is a hit in lowest level cache or a higher level cache as no states are being updated
+					delay += m_read_cache_delay;
 				}
 
 				// for eviction policy management
 				switch(m_evict) {
 					case LRU:
 						for (uint32_t j=0; j<m_num_of_ways; j++) {
-							if (i!=j && m_cache_lines[set][j].valid==true && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
+							if (i!=j && m_cache_lines[set][j].state!=cache_line::I && m_cache_lines[set][j].evict_tag<=m_cache_lines[set][i].evict_tag) {
 								m_cache_lines[set][j].evict_tag++;
 							}
 							assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
@@ -100,23 +162,27 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 						assert(0);
 				}
 
+				print_cache_set(set);
+
 				return;
 			}
 		} else {
 			way_free = i;
 		}
 	}
-	/*printf("(%s)..", name());
+	printf("(%s)..", name());
 	printf("cache miss for 0x%08x", payload.get_address());
-	printf("...set=%d\r\n", set);*/
+	printf("..tag=0x%08x", tag);
+	printf("...set=%d\r\n", set);
 
 	if (cmd == tlm::TLM_WRITE_COMMAND && !m_write_allocate) {
-		// if write miss and write-no-allocate policy being selected then not updating anything in cache for this case...just modeling delay for writing the word into main memory
+		// if write miss and write-no-allocate policy being selected then not updating anything in cache for this case...just modeling delay for writing the word into downstream memory module
 
-		delay += CACHE2MEM_LINE_DELAY;
+		delay += m_downstream_cacheblock_delay;
 	} else {
 		if (way_free == -1) {
-			// do cache line replacement based on eviction policy
+			// there is no free way available for caching new block so have to evict one
+			// finding the way to be evicted based on eviction policy
 			uint64_t tmp = 0;
 			switch(m_evict) {
 				case LRU:
@@ -143,19 +209,81 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 					assert(0);
 			}
 
-			// if the line to be evicted is dirty and cache policy is write-back then faking the cache line write to memory via timing modeling
-			if (m_write_back && m_cache_lines[set][way_free].dirty==true) {
-				delay += CACHE2MEM_LINE_DELAY;
+			// evicting the cache-block in way_free (found above)
+			std::cout<<name()<<" evicting ";
+			printf("way[%d]..", way_free);
+			printf("tag:0x%08x..", m_cache_lines[set][way_free].tag);
+			printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
+
+			if (m_cache_lines[set][way_free].state == cache_line::M) {
+				// writing through to next higher level(........part of write-back operation)
+				if (m_parent) {
+					m_parent->update(payload, delay, true);
+					delay += WRITE_THROUGH_DELAY;
+				} else {
+					// this is the highest level cache so writing to memory
+					delay += m_downstream_cacheblock_delay;
+				}
+			} else if (m_cache_lines[set][way_free].state == cache_line::MBS) {
+				// there has to be a cache within child hierarchy that is caching block with M state so has to write-back that block into this cache's parent cache or memory during back-invalidation
+				// right now faking as if this cache is the one that is actually doing the writeback to the parent for simplicity..while the actual cache having M will be later invalidated using back-invalidation scheme just below without the actual writeback
+				// another approach could be to pass this cache's parent pointer within the back-invalidate procedure and the cache that is actually caching with M state would then later writeback to this parent using that pointer
+				// TODO: accurate modeling for timing needed for this scenario
+
+				// writing through to next higher level(........part of write-back operation)
+				if (m_parent) {
+					m_parent->update(payload, delay, true);
+					delay += WRITE_THROUGH_DELAY;
+				} else {
+					delay += m_downstream_cacheblock_delay;
+				}
+			}
+			// BackInvalidation for maintaining strict inclusiveness
+			if (m_child) {
+				addr_t req_addr = ((m_cache_lines[set][way_free].tag << (uint32_t)(log2((double) m_num_of_sets))) | set) << (uint32_t)(log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE));
+				for (uint32_t i=0; i<m_child->size(); i++) {
+					(*m_child)[i]->update_state(2, req_addr, delay);
+				}
 			}
 		}
 
-		m_cache_lines[set][way_free].valid = true;
-		m_cache_lines[set][way_free].dirty = false;
-		m_cache_lines[set][way_free].tag = tag;
+		// requesting referred cache block from higher level cache/memory module
+		if (m_parent) {
+			// for lower level caches, requesting the block from next higher cache in hierarchy
+			m_parent->update(payload, delay);
+		}
+		delay += m_upstream_cacheblock_delay;			// cache block transfer delay
+		delay += m_write_cache_delay;
 
+		// caching this new block
+		m_cache_lines[set][way_free].tag = tag;
+		if (!m_child && cmd==tlm::TLM_WRITE_COMMAND) {
+			// for lowest level cache with a write miss
+			delay += m_write_cache_delay;
+			if (m_write_back) {
+				m_cache_lines[set][way_free].state = cache_line::M;
+				// notifying the parent caches that this cache has the most updated data now
+				if (m_parent) {
+					m_parent->update_state(1, payload.get_address(), delay);
+				}
+			} else {
+				m_cache_lines[set][way_free].state = cache_line::S;
+				// writing through to next higher level(.........normal write-through operation)
+				if (m_parent) {
+					m_parent->update(payload, delay, true);
+					delay += WRITE_THROUGH_DELAY;
+				}
+			}
+		} else {
+			// for lowest level cache with a read miss OR for a higher level cache
+			// simply read the cache block and pass onto the next lower level
+			m_cache_lines[set][way_free].state = cache_line::S;
+			delay += m_read_cache_delay;
+		}
+		// eviction policy stuff
 		if (m_evict == LRU) {
 			for (uint32_t j=0; j<m_num_of_ways; j++) {
-				if ((uint32_t)way_free!=j && m_cache_lines[set][j].valid==true) {
+				if ((uint32_t)way_free!=j && m_cache_lines[set][j].state!=cache_line::I) {
 					m_cache_lines[set][j].evict_tag++;
 				}
 				assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
@@ -164,32 +292,118 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
 		} else {
 			m_cache_lines[set][way_free].evict_tag = 0;
 		}
-
-		delay += MEM2CACHE_LINE_DELAY;
-		if (cmd == tlm::TLM_WRITE_COMMAND) {					// write miss
-			if (m_write_back) {
-				m_cache_lines[set][way_free].dirty = true;
-			} else {
-				//delay += CACHE2MEM_LINE_DELAY;
-				// for write-through policy, we assume that there are write buffers b/w cache and higher memory hierarchy level so as to hide the write word delay to this cache
-				// hence delay not updated here
-			}
-			delay += WR_CACHE_DELAY;
-		} else if (cmd == tlm::TLM_READ_COMMAND) {			// read miss
-			delay += RD_CACHE_DELAY;
-		}
 	}
+
+	print_cache_set(set);
 }
 
 
 
 
+void cache::set_parent(cache *parent) {
+	m_parent = parent;
+}
+
+void cache::set_children(cache *child) {
+	m_child->push_back(child);
+}
+
+void cache::set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read) {
+	m_lookup_delay = lookup;
+	m_write_cache_delay = write;
+	m_read_cache_delay = read;
+	m_upstream_cacheblock_delay = upstream;
+	m_downstream_cacheblock_delay = downstream;
+}
+
+
+void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay) {
+	addr_t addr = (req_addr/m_cache_line_size)*m_cache_line_size;			// rounded to cache-block address
+	// finding out the cache set for this address for lookup
+	uint32_t set = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE))) & ((1 << (uint32_t) log2((double)m_num_of_sets)) - 1);
+	// as well as the tag
+	addr_t tag = (addr >> (uint32_t) (log2((double) WORD_SIZE) + log2((double) m_cache_line_size/WORD_SIZE) + log2((double) m_num_of_sets)));
+
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
+		// finding the block to update its state
+		if (m_cache_lines[set][i].tag == tag) {
+			// operation = 1 => child wants to notify the parent that it is modifying the shared block...go recursively through all parents upto memory
+			// operation = 2 => parent wants to notify the child for back invalidation...go recursively through all children upto first level cache
+
+			switch(operation) {
+			case 1:
+				if (m_write_back) {
+					m_cache_lines[set][i].state = cache_line::MBS;
+				}
+				// going over all of its parents
+				if (m_parent) {
+					m_parent->update_state(1, req_addr, delay);
+				}
+				break;
+			case 2:
+				// first checking if block to be back invalidated actually exists in this cache
+				if (m_write_back && m_cache_lines[set][i].state==cache_line::M) {
+					// right now doing nothing as this block has already been written back by the parent that initiated the back-invalidation..but a better model would be to writeback this cache block from here using the passed pointer to the parent of the cache initiating back-invalidation
+				}
+				// invalidation of this block
+				m_cache_lines[set][i].state = cache_line::I;
+				m_cache_lines[set][i].tag = 0x0;
+				// replacement policy management stuff
+				if (m_evict == LRU) {
+					for (uint32_t j=0; j<m_num_of_ways; j++) {
+						if ((uint32_t)i!=j && m_cache_lines[set][j].state!=cache_line::I && m_cache_lines[set][j].evict_tag>m_cache_lines[set][i].evict_tag) {
+							m_cache_lines[set][j].evict_tag--;
+						}
+						assert(m_cache_lines[set][j].evict_tag <= m_num_of_ways);
+					}
+					m_cache_lines[set][i].evict_tag = 0;
+				}
+				// going over all of its childs
+				if (m_child) {
+					for (uint32_t j=0; j<m_child->size(); j++) {
+						(*m_child)[j]->update_state(2, req_addr, delay);
+					}
+				}
+				break;
+			default:
+				assert(0);
+			}
+
+			break;
+		}
+	}
+
+	// TODO: more accurate timing model for update state delay rather than a fixed value for every case
+	delay += UPDATE_STATE_DELAY;
+}
+
+
+
+void cache::print_cache_set(uint32_t set) {
+	for (uint32_t x=0; x<m_num_of_ways; x++) {
+		std::cout<<name()<<"_";
+		printf("way[%d]..", x);
+		printf("state=%d..", m_cache_lines[set][x].state);
+		printf("tag=0x%08x..", m_cache_lines[set][x].tag);
+		printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
+	}
+}
+
+
+// TODO: FIFO replacement policy cache line
+// TODO: review timing modeling in general
+
+// TODO: deal with coherency issues
+// sofar no support for cache coherence
+// to avoid cache coherency problems in child caches sharing a common parent like split l1 (i/d) cache with unified l2 cache, the child caches (l1 i/d) should be made write through so that childs are not caching the same block with dirty state simultaneously with their own data
 
 
 
 
-
-
+// TODO:
+// one possible issue could be in back invalidation
+// when i try to evict the block from a higher layer then i have the tag, set for that cache block in that cache block...then that needs to be translated into a address request that can be passed onto its child caches for back invalidation so that it can find that same block if it is caching it
+// this address translation is not clear as a higher level cache could be organized differently from child caches so "addr = {tag:set:word_offset:byte_offset}" in higher cache (current implementation) might not correspond to the same block in lower level child caches......need to think of a more generic solution to solve this problem
 
 
 
