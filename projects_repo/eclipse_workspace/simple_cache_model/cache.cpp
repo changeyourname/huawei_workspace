@@ -12,7 +12,7 @@
 #include <math.h>
 #include <algorithm>
 
-cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_pol)
+cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t total_cache_size, uint32_t cache_line_size, uint32_t num_of_ways, uint32_t num_of_children, bool write_back, bool write_allocate, cache::eviction_policy evict_pol)
 	:	sc_module(name),
 		m_total_cache_size(total_cache_size),
 		m_cache_line_size(cache_line_size),
@@ -20,7 +20,8 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 		m_num_of_ways(num_of_ways),
 		m_write_back(write_back),
 		m_write_allocate(write_allocate),
-		m_evict(evict_pol)
+		m_evict(evict_pol),
+		m_log(false)
 {
 	m_cache_lines.resize(m_num_of_sets);
 	for (uint32_t i=0; i<m_num_of_sets; i++) {
@@ -30,25 +31,37 @@ cache::cache(sc_core::sc_module_name name, uint32_t total_cache_size, uint32_t c
 		}
 	}
 
+	m_child = new std::vector< cache * >;
+	if (!num_of_children) {
+		m_child = NULL;
+	} else {
+		m_child->reserve(num_of_children);
+	}
+
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected to occur in real cache organizations
 	// if this does occur though then cache would be inefficient as it will have slots for memory words which actually dont exist in memory......cache will be bigger than memory!
 	assert(log2((double) m_num_of_sets) <= log2((double) MEM_SIZE));
 
+	m_fid = fopen(logfile, "w+");
+	assert(m_fid);
+	fprintf(m_fid, "CACHE_CONFIG \r\n");
+	fprintf(m_fid, "total_cache_size:%dB", m_total_cache_size);
+	fprintf(m_fid, "..cache_block_size:%dB", m_cache_line_size);
+	fprintf(m_fid, "..num_of_sets:%d", m_num_of_sets);
+	fprintf(m_fid, "..num_of_ways:%d", m_num_of_ways);
+	fprintf(m_fid, "..num_of_children:%d", num_of_children);
+	fprintf(m_fid, "..write_back:%d", m_write_back);
+	fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
+	fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict);
+	fflush(m_fid);
+}
 
-	printf("CACHE_CONFIG \r\n");
-	std::cout << name;
-	printf("..total_cache_size:%dB", m_total_cache_size);
-	printf("..cache_block_size:%dB", m_cache_line_size);
-	printf("..num_of_sets:%d", m_num_of_sets);
-	printf("..num_of_ways:%d", m_num_of_ways);
-	printf("..write_back:%d", m_write_back);
-	printf("..write_allocate:%d", m_write_allocate);
-	printf("..evict_policy:%d\r\n\r\n", m_evict);
-
+cache::~cache() {
+	delete m_child;
+	fclose(m_fid);
 }
 
 void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through) {
-
 	int way_free = -1;
 	tlm::tlm_command cmd = payload.get_command();
 
@@ -64,10 +77,12 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 		if (m_cache_lines[set][i].state != cache_line::I) {			// checking for valid cache blocks (M or S)
 			if (m_cache_lines[set][i].tag == tag) {
 				if (!write_through) {
-					printf("(%s)..", name());
-					printf("cache hit for 0x%08x", payload.get_address());
-					printf("..tag=0x%08x", tag);
-					printf("...set=%d\r\n", set);
+					if (m_log) {
+						fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)payload.get_address());
+						fprintf(m_fid, "..tag=0x%08x", tag);
+						fprintf(m_fid, "...set=%d\r\n", set);
+						//fflush(m_fid);			//TODO: disable this after debugging
+					}
 				}
 
 
@@ -151,18 +166,21 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 						assert(0);
 				}
 
-				print_cache_set(set);
-
+				if (m_log) {
+					print_cache_set(set);
+				}
 				return;
 			}
 		} else {
 			way_free = i;
 		}
 	}
-	printf("(%s)..", name());
-	printf("cache miss for 0x%08x", payload.get_address());
-	printf("..tag=0x%08x", tag);
-	printf("...set=%d\r\n", set);
+	if (m_log) {
+		fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)payload.get_address());
+		fprintf(m_fid, "..tag=0x%08x", tag);
+		fprintf(m_fid, "...set=%d\r\n", set);
+		//fflush(m_fid);			//TODO: disable this after debugging
+	}
 
 	if (cmd == tlm::TLM_WRITE_COMMAND && !m_write_allocate) {
 		// if write miss and write-no-allocate policy being selected then not updating anything in cache for this case...just modeling delay for writing the word into downstream memory module
@@ -199,10 +217,12 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 			}
 
 			// evicting the cache-block in way_free (found above)
-			std::cout<<name()<<" evicting ";
-			printf("way[%d]..", way_free);
-			printf("tag:0x%08x..", m_cache_lines[set][way_free].tag);
-			printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
+			if (m_log) {
+				fprintf(m_fid, "evicting way[%d]..", way_free);
+				fprintf(m_fid, "tag:0x%08x..", m_cache_lines[set][way_free].tag);
+				fprintf(m_fid, "lru=%d\r\n", (int)m_cache_lines[set][way_free].evict_tag);
+				//fflush(m_fid);			//TODO: disable this after debugging
+			}
 
 			if (m_cache_lines[set][way_free].state == cache_line::M) {
 				// writing through to next higher level(........part of write-back operation)
@@ -283,7 +303,9 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 		}
 	}
 
-	print_cache_set(set);
+	if (m_log) {
+		print_cache_set(set);
+	}
 }
 
 
@@ -293,8 +315,10 @@ void cache::set_parent(cache *parent) {
 	m_parent = parent;
 }
 
-void cache::set_children(std::vector< cache * > *child) {
-	m_child = child;
+void cache::set_children(cache *child) {
+	if (child) {
+		m_child->push_back(child);
+	}
 }
 
 void cache::set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read) {
@@ -370,12 +394,19 @@ void cache::update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &
 
 void cache::print_cache_set(uint32_t set) {
 	for (uint32_t x=0; x<m_num_of_ways; x++) {
-		std::cout<<name()<<"_";
-		printf("way[%d]..", x);
-		printf("state=%d..", m_cache_lines[set][x].state);
-		printf("tag=0x%08x..", m_cache_lines[set][x].tag);
-		printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
+		fprintf(m_fid, "way[%d]..", x);
+		fprintf(m_fid, "state=%d..", m_cache_lines[set][x].state);
+		fprintf(m_fid, "tag=0x%08x..", m_cache_lines[set][x].tag);
+		fprintf(m_fid, "lru=%d\r\n", (int)m_cache_lines[set][x].evict_tag);
 	}
+	fprintf(m_fid, "------------------\r\n");
+	//fflush(m_fid);			//TODO: disable this after debugging
+}
+
+
+
+void cache::do_logging() {
+	m_log = true;
 }
 
 

@@ -1,0 +1,96 @@
+/*
+ * cache.hpp
+ *
+ *  Created on: Oct 20, 2015
+ *      Author: uzair
+ */
+
+
+// implementation of simple cache model that is designed to be integrated with the processor model or any other mem access request generating agent
+
+#ifndef CACHE_HPP_
+#define CACHE_HPP_
+
+#include <tlm>
+#include <stdint.h>
+#include <stdio.h>
+#include <string>
+
+#define WORD_SIZE 4			// in bytes
+#define MEM_SIZE 536870912	// in bytes
+#define MEM_ADDRESSING 32	// or 64
+
+#if MEM_ADDRESSING == 32
+	typedef uint32_t addr_t;
+#elif MEM_ADDRESSING == 64
+	typedef uint64_t addr_t;
+//#elif ...	and so on for other mem_addressing modes if need be
+#endif
+
+// cache timings
+#define UPDATE_STATE_DELAY sc_core::sc_time(2, sc_core::SC_NS)
+#define WRITE_THROUGH_DELAY sc_core::sc_time(0, sc_core::SC_NS)				// for write-through policy, we assume that there are write buffers b/w cache and higher level cache/memory module so as to hide the write word delay to this cache hence no delay associated for now
+
+
+struct cache_line {
+	enum cache_line_state {M, S, I, MBS};				// M=>Modified; S=>Shared;	I=>Invalid; MBS=>Modified-but-stale(for maintaining strictly inclusive nature of cache)........important only for WB configuration....for WT configuration just two states are used S(valid) and I(invalid)
+
+	cache_line_state state;
+	addr_t tag;
+	uint64_t evict_tag;
+};
+
+
+class cache : public sc_core::sc_module {
+	enum eviction_policy {LRU, LFU, RAND};
+private:
+	uint32_t m_total_cache_size;
+	uint32_t m_cache_line_size;
+	uint32_t m_num_of_sets;
+	uint32_t m_num_of_ways;
+	bool     m_write_back;
+	bool     m_write_allocate;
+	eviction_policy m_evict;
+	std::vector< std::vector<cache_line> > m_cache_lines;
+	cache *m_parent;
+	std::vector < cache * > *m_child;
+	sc_core::sc_time m_lookup_delay;
+	sc_core::sc_time m_read_cache_delay;
+	sc_core::sc_time m_write_cache_delay;
+	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
+	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
+	FILE *m_fid;
+
+	void update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay);
+
+public:
+	cache(sc_core::sc_module_name name, const char *logfile, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, uint32_t num_of_children=0, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
+	~cache();
+	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through=false);
+	void set_parent(cache *parent);
+	void set_children(cache *child);
+	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
+	void print_cache_set(uint32_t set);
+};
+
+
+
+
+
+
+
+// NOTES:
+// support for cache write-back or write-through; write-allocate or write-no-allocate
+// support for LRU, LFU, random eviction policy
+
+
+// this cache model implements strictly inclusive cache hierarchy
+// for inclusive property of cache, the ideas from "Parallel Computer Architecture: A Hardware/software Approach" (Culler, Singh, Gupta) are used especially content mentioned in chapter 5-6
+// turns out we have to include some inclusion info augmented with state bits for each cache block in the hierarchy as well
+
+
+// TODO: support for entire cache flush
+// TODO: efficient construction of l1,l2,l3 cache from the same code......use OO principles like builder pattern etc (constructor shouldnt be passed so many parameters!!)
+
+#endif /* CACHE_HPP_ */
+

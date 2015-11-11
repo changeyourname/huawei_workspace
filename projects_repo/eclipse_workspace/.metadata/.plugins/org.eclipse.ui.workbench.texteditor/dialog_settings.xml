@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="#define" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
-			<item value="#define"/>
-			<item value="num_smp_cores"/>
-			<item value="child_of_l2"/>
-			<item value="new"/>
-			<item value="m_mem"/>
-			<item value="&lt;= m_num_of_w"/>
-			<item value="evict_tag--"/>
-			<item value="set][j].evict_tag--"/>
+			<item value="do_logging"/>
+			<item value="fflush(m_fid)"/>
+			<item value="this_smp_baseaddr"/>
+			<item value="//fflu"/>
+			<item value="fflush"/>
+			<item value="print_cache_set"/>
+			<item value="m_dmi"/>
+			<item value="m_dmi "/>
 		</list>
 		<list key="replacehistory">
 			<item value="uint32_t"/>

@@ -13,6 +13,8 @@
 
 #include <tlm>
 #include <stdint.h>
+#include <stdio.h>
+#include <string>
 
 #define WORD_SIZE 4			// in bytes
 #define MEM_SIZE 536870912	// in bytes
@@ -40,16 +42,7 @@ struct cache_line {
 
 
 class cache : public sc_core::sc_module {
-public:
 	enum eviction_policy {LRU, LFU, RAND};
-
-	cache(sc_core::sc_module_name name, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
-	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through=false);
-	void set_parent(cache *parent);
-	void set_children(std::vector< cache * > *child);
-	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
-
-	void print_cache_set(uint32_t set);
 private:
 	uint32_t m_total_cache_size;
 	uint32_t m_cache_line_size;
@@ -66,10 +59,20 @@ private:
 	sc_core::sc_time m_write_cache_delay;
 	sc_core::sc_time m_upstream_cacheblock_delay;					// this cache is destination for higher cache/mem
 	sc_core::sc_time m_downstream_cacheblock_delay;					// this cache is source for higher cache/mem
+	FILE *m_fid;
+	bool m_log;
 
+public:
+	cache(sc_core::sc_module_name name, const char *logfile, uint32_t total_cache_size=65536, uint32_t cache_line_size=8, uint32_t num_of_ways=2, uint32_t num_of_children=0, bool write_back=true, bool write_allocate=true, cache::eviction_policy evict_pol=LRU);
+	~cache();
+	void update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, bool write_through=false);
 	void update_state(uint32_t operation, addr_t req_addr, sc_core::sc_time &delay);
+	void set_parent(cache *parent);
+	void set_children(cache *child);
+	void set_delays(sc_core::sc_time upstream, sc_core::sc_time downstream, sc_core::sc_time lookup, sc_core::sc_time write, sc_core::sc_time read);
+	void print_cache_set(uint32_t set);
+	void do_logging();
 };
-
 
 
 
@@ -87,7 +90,8 @@ private:
 // turns out we have to include some inclusion info augmented with state bits for each cache block in the hierarchy as well
 
 
-
+// TODO: support for entire cache flush
+// TODO: efficient construction of l1,l2,l3 cache from the same code......use OO principles like builder pattern etc (constructor shouldnt be passed so many parameters!!)
 
 #endif /* CACHE_HPP_ */
 
