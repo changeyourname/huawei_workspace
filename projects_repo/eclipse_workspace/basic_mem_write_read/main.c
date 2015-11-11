@@ -19,8 +19,6 @@
 #include <sched.h>
 
 
-#define NUMINTS  (1024*4*64)
-#define FILESIZE (NUMINTS * sizeof(int))
 #define PAGE_SIZE 4096
 
 #define USER_MEM_BASE 0x70000000
@@ -28,7 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-	/*int global_smp_cpu_mem_baseaddr[4] = {USER_MEM_BASE, USER_MEM_BASE+0x2000, USER_MEM_BASE+0x4000, USER_MEM_BASE+0x6000};
+	int global_smp_cpu_mem_baseaddr[4] = {USER_MEM_BASE, USER_MEM_BASE+0x2000, USER_MEM_BASE+0x4000, USER_MEM_BASE+0x6000};
 	int smp_cpu;
 	// getting the cpu affinity from the user
 	if (argc < 2) {
@@ -46,25 +44,21 @@ int main(int argc, char *argv[])
 	if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
 		printf("ERROR in setting cpu affinity\r\n");
 		exit(-1);
-	}*/
+	}
 
-
-#if 0
-    // making a virtual mapping of /dev/mem to this process address space
-    int *mem_map;
     int mem_fd = open("/dev/mem", O_RDWR);
     if (mem_fd == -1) {
     	perror("Error opening file for writing");
     	exit(EXIT_FAILURE);
     }
 
-    if ((mem_map = malloc(FILESIZE + (PAGE_SIZE-1))) == NULL) {
+    int *mem_map = malloc(PAGE_SIZE);				// dynamic array in C
+    if (mem_map == NULL) {
     	printf("mem allocation error\r\n");
     	exit(-1);
     }
 
-    // making a mapping from physical memory to this process address space for 1024 bytes only
-    mem_map = mmap(0, 1024, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, global_smp_cpu_mem_baseaddr[smp_cpu]);
+    mem_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, global_smp_cpu_mem_baseaddr[smp_cpu]);
     if (mem_map == MAP_FAILED) {
     	close(mem_fd);
     	perror("Error mmapping the file");
@@ -89,35 +83,6 @@ int main(int argc, char *argv[])
     for (int i=0; i<8; i++) {
     	mem_map[i] = i;
     }
-
-
-    if (munmap(mem_map, FILESIZE) == -1) {
-    	perror("Error unmapping the file");
-    }
-    close(mem_fd);
-#endif
-
-
-    int mem_fd = open("/dev/mem", O_RDWR);
-    if (mem_fd == -1) {
-    	perror("Error opening file for writing");
-    	exit(EXIT_FAILURE);
-    }
-
-    int *mem_map = malloc(PAGE_SIZE);				// dynamic array in C
-    if (mem_map == NULL) {
-    	printf("mem allocation error\r\n");
-    	exit(-1);
-    }
-
-    mem_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, 0x70000000);
-    if (mem_map == MAP_FAILED) {
-    	close(mem_fd);
-    	perror("Error mmapping the file");
-    	exit(EXIT_FAILURE);
-    }
-
-    mem_map[0] = 0x12345678;
 
     if (munmap(mem_map, PAGE_SIZE) == -1) {
     	perror("Error unmapping the file");

@@ -1,22 +1,52 @@
-16:10:32 **** Build of configuration Debug for project basic_mem_write_read ****
+17:03:07 **** Build of configuration Debug for project ArmVersatileExpress ****
 make all 
-Building file: ../main.c
-Invoking: Cross ARM C Compiler
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-Finished building: ../main.c
+Building file: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.d" -MT"modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o" -o "modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o" "../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp"
+Finished building: ../modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.cpp
  
-Building target: basic_mem_write_read.elf
-Invoking: Cross ARM C Linker
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read.map" -o "basic_mem_write_read.elf"  ./main.o   
-Finished building target: basic_mem_write_read.elf
+Building file: ../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.d" -MT"modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o" -o "modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o" "../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp"
+Finished building: ../modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.cpp
  
-Invoking: Cross ARM GNU Create Flash Image
-arm-none-linux-gnueabi-objcopy -O ihex "basic_mem_write_read.elf"  "basic_mem_write_read.hex"
-Finished building: basic_mem_write_read.hex
+Building file: ../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.d" -MT"modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o" -o "modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o" "../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp"
+Finished building: ../modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.cpp
  
-Invoking: Cross ARM GNU Print Size
-arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
-   text	   data	    bss	    dec	    hex	filename
-   1676	    312	      4	   1992	    7c8	basic_mem_write_read.elf
-Finished building: basic_mem_write_read.siz
+Building file: ../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.d" -MT"modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o" -o "modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o" "../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp"
+Finished building: ../modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.cpp
+ 
+Building file: ../host/icm/icmCpuManager.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"host/icm/icmCpuManager.d" -MT"host/icm/icmCpuManager.o" -o "host/icm/icmCpuManager.o" "../host/icm/icmCpuManager.cpp"
+Finished building: ../host/icm/icmCpuManager.cpp
+ 
+Building file: ../1.0/tlm2.0/tlmMemory.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"1.0/tlm2.0/tlmMemory.d" -MT"1.0/tlm2.0/tlmMemory.o" -o "1.0/tlm2.0/tlmMemory.o" "../1.0/tlm2.0/tlmMemory.cpp"
+Finished building: ../1.0/tlm2.0/tlmMemory.cpp
+ 
+Building file: ../cache.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"cache.d" -MT"cache.o" -o "cache.o" "../cache.cpp"
+Finished building: ../cache.cpp
+ 
+Building file: ../cache_controller.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"cache_controller.d" -MT"cache_controller.o" -o "cache_controller.o" "../cache_controller.cpp"
+Finished building: ../cache_controller.cpp
+ 
+Building file: ../platform.cpp
+Invoking: GCC C++ Compiler
+g++ -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImperasLib/source -I"/home/uzair/huawei_workspace/projects_repo/eclipse_workspace/ArmVersatileExpress" -I/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/ImpPublic/include/host -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -Wno-long-long -DSC_INCLUDE_DYNAMIC_PROCESSES -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -MMD -MP -MF"platform.d" -MT"platform.o" -o "platform.o" "../platform.cpp"
+Finished building: ../platform.cpp
+ 
+Building target: ArmVersatileExpress
+Invoking: GCC C++ Linker
+g++ -L/home/uzair/huawei_workspace/OVPsim/setup/Imperas.20150901/bin/Linux32 -L/usr/local/systemc-2.3.1/lib-linux/ -m32 -o "ArmVersatileExpress"  ./modelSupport/tlmProcessor/1.0/tlm2.0/tlmProcessor.o  ./modelSupport/tlmPlatform/1.0/tlm2.0/tlmPlatform.o  ./modelSupport/tlmPeripheral/1.0/tlm2.0/tlmPeripheral.o  ./modelSupport/tlmMMC/1.0/tlm2.0/tlmMmc.o  ./host/icm/icmCpuManager.o  ./1.0/tlm2.0/tlmMemory.o  ./cache.o ./cache_controller.o ./platform.o   -lsystemc -lRuntimeLoader
+Finished building target: ArmVersatileExpress
  

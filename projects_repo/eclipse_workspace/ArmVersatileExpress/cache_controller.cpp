@@ -70,24 +70,6 @@ cache_controller::~cache_controller() {
 
 
 void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &payload, sc_core::sc_time &delay) {
-
-	/*static int count = 0;
-	if (m_debug && payload.get_command()==tlm::TLM_WRITE_COMMAND && SocketId>=4) {
-		unsigned char *ptr = payload.get_data_ptr();
-		if ((payload.get_address()>=0x70000000 && payload.get_address()<0x70002000) || (payload.get_address()>=0x70002000 && payload.get_address()<0x70004000) || (payload.get_address()>=0x70004000 && payload.get_address()<0x70006000) || (payload.get_address()>=0x70006000 && payload.get_address()<0x70008000)) {
-			count++;
-			assert(count != 10);
-
-			std::cout<<sc_core::sc_time_stamp().to_string()<<"..";
-			printf("ID:%d..", SocketId-4);
-			printf("addr:0x%08x        ", payload.get_address());
-			printf("val[0]:0x%02x | ", *ptr);
-			printf("val[1]:0x%02x | ", *(ptr+1));
-			printf("val[2]:0x%02x | ", *(ptr+2));
-			printf("val[3]:0x%02x\r\n", *(ptr+3));
-		}
-	}*/
-
 	uint64_t addr = payload.get_address();
 	tlm::tlm_command cmd = payload.get_command();
 	unsigned char *trans_ptr = payload.get_data_ptr();
@@ -95,23 +77,21 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 
 
 	// updating cache stuff if it is enabled
-	if (addr >= 0x70000000 && addr <= 0x7000001c) {
-		if (m_debug && mem_transaction) {
-			delay = sc_core::SC_ZERO_TIME;
-			if (cmd == tlm::TLM_WRITE_COMMAND) {
-				delay += CPU_TO_L1_DELAY;
-			}
-
-			if (SocketId < 4) {
-				// instruction request
-				m_l1cache_i[SocketId]->update(payload, delay);
-			} else if (SocketId < 8) {
-				// data request
-				m_l1cache_d[SocketId-4]->update(payload, delay);
-			}
-
-			wait(delay);
+	if (m_debug && mem_transaction) {
+		delay = sc_core::SC_ZERO_TIME;
+		if (cmd == tlm::TLM_WRITE_COMMAND) {
+			delay += CPU_TO_L1_DELAY;
 		}
+
+		if (SocketId < 4) {
+			// instruction request
+			m_l1cache_i[SocketId]->update(payload, delay);
+		} else if (SocketId < 8) {
+			// data request
+			m_l1cache_d[SocketId-4]->update(payload, delay);
+		}
+
+		wait(delay);
 	}
 
 	// checking for startup_app to have run on linux/platform...the startup_app writes 0x12345678 @ 0x70000000 platform physical address

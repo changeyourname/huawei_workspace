@@ -76,11 +76,10 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 		if (m_cache_lines[set][i].state != cache_line::I) {			// checking for valid cache blocks (M or S)
 			if (m_cache_lines[set][i].tag == tag) {
 				if (!write_through) {
-					fprintf(m_fid, "(%s)..", name());
 					fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)payload.get_address());
 					fprintf(m_fid, "..tag=0x%08x", tag);
 					fprintf(m_fid, "...set=%d\r\n", set);
-					fflush(m_fid);			//TODO: disable this after debugging
+					//fflush(m_fid);			//TODO: disable this after debugging
 				}
 
 
@@ -172,11 +171,10 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 			way_free = i;
 		}
 	}
-	fprintf(m_fid, "(%s)..", name());
 	fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)payload.get_address());
 	fprintf(m_fid, "..tag=0x%08x", tag);
 	fprintf(m_fid, "...set=%d\r\n", set);
-	fflush(m_fid);			//TODO: disable this after debugging
+	//fflush(m_fid);			//TODO: disable this after debugging
 
 	if (cmd == tlm::TLM_WRITE_COMMAND && !m_write_allocate) {
 		// if write miss and write-no-allocate policy being selected then not updating anything in cache for this case...just modeling delay for writing the word into downstream memory module
@@ -213,11 +211,10 @@ void cache::update(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay, b
 			}
 
 			// evicting the cache-block in way_free (found above)
-			fprintf(m_fid, "%s ", name());
-			fprintf(m_fid, " evicting way[%d]..", way_free);
+			fprintf(m_fid, "evicting way[%d]..", way_free);
 			fprintf(m_fid, "tag:0x%08x..", m_cache_lines[set][way_free].tag);
 			fprintf(m_fid, "lru=%d\r\n", (int)m_cache_lines[set][way_free].evict_tag);
-			fflush(m_fid);			//TODO: disable this after debugging
+			//fflush(m_fid);			//TODO: disable this after debugging
 
 			if (m_cache_lines[set][way_free].state == cache_line::M) {
 				// writing through to next higher level(........part of write-back operation)
@@ -393,6 +390,7 @@ void cache::print_cache_set(uint32_t set) {
 		fprintf(m_fid, "lru=%d\r\n", (int)m_cache_lines[set][x].evict_tag);
 	}
 	fprintf(m_fid, "------------------\r\n");
+	//fflush(m_fid);			//TODO: disable this after debugging
 }
 
 
