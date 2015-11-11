@@ -1,17 +1,25 @@
-10:18:22 **** Build of configuration Debug for project basic_mem_write_read ****
+16:10:32 **** Build of configuration Debug for project basic_mem_write_read ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -mfloat-abi=hard -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
 Finished building: ../main.c
  
 Building target: basic_mem_write_read.elf
 Invoking: Cross ARM C Linker
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -mfloat-abi=hard -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read.map" -o "basic_mem_write_read.elf"  ./main.o   
-/opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/ld: error: ./main.o uses VFP register arguments, basic_mem_write_read.elf does not
-/opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/../../../../arm-none-linux-gnueabi/bin/ld: failed to merge target specific data of file ./main.o
-collect2: ld returned 1 exit status
-make: *** [basic_mem_write_read.elf] Error 1
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read.map" -o "basic_mem_write_read.elf"  ./main.o   
+Finished building target: basic_mem_write_read.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "basic_mem_write_read.elf"  "basic_mem_write_read.hex"
+Finished building: basic_mem_write_read.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
+   text	   data	    bss	    dec	    hex	filename
+   1676	    312	      4	   1992	    7c8	basic_mem_write_read.elf
+Finished building: basic_mem_write_read.siz
+ 
 
-10:18:22 Build Finished (took 60ms)
+16:10:32 Build Finished (took 110ms)
 

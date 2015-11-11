@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;basic_mem_write_read_with_timing&apos; to &apos;basic_mem_write_read&apos;" description="Rename resource &apos;basic_mem_write_read_with_timing&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/basic_mem_write_read_with_timing" name="basic_mem_write_read" stamp="1447254059605" updateReferences="true"/>
+</session>

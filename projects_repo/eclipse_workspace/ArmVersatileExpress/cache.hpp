@@ -90,6 +90,7 @@ public:
 
 
 // TODO: support for entire cache flush
+// TODO: efficient construction of l1,l2,l3 cache from the same code......use OO principles like builder pattern etc (constructor shouldnt be passed so many parameters!!)
 
 #endif /* CACHE_HPP_ */
 

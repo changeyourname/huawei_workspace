@@ -107,7 +107,7 @@ void cache_controller::b_transport(int SocketId, tlm::tlm_generic_payload &paylo
 				m_l1cache_i[SocketId]->update(payload, delay);
 			} else if (SocketId < 8) {
 				// data request
-				m_l1cache_d[SocketId]->update(payload, delay);
+				m_l1cache_d[SocketId-4]->update(payload, delay);
 			}
 
 			wait(delay);

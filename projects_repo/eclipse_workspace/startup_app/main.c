@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/mman.h>
 
 #define PAGE_SIZE 4096

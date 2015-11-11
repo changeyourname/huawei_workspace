@@ -1,39 +1,25 @@
-09:51:31 **** Build of configuration Debug for project startup_app ****
+16:04:02 **** Build of configuration Debug for project startup_app ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu11 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-../main.c: In function 'main':
-../main.c:36:6: warning: implicit declaration of function 'close' [-Wimplicit-function-declaration]
-      close(mem_fd);
-      ^
-error: A valid Sourcery CodeBench license key could not be found.
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+Finished building: ../main.c
+ 
+Building target: startup_app.elf
+Invoking: Cross ARM C Linker
+arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"startup_app.map" -o "startup_app.elf"  ./main.o   
+Finished building target: startup_app.elf
+ 
+Invoking: Cross ARM GNU Create Flash Image
+arm-none-linux-gnueabi-objcopy -O ihex "startup_app.elf"  "startup_app.hex"
+Finished building: startup_app.hex
+ 
+Invoking: Cross ARM GNU Print Size
+arm-none-linux-gnueabi-size --format=berkeley "startup_app.elf"
+   text	   data	    bss	    dec	    hex	filename
+   1704	    312	      4	   2020	    7e4	startup_app.elf
+Finished building: startup_app.siz
+ 
 
-Refer to the Getting Started guide included with Sourcery CodeBench
-for instructions on how to obtain and install a license key.
-
-For technical support for Sourcery CodeBench, visit:
-  https://sourcery.mentor.com/GNUToolchain/
-
-For information about license keys and the GPL, visit:
-  https://sourcery.mentor.com/GNUToolchain/kbentry55
-
-The license manager error is:
-
-Cannot find license file.
- The license files (or license server system network addresses) attempted are 
-listed below.  Use LM_LICENSE_FILE to use a different license file,
- or contact your software provider for a license file.
-Feature:       gcc_ARM_GNULinux
-Filename:      /home/uzair/mgc/embedded/codebench/libexec/gcc/arm-none-linux-gnueabi/4.9.1/../../../../license/arm-none-linux-gnueabi
-License path:  /home/uzair/mgc/embedded/codebench/libexec/gcc/arm-none-linux-gnueabi/4.9.1/../../../../license/arm-none-linux-gnueabi:
-FLEXnet Licensing error:-1,359.  System Error: 2 "No such file or directory"
-For further information, refer to the FLEXnet Licensing documentation,
-available at "www.flexerasoftware.com".
-
-Your host ID(s) are: ecb1d74a0f25
-arm-none-linux-gnueabi-gcc: error: /home/uzair/mgc/embedded/codebench/bin/../libexec/gcc/arm-none-linux-gnueabi/4.9.1/cs-license: non-zero exit status
-make: *** [main.o] Error 1
-
-09:51:31 Build Finished (took 58ms)
+16:04:02 Build Finished (took 112ms)
 
