@@ -40,6 +40,7 @@ int sc_main(int argc, char *argv[]) {
 	return 0;
 }*/
 
+/*
 #include <stdio.h>
 #include <assert.h>
 #include <vector>
@@ -71,5 +72,23 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+*/
+
+
+#include <stdio.h>
+
+int main ()
+{
+   FILE * pFile;
+   pFile = fopen ("myfile.txt","w");
+   fprintf(pFile, "abc:%d\r\n", 4);
+   fclose (pFile);
+
+   return 0;
+}
+
+
+
+
 
 

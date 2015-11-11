@@ -1,4 +1,4 @@
-15:45:26 **** Build of configuration Debug for project test ****
+11:34:08 **** Build of configuration Debug for project test ****
 make all 
 Building file: ../main.cpp
 Invoking: GCC C++ Compiler
@@ -11,5 +11,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "test"  ./main.o   -lsystemc
 Finished building target: test
  
 
-15:45:26 Build Finished (took 163ms)
+11:34:08 Build Finished (took 110ms)
 

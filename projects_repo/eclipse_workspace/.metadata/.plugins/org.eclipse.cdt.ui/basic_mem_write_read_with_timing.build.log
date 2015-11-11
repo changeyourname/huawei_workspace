@@ -1,4 +1,4 @@
-10:23:19 **** Build of configuration Debug for project basic_mem_write_read_with_timing ****
+11:15:23 **** Build of configuration Debug for project basic_mem_write_read_with_timing ****
 make all 
 Building file: ../main.c
 Invoking: Cross ARM C Compiler
@@ -17,9 +17,9 @@ Finished building: basic_mem_write_read_with_timing.hex
 Invoking: Cross ARM GNU Print Size
 arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read_with_timing.elf"
    text	   data	    bss	    dec	    hex	filename
-   4655	    332	      4	   4991	   137f	basic_mem_write_read_with_timing.elf
+   2385	    328	      4	   2717	    a9d	basic_mem_write_read_with_timing.elf
 Finished building: basic_mem_write_read_with_timing.siz
  
 
-10:23:19 Build Finished (took 108ms)
+11:15:23 Build Finished (took 110ms)
 

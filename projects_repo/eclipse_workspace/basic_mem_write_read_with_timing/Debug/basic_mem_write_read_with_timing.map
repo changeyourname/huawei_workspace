@@ -1,9 +1,5 @@
 Archive member included because of file (symbol)
 
-/opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
-                              ./main.o (__aeabi_i2d)
-/opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
-                              ./main.o (__aeabi_ddiv)
 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
                               /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt1.o (__libc_csu_fini)
 
@@ -30,14 +26,6 @@ Discarded input sections
  .bss           0x00000000        0x0 ./main.o
  .note.GNU-stack
                 0x00000000        0x0 ./main.o
- .data          0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
- .bss           0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
- .note.GNU-stack
-                0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
- .data          0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
- .bss           0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
- .note.GNU-stack
-                0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
  .data          0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
  .bss           0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
  .ARM.extab     0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
@@ -91,36 +79,36 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
 .note.gnu.build-id
  *(.note.gnu.build-id)
 
-.hash           0x00008128       0x9c
+.hash           0x00008128       0x98
  *(.hash)
- .hash          0x00008128       0x9c /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .hash          0x00008128       0x98 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
 .gnu.hash
  *(.gnu.hash)
 
-.dynsym         0x000081c4      0x140
+.dynsym         0x000081c0      0x130
  *(.dynsym)
- .dynsym        0x000081c4      0x140 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .dynsym        0x000081c0      0x130 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.dynstr         0x00008304       0xec
+.dynstr         0x000082f0       0xe8
  *(.dynstr)
- .dynstr        0x00008304       0xec /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .dynstr        0x000082f0       0xe8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.gnu.version    0x000083f0       0x28
+.gnu.version    0x000083d8       0x26
  *(.gnu.version)
- .gnu.version   0x000083f0       0x28 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .gnu.version   0x000083d8       0x26 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.gnu.version_d  0x00008418        0x0
+.gnu.version_d  0x00008400        0x0 load address 0x000083fe
  *(.gnu.version_d)
  .gnu.version_d
                 0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.gnu.version_r  0x00008418       0x40
+.gnu.version_r  0x00008400       0x40
  *(.gnu.version_r)
  .gnu.version_r
-                0x00008418       0x40 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x00008400       0x40 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.rel.dyn        0x00008458        0x8
+.rel.dyn        0x00008440        0x8
  *(.rel.init)
  *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
  *(.rel.fini)
@@ -132,7 +120,7 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  *(.rel.ctors)
  *(.rel.dtors)
  *(.rel.got)
- .rel.got       0x00008458        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .rel.got       0x00008440        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
  *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
  .rel.bss       0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
@@ -155,70 +143,48 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
 .rela.ifunc.dyn
  *(.rela.ifunc.*)
 
-.rel.plt        0x00008460       0x80
+.rel.plt        0x00008448       0x78
  *(.rel.plt)
- .rel.plt       0x00008460       0x80 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .rel.plt       0x00008448       0x78 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
 .rela.plt
  *(.rela.plt)
 
-.init           0x000084e0        0xc
+.init           0x000084c0        0xc
  *(.init)
- .init          0x000084e0        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
-                0x000084e0                _init
- .init          0x000084e8        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
+ .init          0x000084c0        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x000084c0                _init
+ .init          0x000084c8        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
 
-.plt            0x000084ec       0xd4
+.plt            0x000084cc       0xc8
  *(.plt)
- .plt           0x000084ec       0xd4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
-                0x00008500                open@@GLIBC_2.4
-                0x0000850c                mmap@@GLIBC_2.4
-                0x00008518                abort@@GLIBC_2.4
-                0x00008524                __libc_start_main@@GLIBC_2.4
-                0x0000853c                memset@@GLIBC_2.4
-                0x00008548                perror@@GLIBC_2.4
-                0x00008554                clock@@GLIBC_2.4
-                0x00008560                printf@@GLIBC_2.4
-                0x0000856c                atoi@@GLIBC_2.4
-                0x00008578                close@@GLIBC_2.4
-                0x00008584                malloc@@GLIBC_2.4
-                0x00008590                puts@@GLIBC_2.4
-                0x0000859c                sched_setaffinity@@GLIBC_2.4
-                0x000085a8                rand@@GLIBC_2.4
-                0x000085b4                exit@@GLIBC_2.4
+ .plt           0x000084cc       0xc8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x000084e0                open@@GLIBC_2.4
+                0x000084ec                mmap@@GLIBC_2.4
+                0x000084f8                abort@@GLIBC_2.4
+                0x00008504                __libc_start_main@@GLIBC_2.4
+                0x0000851c                memset@@GLIBC_2.4
+                0x00008528                perror@@GLIBC_2.4
+                0x00008534                printf@@GLIBC_2.4
+                0x00008540                atoi@@GLIBC_2.4
+                0x0000854c                close@@GLIBC_2.4
+                0x00008558                malloc@@GLIBC_2.4
+                0x00008564                puts@@GLIBC_2.4
+                0x00008570                sched_setaffinity@@GLIBC_2.4
+                0x0000857c                munmap@@GLIBC_2.4
+                0x00008588                exit@@GLIBC_2.4
 
-.text           0x000085c0      0xc30
+.text           0x00008594      0x394
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x000085c0       0x38 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt1.o
-                0x000085c0                _start
- .text          0x000085f8       0x24 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
- .text          0x0000861c       0x4c /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
- .text.main     0x00008668      0x2f0 ./main.o
-                0x00008668                main
- .text          0x00008958      0x3b8 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
-                0x00008c9c                __floatundidf
-                0x00008c34                __floatsidf
-                0x00008c10                __aeabi_ui2d
-                0x00008c34                __aeabi_i2d
-                0x00008c10                __floatunsidf
-                0x00008960                __subdf3
-                0x00008cb0                __floatdidf
-                0x00008964                __adddf3
-                0x00008cb0                __aeabi_l2d
-                0x00008c5c                __aeabi_f2d
-                0x00008c9c                __aeabi_ul2d
-                0x00008958                __aeabi_drsub
-                0x00008c5c                __extendsfdf2
-                0x00008964                __aeabi_dadd
-                0x00008960                __aeabi_dsub
- .text          0x00008d10      0x470 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
-                0x00008d10                __muldf3
-                0x00008f7c                __divdf3
-                0x00008d10                __aeabi_dmul
-                0x00008f7c                __aeabi_ddiv
- .text          0x00009180       0x70 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
-                0x00009180                __libc_csu_fini
-                0x00009184                __libc_csu_init
+ .text          0x00008594       0x38 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt1.o
+                0x00008594                _start
+ .text          0x000085cc       0x24 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .text          0x000085f0       0x4c /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+ .text.main     0x0000863c      0x27c ./main.o
+                0x0000863c                main
+ .text          0x000088b8       0x70 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
+                0x000088b8                __libc_csu_fini
+                0x000088bc                __libc_csu_init
  *(.gnu.warning)
  *(.glue_7t)
  .glue_7t       0x00000000        0x0 linker stubs
@@ -229,61 +195,60 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  *(.v4_bx)
  .v4_bx         0x00000000        0x0 linker stubs
 
-.fini           0x000091f0        0x8
+.fini           0x00008928        0x8
  *(.fini)
- .fini          0x000091f0        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
-                0x000091f0                _fini
- .fini          0x000091f4        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
-                0x000091f8                PROVIDE (__etext, .)
-                0x000091f8                PROVIDE (_etext, .)
-                0x000091f8                PROVIDE (etext, .)
+ .fini          0x00008928        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x00008928                _fini
+ .fini          0x0000892c        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
+                0x00008930                PROVIDE (__etext, .)
+                0x00008930                PROVIDE (_etext, .)
+                0x00008930                PROVIDE (etext, .)
 
-.rodata         0x000091f8       0xe4
+.rodata         0x00008930       0xd8
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata.C.0.3676
-                0x000091f8       0x10 ./main.o
- .rodata        0x00009208       0xd4 ./main.o
+ .rodata.C.0.3674
+                0x00008930       0x10 ./main.o
+ .rodata        0x00008940       0xc8 ./main.o
 
 .rodata1
  *(.rodata1)
 
-.ARM.extab      0x000092dc        0xc
+.ARM.extab      0x00008a08        0xc
  *(.ARM.extab* .gnu.linkonce.armextab.*)
  .ARM.extab.text.main
-                0x000092dc        0xc ./main.o
-                0x000092e8                __exidx_start = .
+                0x00008a08        0xc ./main.o
+                0x00008a14                __exidx_start = .
 
-.ARM.exidx      0x000092e8       0x58
+.ARM.exidx      0x00008a14       0x50
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x000092f8        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt1.o
+ .ARM.exidx     0x00008a24        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt1.o
                                   0x8 (size before relaxing)
- .ARM.exidx     0x000092f8        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
- .ARM.exidx     0x00009300        0x8 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+ .ARM.exidx     0x00008a24        0x8 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .ARM.exidx     0x00008a2c        0x8 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
                                  0x10 (size before relaxing)
  .ARM.exidx.text.main
-                0x00009308       0x10 ./main.o
-                                  0x8 (size before relaxing)
- .ARM.exidx     0x00009318       0x18 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
+                0x00008a34        0x8 ./main.o
+ .ARM.exidx     0x00008a3c       0x18 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
                                  0x10 (size before relaxing)
  .ARM.exidx.init
-                0x000092e8       0x10 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
+                0x00008a14       0x10 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
                                   0x8 (size before relaxing)
  .ARM.exidx.fini
-                0x00009330       0x10 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
+                0x00008a54       0x10 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
                                   0x8 (size before relaxing)
-                0x00009340                __exidx_end = .
+                0x00008a64                __exidx_end = .
 
 .eh_frame_hdr
  *(.eh_frame_hdr)
 
-.eh_frame       0x00009340        0x4
+.eh_frame       0x00008a64        0x4
  *(.eh_frame)
- .eh_frame      0x00009340        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
+ .eh_frame      0x00008a64        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
 
 .gcc_except_table
  *(.gcc_except_table .gcc_except_table.*)
-                0x00009344                . = (ALIGN (0x8000) - ((0x8000 - .) & 0x7fff))
-                0x00011344                . = (0x8000 DATA_SEGMENT_ALIGN 0x1000)
+                0x00008a68                . = (ALIGN (0x8000) - ((0x8000 - .) & 0x7fff))
+                0x00010a68                . = (0x8000 DATA_SEGMENT_ALIGN 0x1000)
 
 .eh_frame
  *(.eh_frame)
@@ -298,24 +263,24 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.preinit_array  0x00011344        0x0
-                0x00011344                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x00010a68        0x0
+                0x00010a68                PROVIDE (__preinit_array_start, .)
  *(.preinit_array)
-                0x00011344                PROVIDE (__preinit_array_end, .)
+                0x00010a68                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x00011344        0x4
-                0x00011344                PROVIDE (__init_array_start, .)
+.init_array     0x00010a68        0x4
+                0x00010a68                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x00011344        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
-                0x00011348                PROVIDE (__init_array_end, .)
+ .init_array    0x00010a68        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+                0x00010a6c                PROVIDE (__init_array_end, .)
 
-.fini_array     0x00011348        0x4
-                0x00011348                PROVIDE (__fini_array_start, .)
+.fini_array     0x00010a6c        0x4
+                0x00010a6c                PROVIDE (__fini_array_start, .)
  *(.fini_array)
- .fini_array    0x00011348        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+ .fini_array    0x00010a6c        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
  *(SORT(.fini_array.*))
-                0x0001134c                PROVIDE (__fini_array_end, .)
+                0x00010a70                PROVIDE (__fini_array_end, .)
 
 .ctors
  *crtbegin.o(.ctors)
@@ -331,55 +296,55 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  *(SORT(.dtors.*))
  *(.dtors)
 
-.jcr            0x0001134c        0x4
+.jcr            0x00010a70        0x4
  *(.jcr)
- .jcr           0x0001134c        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
- .jcr           0x0001134c        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
+ .jcr           0x00010a70        0x0 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+ .jcr           0x00010a70        0x4 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
 
 .data.rel.ro
  *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
  *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
 
-.dynamic        0x00011350       0xf0
+.dynamic        0x00010a74       0xf0
  *(.dynamic)
- .dynamic       0x00011350       0xf0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
-                0x00011350                _DYNAMIC
-                0x00011440                . = (. DATA_SEGMENT_RELRO_END 0x0)
+ .dynamic       0x00010a74       0xf0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x00010a74                _DYNAMIC
+                0x00010b64                . = (. DATA_SEGMENT_RELRO_END 0x0)
 
-.got            0x00011440       0x50
+.got            0x00010b64       0x4c
  *(.got.plt)
- .got.plt       0x00011440       0x4c /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
-                0x00011440                _GLOBAL_OFFSET_TABLE_
+ .got.plt       0x00010b64       0x48 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+                0x00010b64                _GLOBAL_OFFSET_TABLE_
  *(.got)
- .got           0x0001148c        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
+ .got           0x00010bac        0x4 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
 
-.data           0x00011490        0x0
-                0x00011490                __data_start = .
+.data           0x00010bb0        0x0
+                0x00010bb0                __data_start = .
  *(.data .data.* .gnu.linkonce.d.*)
 
 .data1
  *(.data1)
-                0x00011490                _edata = .
-                0x00011490                PROVIDE (edata, .)
-                0x00011490                __bss_start = .
-                0x00011490                __bss_start__ = .
+                0x00010bb0                _edata = .
+                0x00010bb0                PROVIDE (edata, .)
+                0x00010bb0                __bss_start = .
+                0x00010bb0                __bss_start__ = .
 
-.bss            0x00011490        0x4
+.bss            0x00010bb0        0x4
  *(.dynbss)
  .dynbss        0x00000000        0x0 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crti.o
  *(.bss .bss.* .gnu.linkonce.b.*)
- .bss           0x00011490        0x1 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
+ .bss           0x00010bb0        0x1 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtbegin.o
  *(COMMON)
-                0x00011494                . = ALIGN ((. != 0x0)?0x4:0x1)
- *fill*         0x00011491        0x3 00
-                0x00011494                _bss_end__ = .
-                0x00011494                __bss_end__ = .
-                0x00011494                . = ALIGN (0x4)
-                0x00011494                . = ALIGN (0x4)
-                0x00011494                __end__ = .
-                0x00011494                _end = .
-                0x00011494                PROVIDE (end, .)
-                0x00011494                . = DATA_SEGMENT_END (.)
+                0x00010bb4                . = ALIGN ((. != 0x0)?0x4:0x1)
+ *fill*         0x00010bb1        0x3 00
+                0x00010bb4                _bss_end__ = .
+                0x00010bb4                __bss_end__ = .
+                0x00010bb4                . = ALIGN (0x4)
+                0x00010bb4                . = ALIGN (0x4)
+                0x00010bb4                __end__ = .
+                0x00010bb4                _end = .
+                0x00010bb4                PROVIDE (end, .)
+                0x00010bb4                . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -410,15 +375,11 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  .ARM.attributes
                 0x0000008f       0x33 ./main.o
  .ARM.attributes
-                0x000000c2       0x16 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_addsubdf3.o)
+                0x000000c2       0x31 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
  .ARM.attributes
-                0x000000d8       0x16 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/libgcc.a(_arm_muldivdf3.o)
+                0x000000f3       0x31 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
  .ARM.attributes
-                0x000000ee       0x31 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
- .ARM.attributes
-                0x0000011f       0x31 /opt/codesourcery/arm-2009q1/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/crtend.o
- .ARM.attributes
-                0x00000150       0x31 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
+                0x00000124       0x31 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crtn.o
 
 .comment        0x00000000       0x2b
  *(.comment)
@@ -447,27 +408,27 @@ LOAD /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/crt
  .debug_pubnames
                 0x00000000       0x1b ./main.o
 
-.debug_info     0x00000000      0x201
+.debug_info     0x00000000      0x1f2
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x201 ./main.o
+ .debug_info    0x00000000      0x1f2 ./main.o
 
 .debug_abbrev   0x00000000       0xd5
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0xd5 ./main.o
 
-.debug_line     0x00000000      0x41e
+.debug_line     0x00000000      0x41d
  *(.debug_line)
- .debug_line    0x00000000      0x41e ./main.o
+ .debug_line    0x00000000      0x41d ./main.o
 
-.debug_frame    0x00000000       0x74
+.debug_frame    0x00000000       0x70
  *(.debug_frame)
- .debug_frame   0x00000000       0x30 ./main.o
- .debug_frame   0x00000030       0x44 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
+ .debug_frame   0x00000000       0x2c ./main.o
+ .debug_frame   0x0000002c       0x44 /opt/codesourcery/arm-2009q1/bin/../arm-none-linux-gnueabi/libc/usr/lib/libc_nonshared.a(elf-init.oS)
 
-.debug_str      0x00000000      0x170
+.debug_str      0x00000000      0x169
  *(.debug_str)
- .debug_str     0x00000000      0x170 ./main.o
-                                0x1b6 (size before relaxing)
+ .debug_str     0x00000000      0x169 ./main.o
+                                0x1af (size before relaxing)
 
 .debug_loc      0x00000000       0x2b
  *(.debug_loc)

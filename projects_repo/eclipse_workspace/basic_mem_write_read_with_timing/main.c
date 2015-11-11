@@ -83,8 +83,7 @@ int main(int argc, char *argv[])
     	exit(EXIT_FAILURE);
     }
 
-    // writing randomly within this smp-cpu allocated memory space
-    int offset;
+   /* // writing randomly within this smp-cpu allocated memory space
     while(1) {
     	begin = clock();
     	for (int i=0; i<100000; i++) {
@@ -95,7 +94,12 @@ int main(int argc, char *argv[])
 
     	printf("(SMP%d) ", smp_cpu);
 		printf("time_spent for task:%.8f\r\n", time_spent);
+    }*/
+
+    for (int i=0; i<8; i++) {
+    	mem_map[i] = i;
     }
+
 
 
     if (munmap(mem_map, FILESIZE) == -1) {
