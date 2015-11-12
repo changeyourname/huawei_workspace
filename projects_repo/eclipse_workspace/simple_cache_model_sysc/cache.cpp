@@ -10,10 +10,10 @@
 
 #include "cache.hpp"
 
-cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy)
+cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level)
 	:	sc_module(name),
 		m_trans(),
-		m_num_masters(num_masters),
+		m_num_upstream_masters(num_masters),
 		m_block_size(block_size),
 		m_num_of_sets(size/(block_size*num_ways)),
 		m_num_of_ways(num_ways),
@@ -21,7 +21,8 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 		m_write_allocate(write_allocate),
 		m_evict_policy(evict_policy),
 		m_log(false),
-		m_isocket("m_isocket")
+		m_level(level),
+		m_isocket_d("m_isocket_d")
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected to occur in real cache organizations
 	// if this does occur though then cache would be inefficient as it will have slots for memory words which actually dont exist in memory......cache will be bigger than memory!
@@ -35,9 +36,18 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 		}
 	}
 
-	m_tsocket = new tlm_utils::simple_target_socket< cache >[m_num_masters];
-	for (uint32_t i=0; i<m_num_masters; i++) {
-		m_tsocket[i].register_b_transport(this, &cache::b_transport);
+	m_tsocket_d = new tlm_utils::simple_target_socket< cache >[m_num_upstream_masters];
+	for (uint32_t i=0; i<m_num_upstream_masters; i++) {
+		m_tsocket_d[i].register_b_transport(this, &cache::b_transport);
+	}
+
+	if (m_level > 1) {		// not first level cache
+		m_isocket_u = new tlm_utils::simple_initiator_socket< cache >[m_num_upstream_masters];
+	}
+
+	if (m_level < LLC_LEVEL) {			// not last level cache
+		m_tsocket_u = new tlm_utils::simple_target_socket< cache >;
+		m_tsocket_u->register_b_transport(this, &cache::b_transport);
 	}
 
 	m_fid = fopen(logfile, "w+");
@@ -47,7 +57,7 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 	fprintf(m_fid, "..cache_block_size:%dB", m_block_size);
 	fprintf(m_fid, "..num_of_sets:%d", m_num_of_sets);
 	fprintf(m_fid, "..num_of_ways:%d", m_num_of_ways);
-	fprintf(m_fid, "..num_of_children:%d", m_num_masters);
+	fprintf(m_fid, "..num_of_children:%d", m_num_upstream_masters);
 	fprintf(m_fid, "..write_back:%d", m_write_back);
 	fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
 	fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict_policy);
@@ -56,7 +66,13 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 
 
 cache::~cache() {
-	delete[] m_tsocket;
+	delete[] m_tsocket_d;
+	if (m_level > 1) {
+		delete[] m_isocket_u;
+	}
+	if (m_level < LLC_LEVEL) {
+		delete m_tsocket_u;
+	}
 }
 
 
@@ -67,7 +83,7 @@ void cache::do_logging() {
 void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
 	uint64_t req_addr = trans.get_address();
 	tlm::tlm_command cmd = trans.get_command();
-	//uint32_t len = trans.get_data_length();
+	unsigned char *ptr = trans.get_data_ptr();
 
 	uint64_t block_addr, tag;
 	uint32_t set;
@@ -78,27 +94,56 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 
 	if (cache_lookup(req_addr, evict_needed, way_free)) {
 		// cache hit
-		if (m_log) {
-			fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
-			fprintf(m_fid, "..tag=0x%08x", (uint32_t)tag);
-			fprintf(m_fid, "..set=%d\r\n", set);
-			fflush(m_fid);			// disable this when not debugging
-		}
 
-		if (cmd == tlm::TLM_WRITE_COMMAND) {
-			if (m_write_back) {
-				if (m_blocks[set][way_free].state == cache_block::S) {
-					m_blocks[set][way_free].state = cache_block::M;
-					// TODO: notify the parent caches that this cache has most updated data so that they can modify their state to MBS
+		// checking for special request
+		if (req_addr==-1 && cmd==tlm::TLM_WRITE_COMMAND) {
+			if (*ptr == 0x21) {
+				// request from child that it is now caching this block in M state
+				if (m_blocks[set][way_free].state==cache_block::M || m_blocks[set][way_free].state==cache_block::S) {
+					m_blocks[set][way_free].state = cache_block::MBS;
+					// forwarding this special request to further downstream caches if present
+					if (m_level < LLC_LEVEL) {
+						update_other_cache(true, delay);
+					}
 				}
-			} else {
-				// writing through downstream
-				send_request(block_addr, true, delay);
+			} else if (*ptr == 0x12) {
+				// request from parent for back-invalidation
+				if (m_blocks[set][way_free].state==cache_block::S || m_block[set][way_free].state==cache_block::MBS) {
+					m_blocks[set][way_free].state = cache_block::I;
+				} else {
+					assert(m_write_back);		// this cache has to be write-back
+					// writing-back the data to the cache that initially requested the back-invalidation so that it can write-back to its parent and invalidate its corresponding block
+
+				}
 			}
 		} else {
-			// TODO: delay for reading cache block
+			// normal request path
+			if (m_log) {
+				fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
+				fprintf(m_fid, "..tag=0x%08x", (uint32_t)tag);
+				fprintf(m_fid, "..set=%d\r\n", set);
+				fflush(m_fid);			// disable this when not debugging
+			}
+
+			if (cmd == tlm::TLM_WRITE_COMMAND) {
+				if (m_write_back) {
+					if (m_blocks[set][way_free].state == cache_block::S) {
+						m_blocks[set][way_free].state = cache_block::M;
+						update_other_cache(true, delay);
+					}
+				} else {
+					// writing through downstream
+					m_trans.set_write();
+					m_trans.set_address(block_addr);
+					send_request(true, delay);
+				}
+			} else {
+				// todo: delay
+			}
 		}
 	} else {
+		//TODO: assertions if special request doesnt result in a hit!!
+
 		// cache miss
 		if (m_log) {
 			fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)trans.get_address());
@@ -107,10 +152,14 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 			fflush(m_fid);			//TODO: disable this after debugging
 		}
 
-		do_eviction(req_addr, way_free, delay);
+		if (evict_needed) {
+			do_eviction(req_addr, way_free, delay);
+		}
 
 		// fetch the block from downstream
-		send_request(block_addr, false, delay);
+		m_trans.set_read();
+		m_trans.set_address(block_addr);
+		send_request(true, delay);
 
 		// update the state of cache block
 		update_block_state(req_addr, cmd, way_free, delay);
@@ -146,11 +195,13 @@ void cache::update_block_state(uint64_t req_addr, tlm::tlm_command cmd, uint32_t
 	if (cmd == tlm::TLM_WRITE_COMMAND) {
 		if (m_write_back) {
 			m_blocks[set][way_free].state = cache_block::M;
-			// TODO: notify the parent caches that this cache has most updated data so that they can modify their state to MBS
+			update_other_cache(true, delay);
 		} else {
 			m_blocks[set][way_free].state = cache_block::S;
 			// writing through downstream
-			send_request(block_addr, true, delay);
+			m_trans.set_write();
+			m_trans.set_address(block_addr);
+			send_request(true, delay);
 		}
 	} else {
 		m_blocks[set][way_free].state = cache_block::S;
@@ -170,6 +221,17 @@ void cache::update_block_state(uint64_t req_addr, tlm::tlm_command cmd, uint32_t
 	}
 }
 
+
+void cache::update_other_cache(bool parent, sc_core::sc_time &delay) {
+	// sends a special write request with all addr bits high and single byte data of 0x12....can also use set_extensions as well
+	m_trans.set_write();
+	m_trans.set_address(-1);			// special request (64 address bits all set to 1)
+	unsigned char *ptr = new unsigned char(parent?0x12:0x21);
+	m_trans.set_data_ptr(ptr);
+
+	send_request(parent, delay);
+	delete ptr;
+}
 
 void cache::blkAddr_set_tag(uint64_t req_addr, uint64_t &block_addr, uint32_t &set, uint64_t &tag) {
 	block_addr = (req_addr/m_block_size)*m_block_size;
@@ -257,32 +319,33 @@ void cache::do_eviction(uint64_t req_addr, uint32_t way_free, sc_core::sc_time &
 	uint32_t set;
 	blkAddr_set_tag(req_addr, block_addr, set, tag);
 
-	if (m_blocks[set][way_free].state==cache_block::M || m_blocks[set][way_free].state==cache_block::MBS) {
+	// BACK INVALIDATION
+	if (m_level > 1) {
+		update_other_cache(false, delay);
+	}
+
+	// incase this block is in 'S' then no writeback is needed
+	// incase this block is in 'MBS' then this means that this block is being cached somewhere upstream in 'M' state which would have been written back via the back-invalidation path as above
+	if (m_blocks[set][way_free].state==cache_block::M) {
+		assert(m_write_back);			// this should be writeback cache
 		// writing through downstream..if a cache exists on the downstream path then it can update the status of its block (MBS) to M
-		// TODO: model timing
-		send_request(block_addr, true, delay);
-	}
-	// TODO: BACK INVALIDATION
-}
-
-
-void cache::send_request(uint64_t block_addr, bool write, sc_core::sc_time &delay) {
-	unsigned char *ptr = new unsigned char[m_block_size];
-	if (write) {
 		m_trans.set_write();
-	} else {
-		m_trans.set_read();
+		m_trans.set_address(block_addr);
+		send_request(true, delay);
 	}
-	m_trans.set_address(block_addr);
-	// faking write/read data
-	m_trans.set_data_ptr(ptr);
-	m_trans.set_data_length(m_block_size);
+}
+
+
+void cache::send_request(bool downstream, sc_core::sc_time &delay) {
 	m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
-
-	m_isocket->b_transport(m_trans, delay);
-
+	if (downstream) {
+		m_isocket_d->b_transport(m_trans, delay);
+	} else {
+		for (uint32_t i=0; i<m_num_upstream_masters; i++) {
+			m_isocket_u[i]->b_transport(m_trans, delay);
+		}
+	}
 	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
-	delete[] ptr;
 }
 
 
@@ -290,13 +353,13 @@ void cache::send_request(uint64_t block_addr, bool write, sc_core::sc_time &dela
 
 
 
-
+//TODO: use tlm_extension
 
 
 
 //TODO: write-allocate
 //TODO: fifo eviction policy
-
+//TODO: model timing
 
 
 

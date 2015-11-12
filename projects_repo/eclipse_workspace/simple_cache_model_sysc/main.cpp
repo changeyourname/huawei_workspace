@@ -28,12 +28,12 @@ private:
 		while(1) {
 			trans.set_read();
 			trans.set_address(0);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 
-			for (uint32_t i=0; i<m_num_smp_cores*2; i++) {
-				m_isocket[i]->b_transport(trans, delay);
-				assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
-				wait(delay);
-			}
+			trans.set_write();
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 
 			while(1) {
 				wait(2, sc_core::SC_NS);
@@ -141,20 +141,26 @@ int sc_main(int argc, char* argv[]) {
 		delete m_l2cache[i];
 	}*/
 
-	cache m_l1cache_i("m_l1cache_i", "m_l1cache_i", 1, 1024, 4, 1, false, true, cache::LRU);
+	cache m_l1cache_i("m_l1cache_i", "m_l1cache_i", 1, 1024, 4, 1, true, true, cache::LRU, 1);
 	m_l1cache_i.do_logging();
-	cache m_l1cache_d("m_l1cache_d", "m_l1cache_d", 1, 1024, 4, 1, false, true, cache::LRU);
+	cache m_l1cache_d("m_l1cache_d", "m_l1cache_d", 1, 1024, 4, 1, true, true, cache::LRU, 1);
 	m_l1cache_d.do_logging();
-	cache m_l2cache("m_l2cache", "m_l2cache", 2, 2048, 16, 2, true, true, cache::LRU);
+
+	cache m_l2cache("m_l2cache", "m_l2cache", 2, 2048, 16, 2, true, true, cache::LRU, 2);
 	m_l2cache.do_logging();
 
-	m_cpu.m_isocket[0](m_l1cache_i.m_tsocket[0]);
-	m_cpu.m_isocket[1](m_l1cache_d.m_tsocket[0]);
-	m_l1cache_i.m_isocket(m_l2cache.m_tsocket[0]);
-	m_l1cache_d.m_isocket(m_l2cache.m_tsocket[1]);
-	m_l2cache.m_isocket(m_memory.m_tsocket);
+	// downstream direction
+	m_cpu.m_isocket[0](m_l1cache_i.m_tsocket_d[0]);
+	m_cpu.m_isocket[1](m_l1cache_d.m_tsocket_d[0]);
+	m_l1cache_i.m_isocket_d(m_l2cache.m_tsocket_d[0]);
+	m_l1cache_d.m_isocket_d(m_l2cache.m_tsocket_d[1]);
+	m_l2cache.m_isocket_d(m_memory.m_tsocket);
 
-	sc_core::sc_start(2000, sc_core::SC_NS);
+	// upstream direction
+	m_l2cache.m_isocket_u[0](*(m_l1cache_i.m_tsocket_u));
+	m_l2cache.m_isocket_u[1](*(m_l1cache_d.m_tsocket_u));
+
+	sc_core::sc_start(200, sc_core::SC_NS);
 
 	return 0;
 }

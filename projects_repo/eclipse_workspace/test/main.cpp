@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 }
 */
 
-
+/*
 #include <stdio.h>
 
 int main ()
@@ -85,7 +85,145 @@ int main ()
    fclose (pFile);
 
    return 0;
+}*/
+
+
+
+#include <tlm>
+#include <tlm_utils/simple_initiator_socket.h>
+#include <tlm_utils/simple_target_socket.h>
+
+class my_extension : public tlm::tlm_extension< my_extension > {
+public:
+	static std::vector< my_extension *> my_extensions;
+
+	uint32_t m_id;
+
+	my_extension()
+		: m_id(0)
+	{
+	}
+	~my_extension() {}
+
+	virtual tlm_extension_base* clone() const {			// a pure virtual method (declared in abstract class)...polymorphism..must be implemented here!!
+		// const after function name means that it is not possible to change non-mutable members of the object on which this function is invoked i.e the object instance which called this method can't be modified as in its members OR "this" pointer's members aren't allowed to be modified in this function
+		my_extensions.push_back(NULL);
+		my_extensions.back() = new my_extension();
+		my_extensions.back()->m_id = this->m_id;
+		return my_extensions.back();
+	}
+
+	virtual void copy_from(tlm_extension_base const &ext) {
+		m_id = static_cast< my_extension const & >(ext).m_id;
+	}
+private:
+};
+
+std::vector< my_extension * > my_extension::my_extensions;
+
+class initiator : public sc_core::sc_module {
+	SC_HAS_PROCESS(initiator);
+private:
+
+public:
+	tlm_utils::simple_initiator_socket< initiator > m_isocket;
+
+	initiator(sc_core::sc_module_name name)
+		:	sc_module(name), m_isocket("m_isocket")
+	{
+		SC_THREAD(main);
+	}
+
+	void main() {
+		tlm::tlm_generic_payload trans;
+		sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+		my_extension *ext = new my_extension();
+		ext->m_id = 32;
+		trans.set_extension(ext);
+		m_isocket->b_transport(trans, delay);
+
+		while(1) {
+			wait(2, sc_core::SC_NS);
+		}
+	}
+};
+
+
+class target : public sc_core::sc_module {
+private:
+
+public:
+	tlm_utils::simple_target_socket< target > m_tsocket;
+
+	target(sc_core::sc_module_name name)
+		: 	sc_module(name), m_tsocket("m_tsocket")
+	{
+		m_tsocket.register_b_transport(this, &target::b_transport);
+	}
+
+	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
+		my_extension *ext;
+		trans.get_extension(ext);
+		if (ext) {
+			printf("%d\r\n", ext->m_id);
+		} else {
+			assert(0);
+		}
+	}
+};
+
+
+
+int sc_main(int argc, char *argv[]) {
+	initiator m_init("m_init");
+	target m_tar("m_tar");
+
+	m_init.m_isocket(m_tar.m_tsocket);
+
+	sc_core::sc_start(20, sc_core::SC_NS);
+
+	for (std::vector<my_extension *>::iterator iExt = my_extension::my_extensions.begin(); iExt != my_extension::my_extensions.end(); iExt++) {
+		delete *iExt;
+	}
+
+	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

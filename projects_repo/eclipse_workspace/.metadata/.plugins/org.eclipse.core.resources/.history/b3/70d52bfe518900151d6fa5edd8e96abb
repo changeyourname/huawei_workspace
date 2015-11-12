@@ -1,0 +1,72 @@
+/*
+ * cache.hpp
+ *
+ *  Created on: Nov 11, 2015
+ *      Author: uzleo
+ */
+
+#ifndef CACHE_HPP_
+#define CACHE_HPP_
+
+#include <tlm>
+#include <tlm_utils/simple_initiator_socket.h>
+#include <tlm_utils/simple_target_socket.h>
+#include <stdint.h>
+#include "global_defs.hpp"
+
+class cache : public sc_core::sc_module {
+public:
+	enum eviction_policy {LRU, LFU, FIFO, RAND};
+private:
+	struct cache_block {
+		enum cache_block_state {M, S, I};
+
+		cache_block_state state;
+		uint64_t tag;
+		uint32_t evict_tag;
+	};
+
+	tlm::tlm_generic_payload m_trans;			// lt modeling so can afford a single m_trans for the whole object as there are no outstanding requests..this helps to improve performance as m_trans needs to be created only once for an object of this class
+	uint32_t m_num_masters;
+	uint32_t m_block_size;
+	uint32_t m_num_of_sets;
+	uint32_t m_num_of_ways;
+	bool m_write_back;
+	bool m_write_allocate;
+	eviction_policy m_evict_policy;
+	std::vector< std::vector< cache_block > > m_blocks;
+	FILE *m_fid;
+	bool m_log;
+
+	void blkAddr_set_tag(uint64_t req_addr, uint64_t &block_addr, uint32_t &set, uint64_t &tag);
+	bool cache_lookup(uint64_t req_addr, bool &evict_needed, uint32_t &way_free);
+	void do_eviction(uint64_t req_addr, uint32_t way_free, sc_core::sc_time &delay);
+	uint32_t find_way_evict(uint32_t set);
+	void send_request(uint64_t block_addr, bool write, sc_core::sc_time &delay);
+	void update_block_state(uint64_t req_addr, tlm::tlm_command cmd, uint32_t way_free, sc_core::sc_time &delay);
+	void print_cache_set(uint32_t set);
+public:
+	tlm_utils::simple_initiator_socket< cache > m_isocket;
+	tlm_utils::simple_target_socket< cache > *m_tsocket;
+
+	cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy);
+	~cache();
+	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);
+	void do_logging();
+};
+
+
+
+#endif /* CACHE_HPP_ */
+
+
+
+
+
+
+
+
+
+
+
+
