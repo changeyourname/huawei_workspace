@@ -2436,3 +2436,16 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp
 
 !ENTRY org.eclipse.cdt.core 1 0 2015-11-11 16:00:59.938
 !MESSAGE Indexed 'basic_mem_write_read' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+!SESSION 2015-11-12 10:46:55.009 -----------------------------------------------
+eclipse.buildId=4.5.1.M20150904-0015
+java.version=1.7.0_85
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.cpp.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.cpp.product
+
+!ENTRY org.eclipse.cdt.core 1 0 2015-11-12 11:08:05.142
+!MESSAGE Indexed 'simpe_cache_model_sysc' (0 sources, 0 headers) in 0.001 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2015-11-12 11:11:09.462
+!MESSAGE Indexed 'simple_cache_model_sysc' (1 sources, 331 headers) in 6.85 sec: 39,609 declarations; 65,365 references; 0 unresolved inclusions; 0 syntax errors; 4 unresolved names (0.0038%)

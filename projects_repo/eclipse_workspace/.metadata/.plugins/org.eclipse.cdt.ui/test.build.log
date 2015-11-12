@@ -1,15 +1,6 @@
-11:34:08 **** Build of configuration Debug for project test ****
+15:43:03 **** Incremental Build of configuration Debug for project test ****
 make all 
-Building file: ../main.cpp
-Invoking: GCC C++ Compiler
-g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
-Finished building: ../main.cpp
- 
-Building target: test
-Invoking: GCC C++ Linker
-g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "test"  ./main.o   -lsystemc
-Finished building target: test
- 
+make: Nothing to be done for `all'.
 
-11:34:08 Build Finished (took 110ms)
+15:43:03 Build Finished (took 58ms)
 

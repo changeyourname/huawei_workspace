@@ -26,7 +26,7 @@ struct req_type {
 	unsigned char rd_data[4];
 };
 
-#define NUM_REQ 9
+#define NUM_REQ 3
 
 class req_generator : public sc_core::sc_module {
 public:
@@ -42,15 +42,15 @@ public:
 	void main() {
 		//unsigned char *mem_no_cache = new unsigned char[MEM_SIZE];
 		req_type req_stimuli[NUM_REQ] = {
-											{0x10345678, tlm::TLM_READ_COMMAND},
-											{0x10345078, tlm::TLM_READ_COMMAND},
-											{0x10345278, tlm::TLM_READ_COMMAND},
+											{0x00000000, tlm::TLM_READ_COMMAND},
+											{0x00000004, tlm::TLM_READ_COMMAND},
+											{0x00000008, tlm::TLM_READ_COMMAND}/*,
 											{0x10345478, tlm::TLM_READ_COMMAND},
 											{0x10345878, tlm::TLM_WRITE_COMMAND, {1,2,3,4}},
 											{0x11345078, tlm::TLM_READ_COMMAND},
 											{0x11345278, tlm::TLM_READ_COMMAND},
 											{0x11345478, tlm::TLM_READ_COMMAND},
-											{0x11345a78, tlm::TLM_READ_COMMAND}
+											{0x11345a78, tlm::TLM_READ_COMMAND}*/
 								  	  	};
 
 		while(1) {
@@ -70,8 +70,6 @@ public:
 				}
 
 				m_isocket[0]->b_transport(trans, delay);
-
-				printf("delay:%s\r\n---------------\r\n", delay.to_string().c_str());
 
 				wait(2, sc_core::SC_NS);
 			}
@@ -107,17 +105,19 @@ public:
 class target : public sc_core::sc_module {
 private:
 	unsigned char *m_mem;
-	std::vector< cache * > m_l1cache_i;
-	std::vector< cache * > m_l1cache_d;
+	//std::vector< cache * > m_l1cache_i;
+	//std::vector< cache * > m_l1cache_d;
 	cache m_l2cache;
-	std::vector< cache * > *child_of_l2;
+	//std::vector< cache * > *child_of_l2;
+	cache m_l1cache;
 
 public:
 	std::vector< tlm_utils::simple_target_socket_tagged<target> * > m_tsocket;
 
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_mem(mem),
-			m_l2cache("m_l2cache", 16384, 16, 16)
+			m_l2cache("m_l2cache", "m_l2cache", 16384, 16, 1, 1),
+			m_l1cache("m_l1cache", "m_l1cache", 1024, 4, 1)
 	{
 		m_tsocket.reserve(4);
 		char tmp[20];
@@ -127,7 +127,7 @@ public:
 			m_tsocket[i]->register_b_transport(this, &target::b_transport, i);
 		}
 
-		m_l1cache_i.reserve(4);
+		/*m_l1cache_i.reserve(4);
 		for (uint32_t i=0; i<4; i++) {
 			sprintf(tmp, "m_l1cache_i[%d]", i);
 			m_l1cache_i.push_back(new cache(tmp, 1024, 16, 2, false));
@@ -154,15 +154,23 @@ public:
 		}
 		m_l2cache.set_children(child_of_l2);
 		m_l2cache.set_delays((sc_core::sc_time)MEM_TO_L2_CACHEBLOCK_DELAY, (sc_core::sc_time)L2_TO_MEM_CACHEBLOCK_DELAY, (sc_core::sc_time) L2_LOOKUP_DELAY, (sc_core::sc_time) L2_WRITE_DELAY, (sc_core::sc_time) L2_READ_DELAY);
+		*/
+		m_l2cache.set_parent(NULL);
+		m_l2cache.set_children(&m_l2cache);
+		m_l2cache.do_logging();
+
+		m_l1cache.set_parent(&m_l2cache);
+		m_l1cache.do_logging();
+
 	}
 
 	~target() {
 		// cleaning up allocated stuff
-		for (uint32_t i=0; i<4; i++) {
+		/*for (uint32_t i=0; i<4; i++) {
 			delete m_l1cache_i[i];
 			delete m_l1cache_d[i];
 		}
-		delete child_of_l2;
+		delete child_of_l2;*/
 		for (uint32_t i=0; i<4; i++) {
 			delete m_tsocket[i];
 		}
@@ -181,14 +189,15 @@ public:
 		if (payload.get_command() == tlm::TLM_WRITE_COMMAND) {
 			delay += CPU_TO_L1_DELAY;
 		}
-		if (addr <= 0x11000000) {
+		/*if (addr <= 0x11000000) {
 			m_l1cache_d[SocketId]->update(payload, delay);
 		} else {
 			m_l1cache_i[SocketId]->update(payload, delay);
 		}
 		if (payload.get_command() == tlm::TLM_READ_COMMAND) {
 			delay += L1_TO_CPU_DELAY;
-		}
+		}*/
+		m_l1cache.update(payload, delay);
 
 		if (cmd == tlm::TLM_WRITE_COMMAND) {
 			std::memcpy(&m_mem[addr], ptr, (unsigned long) len);
@@ -198,14 +207,14 @@ public:
 	}
 
 	void print() {
-		for (uint32_t i=0; i<4; i++) {
+	/*	for (uint32_t i=0; i<4; i++) {
 			m_l1cache_d[i]->print_cache_set(7);
 			printf("----\r\n");
 			m_l1cache_i[i]->print_cache_set(7);
 			printf("----\r\n");
 		}
 		m_l2cache.print_cache_set(7);
-		printf("----\r\n");
+		printf("----\r\n");*/
 	}
 };
 
@@ -224,7 +233,6 @@ int sc_main(int argc, char *argv[]) {
 
 	sc_core::sc_start(1, sc_core::SC_MS);
 
-	printf("END\r\n");
 	m_target.print();
 
 	return 0;

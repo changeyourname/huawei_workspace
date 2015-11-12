@@ -1,0 +1,267 @@
+/*
+ * cache.cpp
+ *
+ *  Created on: Nov 11, 2015
+ *      Author: uzleo
+ */
+
+
+
+
+#include "cache.hpp"
+
+cache::cache(sc_core::sc_module_name name, uint32_t num_child)
+	:	sc_module(name),
+		m_isocket("m_isocket"),
+		m_num_child(num_child),
+		m_trans(),
+		m_log(false)
+{
+	m_tsocket = new tlm_utils::simple_target_socket< cache >[m_num_child];
+	for (uint32_t i=0; i<m_num_child; i++) {
+		m_tsocket[i].register_b_transport(this, &cache::b_transport);
+	}
+}
+
+
+cache::~cache() {
+	delete[] m_tsocket;
+}
+
+
+void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
+	uint64_t req_addr = trans.get_address();
+	tlm::tlm_command cmd = trans.get_command();
+	unsigned char *ptr = trans.get_data_ptr();
+	uint32_t len = trans.get_data_length();
+	assert(len == WORD_SIZE);
+
+	uint64_t block_addr, tag;
+	uint32_t set;
+	blkAddr_set_tag(req_addr, block_addr, set, tag);
+
+	bool evict_needed;
+	uint32_t way_free;
+
+	if (cache_lookup(block_addr, set, tag, evict_needed, way_free)) {
+		// cache hit
+		if (m_log) {
+			fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
+			frpintf(m_fid, "..tag=0x%08x", tag);
+			fprintf(m_fid, "..set=%d\r\n", set);
+			fflush(m_fid);			// disable this when not debugging
+		}
+
+		if (cmd == tlm::TLM_WRITE_COMMAND) {
+			if (m_write_back) {
+				if (m_cache_blocks[set][way_free].state == cache_block::S) {
+					m_cache_blocks[set][way_free].state = cache_block::M;
+					// TODO: notify the parent caches that this cache has most updated data so that they can modify their state to MBS
+				}
+			} else {
+				// writing through downstream
+				send_request(block_addr, true, delay);
+			}
+		} else {
+			// TODO: delay for reading cache block
+		}
+	} else {
+		// cache miss
+		if (m_log) {
+			fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)payload.get_address());
+			fprintf(m_fid, "..tag=0x%08x", tag);
+			fprintf(m_fid, "...set=%d\r\n", set);
+			fflush(m_fid);			//TODO: disable this after debugging
+		}
+
+		do_eviction(way_free, set, delay);
+
+		// fetch the block from downstream
+		send_request(block_addr, false, delay);
+
+		// update the state of cache block
+		update_block_state(cmd, set, way_free);
+	}
+
+	if (m_log) {
+		print_cache_set(set);
+	}
+}
+
+
+void cache::print_cache_set(uint32_t set) {
+	for (uint32_t x=0; x<m_num_of_ways; x++) {
+		fprintf(m_fid, "way[%d]..", x);
+		fprintf(m_fid, "state=%d..", m_cache_lines[set][x].state);
+		fprintf(m_fid, "tag=0x%08x..", m_cache_lines[set][x].tag);
+		fprintf(m_fid, "lru=%d\r\n", (int)m_cache_lines[set][x].evict_tag);
+	}
+	fprintf(m_fid, "------------------\r\n");
+	fflush(m_fid);			//TODO: disable this after debugging
+}
+
+
+void cache::update_block_state(tlm::tlm_command cmd, uint32_t set, uint32_t way_free) {
+	assert(m_cache_blocks[set][way_free].state == cache_block::I);
+	m_cache_blocks[set][way_free].tag = tag;
+	if (cmd == tlm::TLM_WRITE_COMMAND) {
+		if (m_write_back) {
+			m_cache_blocks[set][way_free].state = cache_block::M;
+			// TODO: notify the parent caches that this cache has most updated data so that they can modify their state to MBS
+		} else {
+			m_cache_blocks[set][way_free].state = cache_block::S;
+			// writing through downstream
+			send_request(block_addr, true, delay);
+		}
+	} else {
+		m_cache_blocks[set][way_free].state = cache_block::S;
+	}
+
+	// eviction policy stuff for this newly cached block
+	if (m_evict_policy == LRU) {
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+			if (way_free!=j && m_cache_blocks[set][j].state!=cache_block::I) {
+				m_cache_blocks[set][j].evict_tag++;
+			}
+			assert(m_cache_blocks[set][way_free].evict_tag <= m_num_of_ways);
+		}
+		m_cache_lines[set][way_free].evict_tag = 1;
+	} else {
+		m_cache_lines[set][way_free].evict_tag = 0;
+	}
+}
+
+
+void cache::blkAddr_set_tag(uint64_t req_addr, uint64_t &block_addr, uint32_t &set, uint64_t &tag) {
+	block_addr = (req_addr/m_cache_block_size)*m_cache_block_size;
+	set = (block_addr >> (uint32_t)(log2((double)WORD_SIZE) + log2((double)m_cache_block_size/WORD_SIZE))) & ((1 << (uint32_t)log2((double)m_num_of_sets)) - 1);
+	tag = (req_addr >> (uint32_t)(log2((double)WORD_SIZE) + log2((double)m_cache_block_size/WORD_SIZE) + log2((double) m_num_of_sets)));
+}
+
+
+bool cache::cache_lookup(uint64_t block_addr, uint32_t set, uint64_t tag, bool &evict_needed, uint32_t &way_free) {
+	evict_needed = true;
+	uint64_t block_addr, tag;
+	uint32_t set;
+	blkAddr_set_tag(req_addr, block_addr, set, tag);
+
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
+		if (m_cache_blocks[set][i].state != cache_block::I) {
+			if (m_cache_blocks[set][i].tag == tag) {
+				evict_needed = false;
+				way_free = i;
+				return true;
+			}
+		} else {
+			evict_needed = false;
+			way_free = i;
+		}
+	}
+
+	if (evict_needed) {
+		way_free = find_way_evict(set);
+	}
+
+	return false;
+}
+
+
+uint32_t cache::find_way_evict(uint32_t set) {
+	int way_free = -1;
+
+	switch(m_evict_policy) {
+		case LRU:
+		{
+			for (uint32_t j=0; j<m_num_of_ways; j++) {
+				if (m_cache_blocks[set][j].evict_tag == m_num_of_ways) {
+					way_free = j;
+				}
+			}
+			assert(way_free != -1);
+			break;
+		}
+		case LFU:
+		{
+			uint64_t tmp = m_cache_blocks[set][0].evict_tag;
+			way_free = 0;
+			for (uint32_t j=1; j<m_num_of_ways; j++) {
+				if (tmp > m_cache_blocks[set][j].evict_tag) {
+					tmp = m_cache_blocks[set][j].evict_tag;
+					way_free = j;
+				}
+			}
+			break;
+		}
+		case FIFO:
+		{
+			//TODO
+			break;
+		}
+		case RAND:
+		{
+			way_free = rand()%4;
+			break;
+		}
+		default:
+		{
+			assert(0);
+		}
+	}
+
+	return (uint32_t)way_free;
+}
+
+
+void cache::do_eviction(uint32_t way_free, uint32_t set, sc_core::sc_time &delay) {
+	if (m_cache_blocks[set][way_free].state==cache_block::M || m_cache_blocks[set][way_free].state==cache_block::MBS) {
+		// writing through downstream..if a cache exists on the downstream path then it can update the status of its block (MBS) to M
+		// TODO: model timing
+		send_request(block_addr, true, delay);
+	}
+	// TODO: BACK INVALIDATION
+}
+
+
+void cache::send_request(uint64_t block_addr, bool write, sc_core::sc_time &delay) {
+	unsigned char *ptr = new unsigned char[m_cache_block_size];
+	if (write) {
+		m_trans.set_write();
+	} else {
+		m_trans.set_read();
+	}
+	m_trans.set_address(block_addr);
+	// faking write/read data
+	m_trans.set_data_ptr(ptr);
+	m_trans.set_data_length(m_cache_block_size);
+	m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+
+	m_isocket->b_transport(m_trans, delay);
+
+	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

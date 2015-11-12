@@ -1,0 +1,20 @@
+15:59:14 **** Build of configuration Debug for project simple_cache_model_sysc ****
+make all 
+Building file: ../cache.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"cache.d" -MT"cache.o" -o "cache.o" "../cache.cpp"
+Finished building: ../cache.cpp
+ 
+Building file: ../main.cpp
+Invoking: GCC C++ Compiler
+g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"main.d" -MT"main.o" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building target: simple_cache_model_sysc
+Invoking: GCC C++ Linker
+g++ -L/usr/local/systemc-2.3.1/lib-linux/ -m32 -o "simple_cache_model_sysc"  ./cache.o ./main.o   -lsystemc
+Finished building target: simple_cache_model_sysc
+ 
+
+15:59:16 Build Finished (took 2s.160ms)
+

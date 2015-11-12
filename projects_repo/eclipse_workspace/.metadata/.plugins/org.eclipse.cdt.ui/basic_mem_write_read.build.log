@@ -1,19 +1,5 @@
-16:23:44 **** Build of configuration Debug for project basic_mem_write_read ****
+15:43:00 **** Incremental Build of configuration Debug for project basic_mem_write_read ****
 make all 
-Building file: ../main.c
-Invoking: Cross ARM C Compiler
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -std=gnu99 -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
-Finished building: ../main.c
- 
-Building target: basic_mem_write_read.elf
-Invoking: Cross ARM C Linker
-arm-none-linux-gnueabi-gcc -mcpu=cortex-a9 -marm -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -Xlinker --gc-sections -Wl,-Map,"basic_mem_write_read.map" -o "basic_mem_write_read.elf"  ./main.o   
-Finished building target: basic_mem_write_read.elf
- 
-Invoking: Cross ARM GNU Create Flash Image
-arm-none-linux-gnueabi-objcopy -O ihex "basic_mem_write_read.elf"  "basic_mem_write_read.hex"
-Finished building: basic_mem_write_read.hex
- 
 Invoking: Cross ARM GNU Print Size
 arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
    text	   data	    bss	    dec	    hex	filename
@@ -21,5 +7,5 @@ arm-none-linux-gnueabi-size --format=berkeley "basic_mem_write_read.elf"
 Finished building: basic_mem_write_read.siz
  
 
-16:23:44 Build Finished (took 115ms)
+15:43:00 Build Finished (took 56ms)
 

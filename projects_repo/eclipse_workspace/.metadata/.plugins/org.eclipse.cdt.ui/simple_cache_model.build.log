@@ -1,22 +1,8 @@
-16:54:08 **** Build of configuration Debug for project simple_cache_model ****
+15:43:00 **** Incremental Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
 g++ -I/usr/local/systemc-2.3.1/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"cache.d" -MT"cache.o" -o "cache.o" "../cache.cpp"
-../cache.cpp: In member function ‘void cache::update(tlm::tlm_generic_payload&, sc_core::sc_time&, bool)’:
-../cache.cpp:68:58: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-      printf("cache hit for 0x%08x", payload.get_address());
-                                                          ^
-../cache.cpp:163:55: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘sc_dt::uint64 {aka long long unsigned int}’ [-Wformat=]
-  printf("cache miss for 0x%08x", payload.get_address());
-                                                       ^
-../cache.cpp:205:63: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
-    printf("lru=%d\r\n", m_cache_lines[set][way_free].evict_tag);
-                                                               ^
-../cache.cpp: In member function ‘void cache::print_cache_set(uint32_t)’:
-../cache.cpp:377:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘uint64_t {aka long long unsigned int}’ [-Wformat=]
-   printf("lru=%d\r\n", m_cache_lines[set][x].evict_tag);
-                                                       ^
 Finished building: ../cache.cpp
  
 Building file: ../main.cpp
@@ -30,5 +16,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o
 Finished building target: simple_cache_model
  
 
-16:54:10 Build Finished (took 1s.809ms)
+15:43:02 Build Finished (took 1s.809ms)
 
