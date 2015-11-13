@@ -162,6 +162,11 @@ int sc_main(int argc, char* argv[]) {
 
 	sc_core::sc_start(200, sc_core::SC_NS);
 
+	// cleaning up allocated memory
+	for (std::vector< cache::req_extension * >::iterator iExt = cache::req_extension::req_extension_clones.begin(); iExt != cache::req_extension::req_extension_clones.end(); iExt++) {
+		delete *iExt;
+	}
+
 	return 0;
 }
 
