@@ -116,7 +116,7 @@ public:
 
 	target(sc_core::sc_module_name name, unsigned char *mem)
 		:	m_mem(mem),
-			m_l2cache("m_l2cache", "m_l2cache", 16384, 16, 1, 1),
+			m_l2cache("m_l2cache", "m_l2cache", 16384, 16, 2, 1),
 			m_l1cache("m_l1cache", "m_l1cache", 1024, 4, 1)
 	{
 		m_tsocket.reserve(4);

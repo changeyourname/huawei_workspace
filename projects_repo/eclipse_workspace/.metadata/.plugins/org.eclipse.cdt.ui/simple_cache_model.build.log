@@ -1,4 +1,4 @@
-15:43:00 **** Incremental Build of configuration Debug for project simple_cache_model ****
+16:13:01 **** Build of configuration Debug for project simple_cache_model ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler
@@ -16,5 +16,5 @@ g++ -L/usr/local/systemc-2.3.1/lib-linux -m32 -o "simple_cache_model"  ./cache.o
 Finished building target: simple_cache_model
  
 
-15:43:02 Build Finished (took 1s.809ms)
+16:13:03 Build Finished (took 1s.709ms)
 

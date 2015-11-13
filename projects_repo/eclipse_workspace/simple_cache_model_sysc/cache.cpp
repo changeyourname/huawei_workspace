@@ -44,6 +44,8 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 		m_blocks[i].resize(m_num_of_ways);
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
 			m_blocks[i][j].state = cache_block::I;
+			m_blocks[i][j].tag = 0x0;
+			m_blocks[i][j].evict_tag = 0x0;
 		}
 	}
 
@@ -407,7 +409,7 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 	// update eviction policy stuff
 	if (m_evict_policy==LRU || m_evict_policy==FIFO) {
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
-			if (m_current_way!=j && *state!=cache_block::I) {
+			if (m_current_way!=j && m_blocks[m_current_set][j].state!=cache_block::I) {
 				m_blocks[m_current_set][j].evict_tag++;
 			}
 			assert(m_blocks[m_current_set][m_current_way].evict_tag <= m_num_of_ways);
@@ -420,6 +422,11 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 
 // performs cache block eviction
 void cache::do_eviction() {
+	if (m_log) {
+		//TODO
+	}
+
+
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
 	// incase this block is in 'S' then no writeback is needed
 	// incase this block is in 'MBS' then this means that this block is being cached somewhere upstream in 'M' state which would have been written back via the back-invalidation path above so no writeback is needed
@@ -461,14 +468,17 @@ void cache::send_request(bool downstream) {
 
 // prints for a given set status of all cache blocks (ways) in common log file for whole cache system
 void cache::print_cache_set(uint32_t set) {
-	fprintf(common_fid, "(%s)..", name());
+	std::string state[4] = {"M", "S", "I", "MBS"};
+
+	fprintf(common_fid, "(%s)\r\n", name());
 	fprintf(common_fid, "------------------\r\n");
 	for (uint32_t x=0; x<m_num_of_ways; x++) {
 		fprintf(common_fid, "way[%d]..", x);
-		fprintf(common_fid, "state=%d..", m_blocks[set][x].state);
+		fprintf(common_fid, "state=%s..", state[m_blocks[set][x].state].c_str());
 		fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
 		fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	}
+	fprintf(common_fid, "\r\n\r\n");
 	fflush(common_fid);			//TODO: disable this after debugging
 }
 
