@@ -17,6 +17,7 @@
 class cache : public sc_core::sc_module {
 public:
 	enum eviction_policy {LRU, LFU, FIFO, RAND};
+	static FILE *common_fid;
 
 	// for special requests (e.g back-invalidation) between caches
 	class req_extension : public tlm::tlm_extension< req_extension > {
@@ -68,7 +69,7 @@ private:
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free);
 	uint32_t find_way_evict();
-	void process_normal_request(tlm::tlm_generic_payload &trans);
+	void process_hit(tlm::tlm_generic_payload &trans);
 	void process_special_request(req_extension::req_type type);
 	void process_miss(tlm::tlm_generic_payload &trans, bool evict_needed);
 	void do_eviction();

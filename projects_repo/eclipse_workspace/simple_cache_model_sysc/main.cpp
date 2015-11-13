@@ -141,9 +141,9 @@ int sc_main(int argc, char* argv[]) {
 		delete m_l2cache[i];
 	}*/
 
-	cache m_l1cache_i("m_l1cache_i", "m_l1cache_i", 1, 1024, 4, 1, true, true, cache::LRU, 1);
+	cache m_l1cache_i("m_l1cache_i", "log/m_l1cache_i.log", 1, 1024, 4, 1, true, true, cache::LRU, 1);
 	m_l1cache_i.do_logging();
-	cache m_l1cache_d("m_l1cache_d", "m_l1cache_d", 1, 1024, 4, 1, true, true, cache::LRU, 1);
+	cache m_l1cache_d("m_l1cache_d", "log/m_l1cache_d.log", 1, 1024, 4, 1, true, true, cache::LRU, 1);
 	m_l1cache_d.do_logging();
 
 	cache m_l2cache("m_l2cache", "m_l2cache", 2, 2048, 16, 2, true, true, cache::LRU, 2);
@@ -166,6 +166,8 @@ int sc_main(int argc, char* argv[]) {
 	for (std::vector< cache::req_extension * >::iterator iExt = cache::req_extension::req_extension_clones.begin(); iExt != cache::req_extension::req_extension_clones.end(); iExt++) {
 		delete *iExt;
 	}
+	fclose(cache::common_fid);
+	delete cache::common_fid;
 
 	return 0;
 }

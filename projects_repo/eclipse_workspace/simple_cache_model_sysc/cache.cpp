@@ -12,6 +12,7 @@
 
 // to clean up allocated stuff globally for the whole class
 std::vector< cache::req_extension * > cache::req_extension::req_extension_clones;
+FILE *cache::common_fid = fopen("log/cache_system.log", "w+");
 
 // constructor
 cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level)
@@ -123,7 +124,7 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 		// cache hit
 		if (type == req_extension::NORMAL) {
 			// normal request
-			process_normal_request(trans);
+			process_hit(trans);
 		} else {
 			// special request
 			process_special_request(type);
@@ -170,12 +171,13 @@ bool cache::cache_lookup(bool &evict_needed, uint32_t &way_free) {
 }
 
 
-
+// based on the eviction policy, choose the way to be replaced
 uint32_t cache::find_way_evict() {
 	int way_free = -1;
 
 	switch(m_evict_policy) {
 		case LRU:
+		case FIFO:
 		{
 			for (uint32_t j=0; j<m_num_of_ways; j++) {
 				if (m_blocks[m_current_set][j].evict_tag == m_num_of_ways) {
@@ -197,11 +199,6 @@ uint32_t cache::find_way_evict() {
 			}
 			break;
 		}
-		case FIFO:
-		{
-			//TODO
-			break;
-		}
 		case RAND:
 		{
 			way_free = rand()%4;
@@ -218,7 +215,7 @@ uint32_t cache::find_way_evict() {
 
 
 // handle normal hit request
-void cache::process_normal_request(tlm::tlm_generic_payload &trans) {
+void cache::process_hit(tlm::tlm_generic_payload &trans) {
 	// logging
 	if (m_log) 	{
 		fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
@@ -252,9 +249,22 @@ void cache::process_normal_request(tlm::tlm_generic_payload &trans) {
 		// read hit
 		// TODO: delay timing for reading cache block
 	}
+
+	// update eviction policy stuff
+	if (m_evict_policy == LRU) {
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+			if (m_current_way!=j && *state!=cache_block::I && m_blocks[m_current_set][j].evict_tag<=m_blocks[m_current_set][m_current_way].evict_tag) {
+				m_blocks[m_current_set][j].evict_tag++;
+			}
+			assert(m_blocks[m_current_set][j].evict_tag <= m_num_of_ways);
+		}
+		m_blocks[m_current_set][m_current_way].evict_tag = 1;
+	} else if (m_evict_policy == LFU) {
+		m_blocks[m_current_set][m_current_way].evict_tag++;
+	}
 }
 
-
+// handle special request on hit
 void cache::process_special_request(req_extension::req_type type) {
 	// logging
 	if (m_log) {
@@ -330,6 +340,7 @@ void cache::process_special_request(req_extension::req_type type) {
 }
 
 
+// handle miss request
 void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 	if (m_log) {
 		fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)trans.get_address());
@@ -356,27 +367,36 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 	// update state of block
 	if (cmd == tlm::TLM_WRITE_COMMAND) {
 		// write miss
-		if (m_write_back) {
-			if (m_level < LLC_LEVEL) {
-				*state = cache_block::M;
-				m_ext->m_type = req_extension::M_UPDATE;
+		if (m_write_allocate) {
+			// allocate block on write miss
+			if (m_write_back) {
+				if (m_level < LLC_LEVEL) {
+					*state = cache_block::M;
+					m_ext->m_type = req_extension::M_UPDATE;
+					send_request(true);
+				}
+			} else {
+				*state = cache_block::S;
+				// writing through downstream
+				m_trans.set_write();
+				m_ext->m_type = req_extension::NORMAL;
 				send_request(true);
 			}
+			// TODO: model write cache delay
 		} else {
-			*state = cache_block::S;
-			// writing through downstream
+			// no allocation of block on write miss...just bypass this cache and write through downstream
 			m_trans.set_write();
 			m_ext->m_type = req_extension::NORMAL;
 			send_request(true);
 		}
-		// TODO: model write cache delay
 	} else {
 		// read miss
 		*state = cache_block::S;
 		// TODO: model read cache delay
 	}
+
 	// update eviction policy stuff
-	if (m_evict_policy == LRU) {
+	if (m_evict_policy==LRU || m_evict_policy==FIFO) {
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
 			if (m_current_way!=j && *state!=cache_block::I) {
 				m_blocks[m_current_set][j].evict_tag++;
@@ -389,7 +409,7 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 	}
 }
 
-
+// performs cache block eviction
 void cache::do_eviction() {
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
 	// incase this block is in 'S' then no writeback is needed
@@ -430,21 +450,20 @@ void cache::send_request(bool downstream) {
 
 
 
-
+// prints for a given set status of all cache blocks (ways) in common log file for whole cache system
 void cache::print_cache_set(uint32_t set) {
+	fprintf(common_fid, "(%s)..", name());
 	for (uint32_t x=0; x<m_num_of_ways; x++) {
-		fprintf(m_fid, "way[%d]..", x);
-		fprintf(m_fid, "state=%d..", m_blocks[set][x].state);
-		fprintf(m_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
-		fprintf(m_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
+		fprintf(common_fid, "way[%d]..", x);
+		fprintf(common_fid, "state=%d..", m_blocks[set][x].state);
+		fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
+		fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	}
-	fprintf(m_fid, "------------------\r\n");
-	fflush(m_fid);			//TODO: disable this after debugging
+	fprintf(common_fid, "------------------\r\n");
+	fflush(common_fid);			//TODO: disable this after debugging
 }
 
 
-//TODO: write-allocate
-//TODO: fifo eviction policy
 //TODO: model timing
 
 
