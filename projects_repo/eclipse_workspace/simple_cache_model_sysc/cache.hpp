@@ -60,7 +60,7 @@ private:
 	std::vector< std::vector< cache_block > > m_blocks;
 	FILE *m_fid;
 	bool m_log;
-	bool m_level;		// if true then this is the highest level cache (most downstream i.e closes to memory or farthest from cpu)
+	uint32_t m_level;
 	uint32_t m_current_set;
 	uint64_t m_current_tag;
 	uint64_t m_current_blockAddr;

@@ -64,7 +64,7 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 
 	// target sockets for downstream masters (for back invalidation)
 	if (m_level < LLC_LEVEL) {			// not last level cache
-		m_tsocket_u = new tlm_utils::simple_target_socket< cache >;
+		m_tsocket_u = new tlm_utils::simple_target_socket< cache >("m_tsocket_u");
 		m_tsocket_u->register_b_transport(this, &cache::b_transport);
 	}
 
@@ -79,6 +79,7 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_mas
 	fprintf(m_fid, "..num_of_children:%d", m_num_upstream_masters);
 	fprintf(m_fid, "..write_back:%d", m_write_back);
 	fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
+	fprintf(m_fid, "..level:%d", m_level);
 	fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict_policy);
 	fflush(m_fid);
 }
@@ -93,9 +94,11 @@ cache::~cache() {
 	if (m_level < LLC_LEVEL) {
 		delete m_tsocket_u;
 	}
-	delete m_ext;
+
 	fclose(m_fid);
-	delete m_fid;
+
+	m_trans.clear_extension(m_ext);
+	delete m_ext;
 }
 
 
@@ -111,7 +114,13 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 	uint64_t req_addr = trans.get_address();
 	req_extension *ext;
 	trans.get_extension(ext);
-	req_extension::req_type type = ext->m_type;
+	req_extension::req_type type;
+	if (!ext) {
+		assert(m_level == 1);		// has to be first level
+		type = req_extension::NORMAL;
+	} else {
+		type = ext->m_type;
+	}
 	bool evict_needed;
 
 	// update for current request (this only works if there are no outstanding request like in LT modeling)
@@ -453,13 +462,13 @@ void cache::send_request(bool downstream) {
 // prints for a given set status of all cache blocks (ways) in common log file for whole cache system
 void cache::print_cache_set(uint32_t set) {
 	fprintf(common_fid, "(%s)..", name());
+	fprintf(common_fid, "------------------\r\n");
 	for (uint32_t x=0; x<m_num_of_ways; x++) {
 		fprintf(common_fid, "way[%d]..", x);
 		fprintf(common_fid, "state=%d..", m_blocks[set][x].state);
 		fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
 		fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	}
-	fprintf(common_fid, "------------------\r\n");
 	fflush(common_fid);			//TODO: disable this after debugging
 }
 
