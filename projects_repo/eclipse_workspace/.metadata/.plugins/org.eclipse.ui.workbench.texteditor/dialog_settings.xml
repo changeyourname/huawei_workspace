@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="324" key="DIALOG_WIDTH"/>
 		<item value="146" key="DIALOG_Y_ORIGIN"/>
-		<item value="435" key="DIALOG_HEIGHT"/>
 		<item value="1056" key="DIALOG_X_ORIGIN"/>
+		<item value="435" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="m_isocket_u" key="selection"/>
 		<list key="findhistory">
+			<item value="m_isocket_u"/>
+			<item value="m_tsocket_u"/>
+			<item value="m_num_child"/>
+			<item value="m_num_upstream_masters"/>
+			<item value="num_masters"/>
+			<item value="clones"/>
+			<item value="send_request"/>
 			<item value="do_logging"/>
-			<item value="fflush(m_fid)"/>
-			<item value="this_smp_baseaddr"/>
-			<item value="//fflu"/>
-			<item value="fflush"/>
-			<item value="print_cache_set"/>
-			<item value="m_dmi"/>
-			<item value="m_dmi "/>
 		</list>
 		<list key="replacehistory">
 			<item value="uint32_t"/>

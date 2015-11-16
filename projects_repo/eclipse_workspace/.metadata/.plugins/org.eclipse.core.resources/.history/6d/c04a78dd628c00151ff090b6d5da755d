@@ -1,0 +1,173 @@
+/*
+ * main.cpp
+ *
+ *  Created on: Nov 11, 2015
+ *      Author: uzleo
+ */
+
+
+#include <tlm>
+#include <tlm_utils/simple_initiator_socket.h>
+#include <tlm_utils/simple_target_socket.h>
+#include <stdint.h>
+#include "cache.hpp"
+#include "global_defs.hpp"
+
+class cpu : public sc_core::sc_module {
+	SC_HAS_PROCESS(cpu);
+private:
+	uint32_t m_num_smp_cores;
+
+	void main() {
+		tlm::tlm_generic_payload trans;
+		sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+		unsigned char *ptr = new unsigned char[WORD_SIZE];
+		trans.set_data_ptr(ptr);
+		trans.set_data_length(WORD_SIZE);
+		cache::req_extension *ext;
+		trans.get_extension(ext);
+
+		while(1) {
+			trans.set_write();
+			trans.set_address(0x3000000);
+
+			m_isocket[0]->b_transport(trans, delay);
+			trans.get_extension(ext);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_read();
+			trans.set_address(0x1000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_write();
+			trans.set_address(0x2000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_read();
+			trans.set_address(0x4000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			/*trans.set_read();
+			trans.set_address(0x500000);
+			m_isocket[1]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);*/
+
+			while(1) {
+				wait(2, sc_core::SC_NS);
+			}
+		}
+
+		delete[] ptr;
+	}
+
+public:
+	tlm_utils::simple_initiator_socket_tagged< cpu > *m_isocket;
+
+	cpu(sc_core::sc_module_name name, uint32_t smp)
+		: sc_core::sc_module(name), m_num_smp_cores(smp)
+	{
+		m_isocket = new tlm_utils::simple_initiator_socket_tagged< cpu >[m_num_smp_cores*2];
+		SC_THREAD(main);
+	}
+};
+
+
+
+class memory : public sc_core::sc_module {
+private:
+	unsigned char *m_mem;
+	uint32_t m_size;
+
+public:
+	tlm_utils::simple_target_socket< memory > m_tsocket;
+
+	memory(sc_core::sc_module_name name, uint32_t size)
+		: 	sc_module(name), m_size(size), m_tsocket("m_tsocket")
+	{
+		m_mem = new unsigned char[size];
+
+		m_tsocket.register_b_transport(this, &memory::b_transport);
+		m_tsocket.register_get_direct_mem_ptr(this, &memory::get_direct_mem_ptr);
+	}
+
+	~memory() {
+		delete[] m_mem;
+	}
+
+	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
+		uint64_t addr = trans.get_address()/WORD_SIZE;			// rounding to word-address
+		tlm::tlm_command cmd = trans.get_command();
+		unsigned char *ptr = trans.get_data_ptr();
+		uint32_t len = trans.get_data_length();
+
+		if (cmd==tlm::TLM_READ_COMMAND) {
+			std::memcpy(ptr, &m_mem[addr], len);
+		} else if (cmd==tlm::TLM_WRITE_COMMAND) {
+			std::memcpy(&m_mem[addr], ptr, len);
+		}
+
+		trans.set_response_status(tlm::TLM_OK_RESPONSE);
+	}
+
+	bool get_direct_mem_ptr(tlm::tlm_generic_payload &trans, tlm::tlm_dmi &dmi_data) {
+		dmi_data.allow_read_write();
+		dmi_data.set_start_address(0x0);
+		dmi_data.set_end_address(m_size-1);
+		dmi_data.set_dmi_ptr(m_mem);
+		trans.set_dmi_allowed(true);
+
+		return true;
+	}
+};
+
+// name, *logfile, num_masters, size, block_size, num_ways, write_back, write_allocate, evict_policy, level
+
+int sc_main(int argc, char* argv[]) {
+	cpu m_cpu("m_cpu", 1);
+	memory m_memory("m_memory", MEM_SIZE);
+
+	cache m_l1cache_i("m_l1cache_i", "log/m_l1cache_i.log", 1, 1024, 8, 2, true, true, cache::LRU, 1);
+	m_l1cache_i.do_logging();
+	cache m_l1cache_d("m_l1cache_d", "log/m_l1cache_d.log", 1, 1024, 8, 2, true, true, cache::LRU, 1);
+	m_l1cache_d.do_logging();
+	cache m_l2cache("m_l2cache", "log/m_l2cache.log", 2, 2048, 16, 4, true, true, cache::LRU, 2);
+	m_l2cache.do_logging();
+	cache m_l3cache("m_l3cache", "log/m_l3cache.log", 1, 4096, 16, 8, true, true, cache::LRU, 3);
+	m_l3cache.do_logging();
+
+	// downstream direction
+	m_cpu.m_isocket[0](m_l1cache_i.m_tsocket_d[0]);
+	m_cpu.m_isocket[1](m_l1cache_d.m_tsocket_d[0]);
+	m_l1cache_i.m_isocket_d(m_l2cache.m_tsocket_d[0]);
+	m_l1cache_d.m_isocket_d(m_l2cache.m_tsocket_d[1]);
+	m_l2cache.m_isocket_d(m_l3cache.m_tsocket_d[0]);
+	m_l3cache.m_isocket_d(m_memory.m_tsocket);
+
+	// upstream direction
+	m_l2cache.m_isocket_u[0](*(m_l1cache_i.m_tsocket_u));
+	m_l2cache.m_isocket_u[1](*(m_l1cache_d.m_tsocket_u));
+	m_l3cache.m_isocket_u[0](*(m_l2cache.m_tsocket_u));
+
+	sc_core::sc_start(200, sc_core::SC_NS);
+
+	printf("simulation completed successfully\r\n");
+
+	// cleaning up allocated memory
+	for (std::vector< cache::req_extension * >::iterator iExt = cache::req_extension::req_extension_clones.begin(); iExt != cache::req_extension::req_extension_clones.end(); iExt++) {
+		delete *iExt;
+	}
+	fclose(cache::common_fid);
+
+	return 0;
+}
+
+
+
+
+
+
+
+

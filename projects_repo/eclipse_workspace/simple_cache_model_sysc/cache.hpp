@@ -66,6 +66,7 @@ private:
 	uint64_t m_current_blockAddr;
 	uint32_t m_current_way;
 	sc_core::sc_time m_current_delay;
+	uint32_t m_id;
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free);
 	uint32_t find_way_evict();
@@ -73,8 +74,7 @@ private:
 	void process_special_request(req_extension::req_type type);
 	void process_miss(tlm::tlm_generic_payload &trans, bool evict_needed);
 	void do_eviction();
-	void send_request(bool downstream);
-	void print_cache_set(uint32_t set);
+	void send_request(bool downstream, bool new_address=false);
 
 public:
 	tlm_utils::simple_initiator_socket< cache > m_isocket_d;		// in downstream direction
@@ -82,10 +82,11 @@ public:
 	tlm_utils::simple_target_socket< cache > *m_tsocket_d;			// in downstream direction
 	tlm_utils::simple_target_socket< cache > *m_tsocket_u;			// in upstream direction
 
-	cache(sc_core::sc_module_name name, const char *logfile, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level);
+	cache(sc_core::sc_module_name name, const char *logfile, uint32_t id, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level);
 	~cache();
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);
 	void do_logging();
+	void print_cache_set(uint32_t set);
 };
 
 

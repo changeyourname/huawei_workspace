@@ -24,14 +24,37 @@ private:
 		unsigned char *ptr = new unsigned char[WORD_SIZE];
 		trans.set_data_ptr(ptr);
 		trans.set_data_length(WORD_SIZE);
+		cache::req_extension *ext;
+		trans.get_extension(ext);
 
 		while(1) {
+			trans.set_write();
+			trans.set_address(0x3000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
 			trans.set_read();
-			trans.set_address(0);
+			trans.set_address(0x1000000);
 			m_isocket[0]->b_transport(trans, delay);
 			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 
 			trans.set_write();
+			trans.set_address(0x2000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_read();
+			trans.set_address(0x4000000);
+			m_isocket[0]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_read();
+			trans.set_address(0x500000);
+			m_isocket[1]->b_transport(trans, delay);
+			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+
+			trans.set_write();
+			trans.set_address(0x6000000);
 			m_isocket[0]->b_transport(trans, delay);
 			assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 
@@ -103,28 +126,33 @@ public:
 	}
 };
 
+// name, *logfile, id, num_masters, size, block_size, num_ways, write_back, write_allocate, evict_policy, level
 
 int sc_main(int argc, char* argv[]) {
 	cpu m_cpu("m_cpu", 1);
 	memory m_memory("m_memory", MEM_SIZE);
 
-	cache m_l1cache_i("m_l1cache_i", "log/m_l1cache_i.log", 1, 1024, 4, 1, true, true, cache::LRU, 1);
+	cache m_l1cache_i("m_l1cache_i", "log/m_l1cache_i.log", 0, 1, 1024, 8, 2, true, true, cache::LRU, 1);
 	m_l1cache_i.do_logging();
-	cache m_l1cache_d("m_l1cache_d", "log/m_l1cache_d.log", 1, 1024, 4, 1, true, true, cache::LRU, 1);
+	cache m_l1cache_d("m_l1cache_d", "log/m_l1cache_d.log", 1, 1, 1024, 8, 2, true, true, cache::LRU, 1);
 	m_l1cache_d.do_logging();
-	cache m_l2cache("m_l2cache", "log/m_l2cache.log", 2, 2048, 16, 2, true, true, cache::LRU, 2);
+	cache m_l2cache("m_l2cache", "log/m_l2cache.log", 2, 2, 2048, 16, 4, true, true, cache::LRU, 2);
 	m_l2cache.do_logging();
+	cache m_l3cache("m_l3cache", "log/m_l3cache.log", 3, 1, 4096, 16, 8, true, true, cache::LRU, 3);
+	m_l3cache.do_logging();
 
 	// downstream direction
 	m_cpu.m_isocket[0](m_l1cache_i.m_tsocket_d[0]);
 	m_cpu.m_isocket[1](m_l1cache_d.m_tsocket_d[0]);
 	m_l1cache_i.m_isocket_d(m_l2cache.m_tsocket_d[0]);
 	m_l1cache_d.m_isocket_d(m_l2cache.m_tsocket_d[1]);
-	m_l2cache.m_isocket_d(m_memory.m_tsocket);
+	m_l2cache.m_isocket_d(m_l3cache.m_tsocket_d[0]);
+	m_l3cache.m_isocket_d(m_memory.m_tsocket);
 
 	// upstream direction
 	m_l2cache.m_isocket_u[0](*(m_l1cache_i.m_tsocket_u));
 	m_l2cache.m_isocket_u[1](*(m_l1cache_d.m_tsocket_u));
+	m_l3cache.m_isocket_u[0](*(m_l2cache.m_tsocket_u));
 
 	sc_core::sc_start(200, sc_core::SC_NS);
 

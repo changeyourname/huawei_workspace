@@ -1,4 +1,4 @@
-16:27:25 **** Build of configuration Debug for project simple_cache_model_sysc ****
+16:23:15 **** Build of configuration Debug for project simple_cache_model_sysc ****
 make all 
 Building file: ../cache.cpp
 Invoking: GCC C++ Compiler

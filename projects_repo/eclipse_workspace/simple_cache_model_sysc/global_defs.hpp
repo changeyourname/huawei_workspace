@@ -11,7 +11,7 @@
 
 #define WORD_SIZE 4
 #define MEM_SIZE 536870912
-#define LLC_LEVEL 2
+#define LLC_LEVEL 3
 
 
 #endif /* GLOBAL_DEFS_HPP_ */

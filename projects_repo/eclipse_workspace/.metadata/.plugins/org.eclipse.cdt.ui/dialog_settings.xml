@@ -11,6 +11,14 @@
 	</section>
 	<section name="PDOMSearchPage">
 	</section>
+	<section name="org.eclipse.cdt.internal.ui.text.QuickOutline">
+		<item value="750" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_X_ORIGIN"/>
+		<item value="429" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_Y_ORIGIN"/>
+		<item value="340" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_HEIGHT"/>
+		<item value="true" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_USE_PERSISTED_SIZE"/>
+		<item value="400" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_WIDTH"/>
+		<item value="true" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_USE_PERSISTED_LOCATION"/>
+	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
 		<item value="442" key="size.width"/>
 		<item value="168" key="size.height"/>
@@ -18,8 +26,8 @@
 	<section name="org.eclipse.cdt.ui.OPEN_ACTION_SELECTION_DIALOG_SECTION">
 		<item value="450" key="DIALOG_WIDTH"/>
 		<item value="202" key="DIALOG_Y_ORIGIN"/>
-		<item value="488" key="DIALOG_HEIGHT"/>
 		<item value="585" key="DIALOG_X_ORIGIN"/>
+		<item value="488" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
