@@ -1,0 +1,10 @@
+-- presentation
+
+next week
+-- gem5 simulator, qemu simulator
+
+-- cache monitor peripheral
+-- improve sanity testing for cache model
+-- timing model
+-- design pattern for cache model (later)
+-- cache partitioning (block level configuration register interface)
