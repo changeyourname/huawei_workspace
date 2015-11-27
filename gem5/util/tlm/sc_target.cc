@@ -50,16 +50,14 @@ Target::Target(sc_core::sc_module_name name,
     debug(debug),
     size(size),
     offset(offset),
-    m_mem(mem)
+    m_mem(mem),
+    req_count(0)
 {
     /* Register tlm transport functions */
     socket.register_b_transport(this, &Target::b_transport);
     socket.register_transport_dbg(this, &Target::transport_dbg);
     socket.register_nb_transport_fw(this, &Target::nb_transport_fw);
 
-
-    /* allocate storage memory */
-    //mem = new unsigned char[size];
 
     SC_METHOD(execute_transaction_process);
     sensitive << target_done_event;
@@ -76,7 +74,7 @@ Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 unsigned int
 Target::transport_dbg(tlm::tlm_generic_payload& trans)
 {
-    printf("(%s):DEBUG addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
+    //printf("(%s):DEBUG addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
     tlm::tlm_command cmd = trans.get_command();
     sc_dt::uint64    adr = trans.get_address() - offset;
     unsigned char*   ptr = trans.get_data_ptr();
@@ -107,7 +105,8 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
                                            sc_time& delay)
 {
     if (phase == tlm::BEGIN_REQ) {
-        printf("(%s):NORMAL addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
+        //printf("(%s):NORMAL addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
+        req_count++;
     }
     /* Queue the transaction until the annotated time has elapsed */
     m_peq.notify(trans, phase, delay);
@@ -267,3 +266,10 @@ Target::send_response(tlm::tlm_generic_payload& trans)
     }
     trans.release();
 }
+
+
+
+unsigned int Target::get_reqCount() {
+    return req_count;
+}
+

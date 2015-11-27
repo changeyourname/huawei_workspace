@@ -94,6 +94,9 @@ struct Target: sc_module
     /** Helping Variables **/
     unsigned long long int size;
     unsigned offset;
+    unsigned int req_count;
+    
+    unsigned int get_reqCount();
 };
 
 #endif //__SIM_SC_TARGET_HH__

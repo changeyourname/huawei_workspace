@@ -27,10 +27,13 @@
 #
 # Authors: Jason Power
 
-""" This file creates a barebones system and executes 'hello', a simple Hello
-World application.
-See Part 1, Chapter 2: Creating a simple configuration script in the
+""" This file creates a single CPU and a two-level cache system.
+This script takes a single parameter which specifies a binary to execute.
+If none is provided it executes 'hello' by default (mostly used for testing)
+
+See Part 1, Chapter 3: Adding cache to the configuration script in the
 learning_gem5 book for more information about this script.
+This file exports options for the L1 I/D and L2 cache sizes.
 
 IMPORTANT: If you modify this file, it's likely that the Learning gem5 book
            also needs to be updated. For now, email Jason <power.jg@gmail.com>
@@ -41,6 +44,35 @@ IMPORTANT: If you modify this file, it's likely that the Learning gem5 book
 import m5
 # import all of the SimObjects
 from m5.objects import *
+
+# Add the common scripts to our path
+m5.util.addToPath('../../common')
+
+# import the caches which we made
+from caches import *
+
+# import the SimpleOpts module
+import SimpleOpts
+
+# Set the usage message to display
+SimpleOpts.set_usage("usage: %prog [options] <binary to execute>")
+
+# Finalize the arguments and grab the opts so we can pass it on to our objects
+(opts, args) = SimpleOpts.parse_args()
+
+# get ISA for the default binary to run. This is mostly for simple testing
+isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
+
+# Default to running 'hello', use the compiled ISA to find the binary
+binary = 'tests/test-progs/hello/bin/' + isa + '/linux/hello'
+
+# Check if there was a binary passed in via the command line and error if
+# there are too many arguments
+if len(args) == 1:
+    binary = args[0]
+elif len(args) > 1:
+    SimpleOpts.print_help()
+    m5.fatal("Expected a binary to execute as positional argument")
 
 # create the system we are going to simulate
 system = System()
@@ -57,40 +89,44 @@ system.mem_ranges = [AddrRange('512MB')] # Create an address range
 # Create a simple CPU
 system.cpu = TimingSimpleCPU()
 
-# Create a memory bus, a system crossbar, in this case
-system.membus = SystemXBar()
+# Create an L1 instruction and data cache
+system.cpu.icache = L1ICache(opts)
+system.cpu.dcache = L1DCache(opts)
 
-# Hook the CPU ports up to the membus
-system.cpu.icache_port = system.membus.slave
-system.cpu.dcache_port = system.membus.slave
+# external ports for hooking to SystemC world
+system.physmem = SimpleMemory() # This must be instanciated, even if not needed
+system.tlm_1 = ExternalSlave()
+system.tlm_1.addr_ranges = [AddrRange('512MB')]
+system.tlm_1.port_type = "tlm"
+system.tlm_1.port_data = "icache_port"
 
-# create the interrupt controller for the CPU and connect to the membus
+system.tlm_2 = ExternalSlave()
+system.tlm_2.addr_ranges = [AddrRange('512MB')]
+system.tlm_2.port_type = "tlm"
+system.tlm_2.port_data = "dcache_port"
+
+system.tlm_3 = ExternalSlave()
+system.tlm_3.addr_ranges = [AddrRange('512MB')]
+system.tlm_3.port_type = "tlm"
+system.tlm_3.port_data = "system_port"
+
+# Connect the instruction and data caches to the CPU
+system.cpu.icache.cpu_side = system.cpu.icache_port
+system.cpu.dcache.cpu_side = system.cpu.dcache_port
+# Hook the caches to external world
+system.cpu.icache.mem_side = system.tlm_1.port
+system.cpu.dcache.mem_side = system.tlm_2.port
+# hook the system_port to external world
+system.system_port = system.tlm_3.port
+
+# create the interrupt controller for the CPU
 system.cpu.createInterruptController()
 
 # For x86 only, make sure the interrupts are connected to the memory
 # Note: these are directly connected to the memory bus and are not cached
 if m5.defines.buildEnv['TARGET_ISA'] == "x86":
-    system.cpu.interrupts[0].pio = system.membus.master
-    system.cpu.interrupts[0].int_master = system.membus.slave
-    system.cpu.interrupts[0].int_slave = system.membus.master
-
-# Create a DDR3 memory controller and connect it to the membus
-#system.mem_ctrl = DDR3_1600_x64()
-#system.mem_ctrl.range = system.mem_ranges[0]
-#system.mem_ctrl.port = system.membus.master
-
-system.mem_ctrl = SimpleMemory()
-system.mem_ctrl.range = system.mem_ranges[0]
-system.mem_ctrl.port = system.membus.master
-
-# Connect the system up to the membus
-system.system_port = system.membus.slave
-
-# get ISA for the binary to run.
-isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
-
-# Run 'hello' and use the compiled ISA to find the binary
-binary = 'tests/test-progs/hello/bin/' + isa + '/linux/hello'
+    print "x86 not supported"
+    sys.exit(1);
 
 # Create a process for a simple "Hello World" application
 process = LiveProcess()

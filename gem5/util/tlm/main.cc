@@ -294,7 +294,7 @@ sc_main(int argc, char **argv)
     sc_core::sc_report_handler::set_handler(reportHandler);
 
     SimControl sim_control("gem5", argc, argv);
-    Target *icache;
+    /*Target *icache;
     Target *dcache;
     Target *system_port;
 
@@ -311,19 +311,17 @@ sc_main(int argc, char **argv)
     tlm::tlm_initiator_socket <> *mem_port_3 = 
         dynamic_cast<tlm::tlm_initiator_socket<> *>(
                     sc_core::sc_find_object("gem5.system_port")
-                );
+                );*/
+                
+    Target *memory;                
+    tlm::tlm_initiator_socket <> *mem_port = dynamic_cast<tlm::tlm_initiator_socket<> *>(sc_core::sc_find_object("gem5.memory"));
                 
     unsigned long long int size = 512*1024*1024ULL;                
     unsigned char *mem = new unsigned char[size];                
 
-    if (mem_port_1 && mem_port_2 && mem_port_3) {
+    /*if (mem_port_1 && mem_port_2 && mem_port_3) {
         SC_REPORT_INFO("sc_main", "Port Found");
-        /*memory = new Target("memory",
-                            sim_control.getDebugFlag(),
-                            size,
-                            sim_control.getOffset());
 
-        memory->socket.bind(*mem_port);*/
         icache = new Target("icache", sim_control.getDebugFlag(), size, sim_control.getOffset(), mem);
         icache->socket.bind(*mem_port_1);
         
@@ -332,12 +330,23 @@ sc_main(int argc, char **argv)
         
         system_port = new Target("system_port", sim_control.getDebugFlag(), size, sim_control.getOffset(), mem);
         system_port->socket.bind(*mem_port_3);
+    }*/ 
+    if (mem_port) {
+        memory = new Target("memory",
+                            sim_control.getDebugFlag(),
+                            size,
+                            sim_control.getOffset(),
+                            mem);
+
+        memory->socket.bind(*mem_port);   
     } else {
         SC_REPORT_FATAL("sc_main", "Port Not Found");
         std::exit(EXIT_FAILURE);
     }
 
     sc_core::sc_start();
+    
+    //printf("icache_req_count: %d...dcache_req_count: %d\r\n", icache->get_reqCount(), dcache->get_reqCount());
 
     SC_REPORT_INFO("sc_main", "End of Simulation");
 

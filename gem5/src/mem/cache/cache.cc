@@ -299,7 +299,7 @@ Cache::markInService(MSHR *mshr, bool pending_dirty_resp)
 bool
 Cache::access(PacketPtr pkt, CacheBlk *&blk, Cycles &lat,
               PacketList &writebacks)
-{
+{   
     // sanity check
     assert(pkt->isRequest());
 
@@ -1743,6 +1743,10 @@ Cache::handleFill(PacketPtr pkt, CacheBlk *blk, PacketList &writebacks,
                     is_secure ? "s" : "ns");
         } else {
             tags->insertBlock(pkt, blk);
+            
+            /*blk = tempBlock;
+            tempBlock->set = tags->extractSet(addr);
+            tempBlock->tag = tags->extractTag(addr);*/
         }
 
         // we should never be overwriting a valid block

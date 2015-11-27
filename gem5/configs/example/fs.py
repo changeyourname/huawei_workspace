@@ -189,7 +189,7 @@ def build_test_system(np):
         elif not options.external_memory_system:
             test_sys.iobridge = Bridge(delay='50ns', ranges = test_sys.mem_ranges)
             test_sys.iobridge.slave = test_sys.iobus.master
-            test_sys.iobridge.master = test_sys.membus.slave
+            test_sys.iobridge.master = test_sys.membus.slave                                  
 
         # Sanity check
         if options.fastmem:
