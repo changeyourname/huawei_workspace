@@ -347,6 +347,7 @@ sc_main(int argc, char **argv)
     sc_core::sc_start();
     
     //printf("icache_req_count: %d...dcache_req_count: %d\r\n", icache->get_reqCount(), dcache->get_reqCount());
+    printf("\r\n\r\nmemory req_count: %d\r\n\r\n", memory->get_reqCount());
 
     SC_REPORT_INFO("sc_main", "End of Simulation");
 

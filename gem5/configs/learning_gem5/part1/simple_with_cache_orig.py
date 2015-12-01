@@ -93,18 +93,31 @@ system.cpu = TimingSimpleCPU()
 system.cpu.icache = L1ICache(opts)
 system.cpu.dcache = L1DCache(opts)
 
+# external ports for hooking to SystemC world
+system.physmem = SimpleMemory() # This must be instanciated, even if not needed
+system.tlm_1 = ExternalSlave()
+system.tlm_1.addr_ranges = [AddrRange('512MB')]
+system.tlm_1.port_type = "tlm"
+system.tlm_1.port_data = "icache_port"
+
+system.tlm_2 = ExternalSlave()
+system.tlm_2.addr_ranges = [AddrRange('512MB')]
+system.tlm_2.port_type = "tlm"
+system.tlm_2.port_data = "dcache_port"
+
+system.tlm_3 = ExternalSlave()
+system.tlm_3.addr_ranges = [AddrRange('512MB')]
+system.tlm_3.port_type = "tlm"
+system.tlm_3.port_data = "system_port"
+
 # Connect the instruction and data caches to the CPU
-system.cpu.icache.connectCPU(system.cpu)
-system.cpu.dcache.connectCPU(system.cpu)
-
-
-# Hook the CPU ports up to the l2bus
-system.cpu.icache.connectBus(system.membus)
-system.cpu.dcache.connectBus(system.membus)
-
-
-# Create a memory bus
-system.membus = SystemXBar()
+system.cpu.icache.cpu_side = system.cpu.icache_port
+system.cpu.dcache.cpu_side = system.cpu.dcache_port
+# Hook the caches to external world
+system.cpu.icache.mem_side = system.tlm_1.port
+system.cpu.dcache.mem_side = system.tlm_2.port
+# hook the system_port to external world
+system.system_port = system.tlm_3.port
 
 # create the interrupt controller for the CPU
 system.cpu.createInterruptController()
@@ -112,29 +125,8 @@ system.cpu.createInterruptController()
 # For x86 only, make sure the interrupts are connected to the memory
 # Note: these are directly connected to the memory bus and are not cached
 if m5.defines.buildEnv['TARGET_ISA'] == "x86":
-    system.cpu.interrupts[0].pio = system.membus.master
-    system.cpu.interrupts[0].int_master = system.membus.slave
-    system.cpu.interrupts[0].int_slave = system.membus.master
-
-# Connect the system up to the membus
-system.system_port = system.membus.slave
-
-# Create a DDR3 memory controller
-#system.mem_ctrl = DDR3_1600_x64()
-#system.mem_ctrl.range = system.mem_ranges[0]
-#system.mem_ctrl.port = system.membus.master
-
-# external memory
-system.physmem = SimpleMemory() # This must be instanciated, even if not needed
-system.tlm_3 = ExternalSlave()
-system.tlm_3.addr_ranges = [AddrRange('512MB')]
-system.tlm_3.port_type = "tlm"
-system.tlm_3.port_data = "memory"
-system.tlm_3.port = system.membus.master
-
-
-
-
+    print "x86 not supported"
+    sys.exit(1);
 
 # Create a process for a simple "Hello World" application
 process = LiveProcess()

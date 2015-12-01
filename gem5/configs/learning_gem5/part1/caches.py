@@ -47,8 +47,8 @@ class L1Cache(Cache):
     assoc = 2
     hit_latency = 2
     response_latency = 2
-    mshrs = 4
-    tgts_per_mshr = 20
+    mshrs = 1
+    tgts_per_mshr = 1
 
     def __init__(self, options=None):
         super(L1Cache, self).__init__()
@@ -109,8 +109,8 @@ class L2Cache(Cache):
     assoc = 8
     hit_latency = 20
     response_latency = 20
-    mshrs = 20
-    tgts_per_mshr = 12
+    mshrs = 1
+    tgts_per_mshr = 1
 
     SimpleOpts.add_option('--l2_size', help="L2 cache size. Default: %s" % size)
 

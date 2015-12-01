@@ -220,7 +220,10 @@ class TimingSimpleCPU : public BaseSimpleCPU
             : TimingCPUPort(_cpu->name() + ".dcache_port", _cpu),
               tickEvent(_cpu)
         {
-           cacheBlockMask = ~(cpu->cacheLineSize() - 1);
+           //cacheBlockMask = ~(cpu->cacheLineSize() - 1);
+           
+           // as caches are disabled so setting word_size = 4....but make sure to change it to 8 for ARM64 system!!
+           cacheBlockMask = ~(4 - 1);
         }
 
         Addr cacheBlockMask;

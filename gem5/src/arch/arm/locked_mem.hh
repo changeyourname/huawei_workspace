@@ -125,7 +125,7 @@ handleLockedWrite(XC *xc, Request *req, Addr cacheBlockMask)
         req->setExtraData(0);
         xc->setMiscReg(MISCREG_LOCKFLAG, false);
         DPRINTF(LLSC,"%s: clearing lock flag in handle locked write\n",
-                xc->getCpuPtr()->name());                
+                xc->getCpuPtr()->name());
         // the rest of this code is not architectural;
         // it's just a debugging aid to help detect
         // livelock by warning on long sequences of failed
@@ -137,6 +137,8 @@ handleLockedWrite(XC *xc, Request *req, Addr cacheBlockMask)
             warn("context %d: %d consecutive "
                  "store conditional failures\n",
                  xc->contextId(), stCondFailures);
+
+             //assert(0);             
         }
 
         // store conditional failed already, so don't issue it to mem

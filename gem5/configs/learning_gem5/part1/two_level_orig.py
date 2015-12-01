@@ -97,14 +97,22 @@ system.cpu.dcache = L1DCache(opts)
 system.cpu.icache.connectCPU(system.cpu)
 system.cpu.dcache.connectCPU(system.cpu)
 
+# Create a memory bus, a coherent crossbar, in this case
+system.l2bus = L2XBar()
 
 # Hook the CPU ports up to the l2bus
-system.cpu.icache.connectBus(system.membus)
-system.cpu.dcache.connectBus(system.membus)
+system.cpu.icache.connectBus(system.l2bus)
+system.cpu.dcache.connectBus(system.l2bus)
 
+# Create an L2 cache and connect it to the l2bus
+system.l2cache = L2Cache(opts)
+system.l2cache.connectCPUSideBus(system.l2bus)
 
 # Create a memory bus
 system.membus = SystemXBar()
+
+# Connect the L2 cache to the membus
+system.l2cache.connectMemSideBus(system.membus)
 
 # create the interrupt controller for the CPU
 system.cpu.createInterruptController()
@@ -120,21 +128,9 @@ if m5.defines.buildEnv['TARGET_ISA'] == "x86":
 system.system_port = system.membus.slave
 
 # Create a DDR3 memory controller
-#system.mem_ctrl = DDR3_1600_x64()
-#system.mem_ctrl.range = system.mem_ranges[0]
-#system.mem_ctrl.port = system.membus.master
-
-# external memory
-system.physmem = SimpleMemory() # This must be instanciated, even if not needed
-system.tlm_3 = ExternalSlave()
-system.tlm_3.addr_ranges = [AddrRange('512MB')]
-system.tlm_3.port_type = "tlm"
-system.tlm_3.port_data = "memory"
-system.tlm_3.port = system.membus.master
-
-
-
-
+system.mem_ctrl = DDR3_1600_x64()
+system.mem_ctrl.range = system.mem_ranges[0]
+system.mem_ctrl.port = system.membus.master
 
 # Create a process for a simple "Hello World" application
 process = LiveProcess()

@@ -144,7 +144,7 @@ def config_cache(options, system):
         elif options.external_memory_system:
             system.cpu[i].connectUncachedPorts(system.membus)
         else:
-            system.cpu[i].connectAllPorts(system.membus)
+            system.cpu[i].connectAllPorts(system.membus)            
 
     return system
 

@@ -335,13 +335,13 @@ Cache::access(PacketPtr pkt, CacheBlk *&blk, Cycles &lat,
     ContextID id = pkt->req->hasContextId() ?
         pkt->req->contextId() : InvalidContextID;
     // Here lat is the value passed as parameter to accessBlock() function
-    // that can modify its value.
-    blk = tags->accessBlock(pkt->getAddr(), pkt->isSecure(), lat, id);
+    // that can modify its value.        
+    blk = tags->accessBlock(pkt->getAddr(), pkt->isSecure(), lat, id);    
 
     DPRINTF(Cache, "%s%s addr %#llx size %d (%s) %s\n", pkt->cmdString(),
             pkt->req->isInstFetch() ? " (ifetch)" : "",
             pkt->getAddr(), pkt->getSize(), pkt->isSecure() ? "s" : "ns",
-            blk ? "hit " + blk->print() : "miss");
+            blk ? "hit " + blk->print() : "miss");         
 
 
     if (pkt->isEviction()) {
@@ -612,7 +612,7 @@ Cache::recvTimingReq(PacketPtr pkt)
         assert(success);
         return true;
     }
-
+    
     promoteWholeLineWrites(pkt);
 
     if (pkt->memInhibitAsserted()) {
@@ -672,7 +672,7 @@ Cache::recvTimingReq(PacketPtr pkt)
     // to access.
     Cycles lat = lookupLatency;
     CacheBlk *blk = NULL;
-    bool satisfied = false;
+    bool satisfied = false;    
     {
         PacketList writebacks;
         // Note that lat is passed by reference here. The function
@@ -864,7 +864,7 @@ Cache::recvTimingReq(PacketPtr pkt)
                 // uncached memory write, forwarded to WriteBuffer.
                 allocateWriteBuffer(pkt, forward_time);
             } else {
-                if (blk && blk->isValid()) {
+                if (blk && blk->isValid()) {            
                     // should have flushed and have no valid block
                     assert(!pkt->req->isUncacheable());
 
@@ -1653,7 +1653,7 @@ Cache::allocateBlock(Addr addr, bool is_secure, PacketList &writebacks)
     CacheBlk *blk = tags->findVictim(addr);
 
     // It is valid to return NULL if there is no victim
-    if (!blk)
+    if (!blk) 
         return nullptr;
 
     if (blk->isValid()) {
@@ -1743,10 +1743,6 @@ Cache::handleFill(PacketPtr pkt, CacheBlk *blk, PacketList &writebacks,
                     is_secure ? "s" : "ns");
         } else {
             tags->insertBlock(pkt, blk);
-            
-            /*blk = tempBlock;
-            tempBlock->set = tags->extractSet(addr);
-            tempBlock->tag = tags->extractTag(addr);*/
         }
 
         // we should never be overwriting a valid block

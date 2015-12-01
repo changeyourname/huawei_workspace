@@ -105,7 +105,7 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
                                            sc_time& delay)
 {
     if (phase == tlm::BEGIN_REQ) {
-        //printf("(%s):NORMAL addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
+        printf("(%s):NORMAL addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
         req_count++;
     }
     /* Queue the transaction until the annotated time has elapsed */

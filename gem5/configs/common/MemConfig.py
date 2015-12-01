@@ -207,7 +207,6 @@ def config_mem(options, system):
                 mem_ctrl.ranks_per_channel = options.mem_ranks
 
             mem_ctrls.append(mem_ctrl)
-
     subsystem.mem_ctrls = mem_ctrls
 
     # Connect the controllers to the membus

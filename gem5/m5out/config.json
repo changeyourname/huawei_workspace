@@ -4,9 +4,9 @@
     "system": {
         "have_virtualization": false, 
         "mmap_using_noreserve": false, 
-        "kernel_addr_check": false, 
+        "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzair/gem5_armFullSystem/binaries/vmlinux.aarch64.20140821", 
+        "kernel": "/home/uzair/gem5_armFullSystem/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -56,7 +56,7 @@
                     "system.realview.ide.config", 
                     "system.realview.ethernet.pio", 
                     "system.realview.ethernet.config", 
-                    "system.iocache.cpu_side"
+                    "system.iobridge.slave"
                 ], 
                 "role": "MASTER"
             }, 
@@ -66,6 +66,28 @@
             "type": "NoncoherentXBar", 
             "use_default_range": true, 
             "frontend_latency": 2
+        }, 
+        "iobridge": {
+            "ranges": [
+                "2147483648:2684354559"
+            ], 
+            "slave": {
+                "peer": "system.iobus.master[27]", 
+                "role": "SLAVE"
+            }, 
+            "name": "iobridge", 
+            "req_size": 16, 
+            "clk_domain": "system.clk_domain", 
+            "delay": 50000, 
+            "eventq_index": 0, 
+            "master": {
+                "peer": "system.membus.slave[2]", 
+                "role": "MASTER"
+            }, 
+            "cxx_class": "Bridge", 
+            "path": "system.iobridge", 
+            "resp_size": 16, 
+            "type": "Bridge"
         }, 
         "symbolfile": "", 
         "readfile": "", 
@@ -87,26 +109,9 @@
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzair/gem5_armFullSystem/binaries/vexpress.aarch64.20140821.dtb", 
+        "dtb_filename": "/home/uzair/gem5_armFullSystem/binaries/vexpress.aarch32.ll_20131205.0-gem5.4cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
-        "external_memory": {
-            "name": "external_memory", 
-            "clk_domain": "system.clk_domain", 
-            "addr_ranges": [
-                "2147483648:2684354559"
-            ], 
-            "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "ExternalSlave", 
-            "path": "system.external_memory", 
-            "type": "ExternalSlave", 
-            "port": {
-                "peer": "system.membus.master[5]", 
-                "role": "SLAVE"
-            }, 
-            "port_data": "memory"
-        }, 
         "work_begin_ckpt_count": 0, 
         "clk_domain": {
             "name": "clk_domain", 
@@ -191,7 +196,7 @@
                 "pio_addr": 471269376, 
                 "type": "PL031"
             }, 
-            "pci_cfg_gen_offsets": true, 
+            "pci_cfg_gen_offsets": false, 
             "vgic": {
                 "system": "system", 
                 "name": "vgic", 
@@ -659,7 +664,7 @@
                 }, 
                 "in_addr_map": true
             }, 
-            "pci_io_base": 788529152, 
+            "pci_io_base": 0, 
             "nvmem": {
                 "range": "0:67108863", 
                 "latency": 30000, 
@@ -668,7 +673,7 @@
                 "clk_domain": "system.clk_domain", 
                 "latency_var": 0, 
                 "bandwidth": "73.000000", 
-                "conf_table_reported": true, 
+                "conf_table_reported": false, 
                 "cxx_class": "SimpleMemory", 
                 "path": "system.realview.nvmem", 
                 "null": false, 
@@ -914,7 +919,7 @@
                 "MSIXCAPNextCapability": 0, 
                 "PXCAPLinkCtrl": 0, 
                 "Revision": 0, 
-                "hardware_address": "<m5.params.EthernetAddr object at 0x7f38f5171350>", 
+                "hardware_address": "<m5.params.EthernetAddr object at 0x7fd7a6efa490>", 
                 "LegacyIOBase": 0, 
                 "pio_latency": 30000, 
                 "platform": "system.realview", 
@@ -1131,8 +1136,23 @@
                 "peer": [
                     "system.realview.hdlcd.dma", 
                     "system.system_port", 
-                    "system.iocache.mem_side", 
-                    "system.l2.mem_side"
+                    "system.iobridge.master", 
+                    "system.cpu0.icache_port", 
+                    "system.cpu0.dcache_port", 
+                    "system.cpu0.itb.walker.port", 
+                    "system.cpu0.dtb.walker.port", 
+                    "system.cpu1.icache_port", 
+                    "system.cpu1.dcache_port", 
+                    "system.cpu1.itb.walker.port", 
+                    "system.cpu1.dtb.walker.port", 
+                    "system.cpu2.icache_port", 
+                    "system.cpu2.dcache_port", 
+                    "system.cpu2.itb.walker.port", 
+                    "system.cpu2.dtb.walker.port", 
+                    "system.cpu3.icache_port", 
+                    "system.cpu3.dcache_port", 
+                    "system.cpu3.itb.walker.port", 
+                    "system.cpu3.dtb.walker.port"
                 ], 
                 "role": "SLAVE"
             }, 
@@ -1174,7 +1194,7 @@
                     "system.realview.gic.pio", 
                     "system.realview.vgic.pio", 
                     "system.realview.local_cpu_timer.pio", 
-                    "system.external_memory.port"
+                    "system.mem_ctrls.port"
                 ], 
                 "role": "MASTER"
             }, 
@@ -1188,55 +1208,6 @@
         }, 
         "multi_thread": false, 
         "eventq_index": 0, 
-        "iocache": {
-            "cpu_side": {
-                "peer": "system.iobus.master[27]", 
-                "role": "SLAVE"
-            }, 
-            "clusivity": "mostly_incl", 
-            "prefetcher": null, 
-            "clk_domain": "system.clk_domain", 
-            "write_buffers": 8, 
-            "response_latency": 50, 
-            "cxx_class": "Cache", 
-            "size": 1024, 
-            "tags": {
-                "name": "tags", 
-                "eventq_index": 0, 
-                "hit_latency": 50, 
-                "clk_domain": "system.clk_domain", 
-                "sequential_access": false, 
-                "assoc": 8, 
-                "cxx_class": "LRU", 
-                "path": "system.iocache.tags", 
-                "block_size": 64, 
-                "type": "LRU", 
-                "size": 1024
-            }, 
-            "system": "system", 
-            "max_miss_count": 0, 
-            "eventq_index": 0, 
-            "mem_side": {
-                "peer": "system.membus.slave[2]", 
-                "role": "MASTER"
-            }, 
-            "type": "Cache", 
-            "forward_snoops": false, 
-            "writeback_clean": false, 
-            "hit_latency": 50, 
-            "tgts_per_mshr": 12, 
-            "demand_mshr_reserve": 1, 
-            "addr_ranges": [
-                "2147483648:2684354559"
-            ], 
-            "is_read_only": false, 
-            "prefetch_on_access": false, 
-            "path": "system.iocache", 
-            "name": "iocache", 
-            "mshrs": 20, 
-            "sequential_access": false, 
-            "assoc": 8
-        }, 
         "dvfs_handler": {
             "enable": false, 
             "name": "dvfs_handler", 
@@ -1330,7 +1301,7 @@
                         "path": "system.cpu0.itb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[2]", 
+                            "peer": "system.membus.slave[5]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -1382,57 +1353,8 @@
                 "type": "TimingSimpleCPU", 
                 "profile": 0, 
                 "icache_port": {
-                    "peer": "system.cpu0.icache.cpu_side", 
+                    "peer": "system.membus.slave[3]", 
                     "role": "MASTER"
-                }, 
-                "icache": {
-                    "cpu_side": {
-                        "peer": "system.cpu0.icache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 32768, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu0.icache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 32768
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[0]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": true, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": true, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu0.icache", 
-                    "name": "icache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
                 }, 
                 "interrupts": [
                     {
@@ -1444,7 +1366,7 @@
                     }
                 ], 
                 "dcache_port": {
-                    "peer": "system.cpu0.dcache.cpu_side", 
+                    "peer": "system.membus.slave[4]", 
                     "role": "MASTER"
                 }, 
                 "socket_id": 0, 
@@ -1498,7 +1420,7 @@
                         "path": "system.cpu0.dtb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[3]", 
+                            "peer": "system.membus.slave[6]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -1511,55 +1433,6 @@
                 "max_insts_any_thread": 0, 
                 "progress_interval": 0, 
                 "branchPred": null, 
-                "dcache": {
-                    "cpu_side": {
-                        "peer": "system.cpu0.dcache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 65536, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu0.dcache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 65536
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[1]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": false, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": false, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu0.dcache", 
-                    "name": "dcache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
-                }, 
                 "isa": [
                     {
                         "pmu": null, 
@@ -1622,7 +1495,7 @@
                         "path": "system.cpu1.itb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[6]", 
+                            "peer": "system.membus.slave[9]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -1674,57 +1547,8 @@
                 "type": "TimingSimpleCPU", 
                 "profile": 0, 
                 "icache_port": {
-                    "peer": "system.cpu1.icache.cpu_side", 
+                    "peer": "system.membus.slave[7]", 
                     "role": "MASTER"
-                }, 
-                "icache": {
-                    "cpu_side": {
-                        "peer": "system.cpu1.icache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 32768, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu1.icache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 32768
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[4]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": true, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": true, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu1.icache", 
-                    "name": "icache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
                 }, 
                 "interrupts": [
                     {
@@ -1736,7 +1560,7 @@
                     }
                 ], 
                 "dcache_port": {
-                    "peer": "system.cpu1.dcache.cpu_side", 
+                    "peer": "system.membus.slave[8]", 
                     "role": "MASTER"
                 }, 
                 "socket_id": 0, 
@@ -1790,7 +1614,7 @@
                         "path": "system.cpu1.dtb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[7]", 
+                            "peer": "system.membus.slave[10]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -1803,55 +1627,6 @@
                 "max_insts_any_thread": 0, 
                 "progress_interval": 0, 
                 "branchPred": null, 
-                "dcache": {
-                    "cpu_side": {
-                        "peer": "system.cpu1.dcache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 65536, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu1.dcache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 65536
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[5]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": false, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": false, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu1.dcache", 
-                    "name": "dcache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
-                }, 
                 "isa": [
                     {
                         "pmu": null, 
@@ -1914,7 +1689,7 @@
                         "path": "system.cpu2.itb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[10]", 
+                            "peer": "system.membus.slave[13]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -1966,57 +1741,8 @@
                 "type": "TimingSimpleCPU", 
                 "profile": 0, 
                 "icache_port": {
-                    "peer": "system.cpu2.icache.cpu_side", 
+                    "peer": "system.membus.slave[11]", 
                     "role": "MASTER"
-                }, 
-                "icache": {
-                    "cpu_side": {
-                        "peer": "system.cpu2.icache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 32768, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu2.icache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 32768
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[8]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": true, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": true, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu2.icache", 
-                    "name": "icache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
                 }, 
                 "interrupts": [
                     {
@@ -2028,7 +1754,7 @@
                     }
                 ], 
                 "dcache_port": {
-                    "peer": "system.cpu2.dcache.cpu_side", 
+                    "peer": "system.membus.slave[12]", 
                     "role": "MASTER"
                 }, 
                 "socket_id": 0, 
@@ -2082,7 +1808,7 @@
                         "path": "system.cpu2.dtb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[11]", 
+                            "peer": "system.membus.slave[14]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -2095,55 +1821,6 @@
                 "max_insts_any_thread": 0, 
                 "progress_interval": 0, 
                 "branchPred": null, 
-                "dcache": {
-                    "cpu_side": {
-                        "peer": "system.cpu2.dcache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 65536, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu2.dcache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 65536
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[9]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": false, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": false, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu2.dcache", 
-                    "name": "dcache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
-                }, 
                 "isa": [
                     {
                         "pmu": null, 
@@ -2206,7 +1883,7 @@
                         "path": "system.cpu3.itb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[14]", 
+                            "peer": "system.membus.slave[17]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -2258,57 +1935,8 @@
                 "type": "TimingSimpleCPU", 
                 "profile": 0, 
                 "icache_port": {
-                    "peer": "system.cpu3.icache.cpu_side", 
+                    "peer": "system.membus.slave[15]", 
                     "role": "MASTER"
-                }, 
-                "icache": {
-                    "cpu_side": {
-                        "peer": "system.cpu3.icache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 32768, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu3.icache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 32768
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[12]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": true, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": true, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu3.icache", 
-                    "name": "icache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
                 }, 
                 "interrupts": [
                     {
@@ -2320,7 +1948,7 @@
                     }
                 ], 
                 "dcache_port": {
-                    "peer": "system.cpu3.dcache.cpu_side", 
+                    "peer": "system.membus.slave[16]", 
                     "role": "MASTER"
                 }, 
                 "socket_id": 0, 
@@ -2374,7 +2002,7 @@
                         "path": "system.cpu3.dtb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
-                            "peer": "system.tol2bus.slave[15]", 
+                            "peer": "system.membus.slave[18]", 
                             "role": "MASTER"
                         }, 
                         "num_squash_per_cycle": 2
@@ -2387,55 +2015,6 @@
                 "max_insts_any_thread": 0, 
                 "progress_interval": 0, 
                 "branchPred": null, 
-                "dcache": {
-                    "cpu_side": {
-                        "peer": "system.cpu3.dcache_port", 
-                        "role": "SLAVE"
-                    }, 
-                    "clusivity": "mostly_incl", 
-                    "prefetcher": null, 
-                    "clk_domain": "system.cpu_clk_domain", 
-                    "write_buffers": 8, 
-                    "response_latency": 2, 
-                    "cxx_class": "Cache", 
-                    "size": 65536, 
-                    "tags": {
-                        "name": "tags", 
-                        "eventq_index": 0, 
-                        "hit_latency": 2, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sequential_access": false, 
-                        "assoc": 2, 
-                        "cxx_class": "LRU", 
-                        "path": "system.cpu3.dcache.tags", 
-                        "block_size": 64, 
-                        "type": "LRU", 
-                        "size": 65536
-                    }, 
-                    "system": "system", 
-                    "max_miss_count": 0, 
-                    "eventq_index": 0, 
-                    "mem_side": {
-                        "peer": "system.tol2bus.slave[13]", 
-                        "role": "MASTER"
-                    }, 
-                    "type": "Cache", 
-                    "forward_snoops": true, 
-                    "writeback_clean": false, 
-                    "hit_latency": 2, 
-                    "tgts_per_mshr": 20, 
-                    "demand_mshr_reserve": 1, 
-                    "addr_ranges": [
-                        "0:18446744073709551615"
-                    ], 
-                    "is_read_only": false, 
-                    "prefetch_on_access": false, 
-                    "path": "system.cpu3.dcache", 
-                    "name": "dcache", 
-                    "mshrs": 4, 
-                    "sequential_access": false, 
-                    "assoc": 2
-                }, 
                 "isa": [
                     {
                         "pmu": null, 
@@ -2484,7 +2063,7 @@
         "gic_cpu_addr": 738205696, 
         "work_cpus_ckpt_count": 0, 
         "work_begin_exit_count": 0, 
-        "machine_type": "VExpress_EMM64", 
+        "machine_type": "VExpress_EMM", 
         "flags_addr": 469827632, 
         "path": "system", 
         "cpu_clk_domain": {
@@ -2500,58 +2079,6 @@
             "type": "SrcClockDomain", 
             "domain_id": -1
         }, 
-        "tol2bus": {
-            "slave": {
-                "peer": [
-                    "system.cpu0.icache.mem_side", 
-                    "system.cpu0.dcache.mem_side", 
-                    "system.cpu0.itb.walker.port", 
-                    "system.cpu0.dtb.walker.port", 
-                    "system.cpu1.icache.mem_side", 
-                    "system.cpu1.dcache.mem_side", 
-                    "system.cpu1.itb.walker.port", 
-                    "system.cpu1.dtb.walker.port", 
-                    "system.cpu2.icache.mem_side", 
-                    "system.cpu2.dcache.mem_side", 
-                    "system.cpu2.itb.walker.port", 
-                    "system.cpu2.dtb.walker.port", 
-                    "system.cpu3.icache.mem_side", 
-                    "system.cpu3.dcache.mem_side", 
-                    "system.cpu3.itb.walker.port", 
-                    "system.cpu3.dtb.walker.port"
-                ], 
-                "role": "SLAVE"
-            }, 
-            "name": "tol2bus", 
-            "snoop_filter": {
-                "name": "snoop_filter", 
-                "system": "system", 
-                "max_capacity": 8388608, 
-                "eventq_index": 0, 
-                "cxx_class": "SnoopFilter", 
-                "path": "system.tol2bus.snoop_filter", 
-                "type": "SnoopFilter", 
-                "lookup_latency": 0
-            }, 
-            "forward_latency": 0, 
-            "clk_domain": "system.cpu_clk_domain", 
-            "system": "system", 
-            "width": 32, 
-            "eventq_index": 0, 
-            "master": {
-                "peer": [
-                    "system.l2.cpu_side"
-                ], 
-                "role": "MASTER"
-            }, 
-            "response_latency": 1, 
-            "cxx_class": "CoherentXBar", 
-            "path": "system.tol2bus", 
-            "snoop_response_latency": 1, 
-            "type": "CoherentXBar", 
-            "use_default_range": false, 
-            "frontend_latency": 1
-        }, 
         "cf0": {
             "driveID": "master", 
             "name": "cf0", 
@@ -2566,7 +2093,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzair/gem5_armFullSystem/disks/linaro-minimal-aarch64.img", 
+                    "image_file": "/home/uzair/gem5_armFullSystem/disks/linux-aarch32-ael.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -2599,62 +2126,35 @@
             "type": "IntrControl"
         }, 
         "have_security": false, 
-        "l2": {
-            "cpu_side": {
-                "peer": "system.tol2bus.master[0]", 
-                "role": "SLAVE"
-            }, 
-            "clusivity": "mostly_incl", 
-            "prefetcher": null, 
-            "clk_domain": "system.cpu_clk_domain", 
-            "write_buffers": 8, 
-            "response_latency": 20, 
-            "cxx_class": "Cache", 
-            "size": 2097152, 
-            "tags": {
-                "name": "tags", 
-                "eventq_index": 0, 
-                "hit_latency": 20, 
-                "clk_domain": "system.cpu_clk_domain", 
-                "sequential_access": false, 
-                "assoc": 8, 
-                "cxx_class": "LRU", 
-                "path": "system.l2.tags", 
-                "block_size": 64, 
-                "type": "LRU", 
-                "size": 2097152
-            }, 
-            "system": "system", 
-            "max_miss_count": 0, 
-            "eventq_index": 0, 
-            "mem_side": {
-                "peer": "system.membus.slave[3]", 
-                "role": "MASTER"
-            }, 
-            "type": "Cache", 
-            "forward_snoops": true, 
-            "writeback_clean": false, 
-            "hit_latency": 20, 
-            "tgts_per_mshr": 12, 
-            "demand_mshr_reserve": 1, 
-            "addr_ranges": [
-                "0:18446744073709551615"
-            ], 
-            "is_read_only": false, 
-            "prefetch_on_access": false, 
-            "path": "system.l2", 
-            "name": "l2", 
-            "mshrs": 20, 
-            "sequential_access": false, 
-            "assoc": 8
-        }, 
         "atags_addr": 134217728, 
         "memories": [
+            "system.mem_ctrls", 
             "system.realview.nvmem", 
             "system.realview.vram"
         ], 
+        "mem_ctrls": [
+            {
+                "range": "2147483648:2684354559", 
+                "latency": 30000, 
+                "name": "mem_ctrls", 
+                "eventq_index": 0, 
+                "clk_domain": "system.clk_domain", 
+                "latency_var": 0, 
+                "bandwidth": "73.000000", 
+                "conf_table_reported": true, 
+                "cxx_class": "SimpleMemory", 
+                "path": "system.mem_ctrls", 
+                "null": false, 
+                "type": "SimpleMemory", 
+                "port": {
+                    "peer": "system.membus.master[5]", 
+                    "role": "SLAVE"
+                }, 
+                "in_addr_map": true
+            }
+        ], 
         "work_begin_cpu_id_exit": -1, 
-        "boot_loader": "/home/uzair/gem5_armFullSystem/binaries/boot_emm.arm64", 
+        "boot_loader": "/home/uzair/gem5_armFullSystem/binaries/boot_emm.arm", 
         "num_work_ids": 16
     }, 
     "time_sync_period": 100000000000, 

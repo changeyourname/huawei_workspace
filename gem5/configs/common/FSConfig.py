@@ -258,6 +258,7 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
 
     self.mem_ranges = []
     size_remain = long(Addr(mdesc.mem()))
+          
     for region in self.realview._mem_regions:
         if size_remain > long(region[1]):
             self.mem_ranges.append(AddrRange(region[0], size=region[1]))
