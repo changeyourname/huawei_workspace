@@ -76,7 +76,9 @@ handleLockedSnoop(XC *xc, PacketPtr pkt, Addr cacheBlockMask)
 
     DPRINTF(LLSC,"%s:  handleing snoop for address: %#x locked addr: %#x\n",
             xc->getCpuPtr()->name(),snoop_addr, locked_addr);
-    if (locked_addr == snoop_addr) {
+            
+    // clearing the lock flag only when the new request (who sent this snoop) is modifying the memory word being locked by this thread previously i.e when pkt->isWrite()            
+    if (locked_addr == snoop_addr && pkt->isWrite()) {
         DPRINTF(LLSC,"%s: address match, clearing lock and signaling sev\n",
                 xc->getCpuPtr()->name());
         xc->setMiscReg(MISCREG_LOCKFLAG, false);
@@ -138,7 +140,7 @@ handleLockedWrite(XC *xc, Request *req, Addr cacheBlockMask)
                  "store conditional failures\n",
                  xc->contextId(), stCondFailures);
 
-             //assert(0);             
+             assert(0);             
         }
 
         // store conditional failed already, so don't issue it to mem
