@@ -72,6 +72,7 @@ class System(MemObject):
     mem_ranges = VectorParam.AddrRange([], "Ranges that constitute main memory")
 
     cache_line_size = Param.Unsigned(64, "Cache line size in bytes")
+    cache_present = Param.Bool(True, "are caches present in design")
 
     work_item_id = Param.Int(-1, "specific work item id")
     num_work_ids = Param.Int(16, "Number of distinct work item types")

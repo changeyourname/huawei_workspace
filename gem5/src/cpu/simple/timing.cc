@@ -414,8 +414,17 @@ TimingSimpleCPU::readMem(Addr addr, uint8_t *data,
     const int asid = 0;
     const ThreadID tid = curThread;
     const Addr pc = thread->instAddr();
-    unsigned block_size = cacheLineSize();
+    unsigned block_size;
+    bool disable_cache = !cachesPresent();
     BaseTLB::Mode mode = BaseTLB::Read;
+    // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
+    // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
+    if (disable_cache) {
+        // so if caches are disabled then making room for 1 more word
+        block_size = 64;
+    } else {
+        block_size = cacheLineSize();
+    }
 
     if (traceData)
         traceData->setMem(addr, size, flags);
@@ -427,6 +436,7 @@ TimingSimpleCPU::readMem(Addr addr, uint8_t *data,
     req->taskId(taskId());
 
     Addr split_addr = roundDown(addr + size - 1, block_size);
+
     assert(split_addr <= addr || split_addr - addr < block_size);
 
     _status = DTBWaitResponse;
@@ -489,8 +499,17 @@ TimingSimpleCPU::writeMem(uint8_t *data, unsigned size,
     const int asid = 0;
     const ThreadID tid = curThread;
     const Addr pc = thread->instAddr();
-    unsigned block_size = cacheLineSize();
+    unsigned block_size;
+    bool disable_cache = !cachesPresent();
     BaseTLB::Mode mode = BaseTLB::Write;
+    // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
+    // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
+    if (disable_cache) {
+        // so if caches are disabled then making room for 1 more word
+        block_size = 64;
+    } else {
+        block_size = cacheLineSize();
+    }    
 
     if (data == NULL) {
         assert(flags & Request::CACHE_BLOCK_ZERO);
@@ -508,8 +527,9 @@ TimingSimpleCPU::writeMem(uint8_t *data, unsigned size,
                                  thread->contextId(), tid);
 
     req->taskId(taskId());
-
+    
     Addr split_addr = roundDown(addr + size - 1, block_size);
+   
     assert(split_addr <= addr || split_addr - addr < block_size);
 
     _status = DTBWaitResponse;

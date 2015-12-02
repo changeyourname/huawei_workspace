@@ -189,6 +189,11 @@ class System : public MemObject
      * Get the cache line size of the system.
      */
     unsigned int cacheLineSize() const { return _cacheLineSize; }
+    
+    /**
+     * Are caches present
+     */
+    bool areCachesPresent() const { return _cachesPresent; } 
 
 #if THE_ISA != NULL_ISA
     PCEventQueue pcEventQueue;
@@ -300,6 +305,7 @@ class System : public MemObject
     Enums::MemoryMode memoryMode;
 
     const unsigned int _cacheLineSize;
+    const bool _cachesPresent;
 
     uint64_t workItemsBegin;
     uint64_t workItemsEnd;

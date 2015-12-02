@@ -92,6 +92,7 @@ System::System(Params *p)
       physmem(name() + ".physmem", p->memories, p->mmap_using_noreserve),
       memoryMode(p->mem_mode),
       _cacheLineSize(p->cache_line_size),
+      _cachesPresent(p->cache_present),
       workItemsBegin(0),
       workItemsEnd(0),
       numWorkIds(p->num_work_ids),
@@ -108,9 +109,9 @@ System::System(Params *p)
             debugSymbolTable = new SymbolTable;
     }
 
-    // check if the cache line size is a value known to work
+    // check if the cache line size is a value known to work    
     if (!(_cacheLineSize == 16 || _cacheLineSize == 32 ||
-          _cacheLineSize == 64 || _cacheLineSize == 128))
+          _cacheLineSize == 64 || _cacheLineSize == 128) && _cachesPresent)
         warn_once("Cache line size is neither 16, 32, 64 nor 128 bytes.\n");
 
     // Get the generic system master IDs

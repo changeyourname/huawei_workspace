@@ -215,15 +215,15 @@ rtc-pl031 1c170000.rtc: setting system clock to 2009-01-01 00:00:04 UTC (1230768
 ALSA device list:
   No soundcards found.
  input: AT Raw Set 2 keyboard as /devices/smb.14/motherboard.15/iofpga.17/1c060000.kmi/serio0/input/input0
-input: touchkitPS/2 eGalax Touchscreen as /devices/smb.14/motherboard.15/iofpga.17/1c070000.kmi/serio1/input/input2
 VFS: Mounted root (ext2 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 init started: BusyBox v1.15.3 (2010-05-07 01:27:07 BST)
-starting pid 694, tty '': '/etc/rc.d/rc.local'
+starting pid 691, tty '': '/etc/rc.d/rc.local'
 warning: can't open /etc/mtab: No such file or directory
-Thu Jan  1 00:00:07 UTC 2009
+Thu Jan  1 00:00:05 UTC 2009
 S: devpts
-Thu Jan  1 00:00:07 UTC 2009
-starting pid 715, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+Thu Jan  1 00:00:06 UTC 2009
+starting pid 712, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+input: touchkitPS/2 eGalax Touchscreen as /devices/smb.14/motherboard.15/iofpga.17/1c070000.kmi/serio1/input/input2
 
 AEL login: 

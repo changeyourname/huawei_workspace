@@ -148,6 +148,9 @@ class BaseCPU : public MemObject
 
     /** Cache the cache line size that we get from the system */
     const unsigned int _cacheLineSize;
+    
+    /** Are caches present in design */
+    const bool _cachesPresent;
 
   public:
 
@@ -388,6 +391,11 @@ class BaseCPU : public MemObject
      * Get the cache line size of the system.
      */
     inline unsigned int cacheLineSize() const { return _cacheLineSize; }
+    
+    /**
+     * Are caches present in the design
+     */
+     inline bool cachesPresent() const { return _cachesPresent; }
 
     /**
      * Serialize this object to the given output stream.
