@@ -1,2 +1,7 @@
 -- For example/fs.py, if we disable caches and run 32 bit platforms by running 32bit linux-smp kernel on ARM processors (timingCPU) (--arm-iset=arm) then I see the CPU requesting 8B words from memory via dcache-port
    which is wierd and so if I run simulation with --cacheline_size=4 it crashes....so for now have to make --cacheline_size=8 even if simulating 32 bit based platforms
+   
+   (it seems that these memory transactions are being issued by DTB,ITB.......maybe they are allowed to make bigger size transactions than that supported by system word_width)
+   
+   
+   

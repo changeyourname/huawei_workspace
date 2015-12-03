@@ -46,7 +46,8 @@ from m5.objects import *
 from Caches import *
 
 def config_cache(options, system):
-    system.cache_present = not options.disable_cache
+    if options.disable_cache:
+        system.disable_cache = True
 
     if options.external_memory_system and (options.caches or options.l2cache):
         print "External caches and internal caches are exclusive options.\n"

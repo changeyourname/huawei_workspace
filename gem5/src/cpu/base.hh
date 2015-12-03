@@ -150,7 +150,7 @@ class BaseCPU : public MemObject
     const unsigned int _cacheLineSize;
     
     /** Are caches present in design */
-    const bool _cachesPresent;
+    const bool _cachesDisabled;
 
   public:
 
@@ -395,7 +395,7 @@ class BaseCPU : public MemObject
     /**
      * Are caches present in the design
      */
-     inline bool cachesPresent() const { return _cachesPresent; }
+     inline bool areCachesDisabled() const { return _cachesDisabled; }
 
     /**
      * Serialize this object to the given output stream.
