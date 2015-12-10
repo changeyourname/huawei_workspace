@@ -187,6 +187,7 @@ ExternalSlave::Port::getAddrRanges() const
 
 ExternalSlave::ExternalSlave(ExternalSlaveParams *params) :
     MemObject(params),
+    _system(params->system),    
     externalPort(NULL),
     portName(params->name + ".port"),
     portType(params->port_type),
@@ -197,6 +198,12 @@ ExternalSlave::ExternalSlave(ExternalSlaveParams *params) :
     if (portHandlers.find("stub") == portHandlers.end())
         registerHandler("stub", new StubSlavePortHandler);
 }
+
+System *
+ExternalSlave::getSystem() {
+    return _system;
+}
+
 
 BaseSlavePort &
 ExternalSlave::getSlavePort(const std::string &if_name,

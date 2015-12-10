@@ -109,6 +109,8 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
         req_count++;
     }*/
     /* Queue the transaction until the annotated time has elapsed */
+    
+        
     m_peq.notify(trans, phase, delay);
     return tlm::TLM_ACCEPTED;
 }

@@ -193,7 +193,7 @@ class System : public MemObject
     /**
      * Are caches present
      */
-    bool areCachesDisabled() const { return _cachesDisabled; } 
+    bool areCachesDisabled() const { return _cachesDisabled; }     
 
 #if THE_ISA != NULL_ISA
     PCEventQueue pcEventQueue;

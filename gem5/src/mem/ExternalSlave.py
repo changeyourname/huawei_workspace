@@ -36,11 +36,16 @@
 # Authors: Andrew Bardsley
 
 from m5.params import *
+from m5.proxy import *
 from MemObject import MemObject
+from System import System
+
 
 class ExternalSlave(MemObject):
     type = 'ExternalSlave'
     cxx_header = "mem/external_slave.hh"
+    
+    system = Param.System(Parent.any, "System that the crossbar belongs to.")    
 
     port = SlavePort("Slave port")
 
@@ -52,3 +57,9 @@ class ExternalSlave(MemObject):
     port_data = Param.String('stub', 'A string to pass to the port'
         ' handler (in a format specific to the handler) to describe how'
         ' the port should be bound/bindable/discoverable')
+
+    
+    
+    
+    
+    

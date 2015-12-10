@@ -61,6 +61,7 @@
 #define __MEM_EXTERNAL_SLAVE__
 
 #include "mem/mem_object.hh"
+#include "sim/system.hh"
 #include "params/ExternalSlave.hh"
 
 class ExternalSlave : public MemObject
@@ -101,6 +102,7 @@ class ExternalSlave : public MemObject
     };
 
   protected:
+    System *_system;  
     /** The peer port for the gem5 port "port" */
     Port *externalPort;
 
@@ -123,7 +125,7 @@ class ExternalSlave : public MemObject
      *  structure */
     static std::map<std::string, Handler *> portHandlers;
 
-  public:
+  public:    
     ExternalSlave(ExternalSlaveParams *params);
 
     /** SlavePort interface.  Responds only to port "port" */
@@ -136,6 +138,8 @@ class ExternalSlave : public MemObject
         Handler *handler);
 
     void init();
+    
+    System *getSystem();
 };
 
 

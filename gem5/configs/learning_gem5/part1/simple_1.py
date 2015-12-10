@@ -27,36 +27,20 @@
 #
 # Authors: Jason Power
 
+""" This file creates a barebones system and executes 'hello', a simple Hello
+World application.
+See Part 1, Chapter 2: Creating a simple configuration script in the
+learning_gem5 book for more information about this script.
+
+IMPORTANT: If you modify this file, it's likely that the Learning gem5 book
+           also needs to be updated. For now, email Jason <power.jg@gmail.com>
+
+"""
+
 # import the m5 (gem5) library created when gem5 is built
 import m5
 # import all of the SimObjects
 from m5.objects import *
-
-# Add the common scripts to our path
-m5.util.addToPath('../../common')
-
-# import the SimpleOpts module
-import SimpleOpts
-
-# Set the usage message to display
-SimpleOpts.set_usage("usage: %prog [options] <binary to execute>")
-
-# Finalize the arguments and grab the opts so we can pass it on to our objects
-(opts, args) = SimpleOpts.parse_args()
-
-# get ISA for the default binary to run. This is mostly for simple testing
-isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
-
-# Default to running 'hello', use the compiled ISA to find the binary
-binary = 'tests/test-progs/hello/bin/' + isa + '/linux/hello'
-
-# Check if there was a binary passed in via the command line and error if
-# there are too many arguments
-if len(args) == 1:
-    binary = args[0]
-elif len(args) > 1:
-    SimpleOpts.print_help()
-    m5.fatal("Expected a binary to execute as positional argument")
 
 # create the system we are going to simulate
 system = System()
@@ -73,44 +57,43 @@ system.mem_ranges = [AddrRange('512MB')] # Create an address range
 # Create a simple CPU
 system.cpu = TimingSimpleCPU()
 
-# Create dummy L1 i/d caches
-system.cpu.icache = CommMonitor()
-system.cpu.dcache = CommMonitor()
+# Create a memory bus, a system crossbar, in this case
+system.membus = SystemXBar()
 
-# external ports for hooking to SystemC world
-system.physmem = SimpleMemory() # This must be instanciated, even if not needed
-system.tlm_1 = ExternalSlave()
-system.tlm_1.addr_ranges = [AddrRange('512MB')]
-system.tlm_1.port_type = "tlm"
-system.tlm_1.port_data = "icache_port"
+# Hook the CPU ports up to the membus
+system.cpu.icache_port = system.membus.slave
+system.cpu.dcache_port = system.membus.slave
 
-system.tlm_2 = ExternalSlave()
-system.tlm_2.addr_ranges = [AddrRange('512MB')]
-system.tlm_2.port_type = "tlm"
-system.tlm_2.port_data = "dcache_port"
-
-system.tlm_3 = ExternalSlave()
-system.tlm_3.addr_ranges = [AddrRange('512MB')]
-system.tlm_3.port_type = "tlm"
-system.tlm_3.port_data = "system_port"
-
-# Connect the instruction and data caches to the CPU
-system.cpu.icache.slave = system.cpu.icache_port
-system.cpu.dcache.slave = system.cpu.dcache_port
-# Hook the caches to external world
-system.cpu.icache.master = system.tlm_1.port
-system.cpu.dcache.master = system.tlm_2.port
-# hook the system_port to external world
-system.system_port = system.tlm_3.port
-
-# create the interrupt controller for the CPU
+# create the interrupt controller for the CPU and connect to the membus
 system.cpu.createInterruptController()
 
 # For x86 only, make sure the interrupts are connected to the memory
 # Note: these are directly connected to the memory bus and are not cached
 if m5.defines.buildEnv['TARGET_ISA'] == "x86":
-    print "x86 not supported"
-    sys.exit(1);
+    system.cpu.interrupts[0].pio = system.membus.master
+    system.cpu.interrupts[0].int_master = system.membus.slave
+    system.cpu.interrupts[0].int_slave = system.membus.master
+
+# Connect the system up to the membus
+system.system_port = system.membus.slave
+
+
+system.physmem = SimpleMemory() # This must be instanciated, even if not needed
+# Create a external TLM port:
+system.tlm = ExternalSlave()
+#system.tlm.system = system
+system.tlm.addr_ranges = [AddrRange('512MB')]
+system.tlm.port_type = "tlm"
+system.tlm.port_data = "memory"
+system.membus.master = system.tlm.port
+
+
+
+# get ISA for the binary to run.
+isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
+
+# Run 'hello' and use the compiled ISA to find the binary
+binary = 'tests/test-progs/hello/bin/' + isa + '/linux/hello'
 
 # Create a process for a simple "Hello World" application
 process = LiveProcess()

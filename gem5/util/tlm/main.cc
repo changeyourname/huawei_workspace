@@ -111,6 +111,8 @@ class SimControl : public Gem5SystemC::Module
     unsigned int getOffset() { return offset; }
 
     void run();
+    
+    CxxConfigManager *getConfigManager();    
 };
 
 SimControl::SimControl(sc_core::sc_module_name name,
@@ -223,7 +225,7 @@ SimControl::SimControl(sc_core::sc_module_name name,
     getEventQueue(0)->dump();
 
     try {
-        config_manager->instantiate();
+        config_manager->instantiate();        
     } catch (CxxConfigManager::Exception &e) {
         std::cerr << "Config problem in sim object "
                   << e.name << ": " << e.message << "\n";
@@ -265,6 +267,11 @@ SimControl::run()
 #endif
 }
 
+CxxConfigManager *
+SimControl::getConfigManager() {
+    return config_manager;
+}
+
 
 void
 reportHandler(const sc_core::sc_report &report,
@@ -293,25 +300,7 @@ sc_main(int argc, char **argv)
 {
     sc_core::sc_report_handler::set_handler(reportHandler);
 
-    SimControl sim_control("gem5", argc, argv);
-    /*Target *icache;
-    Target *dcache;
-    Target *system_port;
-
-    tlm::tlm_initiator_socket <> *mem_port_1 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.icache_port")
-                );
-                
-    tlm::tlm_initiator_socket <> *mem_port_2 = 
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.dcache_port")
-                );
-                
-    tlm::tlm_initiator_socket <> *mem_port_3 = 
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.system_port")
-                );*/
+    SimControl sim_control("gem5", argc, argv);      
                 
     Target *memory;                
     tlm::tlm_initiator_socket <> *mem_port = dynamic_cast<tlm::tlm_initiator_socket<> *>(sc_core::sc_find_object("gem5.memory"));
@@ -319,18 +308,6 @@ sc_main(int argc, char **argv)
     unsigned long long int size = 512*1024*1024ULL;                
     unsigned char *mem = new unsigned char[size];                
 
-    /*if (mem_port_1 && mem_port_2 && mem_port_3) {
-        SC_REPORT_INFO("sc_main", "Port Found");
-
-        icache = new Target("icache", sim_control.getDebugFlag(), size, sim_control.getOffset(), mem);
-        icache->socket.bind(*mem_port_1);
-        
-        dcache = new Target("dcache", sim_control.getDebugFlag(), size, sim_control.getOffset(), mem);
-        dcache->socket.bind(*mem_port_2);
-        
-        system_port = new Target("system_port", sim_control.getDebugFlag(), size, sim_control.getOffset(), mem);
-        system_port->socket.bind(*mem_port_3);
-    }*/ 
     if (mem_port) {
         memory = new Target("memory",
                             sim_control.getDebugFlag(),
@@ -344,10 +321,10 @@ sc_main(int argc, char **argv)
         std::exit(EXIT_FAILURE);
     }
 
-    sc_core::sc_start();
+    sc_core::sc_start();       
     
     //printf("icache_req_count: %d...dcache_req_count: %d\r\n", icache->get_reqCount(), dcache->get_reqCount());
-    printf("\r\n\r\nmemory req_count: %d\r\n\r\n", memory->get_reqCount());
+
 
     SC_REPORT_INFO("sc_main", "End of Simulation");
 

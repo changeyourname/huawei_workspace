@@ -41,6 +41,8 @@
 #include "sc_ext.hh"
 #include "sc_mm.hh"
 #include "sc_port.hh"
+#include "cpu/thread_context.hh"
+#include "sim/system.hh"
 
 namespace Gem5SystemC
 {
@@ -197,6 +199,27 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      *  }
      *  requestInProgress = trans;
     */
+    
+    // catering for LLSC requests
+    if (packet->isLLSC()) {
+        if (packet->isRead()) {         // LL
+            // tracking this address:context for future SC
+            trackLoadLocked(packet);
+    } else {                            // SC
+            Request *req = packet->req;
+            if (lockedAddrList.empty()) {
+                // SC failed
+                req->setExtraData(0);
+                return true;
+            } else {
+                if (!checkLockedAddrList(packet)) {
+                    return true;
+                }
+            }
+        }
+    }
+    
+    
 
     /* Prepare the transaction */
     tlm::tlm_generic_payload * trans = mm.allocate();
@@ -234,6 +257,110 @@ sc_transactor::recvTimingReq(PacketPtr packet)
 
     return true;
 }
+
+
+// Called on *writes* only... both regular stores and
+// store-conditional operations.  Check for conventional stores which
+// conflict with locked addresses, and for success/failure of store
+// conditionals.
+bool
+sc_transactor::checkLockedAddrList(PacketPtr pkt)
+{
+    Request *req = pkt->req;
+    Addr paddr = LockedAddr::mask(req->getPaddr());
+
+    // Iterate over list.  Note that there could be multiple matching records,
+    // as more than one context could have done a load locked to this location.
+    // Only remove records when we succeed in finding a record for (xc, addr);
+    // then, remove all records with this address.  Failed store-conditionals do
+    // not blow unrelated reservations.
+    std::list<LockedAddr>::iterator i = lockedAddrList.begin();
+
+    bool allowStore = false;
+
+    while (i != lockedAddrList.end()) {
+        if (i->addr == paddr && i->matchesContext(req)) {
+            // it's a store conditional, and as far as the memory system can
+            // tell, the requesting context's lock is still valid.
+            /*DPRINTF(LLSC, "StCond success: context %d addr %#x\n",
+                    req->contextId(), paddr);*/
+            allowStore = true;
+            break;
+        }
+        // If we didn't find a match, keep searching!  Someone else may well
+        // have a reservation on this line here but we may find ours in just
+        // a little while.
+        i++;
+    }
+    req->setExtraData(allowStore ? 1 : 0);
+
+    // LLSCs that succeeded AND non-LLSC stores both fall into here:
+    if (allowStore) {
+        // We write address paddr.  However, there may be several entries with a
+        // reservation on this address (for other contextIds) and they must all
+        // be removed.
+        i = lockedAddrList.begin();
+        while (i != lockedAddrList.end()) {
+            if (i->addr == paddr) {
+                /*DPRINTF(LLSC, "Erasing lock record: context %d addr %#x\n",
+                        i->contextId, paddr);*/
+                        
+                // For ARM, a spinlock would typically include a Wait
+                // For Event (WFE) to conserve energy. The ARMv8
+                // architecture specifies that an event is
+                // automatically generated when clearing the exclusive
+                // monitor to wake up the processor in WFE.            
+                
+                // FIXME: wake up cpus on lock erasure...........though i feel that the cpu
+                // itself deals with this via locked_mem.hh.....so maybe this is not needed!
+                
+                // right now not getting the true system instance in owner.getSystem()
+                // can explore why we are not getting the true system instance even though 
+                // its address is similar to the one that is actually created
+                
+                // ThreadContext* ctx = owner.getSystem()->getThreadContext(i->contextId);
+                // ctx->getCpuPtr()->wakeup(ctx->threadId());
+                
+                i = lockedAddrList.erase(i);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    return allowStore;
+}
+
+
+// Add load-locked to tracking list.  Should only be called if the
+// operation is a load and the LLSC flag is set.
+void
+sc_transactor::trackLoadLocked(PacketPtr pkt)
+{
+    Request *req = pkt->req;
+    Addr paddr = LockedAddr::mask(req->getPaddr());
+
+    // first we check if we already have a locked addr for this
+    // xc.  Since each xc only gets one, we just update the
+    // existing record with the new address.
+    std::list<LockedAddr>::iterator i;
+
+    for (i = lockedAddrList.begin(); i != lockedAddrList.end(); ++i) {
+        if (i->matchesContext(req)) {
+            /*DPRINTF(LLSC, "Modifying lock record: context %d addr %#x\n",
+                    req->contextId(), paddr);*/
+            i->addr = paddr;
+            return;
+        }
+    }
+
+    // no record for this xc: need to allocate a new one
+    /*DPRINTF(LLSC, "Adding lock record: context %d addr %#x\n",
+            req->contextId(), paddr);*/
+    lockedAddrList.push_front(LockedAddr(req));
+}
+
+
 
 void
 sc_transactor::pec(

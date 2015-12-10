@@ -37,8 +37,8 @@ VARIANT = opt
 
 #SYSTEMC_INC = /opt/systemc/include
 #SYSTEMC_LIB = /opt/systemc/lib-linux64
-SYSTEMC_INC = /usr/local/systemc-2.3.1/include
-SYSTEMC_LIB = /usr/local/systemc-2.3.1/lib-linux64
+SYSTEMC_INC = $(SYSTEMC_HOME)/include
+SYSTEMC_LIB = $(SYSTEMC_HOME)/lib-linux64
 
 CXXFLAGS = -I../../build/$(ARCH) -L../../build/$(ARCH)
 CXXFLAGS += -I../systemc/

@@ -417,8 +417,9 @@ CxxConfigManager::findAllObjects()
      *  even with config file reorganisation */
     std::sort(objects.begin(), objects.end());
 
-    for (auto i = objects.begin(); i != objects.end(); ++i)
+    for (auto i = objects.begin(); i != objects.end(); ++i) {
         findObject(*i);
+    }
 
     /* Set the traversal order for further iterators */
     objectsInOrder.clear();
