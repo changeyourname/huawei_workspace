@@ -309,17 +309,21 @@ sc_transactor::checkLockedAddrList(PacketPtr pkt)
                 // For Event (WFE) to conserve energy. The ARMv8
                 // architecture specifies that an event is
                 // automatically generated when clearing the exclusive
-                // monitor to wake up the processor in WFE.            
+                // monitor to wake up the processor in WFE.          
+                // ThreadContext* ctx = owner.getSystem()->getThreadContext(i->contextId);
+                // ctx->getCpuPtr()->wakeup(ctx->threadId());                  
                 
-                // FIXME: wake up cpus on lock erasure...........though i feel that the cpu
-                // itself deals with this via locked_mem.hh.....so maybe this is not needed!
-                
+                // FIXME: enable above!!
                 // right now not getting the true system instance in owner.getSystem()
                 // can explore why we are not getting the true system instance even though 
                 // its address is similar to the one that is actually created
                 
-                // ThreadContext* ctx = owner.getSystem()->getThreadContext(i->contextId);
-                // ctx->getCpuPtr()->wakeup(ctx->threadId());
+                // though i feel that the cpu itself deals with this via locked_mem.hh.....also
+                // if caches are disabled then snooping for locked addresses happen for each 
+                // request and for each context so this ARM semantics for wakeup @ lock-erasure
+                // would have been done already in locked_mem.hh...so maybe ignoring this is OK                
+                
+
                 
                 i = lockedAddrList.erase(i);
             } else {
