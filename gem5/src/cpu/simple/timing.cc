@@ -817,6 +817,7 @@ TimingSimpleCPU::completeDataAccess(PacketPtr pkt)
     assert(_status == DcacheWaitResponse || _status == DTBWaitResponse ||
            pkt->req->getFlags().isSet(Request::NO_ACCESS));
 
+
     pkt->req->setAccessLatency();
 
     updateCycleCounts();

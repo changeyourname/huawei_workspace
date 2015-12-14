@@ -179,16 +179,22 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     sc_assert(!needToSendRequestRetry);
 
     // simply drop inhibited packets and clean evictions
-    if (packet->memInhibitAsserted() ||
-        packet->cmd == MemCmd::CleanEvict)
+    if (packet->memInhibitAsserted()) {
         return true;
-
+    }
+    if (packet->cmd == MemCmd::CleanEvict || packet->cmd == MemCmd::WritebackClean) {
+        return true;
+    }           
+    
+    //assert(AddrRange(packet->getAddr(), packet->getAddr() + (packet->getSize() - 1)).isSubset(range)); 
+        
     /* Remember if a request comes in while we're blocked so that a retry
      * can be sent to gem5 */
-    if (blockingRequest) {
+    /*if (blockingRequest) {
         needToSendRequestRetry = true;
         return false;
-    }
+    }*/
+    
 
     /*  NOTE: normal tlm is blocking here. But in our case we return false
      *  and tell gem5 when a retry can be done. This is the main difference
@@ -200,25 +206,44 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      *  requestInProgress = trans;
     */
     
-    // catering for LLSC requests
-    if (packet->isLLSC()) {
-        if (packet->isRead()) {         // LL
-            // tracking this address:context for future SC
+    
+    if (packet->cmd == MemCmd::SwapReq) {
+        assert(0);
+    } else if (packet->isRead()) {
+        assert(!packet->isWrite());
+        if (packet->isLLSC()) {
             trackLoadLocked(packet);
-    } else {                            // SC
-            Request *req = packet->req;
-            if (lockedAddrList.empty()) {
-                // SC failed
+        }
+        // forward this request to SysC memory        
+    } else if (packet->isInvalidate()) {
+        return true;
+    } else if (packet->isWrite()) {
+        Request *req = packet->req;
+        if (lockedAddrList.empty()) {
+            // no locked addrs: nothing to check, sotre_conditional fails
+            bool isLLSC = packet->isLLSC();
+            if (isLLSC) {
                 req->setExtraData(0);
                 return true;
-            } else {
-                if (!checkLockedAddrList(packet)) {
-                    return true;
-                }
+            }
+        } else {
+            if (!checkLockedAddrList(packet)) {
+                return true;
             }
         }
     }
+
+
+    // if the previous transaction's response has not been sent Ok then
+    // we shouldn't forward any new request to memory
+    if (blockingResponse) {
+        needToSendRequestRetry = true;
+
+        // send retry request so as to retry the previous transaction                
+        return false;
+    }
     
+    // forwarding the request to SysC memory module  
     
 
     /* Prepare the transaction */
@@ -234,13 +259,17 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      * Standard Page 507 for a visualisation of the procedure */
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
-    tlm::tlm_sync_enum status;
+    tlm::tlm_sync_enum status;    
+    
     status = iSocket->nb_transport_fw(*trans, phase, delay);
+    
+    //assert(status == tlm::TLM_COMPLETED);
+    
     /* Check returned value: */
     if(status == tlm::TLM_ACCEPTED) {
         sc_assert(phase == tlm::BEGIN_REQ);
         /* Accepted but is now blocking until END_REQ (exclusion rule)*/
-        blockingRequest = trans;
+        blockingRequest = trans;    
     } else if(status == tlm::TLM_UPDATED) {
         /* The Timing annotation must be honored: */
         sc_assert(phase == tlm::END_REQ || phase == tlm::BEGIN_RESP);
@@ -252,7 +281,11 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     } else if(status == tlm::TLM_COMPLETED) {
         /* Transaction is over nothing has do be done. */
         sc_assert(phase == tlm::END_RESP);
-        trans->release();
+        
+        payloadEvent<sc_transactor> * pe;
+        pe = new payloadEvent<sc_transactor>(*this,
+            &sc_transactor::pec, "PEQ");
+        pe->notify(*trans, phase, delay);
     }
 
     return true;
@@ -268,6 +301,9 @@ sc_transactor::checkLockedAddrList(PacketPtr pkt)
 {
     Request *req = pkt->req;
     Addr paddr = LockedAddr::mask(req->getPaddr());
+    bool isLLSC = pkt->isLLSC();
+    
+    bool allowStore = !isLLSC;
 
     // Iterate over list.  Note that there could be multiple matching records,
     // as more than one context could have done a load locked to this location.
@@ -276,23 +312,23 @@ sc_transactor::checkLockedAddrList(PacketPtr pkt)
     // not blow unrelated reservations.
     std::list<LockedAddr>::iterator i = lockedAddrList.begin();
 
-    bool allowStore = false;
-
-    while (i != lockedAddrList.end()) {
-        if (i->addr == paddr && i->matchesContext(req)) {
-            // it's a store conditional, and as far as the memory system can
-            // tell, the requesting context's lock is still valid.
-            /*DPRINTF(LLSC, "StCond success: context %d addr %#x\n",
-                    req->contextId(), paddr);*/
-            allowStore = true;
-            break;
+    if (isLLSC) {
+        while (i != lockedAddrList.end()) {
+            if (i->addr == paddr && i->matchesContext(req)) {
+                // it's a store conditional, and as far as the memory system can
+                // tell, the requesting context's lock is still valid.
+                /*DPRINTF(LLSC, "StCond success: context %d addr %#x\n",
+                        req->contextId(), paddr);*/
+                allowStore = true;
+                break;
+            }
+            // If we didn't find a match, keep searching!  Someone else may well
+            // have a reservation on this line here but we may find ours in just
+            // a little while.
+            i++;
         }
-        // If we didn't find a match, keep searching!  Someone else may well
-        // have a reservation on this line here but we may find ours in just
-        // a little while.
-        i++;
+        req->setExtraData(allowStore ? 1 : 0);
     }
-    req->setExtraData(allowStore ? 1 : 0);
 
     // LLSCs that succeeded AND non-LLSC stores both fall into here:
     if (allowStore) {
@@ -316,14 +352,14 @@ sc_transactor::checkLockedAddrList(PacketPtr pkt)
                 // FIXME: enable above!!
                 // right now not getting the true system instance in owner.getSystem()
                 // can explore why we are not getting the true system instance even though 
-                // its address is similar to the one that is actually created
-                
-                // though i feel that the cpu itself deals with this via locked_mem.hh.....also
-                // if caches are disabled then snooping for locked addresses happen for each 
-                // request and for each context so this ARM semantics for wakeup @ lock-erasure
-                // would have been done already in locked_mem.hh...so maybe ignoring this is OK                
-                
+                // its address is similar to the one that is actually created               
 
+                // i think we are fairly OK with non-LLSC if we ignore this as this would have
+                // been handled in locked_mem.hh as without caches, each SMP-core request 
+                // is being snooped by all others before issuing it to the memory
+                
+                // But for LLSC succeeding stores, is waking up that CPU necessary??
+                // can we also do this in locked_mem.hh???
                 
                 i = lockedAddrList.erase(i);
             } else {
@@ -373,7 +409,7 @@ sc_transactor::pec(
     const tlm::tlm_phase& phase)
 {
     sc_time delay;
-
+    
     if(phase == tlm::END_REQ ||
             &trans == blockingRequest && phase == tlm::BEGIN_RESP) {
         sc_assert(&trans == blockingRequest);
@@ -386,9 +422,8 @@ sc_transactor::pec(
         }
     }
     else if(phase == tlm::BEGIN_RESP)
-    {
-        CAUGHT_UP;
-
+    {                    
+        CAUGHT_UP;        
         PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
 
         sc_assert(!blockingResponse);
@@ -413,6 +448,25 @@ sc_transactor::pec(
                 trans.release();
             }
         }
+    } else if (phase == tlm::END_RESP) {
+        CAUGHT_UP;       
+        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
+         
+        sc_assert(!blockingResponse);        
+
+        bool need_retry;
+        if (packet->needsResponse()) {
+            packet->makeResponse();
+            need_retry = !iSocket.sendTimingResp(packet);
+        } else {
+            need_retry = false;
+        }
+        
+        if (need_retry) {
+            blockingResponse = &trans;
+        } else {                                  
+            trans.release();        
+        }
     } else {
         SC_REPORT_FATAL("transactor", "Invalid protocol phase in pec");
     }
@@ -429,16 +483,24 @@ sc_transactor::recvRespRetry()
 
     tlm::tlm_generic_payload *trans = blockingResponse;
     blockingResponse = NULL;
+
     PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
 
     bool need_retry = !iSocket.sendTimingResp(packet);
 
     sc_assert(!need_retry);
 
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+    /*sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::END_RESP;
-    iSocket->nb_transport_fw(*trans, phase, delay);
+    iSocket->nb_transport_fw(*trans, phase, delay);*/
     // Release transaction with all the extensions
+    
+    if (needToSendRequestRetry) {
+        needToSendRequestRetry = false;
+        iSocket.sendRetryReq();
+    }    
+    
+    
     trans->release();
 }
 
