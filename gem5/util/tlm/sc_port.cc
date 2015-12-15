@@ -91,11 +91,9 @@ Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
     CAUGHT_UP;
-    SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
+    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");       
 
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-
-
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;   
     /* Prepare the transaction */
     tlm::tlm_generic_payload * trans = mm.allocate();
     trans->acquire();
@@ -106,16 +104,36 @@ sc_transactor::recvAtomic(PacketPtr packet)
     trans->set_auto_extension(extension);
 
     /* Execute b_transport: */
-    if (packet->cmd == MemCmd::SwapReq) {
-        SC_REPORT_FATAL("transactor", "SwapReq not supported");
-    } else if (packet->isRead()) {
-        iSocket->b_transport(*trans, delay);
-    } else if (packet->isInvalidate()) {
-        // do nothing
-    } else if (packet->isWrite()) {
-        iSocket->b_transport(*trans, delay);
+    if (packet->memInhibitAsserted() || packet->cmd == MemCmd::CleanEvict || packet->cmd == MemCmd::WritebackClean) {
+        return delay.value();
     } else {
-        SC_REPORT_FATAL("transactor", "Typo of request not supported");
+        if (packet->cmd == MemCmd::SwapReq) {
+            SC_REPORT_FATAL("transactor", "SwapReq not supported");
+        } else if (packet->isRead()) {
+            if (packet->isLLSC()) {
+                trackLoadLocked(packet);
+            }
+            iSocket->b_transport(*trans, delay);
+        } else if (packet->isInvalidate()) {
+            // do nothing
+        } else if (packet->isWrite()) {
+            Request *req = packet->req;
+            if (lockedAddrList.empty()) {
+                bool isLLSC = packet->isLLSC();
+                if (isLLSC) {
+                    req->setExtraData(0);
+                    return true;
+                }
+            } else {
+                if (!checkLockedAddrList(packet)) {
+                    return true;
+                }
+            }
+            
+            iSocket->b_transport(*trans, delay);
+        } else {
+            SC_REPORT_FATAL("transactor", "Typo of request not supported");
+        }   
     }
 
     if (packet->needsResponse()) {

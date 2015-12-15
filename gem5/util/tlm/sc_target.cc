@@ -115,10 +115,7 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
     /*m_peq.notify(trans, phase, delay);
     return tlm::TLM_ACCEPTED;*/
     
-    PacketPtr packet = gem5Extension::getExtension(trans).getPacket();        
-    if (packet->req->hasContextId()) {
-        printf("core:%d..addr:0x%08x..masterID:%d\r\n", packet->req->contextId(), trans.get_address(), packet->req->masterId());
-    }
+
     execute_transaction(trans);
     phase = tlm::END_RESP;
     return tlm::TLM_COMPLETED;
