@@ -35,8 +35,6 @@ ARCH = ARM
 VARIANT = opt
 #VARIANT = debug
 
-#SYSTEMC_INC = /opt/systemc/include
-#SYSTEMC_LIB = /opt/systemc/lib-linux64
 SYSTEMC_INC = $(SYSTEMC_HOME)/include
 SYSTEMC_LIB = $(SYSTEMC_HOME)/lib-linux64
 

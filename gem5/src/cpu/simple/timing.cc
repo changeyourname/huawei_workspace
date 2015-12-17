@@ -435,7 +435,6 @@ TimingSimpleCPU::readMem(Addr addr, uint8_t *data,
     req->taskId(taskId());
 
     Addr split_addr = roundDown(addr + size - 1, block_size);
-
     assert(split_addr <= addr || split_addr - addr < block_size);
 
     _status = DTBWaitResponse;
@@ -526,9 +525,8 @@ TimingSimpleCPU::writeMem(uint8_t *data, unsigned size,
                                  thread->contextId(), tid);
 
     req->taskId(taskId());
-    
+
     Addr split_addr = roundDown(addr + size - 1, block_size);
-   
     assert(split_addr <= addr || split_addr - addr < block_size);
 
     _status = DTBWaitResponse;
@@ -816,7 +814,6 @@ TimingSimpleCPU::completeDataAccess(PacketPtr pkt)
     assert(!pkt->isError());
     assert(_status == DcacheWaitResponse || _status == DTBWaitResponse ||
            pkt->req->getFlags().isSet(Request::NO_ACCESS));
-
 
     pkt->req->setAccessLatency();
 

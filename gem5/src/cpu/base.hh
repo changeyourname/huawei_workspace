@@ -148,7 +148,7 @@ class BaseCPU : public MemObject
 
     /** Cache the cache line size that we get from the system */
     const unsigned int _cacheLineSize;
-    
+
     /** Are caches present in design */
     const bool _cachesDisabled;
 

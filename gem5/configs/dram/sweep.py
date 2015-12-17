@@ -94,13 +94,14 @@ mem_range = AddrRange('256MB')
 system.mem_ranges = [mem_range]
 
 # do not worry about reserving space for the backing store
-mmap_using_noreserve = True
+system.mmap_using_noreserve = True
 
 # force a single channel to match the assumptions in the DRAM traffic
 # generator
 options.mem_channels = 1
 options.external_memory_system = 0
 options.tlm_memory = 0
+options.elastic_trace_en = 0
 MemConfig.config_mem(options, system)
 
 # the following assumes that we are using the native DRAM
@@ -145,8 +146,8 @@ burst_size = int((system.mem_ctrls[0].devices_per_rank.value *
 page_size = system.mem_ctrls[0].devices_per_rank.value * \
     system.mem_ctrls[0].device_rowbuffer_size.value
 
-# match the maximum bandwidth of the memory, the parameter is in ns
-# and we need it in ticks
+# match the maximum bandwidth of the memory, the parameter is in seconds
+# and we need it in ticks (ps)
 itt = system.mem_ctrls[0].tBURST.value * 1000000000000
 
 # assume we start at 0

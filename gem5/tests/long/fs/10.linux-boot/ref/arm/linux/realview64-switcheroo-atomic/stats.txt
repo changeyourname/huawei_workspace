@@ -4,11 +4,11 @@ sim_seconds                                 51.111153                       # Nu
 sim_ticks                                51111152682000                       # Number of ticks simulated
 final_tick                               51111152682000                       # Number of ticks from beginning of simulation (restored from checkpoints and never reset)
 sim_freq                                 1000000000000                       # Frequency of simulated ticks
-host_inst_rate                                1108699                       # Simulator instruction rate (inst/s)
-host_op_rate                                  1302904                       # Simulator op (including micro ops) rate (op/s)
-host_tick_rate                            57554949131                       # Simulator tick rate (ticks/s)
-host_mem_usage                                 721016                       # Number of bytes of host memory used
-host_seconds                                   888.04                       # Real time elapsed on the host
+host_inst_rate                                 965225                       # Simulator instruction rate (inst/s)
+host_op_rate                                  1134298                       # Simulator op (including micro ops) rate (op/s)
+host_tick_rate                            50106889543                       # Simulator tick rate (ticks/s)
+host_mem_usage                                 675900                       # Number of bytes of host memory used
+host_seconds                                  1020.04                       # Real time elapsed on the host
 sim_insts                                   984570519                       # Number of instructions simulated
 sim_ops                                    1157031967                       # Number of ops (including micro ops) simulated
 system.voltage_domain.voltage                       1                       # Voltage in Volts
@@ -682,6 +682,7 @@ system.iobus.trans_dist::WriteReq              136515                       # Tr
 system.iobus.trans_dist::WriteResp             136515                       # Transaction distribution
 system.iobus.pkt_count_system.bridge.master::system.realview.uart.pio        47598                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.realview_io.pio           14                       # Packet count per connected master and slave (bytes)
+system.iobus.pkt_count_system.bridge.master::system.realview.pci_host.pio          434                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.timer0.pio           16                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.timer1.pio           16                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.rtc.pio           16                       # Packet count per connected master and slave (bytes)
@@ -691,10 +692,7 @@ system.iobus.pkt_count_system.bridge.master::system.realview.uart3_fake.pio     
 system.iobus.pkt_count_system.bridge.master::system.realview.sp810_fake.pio           24                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.watchdog_fake.pio           16                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.ide.pio        29548                       # Packet count per connected master and slave (bytes)
-system.iobus.pkt_count_system.bridge.master::system.realview.ide-pciconf          210                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::system.realview.ethernet.pio        44750                       # Packet count per connected master and slave (bytes)
-system.iobus.pkt_count_system.bridge.master::system.realview.ethernet-pciconf          164                       # Packet count per connected master and slave (bytes)
-system.iobus.pkt_count_system.bridge.master::system.realview.pciconfig.pio           60                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.bridge.master::total       122480                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.realview.ide.dma::system.iocache.cpu_side       230962                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_count_system.realview.ide.dma::total       230962                       # Packet count per connected master and slave (bytes)
@@ -703,6 +701,7 @@ system.iobus.pkt_count_system.realview.ethernet.dma::total           80         
 system.iobus.pkt_count::total                  353522                       # Packet count per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.uart.pio        47618                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.realview_io.pio           28                       # Cumulative packet size per connected master and slave (bytes)
+system.iobus.pkt_size_system.bridge.master::system.realview.pci_host.pio          634                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.timer0.pio           32                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.timer1.pio           32                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.rtc.pio           32                       # Cumulative packet size per connected master and slave (bytes)
@@ -712,10 +711,7 @@ system.iobus.pkt_size_system.bridge.master::system.realview.uart3_fake.pio      
 system.iobus.pkt_size_system.bridge.master::system.realview.sp810_fake.pio           48                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.watchdog_fake.pio           32                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.ide.pio        17558                       # Cumulative packet size per connected master and slave (bytes)
-system.iobus.pkt_size_system.bridge.master::system.realview.ide-pciconf          263                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::system.realview.ethernet.pio        89500                       # Cumulative packet size per connected master and slave (bytes)
-system.iobus.pkt_size_system.bridge.master::system.realview.ethernet-pciconf          251                       # Cumulative packet size per connected master and slave (bytes)
-system.iobus.pkt_size_system.bridge.master::system.realview.pciconfig.pio          120                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.bridge.master::total       155610                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.realview.ide.dma::system.iocache.cpu_side      7334280                       # Cumulative packet size per connected master and slave (bytes)
 system.iobus.pkt_size_system.realview.ide.dma::total      7334280                       # Cumulative packet size per connected master and slave (bytes)
@@ -1044,6 +1040,12 @@ system.membus.snoop_fanout::overflows               0      0.00%    100.00% # Re
 system.membus.snoop_fanout::min_value               1                       # Request fanout histogram
 system.membus.snoop_fanout::max_value               1                       # Request fanout histogram
 system.membus.snoop_fanout::total             3920446                       # Request fanout histogram
+system.realview.dcc.osc_cpu.clock               16667                       # Clock period in ticks
+system.realview.dcc.osc_ddr.clock               25000                       # Clock period in ticks
+system.realview.dcc.osc_hsbm.clock              25000                       # Clock period in ticks
+system.realview.dcc.osc_pxl.clock               42105                       # Clock period in ticks
+system.realview.dcc.osc_smb.clock               20000                       # Clock period in ticks
+system.realview.dcc.osc_sys.clock               16667                       # Clock period in ticks
 system.realview.ethernet.txBytes                  966                       # Bytes Transmitted
 system.realview.ethernet.txPackets                  3                       # Number of Packets Transmitted
 system.realview.ethernet.txIpChecksums              0                       # Number of tx IP Checksums done by device
@@ -1086,16 +1088,10 @@ system.realview.ethernet.totalRxOrn                 0                       # to
 system.realview.ethernet.coalescedTotal             0                       # average number of interrupts coalesced into each post
 system.realview.ethernet.postedInterrupts           18                       # number of posts to CPU
 system.realview.ethernet.droppedPackets             0                       # number of packets dropped
-system.realview.realview_io.osc_pxl.clock        42105                       # Clock period in ticks
-system.realview.realview_io.osc_clcd.clock        42105                       # Clock period in ticks
-system.realview.realview_io.osc_cpu.clock        16667                       # Clock period in ticks
-system.realview.realview_io.osc_ddr.clock        25000                       # Clock period in ticks
-system.realview.realview_io.osc_hsbm.clock        25000                       # Clock period in ticks
-system.realview.realview_io.osc_mcc.clock        20000                       # Clock period in ticks
-system.realview.realview_io.osc_peripheral.clock        41667                       # Clock period in ticks
-system.realview.realview_io.osc_smb.clock        20000                       # Clock period in ticks
-system.realview.realview_io.osc_sys.clock        16667                       # Clock period in ticks
-system.realview.realview_io.osc_system_bus.clock        41667                       # Clock period in ticks
+system.realview.mcc.osc_clcd.clock              42105                       # Clock period in ticks
+system.realview.mcc.osc_mcc.clock               20000                       # Clock period in ticks
+system.realview.mcc.osc_peripheral.clock        41667                       # Clock period in ticks
+system.realview.mcc.osc_system_bus.clock        41667                       # Clock period in ticks
 system.toL2Bus.snoop_filter.tot_requests     52477792                       # Total number of requests made to the snoop filter.
 system.toL2Bus.snoop_filter.hit_single_requests     26568978                       # Number of requests hitting in the snoop filter with a single holder of the requested data.
 system.toL2Bus.snoop_filter.hit_multi_requests         1747                       # Number of requests hitting in the snoop filter with multiple (>1) holders of the requested data.

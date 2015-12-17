@@ -55,6 +55,8 @@
 
 class MemObject;
 
+class System;
+
 /**
  * Ports are used to interface memory objects to each other. A port is
  * either a master or a slave and the connected peer is always of the
@@ -67,6 +69,10 @@ class Port
 
     /** Descriptive name (for DPRINTF output) */
     std::string portName;
+    
+    /*
+    // pointer to the system object to let SystemC know about CPUs making the memory requests
+    System *_system;*/
 
   protected:
 

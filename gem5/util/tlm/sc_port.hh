@@ -42,7 +42,9 @@
 #include <tlm>
 
 #include "mem/external_slave.hh"
+// TODO: is below needed??
 #include "mem/abstract_mem.hh"
+// TODO: -------------------
 #include "sc_mm.hh"
 #include "sc_module.hh"
 

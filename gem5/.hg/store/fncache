@@ -225,7 +225,7 @@ data/tests/quick/se/40.m5threads-test-atomic/ref/sparc/linux/o3-timing-mp/stats.
 data/src/mem/protocol/MOESI_SMP_directory.slicc.i
 data/arch/mips/isa/operands.isa.i
 data/tests/quick/60.rubytest/ref/alpha/linux/rubytest-ruby-MOESI_hammer/stats.txt.i
-data/mem/physical.hh.i
+data/src/mem/ruby/storebuffer/storebuffer.cc.i
 data/ext/mcpat/cacti/cacti_interface.h.i
 data/tests/long/00.gzip/ref/sparc/linux/o3-timing/config.ini.i
 data/tests/long/fs/10.linux-boot/ref/alpha/linux/tsunami-switcheroo-full/stats.txt.i
@@ -286,6 +286,7 @@ data/build_opts/X86.i
 data/src/arch/arm/isa/insts/fp64.isa.i
 data/src/unittest/rangetest.cc.i
 data/src/mem/ruby/system/LRUPolicy.hh.i
+data/src/dev/storage/ide_disk.hh.i
 data/src/arch/x86/insts/microldstop.hh.i
 data/src/mem/ruby/common/BigSet.cc.i
 data/src/cpu/testers/rubytest/CheckTable.cc.i
@@ -407,6 +408,7 @@ data/build_opts/NOISA.i
 data/cpu/profile.hh.i
 data/src/arch/sparc/system.cc.i
 data/python/m5/objects/SimConsole.py.i
+data/tests/long/se/00.gzip/ref/arm/linux/o3-timing/simerr.i
 data/tests/long/10.linux-boot/ref/arm/linux/realview-o3/config.ini.i
 data/tests/quick/se/10.mcf/ref/sparc/linux/simple-atomic/simerr.i
 data/tests/long/70.twolf/ref/alpha/linux/simple-timing/smred.pl1.i
@@ -465,6 +467,7 @@ data/tests/configs/pc-simple-timing.py.i
 data/tests/long/30.eon/ref/alpha/linux/o3-timing/stdout.i
 data/system/alpha/h/paldefs.h.i
 data/tests/quick/00.hello/ref/mips/linux/simple-atomic-ruby/config.ini.i
+data/util/encode_inst_dep_trace.py.i
 data/src/arch/x86/isa/insts/simd128/floating_point/data_conversion/convert_floating_point_to_gpr_integer.py.i
 data/src/mem/ruby/common/Global.hh.i
 data/tests/quick/80.netperf-stream/ref/alpha/linux/twosys-tsunami-simple-atomic/testsys.terminal.i
@@ -607,7 +610,7 @@ data/sim/eventq.hh.i
 data/tests/long/10.linux-boot/ref/x86/linux/pc-o3-timing/simout.i
 data/ext/mcpat/array.cc.i
 data/tests/quick/50.memtest/ref/alpha/linux/memtest-ruby-MOESI_CMP_directory/config.ini.i
-data/src/dev/mips/MipsConsole.py.i
+data/src/dev/net/i8254xGBe.hh.i
 data/util/chkformat.i
 data/src/mem/slicc/ast/TypeDeclAST.hh.i
 data/ext/dsent/model/timing_graph/ElectricalTimingNode.cc.i
@@ -631,6 +634,7 @@ data/src/mem/protocol/MOESI_CMP_directory.slicc.i
 data/tests/long/fs/10.linux-boot/ref/alpha/linux/tsunami-o3/simout.i
 data/src/mem/cache/prefetch/queued.hh.i
 data/cpu/ooo_cpu/ooo_cpu.hh.i
+data/src/dev/pci/PciDevice.py.i
 data/src/mem/ruby/slicc_interface/AbstractCacheEntry.hh.i
 data/src/base/hybrid_pred.hh.i
 data/ext/ply/test/lex_ignore.exp.i
@@ -754,6 +758,7 @@ data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-o3-checker/stats.txt.i
 data/src/cpu/quiesce_event.hh.i
 data/tests/quick/00.hello/ref/alpha/linux/o3-timing/simerr.i
 data/tests/long/10.mcf/ref/sparc/linux/simple-atomic/stderr.i
+data/src/dev/pci/SConscript.i
 data/tests/quick/se/60.rubytest/ref/alpha/linux/rubytest-ruby/simerr.i
 data/tests/quick/se/00.hello/ref/alpha/tru64/simple-timing-ruby/ruby.stats.i
 data/dev/console.hh.i
@@ -850,7 +855,7 @@ data/configs/boot/netperf-stream-udp-client.rcS.i
 data/src/mem/ruby/network/garnet/flexible-pipeline/OutVcState.cc.i
 data/src/cpu/inorder/resources/bpred_unit.hh.i
 data/src/mem/ruby/system/PersistentTable.hh.i
-data/tests/long/00.gzip/ref/sparc/linux/simple-atomic/config.out.i
+data/sim/process.cc.i
 data/ext/libelf/gelf_rela.c.i
 data/AUTHORS.i
 data/src/arch/x86/isa/insts/data_conversion/translate.py.i
@@ -879,6 +884,7 @@ data/src/arch/alpha/miscregfile.hh.i
 data/tests/long/20.parser/ref/arm/linux/o3-timing/config.ini.i
 data/ext/mcpat/cacti/router.h.i
 data/src/unittest/stattest.i.i
+data/src/dev/storage/Ide.py.i
 data/build_opts/ALPHA_SE.i
 data/src/arch/x86/insts/badmicroop.cc.i
 data/src/cpu/memtest/memtest.cc.i
@@ -916,6 +922,7 @@ data/src/base/vnc/vncserver.cc.i
 data/src/mem/ruby/network/simple/Network_Files/NUCA_Procs-1_ProcsPerChip-1_L2Banks-64_Memories-1.txt.i
 data/tests/long/70.twolf/ref/alpha/tru64/simple-timing/stats.txt.i
 data/src/dev/alpha/tsunami_cchip.cc.i
+data/src/dev/net/multi_etherlink.hh.i
 data/src/arch/x86/isa/insts/simd128/integer/logical/pand.py.i
 data/mem/mem_object.hh.i
 data/tests/long/se/10.mcf/ref/arm/linux/o3-timing/chair.cook.ppm.i
@@ -946,6 +953,7 @@ data/sim/intr_control.cc.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-switcheroo-full/system.terminal.i
 data/src/mem/ruby/network/fault_model/FaultModel.cc.i
 data/tests/quick/00.hello/ref/x86/linux/simple-timing-ruby/simerr.i
+data/src/cpu/o3/alpha/dyn_inst_impl.hh.i
 data/ext/dsent/libutil/Exception.cc.i
 data/arch/alpha/alpha_memory.hh.i
 data/src/unittest/stattestmain.py.i
@@ -996,7 +1004,7 @@ data/src/arch/mips/isa/formats/mt.isa.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-o3/stats.txt.i
 data/python/m5/objects/Pci.mpy.i
 data/src/cpu/testers/directedtest/SeriesRequestGenerator.cc.i
-data/configs/topologies/Pt2Pt.py.i
+data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/m5stats.txt.i
 data/src/arch/arm/utility.hh.i
 data/tests/long/80.netperf-stream/test.py.i
 data/src/arch/alpha/floatregfile.cc.i
@@ -1064,10 +1072,10 @@ data/src/mem/ruby/network/simple/SimpleLink.cc.i
 data/mem/translating_port.hh.i
 data/src/arch/x86/isa/insts/simd64/floating_point/arithmetic/addition.py.i
 data/src/mem/gems_common/util.cc.i
-data/src/mem/ruby/storebuffer/storebuffer.cc.i
 data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-atomic/stdout.i
 data/src/mem/protocol/MOESI_CMP_directory-L1cache.sm.i
 data/util/systemc/sc_gem5_control.hh.i
+data/tests/quick/00.hello/ref/alpha/tru64/simple-timing-ruby/ruby.stats.i
 data/src/arch/power/isa/formats/util.isa.i
 data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_Two_Level/system.pc.com_1.terminal.i
 data/tests/quick/10.linux-boot/ref/arm/linux/realview-simple-timing/status.i
@@ -1118,7 +1126,7 @@ data/cpu/base_dyn_inst.cc.i
 data/src/arch/x86/isa/insts/x87/control/save_and_restore_x87_environment.py.i
 data/tests/long/60.bzip2/ref/alpha/tru64/o3-timing/m5stats.txt.i
 data/src/arch/x86/regs/msr.cc.i
-data/tests/quick/00.hello/ref/alpha/tru64/simple-timing-ruby/ruby.stats.i
+data/src/cpu/o3/probe/elastic_trace.cc.i
 data/src/arch/x86/linux/system.hh.i
 data/tests/quick/se/10.mcf/test.py.i
 data/src/sim/probe/pmu.hh.i
@@ -1161,8 +1169,8 @@ data/arch/isa_parser.py.i
 data/util/statetrace/base/statetrace.cc.i
 data/tests/long/00.gzip/ref/arm/linux/simple-atomic/simerr.i
 data/src/mem/config/prefetch.hh.i
+data/src/dev/net/etherint.cc.i
 data/cpu/ozone/back_end.cc.i
-data/src/mem/ruby/network/orion/OrionLink.hh.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-simple-atomic/system.terminal.i
 data/src/unittest/offtest.cc.i
 data/tests/quick/se/70.twolf/ref/x86/linux/simple-timing/smred.pl2.i
@@ -1269,6 +1277,7 @@ data/src/mem/mport.cc.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-o3-dual/system.terminal.i
 data/tests/long/70.twolf/ref/sparc/linux/simple-atomic/config.ini.i
 data/base/bitfield.hh.i
+data/src/dev/net/tcp_iface.hh.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-simple-timing/config.ini.i
 data/src/arch/arm/isa/armdecode.isa.i
 data/src/python/m5/trace.py.i
@@ -1335,7 +1344,7 @@ data/src/mem/protocol/MESI_SCMP_bankdirectory_m-mem.sm.i
 data/ext/mcpat/bus_interconnect.cc.i
 data/src/kern/system_events.cc.i
 data/tests/quick/00.hello/ref/mips/linux/inorder-timing/simout.i
-data/src/cpu/o3/alpha/dyn_inst_impl.hh.i
+data/mem/physical.hh.i
 data/build_opts/ALPHA_SE_Network_test.i
 data/src/mem/ruby/network/garnet/fixed-pipeline/flitBuffer_d.hh.i
 data/tests/quick/se/00.hello/ref/power/linux/o3-timing/stats.txt.d
@@ -1413,7 +1422,7 @@ data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview64-simple-atomic/system.
 data/tests/quick/00.hello/ref/mips/linux/simple-timing/config.out.i
 data/src/arch/mips/isa/decoder.isa.i
 data/src/dev/ide_ctrl.cc.i
-data/ext/dsent/model/optical/RingDetector.cc.i
+data/tests/long/00.gzip/ref/arm/linux/o3-timing/stats.txt.i
 data/tests/quick/se/50.vortex/ref/arm/linux/simple-atomic/stats.txt.i
 data/ext/dsent/model/timing_graph/ElectricalDelay.h.i
 data/src/arch/arm/microcode_rom.hh.i
@@ -1430,7 +1439,7 @@ data/tests/long/se/70.twolf/ref/x86/linux/simple-timing/smred.pl1.i
 data/src/mem/multi_level_page_table_impl.hh.i
 data/cpu/beta_cpu/mem_dep_unit.hh.i
 data/src/sim/probe/probe.cc.i
-data/tests/long/se/00.gzip/ref/arm/linux/o3-timing/simerr.i
+data/src/dev/net/ns_gige_reg.h.i
 data/tests/quick/se/00.hello/ref/alpha/tru64/minor-timing/simerr.i
 data/src/arch/x86/isa/insts/simd64/__init__.py.i
 data/src/python/m5/options.py.i
@@ -1445,6 +1454,7 @@ data/ext/ply/test/lex_token2.exp.i
 data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview64-simple-atomic/stats.txt.i
 data/src/cpu/timing_expr.hh.i
 data/src/mem/protocol/MSI_MOSI_CMP_directory-L1cache.sm.i
+data/src/dev/net/multi_iface.hh.i
 data/tests/quick/se/10.mcf/ref/x86/linux/simple-atomic/mcf.out.i
 data/src/mem/ruby/network/garnet/fixed-pipeline/SWallocator_d.hh.i
 data/src/mem/cache/tags/split_blk.hh.i
@@ -1452,12 +1462,13 @@ data/tests/configs/alpha_generic.py.i
 data/tests/long/70.twolf/ref/sparc/linux/simple-timing/config.ini.i
 data/sim/serialize.cc.i
 data/ext/mcpat/cacti/subarray.cc.i
+data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-o3-dual/m5stats.txt.i
 data/tests/long/10.linux-boot/ref/arm/linux/realview-o3-dual/simerr.i
 data/tests/quick/se/00.hello/ref/x86/linux/simple-timing/simout.i
 data/tests/long/se/60.bzip2/ref/arm/linux/simple-atomic/stats.txt.i
 data/tests/quick/se/50.memtest/ref/alpha/linux/memtest/stats.txt.i
 data/src/sim/vptr.hh.i
-data/tests/quick/se/50.memtest/ref/alpha/linux/memtest/stats.txt.d
+data/src/dev/net/multi_etherlink.cc.i
 data/tests/quick/se/70.twolf/ref/alpha/tru64/simple-atomic/smred.pl1.i
 data/tests/long/70.twolf/ref/sparc/linux/simple-atomic/config.out.i
 data/tests/quick/se/00.hello/ref/arm/linux/simple-atomic/config.ini.i
@@ -1517,7 +1528,7 @@ data/src/cpu/directedtest/SeriesRequestGenerator.hh.i
 data/tests/configs/tgen-simple-dram.py.i
 data/ext/dsent/model/std_cells/INV.h.i
 data/tests/quick/02.insttest/ref/sparc/linux/o3-timing/stderr.i
-data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/m5stats.txt.i
+data/configs/topologies/Pt2Pt.py.i
 data/src/arch/x86/regs/msr.hh.i
 data/src/unittest/circlebuf.cc.i
 data/src/mem/ruby/system/RubyMemoryControl.py.i
@@ -1591,7 +1602,7 @@ data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_Two_Le
 data/tests/long/00.gzip/ref/arm/linux/simple-atomic/simout.i
 data/arch/alpha/tru64/process.hh.i
 data/src/cpu/inorder/SConsopts.i
-data/tests/long/00.gzip/ref/arm/linux/o3-timing/stats.txt.i
+data/ext/dsent/model/optical/RingDetector.cc.i
 data/util/statetrace/arch/tracechild_arm.hh.i
 data/src/cpu/o3/SConscript.i
 data/src/base/circlebuf.hh.i
@@ -1602,7 +1613,7 @@ data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-timing-dual/stderr
 data/src/cpu/inorder/reg_dep_map.cc.i
 data/src/mem/slicc/ast/IfStatementAST.cc.i
 data/tests/quick/se/02.insttest/ref/sparc/linux/inorder-timing/simerr.i
-data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-o3-dual/m5stats.txt.i
+data/src/dev/net/multi_iface.cc.i
 data/src/mem/ruby/tester/RequestGenerator.cc.i
 data/tests/long/se/10.mcf/ref/x86/linux/o3-timing/mcf.out.i
 data/python/m5/objects/BaseCache.mpy.i
@@ -1630,6 +1641,7 @@ data/ext/dsent/model/PortInfo.h.i
 data/src/mem/port.cc.i
 data/src/mem/ruby/system/WireBuffer.cc.i
 data/src/mem/ruby/filters/GenericBloomFilter.hh.i
+data/src/dev/net/etherbus.cc.i
 data/tests/long/se/60.bzip2/ref/alpha/tru64/minor-timing/simerr.i
 data/arch/mips/linux/linux.cc.i
 data/tests/long/00.gzip/ref/x86/linux/simple-timing/stats.txt.i
@@ -1647,6 +1659,7 @@ data/tests/long/se/00.gzip/ref/x86/linux/simple-atomic/config.ini.i
 data/src/arch/x86/isa/insts/simd64/integer/data_transfer/__init__.py.i
 data/src/mem/ruby/network/orion/Allocator/MatrixArbiter.hh.i
 data/tests/quick/40.m5threads-test-atomic/ref/sparc/linux/simple-atomic-mp-ruby/simout.i
+data/tests/long/00.gzip/ref/sparc/linux/simple-atomic/stdout.i
 data/util/ccdrv/readme.txt.i
 data/src/mem/ruby/FakeSimicsDataTypes.hh.i
 data/tests/long/se/50.vortex/ref/arm/linux/simple-atomic/config.ini.i
@@ -1738,7 +1751,7 @@ data/src/mem/protocol/MOESI_CMP_directory-msg.sm.i
 data/configs/boot/ping-server.rcS.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-simple-timing/simout.i
 data/src/cpu/base_dyn_inst_impl.hh.i
-data/tests/long/00.gzip/ref/arm/linux/simple-timing/config.ini.i
+data/kern/tru64/dump_mbuf.cc.i
 data/src/mem/cache/miss/SConscript.i
 data/tests/long/00.gzip/ref/alpha/linux/simple-timing/stderr.i
 data/src/dev/isa_fake.hh.i
@@ -1850,6 +1863,7 @@ data/mem/cache/prefetch/tagged_prefetcher_impl.hh.i
 data/src/mem/ruby/network/garnet/flexible-pipeline/flit.hh.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-minor/stats.txt.d
 data/cpu/beta_cpu/btb.hh.i
+data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-inorder/stats.txt.i
 data/src/arch/null/remote_gdb.hh.i
 data/src/arch/alpha/isa/util.isa.i
 data/ext/mcpat/cacti/uca.cc.i
@@ -1918,6 +1932,7 @@ data/src/mem/cache/cache_impl.hh.i
 data/cpu/o3/cpu_policy.hh.i
 data/src/mem/cache/cache_impl.hh.d
 data/tests/long/60.bzip2/ref/x86/linux/simple-atomic/m5stats.txt.i
+data/src/dev/net/pktfifo.hh.i
 data/test/lru_test.cc.i
 data/src/mem/ExternalSlave.py.i
 data/src/dev/dma_device.hh.i
@@ -1936,6 +1951,7 @@ data/src/arch/arm/table_walker.cc.i
 data/src/arch/mips/vtophys.hh.i
 data/tests/configs/realview-simple-atomic-checkpoint.py.i
 data/src/mem/ruby/network/simple/Network_Files/NUCA_Procs-1_ProcsPerChip-1_L2Banks-32_Memories-1.txt.i
+data/src/dev/net/Ethernet.py.i
 data/src/mem/slicc/ast/AssignStatementAST.py.i
 data/src/arch/arm/freebsd/system.cc.i
 data/src/sim/byteswap.hh.i
@@ -1946,6 +1962,7 @@ data/ext/nomali/lib/mali_t7xx.hh.i
 data/src/arch/arm/stacktrace.cc.i
 data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-o3-timing/stats.txt.d
 data/ext/ply/example/optcalc/README.i
+data/src/proto/inst_dep_record.proto.i
 data/tests/quick/00.hello/ref/alpha/tru64/simple-timing-ruby/config.ini.i
 data/src/mem/slicc/ast/CheckAllocateStatementAST.hh.i
 data/src/cpu/inorder/pipeline_traits.9stage.smt2.hh.i
@@ -1965,9 +1982,9 @@ data/arch/alpha/memory.cc.i
 data/ext/ply/test/lex_literal1.py.i
 data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-atomic-dual/system.terminal.i
 data/tests/long/30.eon/ref/alpha/linux/simple-atomic/stderr.i
-data/src/arch/x86/isa/insts/simd128/integer/compare/__init__.py.i
+data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/config.ini.i
 data/ext/x11keysym/keysym.h.i
-data/tests/long/se/10.mcf/ref/arm/linux/simple-timing/stats.txt.i
+data/src/dev/net/ns_gige.cc.i
 data/tests/long/30.eon/ref/arm/linux/o3-timing/simout.i
 data/tests/quick/00.hello/ref/mips/linux/inorder-timing/stats.txt.i
 data/src/arch/sparc/SparcNativeTrace.py.i
@@ -2038,6 +2055,7 @@ data/arch/mips/process.hh.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-minor-dual/simout.i
 data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_CMP_directory/config.ini.i
 data/src/dev/etherdevice.cc.i
+data/src/dev/net/etherpkt.cc.i
 data/src/python/swig/stats.i.i
 data/src/arch/x86/isa/insts/simd128/integer/data_transfer/move_mask.py.i
 data/python/m5/objects/Root.mpy.i
@@ -2198,6 +2216,7 @@ data/src/cpu/decode_cache.cc.i
 data/tests/quick/00.hello/ref/alpha/linux/simple-atomic/m5stats.txt.i
 data/arch/mips/regfile/regfile.hh.i
 data/src/arch/arm/isa/insts/data64.isa.i
+data/src/dev/net/i8254xGBe.cc.i
 data/src/unittest/trietest.cc.i
 data/sim/system.hh.i
 data/ext/ply/test/lex_dup2.py.i
@@ -2219,6 +2238,7 @@ data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-switcheroo-full/config.i
 data/tests/quick/se/70.twolf/ref/alpha/tru64/simple-timing/stats.txt.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-minor/system.terminal.i
 data/kern/kernel_stats.cc.i
+data/src/dev/net/SConscript.i
 data/ext/ply/example/BASIC/hello.bas.i
 data/ext/dsent/model/timing_graph/ElectricalTimingTree.h.i
 data/src/mem/gems_common/ioutil/confio.hh.i
@@ -2320,7 +2340,7 @@ data/objects/Bus.mpy.i
 data/src/arch/arm/insts/mem64.cc.i
 data/tests/long/80.solaris-boot/ref/sparc/solaris/t1000-simple-atomic/console.system.t1000.pconsole.i
 data/src/base/dbl_list.hh.i
-data/kern/tru64/dump_mbuf.cc.i
+data/tests/long/00.gzip/ref/arm/linux/simple-timing/config.ini.i
 data/src/sim/eventq_impl.hh.i
 data/tests/long/20.parser/ref/x86/linux/o3-timing/simout.i
 data/tests/test-progs/mwait/mwait.c.i
@@ -2360,6 +2380,7 @@ data/cpu/smt.hh.i
 data/src/mem/cache/tags/iic_repl/repl.hh.i
 data/src/cpu/inorder/inorder_trace.cc.i
 data/tests/quick/01.hello-2T-smt/ref/alpha/linux/o3-timing/config.out.i
+data/ext/ply/example/yply/yply.py.i
 data/tests/quick/se/70.twolf/ref/alpha/tru64/simple-atomic/stats.txt.i
 data/src/arch/sparc/syscallreturn.hh.i
 data/tests/long/se/70.twolf/ref/arm/linux/minor-timing/stats.txt.i
@@ -2504,7 +2525,7 @@ data/ext/mcpat/Alpha21364.xml.i
 data/tests/long/se/30.eon/ref/alpha/tru64/o3-timing/simout.i
 data/tests/quick/00.hello/ref/alpha/tru64/simple-timing-ruby-MOESI_hammer/ruby.stats.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-switcheroo-o3/stats.txt.d
-data/src/cpu/o3/alpha_cpu.hh.i
+data/src/dev/net/etherlink.cc.i
 data/tests/quick/se/00.hello/ref/mips/linux/o3-timing/config.ini.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-switcheroo-o3/stats.txt.i
 data/src/arch/x86/isa/insts/simd64/integer/exit_media_state.py.i
@@ -2707,7 +2728,7 @@ data/build_opts/ALPHA_MESI_CMP_directory.i
 data/src/sim/stat_register.hh.i
 data/tests/long/00.gzip/ref/alpha/tru64/simple-timing/simout.i
 data/tests/quick/20.eio-short/ref/alpha/eio/detailed/stderr.i
-data/tests/long/00.gzip/ref/sparc/linux/simple-atomic/stdout.i
+data/src/arch/x86/insts/microldstop.cc.i
 data/src/base/barrier.hh.i
 data/src/proto/protoio.cc.i
 data/system/alpha/h/net_buff.h.i
@@ -2844,6 +2865,7 @@ data/tests/long/80.solaris-boot/ref/sparc/solaris/t1000-simple-atomic/stats.txt.
 data/src/base/flags.hh.i
 data/tests/long/se/30.eon/ref/arm/linux/simple-timing/simout.i
 data/configs/common/CpuConfig.py.i
+data/src/mem/ruby/network/garnet-fixed-pipeline/NetworkLink_d.cc.i
 data/src/arch/mips/mmaped_ipr.hh.i
 data/src/dev/alpha/console.cc.i
 data/src/dev/etherpkt.hh.i
@@ -2884,6 +2906,7 @@ data/util/tlm/README.i
 data/src/mem/port_proxy.hh.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-switcheroo-full/simerr.i
 data/tests/long/se/10.mcf/ref/sparc/linux/simple-atomic/simerr.i
+data/src/dev/pci/host.cc.i
 data/tests/quick/00.hello/ref/sparc/linux/simple-timing/stats.txt.i
 data/src/mem/ruby/tester/Driver_Tester.hh.i
 data/dev/pcidev.cc.i
@@ -2912,6 +2935,7 @@ data/tests/quick/se/02.insttest/ref/sparc/linux/o3-timing/config.ini.i
 data/tests/quick/fs/10.linux-boot/ref/x86/linux/pc-simple-timing/config.ini.i
 data/tests/long/70.twolf/ref/alpha/linux/o3-timing/smred.pl2.i
 data/tests/long/00.gzip/ref/sparc/linux/simple-atomic/stderr.i
+data/tests/quick/se/00.hello/ref/alpha/tru64/simple-timing-ruby/config.ini.i
 data/dev/tsunami_pchip.hh.i
 data/tests/quick/60.rubytest/ref/alpha/linux/rubytest-ruby-MOESI_hammer/simout.i
 data/tests/quick/00.hello/ref/mips/linux/simple-timing/config.ini.i
@@ -2993,6 +3017,7 @@ data/tests/quick/se/40.m5threads-test-atomic/ref/sparc/linux/simple-timing-mp-ru
 data/tests/long/70.twolf/ref/alpha/tru64/o3-timing/smred.pl2.i
 data/tests/long/se/70.twolf/ref/sparc/linux/simple-timing/smred.out.i
 data/src/cpu/directedtest/RubyDirectedTester.py.i
+data/src/dev/pci/copy_engine_defs.hh.i
 data/src/mem/ruby/SConsopts.i
 data/src/arch/x86/isa/insts/general_purpose/data_transfer/stack_operations.py.i
 data/arch/mips/isa/formats/mem.isa.i
@@ -3014,10 +3039,12 @@ data/build_opts/ALPHA_SE_MOESI_hammer.i
 data/tests/long/10.mcf/ref/sparc/linux/simple-atomic/m5stats.txt.i
 data/system/alpha/h/address.h.i
 data/util/cxx_config/Makefile.i
+data/src/dev/storage/simple_disk.hh.i
 data/tests/long/20.parser/ref/x86/linux/simple-atomic/simout.i
 data/src/arch/x86/isa/insts/simd128/integer/arithmetic/addition.py.i
 data/tests/long/se/30.eon/ref/arm/linux/simple-atomic/simerr.i
 data/build_opts/SPARC_SE.i
+data/src/dev/pci/CopyEngine.py.i
 data/tests/long/70.twolf/ref/arm/linux/simple-timing/stats.txt.i
 data/ext/nomali/tests/nomali_test_helpers.h.i
 data/src/python/m5/attrdict.py.i
@@ -3060,13 +3087,14 @@ data/sim/pseudo_inst.cc.i
 data/ext/ply/test/yacc_rr_unused.py.i
 data/src/mem/ruby/system/MultiGrainBloomFilter.cc.i
 data/tests/quick/00.hello/ref/alpha/tru64/o3-timing/simerr.i
-data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-inorder/stats.txt.i
+data/src/dev/net/i8254xGBe_defs.hh.i
 data/src/mem/ruby/system/CacheRecorder.hh.i
 data/tests/long/se/30.eon/ref/alpha/tru64/simple-timing/config.ini.i
 data/src/arch/x86/isa/insts/general_purpose/flags/set_and_clear.py.i
 data/src/python/m5/proxy.py.i
 data/ext/libelf/elf_queue.h.i
 data/src/cpu/o3/dyn_inst_impl.hh.i
+data/src/dev/i2c/I2C.py.i
 data/tests/quick/10.linux-boot/ref/arm/linux/realview-simple-timing/simout.i
 data/src/base/vnc/VncServer.py.i
 data/tests/long/se/70.twolf/ref/sparc/linux/simple-atomic/simerr.i
@@ -3130,6 +3158,7 @@ data/tests/long/40.perlbmk/ref/alpha/tru64/o3-timing/simout.i
 data/src/mem/ruby/structures/TBETable.hh.i
 data/ext/gzstream/VERSION.i
 data/build/build_options/default/SPARC_SE.i
+data/tests/long/se/70.twolf/ref/x86/linux/simple-atomic/simout.i
 data/src/arch/x86/isa/insts/simd64/integer/data_transfer/move.py.i
 data/tests/long/se/40.perlbmk/ref/arm/linux/minor-timing/simerr.i
 data/src/arch/x86/isa/insts/simd64/floating_point/arithmetic/__init__.py.i
@@ -3139,6 +3168,7 @@ data/src/cpu/inorder/resources/use_def.hh.i
 data/tests/quick/00.hello/ref/sparc/linux/simple-timing/stderr.i
 data/src/cpu/kvm/vm.cc.i
 data/ext/dsent/model/optical_graph/OpticalNode.cc.i
+data/tests/long/00.gzip/ref/alpha/linux/simple-atomic/m5stats.txt.i
 data/util/find_copyrights.py.i
 data/src/arch/x86/isa/insts/general_purpose/compare_and_test/__init__.py.i
 data/src/dev/alpha/backdoor.hh.i
@@ -3264,8 +3294,8 @@ data/src/mem/slicc/ast/StaticCastAST.py.i
 data/src/mem/AddrMapper.py.i
 data/python/m5/objects/Root.py.i
 data/dev/sinic.cc.i
-data/tests/long/se/70.twolf/ref/x86/linux/simple-atomic/simout.i
-data/tests/long/00.gzip/ref/alpha/linux/simple-atomic/m5stats.txt.i
+data/src/dev/net/etherint.hh.i
+data/src/mem/ruby/network/orion/OrionLink.hh.i
 data/tests/quick/se/03.learning-gem5/ref/sparc/linux/learning-gem5-p1-two-level/simerr.i
 data/src/arch/x86/isa.cc.i
 data/tests/quick/se/00.hello/ref/mips/linux/simple-timing-ruby/simerr.i
@@ -3294,9 +3324,10 @@ data/ext/ply/test/README.i
 data/src/mem/cache/tags/iic.hh.i
 data/tests/quick/se/50.vortex/ref/arm/linux/simple-timing/smred.out.i
 data/src/dev/arm/hdlcd.cc.i
+data/src/base/compression/lzss_compression.cc.i
 data/tests/long/10.linux-boot/ref/x86/linux/pc-o3-timing/system.pc.com_1.terminal.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-switcheroo-atomic/simout.i
-data/src/base/compression/lzss_compression.cc.i
+data/src/dev/pci/host.hh.i
 data/src/cpu/IntrControl.py.i
 data/src/arch/x86/isa/insts/simd128/floating_point/compare/compare_and_write_minimum_or_maximum.py.i
 data/src/arch/arm/interrupts.cc.i
@@ -3364,6 +3395,7 @@ data/src/mem/multi_level_page_table.hh.i
 data/src/arch/x86/isa/insts/simd128/floating_point/arithmetic/reciprocal_estimation.py.i
 data/src/mem/ruby/network/orion/Buffer/AmpUnit.cc.i
 data/src/arch/alpha/ev5.cc.i
+data/src/dev/net/etherobject.hh.i
 data/src/mem/slicc/ast/TransitionDeclAST.cc.i
 data/tests/quick/se/20.eio-short/ref/alpha/eio/simple-timing/config.ini.i
 data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-inorder/simout.i
@@ -3427,7 +3459,7 @@ data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_Two_Le
 data/tests/long/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_Two_Level/stats.txt.d
 data/tests/quick/se/70.tgen/ref/null/none/tgen-simple-mem/simerr.i
 data/src/cpu/activity.cc.i
-data/tests/linux-boot/ref/alpha/atomic/stdout.i
+data/src/dev/net/etherbus.hh.i
 data/tests/long/fs/80.solaris-boot/ref/sparc/solaris/t1000-simple-atomic/stats.txt.i
 data/tests/quick/se/00.hello/ref/alpha/linux/simple-timing-ruby-MOESI_hammer/config.ini.i
 data/tests/configs/simple-atomic-dummychecker.py.i
@@ -3543,6 +3575,7 @@ data/ext/drampower/src/Parameter.cc.i
 data/src/mem/cache/miss/mshr_queue.cc.i
 data/src/arch/mips/pseudo_inst.hh.i
 data/src/mem/noncoherent_bus.cc.i
+data/src/dev/pci/PciHost.py.i
 data/arch/alpha/stacktrace.hh.i
 data/src/mem/ruby/network/garnet-flexible-pipeline/NetworkInterface.cc.i
 data/ext/ply/test/lex_error3.py.i
@@ -3603,7 +3636,7 @@ data/base/endian.hh.i
 data/src/sim/pseudo_inst.hh.i
 data/src/arch/x86/isa/insts/data_conversion/bcd_adjust.py.i
 data/build_opts/ALPHA_MOESI_hammer.i
-data/tests/quick/40.m5threads-test-atomic/test.py.i
+data/src/dev/mips/MipsConsole.py.i
 data/tests/long/70.twolf/ref/x86/linux/simple-timing/smred.pin.i
 data/src/arch/sparc/process.cc.i
 data/src/mem/ruby/network/garnet-flexible-pipeline/OutVcState.hh.i
@@ -3619,6 +3652,8 @@ data/tests/test1/ref/alpha/detailed/stdout.i
 data/src/mem/slicc/ast/OutPortDeclAST.py.i
 data/dev/ethertap.cc.i
 data/src/dev/ps2.cc.i
+data/src/dev/net/sinic.cc.i
+data/tests/long/se/10.mcf/ref/arm/linux/simple-timing/stats.txt.i
 data/src/mem/ruby/network/garnet/flexible-pipeline/GarnetNetwork.hh.i
 data/configs/boot/bbench-ics.rcS.i
 data/tests/long/70.twolf/ref/alpha/linux/o3-timing/smred.out.i
@@ -3633,7 +3668,7 @@ data/src/mem/cache/tags/iic_repl/gen.cc.i
 data/src/cpu/o3/thread_context_impl.hh.i
 data/tests/quick/10.linux-boot/ref/arm/linux/realview-simple-timing-dual/stats.txt.i
 data/src/mem/protocol/MESI_CMP_directory-dma.sm.i
-data/tests/long/00.gzip/ref/sparc/linux/simple-timing/config.ini.i
+data/src/kern/alpha/idle_event.hh.i
 data/src/mem/ruby/tester/DetermInvGenerator.hh.i
 data/ext/nomali/lib/gpu.cc.i
 data/src/sim/process.hh.i
@@ -3649,7 +3684,7 @@ data/src/base/atomicio.hh.i
 data/mem/packet.cc.i
 data/src/arch/alpha/tru64/tru64.hh.i
 data/tests/quick/00.hello/ref/power/linux/o3-timing/stats.txt.i
-data/src/cpu/o3/mips/cpu_builder.cc.i
+data/tests/long/00.gzip/ref/alpha/linux/simple-atomic/stdout.i
 data/tests/quick/00.hello/ref/alpha/linux/simple-timing-ruby-MOESI_CMP_token/simout.i
 data/tests/quick/se/50.memtest/ref/alpha/linux/memtest-ruby-MESI_Two_Level/simerr.i
 data/tests/quick/se/40.m5threads-test-atomic/ref/sparc/linux/simple-timing-mp-ruby/config.ini.i
@@ -3658,6 +3693,7 @@ data/src/mem/ruby/SConscript.i
 data/src/mem/cache/tags/split.cc.i
 data/tests/long/se/00.gzip/ref/sparc/linux/o3-timing/config.ini.i
 data/sim/sim_exit.hh.i
+data/src/dev/storage/ide_ctrl.hh.i
 data/tests/quick/se/70.tgen/test-refresh.trc.i
 data/arch/alpha/linux_process.hh.i
 data/tests/long/se/50.vortex/ref/sparc/linux/simple-timing/smred.out.i
@@ -3981,6 +4017,7 @@ data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-o3-checker/simerr.i
 data/src/mem/protocol/MESI_SCMP_bankdirectory-L2cache.sm.i
 data/src/mem/ruby/README.debugging.i
 data/src/mem/slicc/ast/LiteralExprAST.hh.i
+data/tests/linux-boot/ref/alpha/atomic/stdout.i
 data/tests/quick/se/60.rubytest/ref/alpha/linux/rubytest-ruby-MOESI_CMP_directory/simerr.i
 data/tests/long/se/30.eon/ref/alpha/tru64/minor-timing/simout.i
 data/src/base/SConscript.i
@@ -4045,7 +4082,7 @@ data/tests/quick/02.insttest/ref/sparc/linux/simple-atomic/simout.i
 data/ext/dsent/model/optical/GatedLaserSource.cc.i
 data/ext/dnet/dnet/fw.h.i
 data/sim/process.hh.i
-data/src/arch/alpha/AlphaISA.py.i
+data/src/dev/net/ethertap.hh.i
 data/cpu/quiesce_event.cc.i
 data/src/kern/tru64/tru64.hh.i
 data/src/unittest/cprintftest.cc.i
@@ -4096,6 +4133,7 @@ data/tests/long/10.mcf/ref/x86/linux/simple-atomic/m5stats.txt.i
 data/ext/ply/test/yacc_badtok.py.i
 data/tests/long/70.twolf/ref/x86/linux/o3-timing/config.ini.i
 data/src/base/range_map.hh.i
+data/src/dev/net/pktfifo.cc.i
 data/system/alpha/console/printf.c.i
 data/cpu/o3/scoreboard.hh.i
 data/ext/ply/test/yacc_term1.py.i
@@ -4158,6 +4196,7 @@ data/tests/long/40.perlbmk/ref/alpha/linux/simple-timing/stderr.i
 data/tests/quick/01.hello-2T-smt/ref/alpha/linux/o3-timing/simerr.i
 data/util/m5/jni/gem5Op.java.i
 data/src/arch/x86/isa/insts/simd128/integer/save_and_restore_state/__init__.py.i
+data/src/sim/backtrace_none.cc.i
 data/src/sim/stats.hh.i
 data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/stdout.i
 data/cpu/o3/alpha_cpu_impl.hh.i
@@ -4169,6 +4208,7 @@ data/tests/quick/se/03.learning-gem5/ref/arm/linux/learning-gem5-p1-simple/confi
 data/tests/quick/se/00.hello/ref/mips/linux/o3-timing/stats.txt.d
 data/src/unittest/cprintftime.cc.i
 data/src/arch/power/miscregs.hh.i
+data/src/cpu/o3/probe/elastic_trace.hh.i
 data/src/arch/mips/MipsCPU.py.i
 data/src/cpu/simple/TimingSimpleCPU.py.i
 data/tests/long/50.vortex/ref/alpha/tru64/simple-atomic/stderr.i
@@ -4240,6 +4280,7 @@ data/tests/quick/00.hello/ref/arm/linux/simple-atomic/config.ini.i
 data/tests/long/70.twolf/ref/x86/linux/simple-atomic/smred.sv2.i
 data/src/cpu/inorder/resources/cache_unit.hh.i
 data/ext/dsent/model/electrical/OR.cc.i
+data/util/multi/tcp_server.cc.i
 data/ext/drampower/src/MemorySpecification.h.i
 data/src/arch/sparc/isa/formats/mem.isa.i
 data/dev/tsunami_io.hh.i
@@ -4271,6 +4312,7 @@ data/src/mem/dram.hh.i
 data/ext/ply/example/BASIC/linear.bas.i
 data/src/cpu/checker/cpu.hh.i
 data/src/cpu/decode_cache.hh.i
+data/src/dev/net/etherdump.cc.i
 data/src/mem/ruby/network/garnet-fixed-pipeline/NetworkHeader.hh.i
 data/tests/quick/se/00.hello/ref/mips/linux/inorder-timing/simout.i
 data/configs/common/Benchmarks.py.i
@@ -4412,7 +4454,7 @@ data/src/mem/mem_object.hh.i
 data/src/mem/ruby/network/garnet/fixed-pipeline/Switch_d.cc.i
 data/tests/quick/00.hello/ref/mips/linux/simple-atomic/stats.txt.i
 data/src/cpu/o3/cpu_policy.hh.i
-data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/config.ini.i
+data/src/arch/x86/isa/insts/simd128/integer/compare/__init__.py.i
 data/src/mem/ruby/network/garnet/fixed-pipeline/OutVcState_d.cc.i
 data/dev/alpha_access.h.i
 data/tests/long/se/20.parser/ref/x86/linux/o3-timing/stats.txt.i
@@ -4505,6 +4547,7 @@ data/src/cpu/simple/SConsopts.i
 data/ext/dsent/model/electrical/SeparableAllocator.cc.i
 data/ext/libelf/elf_flag.c.i
 data/tests/run.py.i
+data/tests/quick/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_CMP_directory/simout.i
 data/src/base/CPA.py.i
 data/tests/quick/10.linux-boot/test.py.i
 data/python/SConscript.i
@@ -4543,7 +4586,7 @@ data/ext/dsent/model/optical_graph/OpticalModulator.h.i
 data/util/stats/db.py.i
 data/tests/long/70.twolf/ref/arm/linux/simple-atomic/simout.i
 data/src/cpu/inorder/SConscript.i
-data/src/mem/ruby/network/garnet-fixed-pipeline/NetworkLink_d.cc.i
+data/src/dev/pci/types.hh.i
 data/arch/alpha/isa/main.isa.i
 data/src/dev/multi_packet.cc.i
 data/src/arch/arm/remote_gdb.hh.i
@@ -4642,6 +4685,7 @@ data/tests/quick/se/00.hello/ref/x86/linux/simple-atomic/simout.i
 data/src/doxygen/images/gem5_MS_Fig5.PNG.i
 data/src/mem/ruby/config/TwoLevel_SplitL1UnifiedL2.rb.i
 data/src/arch/power/insts/branch.hh.i
+data/src/dev/net/sinic.hh.i
 data/src/mem/ruby/network/garnet-fixed-pipeline/SConscript.i
 data/util/stats/profile.py.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-minor-dual/simerr.i
@@ -4752,6 +4796,7 @@ data/src/cpu/ozone/ozone_base_dyn_inst.cc.i
 data/src/mem/ruby/config/RubyConfig.cc.i
 data/src/dev/x86/south_bridge/i8254.cc.i
 data/src/python/m5/internal/params.py.i
+data/src/dev/storage/ide_disk.cc.i
 data/src/mem/ruby/interfaces/OpalInterface.cc.i
 data/util/statetrace/arch/tracechild_arm.cc.i
 data/src/kern/linux/linux.hh.i
@@ -4939,6 +4984,7 @@ data/tests/long/30.eon/ref/alpha/tru64/o3-timing/stdout.i
 data/tests/quick/50.memtest/ref/alpha/linux/memtest-ruby-MOESI_CMP_token/config.ini.i
 data/cpu/o3/iew.hh.i
 data/src/mem/ruby/network/BasicRouter.py.i
+data/src/sim/backtrace_glibc.cc.i
 data/tests/long/70.twolf/ref/x86/linux/simple-atomic/smred.out.i
 data/src/mem/Bridge.py.i
 data/src/base/refcnt.hh.i
@@ -4971,7 +5017,7 @@ data/ext/ply/test/yacc_error4.py.i
 data/src/cpu/o3/rob.cc.i
 data/ext/mcpat/cachearray.cc.i
 data/sim/hybrid_pred.cc.i
-data/sim/process.cc.i
+data/tests/long/00.gzip/ref/sparc/linux/simple-atomic/config.out.i
 data/util/statetrace/refcnt.hh.i
 data/dev/platform.cc.i
 data/src/mem/slicc/ast/DeclListAST.py.i
@@ -5083,6 +5129,7 @@ data/system/alpha/palcode/ev5_paldef.h.i
 data/configs/ruby/Ruby.py.i
 data/tests/linux-boot/ref/alpha/atomic/console.system.sim_console.i
 data/system/alpha/h/flash.h.i
+data/src/dev/storage/simple_disk.cc.i
 data/src/mem/comm_monitor.cc.i
 data/src/dev/etherdevice.hh.i
 data/src/arch/sparc/vtophys.cc.i
@@ -5110,7 +5157,7 @@ data/src/cpu/inorder/resources/fetch_seq_unit.hh.i
 data/arch/sparc/linux_process.cc.i
 data/ext/mcpat/cacti/parameter.cc.i
 data/src/cpu/IntelTrace.py.i
-data/tests/quick/se/03.learning-gem5/ref/mips/linux/learning-gem5-p1-simple/simout.i
+data/tests/quick/40.m5threads-test-atomic/test.py.i
 data/tests/long/se/70.twolf/ref/alpha/tru64/simple-atomic/smred.sav.i
 data/src/mem/ruby/slicc_interface/AbstractController.cc.i
 data/cpu/beta_cpu/decode_impl.hh.i
@@ -5135,6 +5182,7 @@ data/util/tlm/sc_port.cc.i
 data/src/cpu/testers/networktest/networktest.cc.i
 data/src/mem/protocol/MI_example-dir.sm.i
 data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview64-switcheroo-atomic/config.ini.i
+data/src/dev/pci/device.hh.i
 data/tests/quick/se/03.learning-gem5/ref/mips/linux/learning-gem5-p1-two-level/simerr.i
 data/src/sim/probe/Probe.py.i
 data/tests/quick/se/20.eio-short/ref/alpha/eio/simple-atomic/config.ini.i
@@ -5199,6 +5247,7 @@ data/src/python/m5/util/code_formatter.py.i
 data/ext/dsent/model/timing_graph/ElectricalNet.h.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-simple-atomic/config.ini.i
 data/ext/mcpat/cacti/component.cc.i
+data/src/dev/net/etherdevice.cc.i
 data/ext/dsent/model/std_cells/XOR2.cc.i
 data/tests/long/fs/80.solaris-boot/ref/sparc/solaris/t1000-simple-atomic/config.ini.i
 data/tests/quick/fs/80.netperf-stream/test.py.i
@@ -5210,6 +5259,7 @@ data/src/arch/x86/pagetable.hh.i
 data/src/arch/alpha/stacktrace.hh.i
 data/tests/quick/se/00.hello/ref/mips/linux/inorder-timing/stats.txt.i
 data/cpu/o3/2bit_local_pred.cc.i
+data/configs/example/etrace_replay.py.i
 data/src/arch/arm/insts/macromem.cc.i
 data/tests/long/00.gzip/ref/alpha/tru64/o3-timing/stderr.i
 data/src/cpu/o3/alpha_cpu_builder.cc.i
@@ -5283,7 +5333,7 @@ data/src/mem/protocol/MESI_CMP_directory-mem.sm.i
 data/base/loader/aout_object.hh.i
 data/src/base/misc.hh.i
 data/system/alpha/console/console.c.i
-data/src/kern/alpha/idle_event.hh.i
+data/tests/long/00.gzip/ref/sparc/linux/simple-timing/config.ini.i
 data/ext/drampower/src/MemArchitectureSpec.cc.i
 data/src/arch/arm/isa/operands.isa.i
 data/src/mem/gems_common/std-includes.hh.i
@@ -5332,6 +5382,7 @@ data/src/unittest/bituniontest.cc.i
 data/src/dev/arm/gic_pl390.cc.i
 data/ext/fputils/tests/test_helper.h.i
 data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-o3-dual/system.terminal.i
+data/src/dev/net/etherdump.hh.i
 data/src/mem/simple_mem.cc.i
 data/src/python/m5/simulate.py.i
 data/src/cpu/minor/decode.cc.i
@@ -5363,6 +5414,7 @@ data/system/alpha/h/mem.h.i
 data/src/dev/x86/south_bridge/i8254.hh.i
 data/src/arch/x86/isa/insts/simd64/floating_point/compare/compare_and_write_minimum_or_maximum.py.i
 data/src/cpu/minor/exec_context.hh.i
+data/src/dev/storage/ide_wdcreg.h.i
 data/tests/long/se/50.vortex/ref/alpha/tru64/simple-atomic/config.ini.i
 data/ext/dsent/model/electrical/router/RouterSwitchAllocator.cc.i
 data/src/arch/x86/X86System.py.i
@@ -5397,7 +5449,7 @@ data/src/dev/i2cbus.cc.i
 data/src/cpu/o3/fetch_impl.hh.i
 data/src/mem/protocol/MESI_CMP_directory-dir.sm.i
 data/src/mem/ruby/common/MachineID.hh.i
-data/tests/quick/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_CMP_directory/simout.i
+data/src/dev/net/multi_packet.cc.i
 data/tests/long/60.bzip2/ref/x86/linux/simple-atomic/stderr.i
 data/src/arch/x86/predecoder.cc.i
 data/tests/long/10.mcf/ref/arm/linux/simple-atomic/chair.cook.ppm.i
@@ -5468,11 +5520,11 @@ data/dev/etherlink.cc.i
 data/tests/quick/20.eio-short/ref/alpha/eio/simple-atomic/simerr.i
 data/configs/boot/mutex-test.rcS.i
 data/ext/ply/test/lex_re3.py.i
+data/src/dev/net/ethertap.cc.i
 data/src/mem/ruby/structures/Cache.py.i
 data/src/mem/slicc/ast/FormalParamAST.py.i
 data/src/dev/SimpleDisk.py.i
 data/src/python/swig/system.i.i
-data/src/arch/x86/insts/microldstop.cc.i
 data/tests/quick/eio1/test.py.i
 data/ext/dsent/model/optical/SWSRLink.cc.i
 data/tests/long/70.twolf/ref/alpha/tru64/simple-atomic/m5stats.txt.i
@@ -5546,6 +5598,7 @@ data/src/arch/arm/utility.cc.i
 data/tests/long/30.eon/ref/alpha/tru64/inorder-timing/stats.txt.i
 data/src/cpu/trace/reader/itx_reader.hh.i
 data/src/arch/x86/floatregfile.cc.i
+data/src/dev/storage/SConscript.i
 data/src/cpu/inorder/resources/agen_unit.cc.i
 data/base/trace.cc.i
 data/tests/long/70.twolf/ref/alpha/tru64/o3-timing/stats.txt.i
@@ -5639,6 +5692,7 @@ data/tests/quick/se/00.hello/ref/alpha/linux/minor-timing/stats.txt.i
 data/src/cpu/o3/params.hh.i
 data/tests/long/se/70.twolf/ref/sparc/linux/simple-atomic/smred.twf.i
 data/tests/long/10.mcf/ref/sparc/linux/simple-timing/simerr.i
+data/src/dev/i2c/bus.cc.i
 data/src/cpu/ozone/lw_lsq.cc.i
 data/tests/test1/ref/alpha/atomic/m5stats.txt.i
 data/tests/long/se/60.bzip2/ref/x86/linux/simple-timing/stats.txt.i
@@ -5749,6 +5803,7 @@ data/src/arch/x86/system.hh.i
 data/src/mem/slicc/ast/TypeFieldEnumAST.cc.i
 data/tests/quick/se/40.m5threads-test-atomic/ref/sparc/linux/simple-timing-mp/stats.txt.i
 data/src/mem/cache/tags/repl/gen.hh.i
+data/src/dev/storage/disk_image.cc.i
 data/ext/mcpat/regression/test-3/region0.out.ref.i
 data/src/mem/gems_common/calc_host.sh.i
 data/ext/ply/ply/yacc.py.i
@@ -5765,6 +5820,7 @@ data/src/mem/ruby/config/libruby_cfg_test.cc.i
 data/src/arch/mips/isa/formats/int.isa.i
 data/ext/mcpat/cachearray.h.i
 data/tests/long/30.eon/ref/alpha/linux/simple-timing/config.ini.i
+data/src/dev/net/tcp_iface.cc.i
 data/mem/config/prefetch.hh.i
 data/arch/alpha/tlb.hh.i
 data/src/arch/x86/isa/insts/simd128/integer/logical/exclusive_or.py.i
@@ -5841,7 +5897,7 @@ data/tests/quick/se/60.rubytest/ref/alpha/linux/rubytest-ruby-MESI_Two_Level/sim
 data/src/arch/arm/insts/pred_inst.hh.i
 data/tests/long/70.twolf/ref/arm/linux/simple-timing/smred.out.i
 data/src/mem/slicc/ast/WakeUpDependentsStatementAST.py.i
-data/ext/ply/example/yply/yply.py.i
+data/src/dev/i2c/device.hh.i
 data/tests/long/10.linux-boot/ref/alpha/linux/tsunami-o3-dual/stderr.i
 data/tests/long/60.bzip2/ref/alpha/tru64/inorder-timing/config.ini.i
 data/ext/drampower/src/Parameter.h.i
@@ -6076,6 +6132,7 @@ data/src/arch/power/stacktrace.cc.i
 data/cpu/beta_cpu/commit.hh.i
 data/src/mem/slicc/main.py.i
 data/tests/quick/se/01.hello-2T-smt/ref/alpha/linux/o3-timing-mt/simout.i
+data/tests/quick/se/03.learning-gem5/ref/mips/linux/learning-gem5-p1-simple/simout.i
 data/tests/quick/se/70.twolf/ref/sparc/linux/simple-atomic/config.ini.i
 data/tests/quick/se/01.hello-2T-smt/ref/alpha/linux/o3-timing/stats.txt.d
 data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-timing-dual/m5stats.txt.i
@@ -6520,6 +6577,7 @@ data/tests/quick/se/70.twolf/ref/arm/linux/simple-atomic/smred.out.i
 data/src/cpu/kvm/device.hh.i
 data/cpu/o3/cpu.cc.i
 data/src/mem/noncoherent_xbar.cc.i
+data/tests/long/10.mcf/ref/x86/linux/simple-timing/mcf.out.i
 data/tests/quick/se/00.hello/ref/arm/linux/simple-atomic/stats.txt.i
 data/src/cpu/checker/thread_context.hh.i
 data/sim/cache/null_compression.hh.i
@@ -6588,7 +6646,7 @@ data/tests/long/10.linux-boot/ref/x86/linux/pc-simple-timing/simerr.i
 data/src/arch/power/isa/formats/mem.isa.i
 data/tests/quick/se/10.mcf/ref/sparc/linux/simple-atomic/stats.txt.i
 data/src/arch/arm/isa_device.hh.i
-data/tests/long/10.linux-boot/ref/x86/linux/pc-simple-timing/config.ini.i
+data/src/dev/storage/DiskImage.py.i
 data/src/base/callback.cc.i
 data/tests/long/70.twolf/ref/alpha/tru64/inorder-timing/smred.sav.i
 data/src/arch/x86/tlb.cc.i
@@ -6645,6 +6703,7 @@ data/src/mem/protocol/RubySlicc_Profiler.sm.i
 data/tests/quick/60.rubytest/ref/alpha/linux/rubytest-ruby-MOESI_CMP_token/stats.txt.i
 data/src/arch/x86/isa/insts/general_purpose/load_effective_address.py.i
 data/tests/long/60.bzip2/ref/alpha/tru64/inorder-timing/simerr.i
+data/src/sim/backtrace.hh.i
 data/tests/quick/se/70.tgen/ref/null/none/tgen-simple-dram/config.ini.i
 data/tests/quick/se/00.hello/ref/alpha/tru64/simple-timing-ruby-MOESI_hammer/simerr.i
 data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview-simple-atomic-dual/system.terminal.i
@@ -6666,12 +6725,14 @@ data/src/base/statistics.hh.i
 data/sim/smt.hh.i
 data/src/mem/slicc/ast/InfixOperatorExprAST.py.i
 data/tests/quick/fs/10.linux-boot/ref/x86/linux/pc-simple-atomic/system.pc.terminal.i
+data/src/cpu/o3/alpha_cpu.hh.i
 data/src/mem/protocol/Network_test.slicc.i
 data/tests/quick/se/00.hello/test.py.i
 data/ext/mcpat/regression/test-8/region0.out.ref.i
 data/src/mem/ruby/slicc_interface/NetworkMessage.hh.i
 data/src/mem/slicc/symbols/RequestType.py.i
 data/src/mem/protocol/MOSI_SMP_directory_1level-msg.sm.i
+data/src/dev/net/etherlink.hh.i
 data/src/base/vnc/Vnc.py.i
 data/ext/dnet/ip.h.i
 data/src/mem/slicc/symbols/SymbolTable.py.i
@@ -6713,7 +6774,7 @@ data/cpu/exetrace.cc.i
 data/src/arch/arm/insts/branch64.hh.i
 data/src/arch/x86/isa/insts/x87/arithmetic/division.py.i
 data/src/mem/RubyMemory.py.i
-data/src/mem/ruby/common/TypeDefines.hh.i
+data/src/dev/net/multi_packet.hh.i
 data/tests/long/se/50.vortex/ref/arm/linux/simple-timing/simerr.i
 data/tests/configs/ruby_config.py.i
 data/system/alpha/h/mon.h.i
@@ -6761,6 +6822,7 @@ data/util/batch/send.py.i
 data/src/arch/x86/isa/insts/simd128/floating_point/logical/andp.py.i
 data/ext/ply/test/lex_re2.py.i
 data/arch/mips/isa/formats/tlb.format.i
+data/src/cpu/trace/TraceCPU.py.i
 data/src/base/time.cc.i
 data/kern/tru64/printf.hh.i
 data/src/arch/arm/ArmNativeTrace.py.i
@@ -6816,6 +6878,7 @@ data/configs/boot/mcf.rcS.i
 data/ext/libelf/elf_cntl.c.i
 data/cpu/SConscript.i
 data/tests/long/se/10.mcf/ref/arm/linux/simple-timing/mcf.out.i
+data/src/cpu/o3/probe/ElasticTrace.py.i
 data/objects/BadDevice.mpy.i
 data/system/alpha/h/kbdscan.h.i
 data/src/dev/x86/PC.py.i
@@ -6868,6 +6931,7 @@ data/ext/ply/example/BASIC/func.bas.i
 data/tests/long/se/50.vortex/ref/alpha/tru64/o3-timing/stats.txt.i
 data/tests/long/se/40.perlbmk/ref/alpha/tru64/minor-timing/simout.i
 data/tests/long/se/60.bzip2/ref/arm/linux/minor-timing/simout.i
+data/tests/long/10.linux-boot/ref/x86/linux/pc-simple-timing/config.ini.i
 data/python/m5/objects/Process.py.i
 data/tests/long/se/50.vortex/ref/alpha/tru64/o3-timing/stats.txt.d
 data/util/make_release.py.i
@@ -6876,6 +6940,7 @@ data/sim/sim_object.cc.i
 data/dev/simple_disk.cc.i
 data/src/arch/arm/insts/vfp.cc.i
 data/src/mem/cache/tags/iic.cc.i
+data/tests/quick/se/50.memtest/ref/alpha/linux/memtest/stats.txt.d
 data/src/arch/x86/isa/insts/simd128/integer/data_transfer/__init__.py.i
 data/tests/quick/60.rubytest/ref/alpha/linux/rubytest-ruby-MOESI_CMP_token/simerr.i
 data/src/mem/probes/base.hh.i
@@ -7015,6 +7080,7 @@ data/tests/quick/00.hello/ref/alpha/linux/simple-atomic-ruby/simerr.i
 data/src/arch/x86/isa/microops/debug.isa.i
 data/src/cpu/minor/stats.cc.i
 data/src/mem/packet_queue.hh.i
+data/src/dev/net/etherpkt.hh.i
 data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-atomic-dual/m5stats.txt.i
 data/src/unittest/circletest.cc.i
 data/tests/quick/se/00.hello/ref/alpha/linux/simple-atomic/simerr.i
@@ -7145,6 +7211,7 @@ data/tests/quick/00.hello/ref/alpha/linux/inorder-timing/simerr.i
 data/tests/long/50.vortex/ref/alpha/tru64/simple-timing/stats.txt.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview64-o3-checker/simout.i
 data/util/cpt_upgraders/arm-miscreg-teehbr.py.i
+data/util/cpt_upgraders/arm-gem5-gic-ext.py.i
 data/cpu/o3/mem_dep_unit.hh.i
 data/tests/long/10.mcf/ref/arm/linux/simple-timing/simout.i
 data/src/mem/ruby/tester/DetermInvGenerator.cc.i
@@ -7355,12 +7422,13 @@ data/src/cpu/rubytest/SConscript.i
 data/src/mem/protocol/MOESI_SMP_directory-msg.sm.i
 data/configs/learning_gem5/part1/simple.py.i
 data/ext/ply/test/lex_empty.exp.i
+data/util/decode_inst_dep_trace.py.i
 data/cpu/beta_cpu/sat_counter.hh.i
 data/src/mem/protocol/MOSI_SMP_bcast.slicc.i
 data/test/bitvectest.cc.i
 data/tests/long/70.twolf/ref/alpha/tru64/simple-atomic/config.out.i
 data/ext/dsent/model/optical/LaserSource.cc.i
-data/tests/long/00.gzip/ref/alpha/linux/simple-atomic/stdout.i
+data/src/cpu/o3/mips/cpu_builder.cc.i
 data/arch/mips/mips_linux.hh.i
 data/tests/test-progs/hello/bin/power/linux/hello.d
 data/tests/test-progs/hello/bin/power/linux/hello.i
@@ -7378,6 +7446,7 @@ data/src/mem/ruby/common/Debug.cc.i
 data/cpu/o3/alpha_cpu.hh.i
 data/tests/long/30.eon/ref/alpha/tru64/simple-timing/simout.i
 data/configs/boot/surge-server.rcS.i
+data/src/dev/pci/device.cc.i
 data/util/checktrace.sh.i
 data/tests/long/se/70.twolf/ref/x86/linux/o3-timing/simout.i
 data/src/arch/sparc/registers.hh.i
@@ -7448,6 +7517,7 @@ data/ext/ply/ply/lex.py.i
 data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview-simple-atomic/simerr.i
 data/src/mem/cache/tags/base_tags.hh.i
 data/base/str.cc.i
+data/src/dev/net/etherdevice.hh.i
 data/tests/quick/50.memtest/ref/alpha/linux/memtest-ruby/ruby.stats.i
 data/tests/long/10.linux-boot/ref/x86/linux/pc-simple-atomic/simout.i
 data/system/alpha/h/eb64.h.i
@@ -7464,7 +7534,7 @@ data/src/cpu/trace/reader/mem_trace_reader.cc.i
 data/tests/long/80.solaris-boot/ref/sparc/solaris/t1000-simple-atomic/system.t1000.pterm.i
 data/src/arch/x86/isa/insts/simd128/floating_point/data_reordering/shuffle.py.i
 data/arch/mips/isa_desc/bitfields.h.i
-data/tests/quick/se/00.hello/ref/alpha/tru64/simple-timing-ruby/config.ini.i
+data/src/dev/pci/pcireg.h.i
 data/src/arch/arm/isa/formats/pred.isa.i
 data/base/circlebuf.hh.i
 data/base/output.hh.i
@@ -7481,7 +7551,7 @@ data/src/mem/ruby/eventqueue/SConscript.i
 data/src/arch/alpha/floatregfile.hh.i
 data/src/arch/x86/isa/insts/general_purpose/no_operation.py.i
 data/ext/dsent/model/optical/SWSRLink.h.i
-data/tests/quick/30.eio-mp/ref/alpha/eio/simple-atomic-mp/stats.txt.i
+data/src/dev/pci/copy_engine.cc.i
 data/src/cpu/ozone/cpu_builder.cc.i
 data/src/dev/ide_ctrl.hh.i
 data/cpu/ozone/front_end.cc.i
@@ -7591,6 +7661,7 @@ data/dev/platform.hh.i
 data/ext/dnet/dnet/ip.h.i
 data/src/arch/x86/isa/insts/data_transfer/__init__.py.i
 data/src/arch/x86/emulenv.cc.i
+data/tests/quick/30.eio-mp/ref/alpha/eio/simple-atomic-mp/stats.txt.i
 data/cpu/beta_cpu/inst_queue_impl.hh.i
 data/tests/long/70.twolf/ref/alpha/tru64/inorder-timing/smred.pl1.i
 data/src/arch/x86/isa/insts/simd64/integer/compare/compare_and_write_mask.py.i
@@ -7639,6 +7710,7 @@ data/src/python/m5/objects/SimpleOzoneCPU.py.i
 data/src/mem/ruby/network/orion/Wire.cc.i
 data/tests/long/se/20.parser/ref/x86/linux/simple-atomic/config.ini.i
 data/tests/quick/20.eio-short/ref/alpha/eio/simple-timing/simerr.i
+data/configs/common/PlatformConfig.py.i
 data/src/mem/ruby/system/Sequencer.py.i
 data/tests/quick/10.linux-boot/ref/alpha/linux/tsunami-simple-timing/stdout.i
 data/src/mem/slicc/ast/OutPortDeclAST.hh.i
@@ -7691,6 +7763,7 @@ data/src/cpu/directedtest/DirectedGenerator.cc.i
 data/src/mem/protocol/MOESI_SMP_token.slicc.i
 data/system/alpha/h/eb64p.h.i
 data/tests/quick/00.hello/ref/arm/linux/o3-timing/config.ini.i
+data/src/mem/ruby/common/TypeDefines.hh.i
 data/dev/tsunami.hh.i
 data/src/mem/ruby/network/simple/Network_Files/NUCA_Procs-8_ProcsPerChip-8_L2Banks-8_Memories-8.txt.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-o3-checker/stats.txt.d
@@ -7772,11 +7845,12 @@ data/src/cpu/o3/sparc/thread_context.hh.i
 data/tests/quick/fs/10.linux-boot/ref/arm/linux/realview-switcheroo-timing/config.ini.i
 data/ext/mcpat/processor.h.i
 data/src/arch/arm/ArmSystem.py.i
-data/util/multi/tcp_server.cc.i
+data/src/dev/i2c/bus.hh.i
 data/src/cpu/ozone/lw_lsq.hh.i
 data/kern/linux/linux_system.cc.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-o3/stats.txt.i
 data/tests/quick/se/50.memtest/ref/alpha/linux/memtest-ruby-MOESI_hammer/ruby.stats.i
+data/src/dev/storage/SimpleDisk.py.i
 data/tests/quick/se/00.hello/ref/x86/linux/simple-atomic/simerr.i
 data/tests/quick/fs/10.linux-boot/ref/x86/linux/pc-simple-timing-ruby-MESI_CMP_directory/config.ini.i
 data/src/mem/ruby/slicc_interface/RubySlicc_Profiler_interface.hh.i
@@ -7807,6 +7881,7 @@ data/ext/fputils/Makefile.am.i
 data/src/mem/bridge.cc.i
 data/tests/long/70.twolf/ref/alpha/tru64/simple-timing/stderr.i
 data/tests/long/00.gzip/ref/alpha/linux/simple-atomic/config.ini.i
+data/src/dev/storage/ide_atareg.h.i
 data/src/mem/protocol/Network_test-cache.sm.i
 data/src/base/loader/raw_object.cc.i
 data/src/cpu/thread_state.cc.i
@@ -7820,6 +7895,7 @@ data/tests/long/20.parser/ref/x86/linux/simple-timing/stdout.i
 data/src/cpu/o3/cpu.cc.i
 data/tests/quick/se/00.hello/ref/mips/linux/simple-timing-ruby/config.ini.i
 data/cpu/intr_control.cc.i
+data/src/dev/storage/disk_image.hh.i
 data/src/mem/slicc/ast/InfixOperatorExprAST.cc.i
 data/tests/long/se/70.twolf/ref/arm/linux/simple-atomic/simout.i
 data/src/arch/alpha/regfile.hh.i
@@ -7848,7 +7924,7 @@ data/src/arch/null/SConscript.i
 data/src/arch/x86/isa/insts/general_purpose/flags/push_and_pop.py.i
 data/src/cpu/ozone/inst_queue.hh.i
 data/src/mem/slicc/ast/MachineAST.py.i
-data/tests/long/10.mcf/ref/x86/linux/simple-timing/mcf.out.i
+data/src/arch/alpha/AlphaISA.py.i
 data/src/mem/MemChecker.py.i
 data/tests/configs/realview-simple-atomic.py.i
 data/src/arch/mips/isa.hh.i
@@ -7867,6 +7943,7 @@ data/src/arch/sparc/types.hh.i
 data/src/arch/mips/regfile/misc_regfile.hh.i
 data/dev/etherpkt.hh.i
 data/tests/quick/se/00.hello/ref/sparc/linux/simple-timing-ruby/simerr.i
+data/src/dev/net/sinicreg.hh.i
 data/src/base/cprintf.hh.i
 data/src/mem/hmc_controller.hh.i
 data/configs/boot/ammp.rcS.i
@@ -7903,6 +7980,7 @@ data/src/cpu/inteltrace.cc.i
 data/tests/long/se/70.twolf/ref/alpha/tru64/simple-atomic/smred.pl1.i
 data/tests/quick/se/50.vortex/ref/arm/linux/simple-timing/simerr.i
 data/src/arch/x86/isa/insts/x87/arithmetic/square_root.py.i
+data/src/dev/i2c/SConscript.i
 data/tests/quick/00.hello/ref/alpha/tru64/simple-atomic/m5stats.txt.i
 data/src/mem/protocol/MESI_CMP_directory-L2cache.sm.i
 data/src/arch/sparc/miscregfile.hh.i
@@ -8018,6 +8096,7 @@ data/src/sim/probe/mem.hh.i
 data/src/arch/mips/MipsInterrupts.py.i
 data/tests/long/se/70.twolf/ref/arm/linux/o3-timing/config.ini.i
 data/ext/nomali/Doxyfile.i
+data/src/dev/pci/copy_engine.hh.i
 data/src/mem/ruby/network/orion/Buffer/PrechargeUnit.hh.i
 data/system/alpha/h/ev5_osfalpha_defs.h.i
 data/src/cpu/kvm/arm_cpu.hh.i
@@ -8044,6 +8123,7 @@ data/src/base/bitmap.cc.i
 data/src/mem/probes/MemTraceProbe.py.i
 data/src/python/m5/objects/BaseCache.py.i
 data/build/build_options/ALPHA_SE.i
+data/src/dev/net/ns_gige.hh.i
 data/src/mem/ruby/network/garnet-fixed-pipeline/SWallocator_d.hh.i
 data/tests/long/se/70.twolf/ref/x86/linux/o3-timing/stats.txt.i
 data/configs/example/memcheck.py.i
@@ -8058,6 +8138,7 @@ data/src/mem/ruby/network/orion/TechParameter.cc.i
 data/tests/long/fs/10.linux-boot/ref/arm/linux/realview-o3/stats.txt.d
 data/src/cpu/kvm/BaseKvmCPU.py.i
 data/tests/quick/20.eio-short/ref/alpha/eio/simple-atomic/stderr.i
+data/src/dev/storage/ide_ctrl.cc.i
 data/src/mem/ruby/network/garnet-fixed-pipeline/InputUnit_d.cc.i
 data/src/mem/ruby/network/orion/power_ll.hh.i
 data/arch/sparc/isa_desc/formats/noop.format.i

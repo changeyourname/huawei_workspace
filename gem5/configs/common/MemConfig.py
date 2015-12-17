@@ -187,6 +187,11 @@ def config_mem(options, system):
     cls = get(options.mem_type)
     mem_ctrls = []
 
+    if options.elastic_trace_en and not issubclass(cls, \
+                                                    m5.objects.SimpleMemory):
+        fatal("When elastic trace is enabled, configure mem-type as "
+                "simple-mem.")
+
     # The default behaviour is to interleave memory channels on 128
     # byte granularity, or cache line granularity if larger than 128
     # byte. This value is based on the locality seen across a large
@@ -206,7 +211,13 @@ def config_mem(options, system):
                     options.mem_ranks:
                 mem_ctrl.ranks_per_channel = options.mem_ranks
 
+            if options.elastic_trace_en:
+                mem_ctrl.latency = '1ns'
+                print "For elastic trace, over-riding Simple Memory " \
+                    "latency to 1ns."
+
             mem_ctrls.append(mem_ctrl)
+
     subsystem.mem_ctrls = mem_ctrls
 
     # Connect the controllers to the membus

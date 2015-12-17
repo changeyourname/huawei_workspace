@@ -111,8 +111,6 @@ class SimControl : public Gem5SystemC::Module
     unsigned int getOffset() { return offset; }
 
     void run();
-    
-    CxxConfigManager *getConfigManager();    
 };
 
 SimControl::SimControl(sc_core::sc_module_name name,
@@ -225,7 +223,7 @@ SimControl::SimControl(sc_core::sc_module_name name,
     getEventQueue(0)->dump();
 
     try {
-        config_manager->instantiate();        
+        config_manager->instantiate();
     } catch (CxxConfigManager::Exception &e) {
         std::cerr << "Config problem in sim object "
                   << e.name << ": " << e.message << "\n";
@@ -267,11 +265,6 @@ SimControl::run()
 #endif
 }
 
-CxxConfigManager *
-SimControl::getConfigManager() {
-    return config_manager;
-}
-
 
 void
 reportHandler(const sc_core::sc_report &report,
@@ -300,31 +293,33 @@ sc_main(int argc, char **argv)
 {
     sc_core::sc_report_handler::set_handler(reportHandler);
 
-    SimControl sim_control("gem5", argc, argv);      
-                
-    Target *memory;                
-    tlm::tlm_initiator_socket <> *mem_port = dynamic_cast<tlm::tlm_initiator_socket<> *>(sc_core::sc_find_object("gem5.memory"));
-                
-    unsigned long long int size = 512*1024*1024ULL;                
-    unsigned char *mem = new unsigned char[size];                
+    SimControl sim_control("gem5", argc, argv);
+    Target *memory;
+
+    tlm::tlm_initiator_socket <> *mem_port =
+        dynamic_cast<tlm::tlm_initiator_socket<> *>(
+                    sc_core::sc_find_object("gem5.memory")
+                );
+
+    unsigned long long int size = 512*1024*1024ULL;
+    unsigned char *mem = new unsigned char[size];
 
     if (mem_port) {
+        SC_REPORT_INFO("sc_main", "Port Found");
+        unsigned long long int size = 512*1024*1024ULL;
         memory = new Target("memory",
                             sim_control.getDebugFlag(),
                             size,
                             sim_control.getOffset(),
                             mem);
 
-        memory->socket.bind(*mem_port);   
+        memory->socket.bind(*mem_port);
     } else {
         SC_REPORT_FATAL("sc_main", "Port Not Found");
         std::exit(EXIT_FAILURE);
     }
 
-    sc_core::sc_start();       
-    
-    //printf("icache_req_count: %d...dcache_req_count: %d\r\n", icache->get_reqCount(), dcache->get_reqCount());
-
+    sc_core::sc_start();
 
     SC_REPORT_INFO("sc_main", "End of Simulation");
 

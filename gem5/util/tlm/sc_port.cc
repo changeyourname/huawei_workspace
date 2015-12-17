@@ -41,8 +41,6 @@
 #include "sc_ext.hh"
 #include "sc_mm.hh"
 #include "sc_port.hh"
-#include "cpu/thread_context.hh"
-#include "sim/system.hh"
 
 namespace Gem5SystemC
 {
@@ -91,9 +89,12 @@ Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
     CAUGHT_UP;
-    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");       
+    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
+    
+    //std::cout << curTick() << ": " << packet->getAddr() << std::endl; 
 
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;   
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+
     /* Prepare the transaction */
     tlm::tlm_generic_payload * trans = mm.allocate();
     trans->acquire();
@@ -102,10 +103,14 @@ sc_transactor::recvAtomic(PacketPtr packet)
     /* Attach the packet pointer to the TLM transaction to keep track */
     gem5Extension* extension = new gem5Extension(packet);
     trans->set_auto_extension(extension);
+    
+    //std::cout << sc_time_stamp();
+    //printf("..%d..%d..%d..0x%08x\r\n", packet->req->masterId(), packet->isRead(), packet->isWrite(), trans->get_address());
 
     /* Execute b_transport: */
-    if (packet->memInhibitAsserted() || packet->cmd == MemCmd::CleanEvict || packet->cmd == MemCmd::WritebackClean) {
-        return delay.value();
+    if (packet->memInhibitAsserted() || packet->cmd==MemCmd::CleanEvict
+        || packet->cmd==MemCmd::WritebackClean) {
+        return 0;
     } else {
         if (packet->cmd == MemCmd::SwapReq) {
             SC_REPORT_FATAL("transactor", "SwapReq not supported");
@@ -116,24 +121,25 @@ sc_transactor::recvAtomic(PacketPtr packet)
             iSocket->b_transport(*trans, delay);
         } else if (packet->isInvalidate()) {
             // do nothing
+            assert(0);
         } else if (packet->isWrite()) {
             Request *req = packet->req;
             if (lockedAddrList.empty()) {
                 bool isLLSC = packet->isLLSC();
                 if (isLLSC) {
                     req->setExtraData(0);
-                    return true;
+                    return 0;
                 }
             } else {
                 if (!checkLockedAddrList(packet)) {
-                    return true;
+                    return 0;
                 }
             }
             
             iSocket->b_transport(*trans, delay);
         } else {
             SC_REPORT_FATAL("transactor", "Typo of request not supported");
-        }   
+        }
     }
 
     if (packet->needsResponse()) {
@@ -197,22 +203,18 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     sc_assert(!needToSendRequestRetry);
 
     // simply drop inhibited packets and clean evictions
-    if (packet->memInhibitAsserted()) {
+    if (packet->memInhibitAsserted() ||
+        packet->cmd == MemCmd::CleanEvict ||
+        packet->cmd == MemCmd::WritebackClean) {
         return true;
     }
-    if (packet->cmd == MemCmd::CleanEvict || packet->cmd == MemCmd::WritebackClean) {
-        return true;
-    }           
-    
-    //assert(AddrRange(packet->getAddr(), packet->getAddr() + (packet->getSize() - 1)).isSubset(range)); 
-        
+
     /* Remember if a request comes in while we're blocked so that a retry
      * can be sent to gem5 */
-    /*if (blockingRequest) {
+    if (blockingRequest) {
         needToSendRequestRetry = true;
         return false;
-    }*/
-    
+    }
 
     /*  NOTE: normal tlm is blocking here. But in our case we return false
      *  and tell gem5 when a retry can be done. This is the main difference
@@ -223,8 +225,8 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      *  }
      *  requestInProgress = trans;
     */
-    
-    
+
+
     if (packet->cmd == MemCmd::SwapReq) {
         assert(0);
     } else if (packet->isRead()) {
@@ -251,7 +253,8 @@ sc_transactor::recvTimingReq(PacketPtr packet)
         }
     }
 
-
+// use this if 1 phase TLM protocol is used for nb_transport_.. by sc_target.hh/cc
+/*
     // if the previous transaction's response has not been sent Ok then
     // we shouldn't forward any new request to memory
     if (blockingResponse) {
@@ -260,6 +263,8 @@ sc_transactor::recvTimingReq(PacketPtr packet)
         // send retry request so as to retry the previous transaction                
         return false;
     }
+*/
+
     
     // forwarding the request to SysC memory module  
     
@@ -277,17 +282,15 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      * Standard Page 507 for a visualisation of the procedure */
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
-    tlm::tlm_sync_enum status;    
-    
+    tlm::tlm_sync_enum status;
+
     status = iSocket->nb_transport_fw(*trans, phase, delay);
-    
-    //assert(status == tlm::TLM_COMPLETED);
-    
+
     /* Check returned value: */
     if(status == tlm::TLM_ACCEPTED) {
         sc_assert(phase == tlm::BEGIN_REQ);
         /* Accepted but is now blocking until END_REQ (exclusion rule)*/
-        blockingRequest = trans;    
+        blockingRequest = trans;
     } else if(status == tlm::TLM_UPDATED) {
         /* The Timing annotation must be honored: */
         sc_assert(phase == tlm::END_REQ || phase == tlm::BEGIN_RESP);
@@ -298,15 +301,91 @@ sc_transactor::recvTimingReq(PacketPtr packet)
         pe->notify(*trans, phase, delay);
     } else if(status == tlm::TLM_COMPLETED) {
         /* Transaction is over nothing has do be done. */
+/*        sc_assert(phase == tlm::END_RESP);
+        trans->release(); */
+
+
         sc_assert(phase == tlm::END_RESP);
-        
-        payloadEvent<sc_transactor> * pe;
+        payloadEvent<sc_transactor> *pe;
         pe = new payloadEvent<sc_transactor>(*this,
             &sc_transactor::pec, "PEQ");
         pe->notify(*trans, phase, delay);
     }
 
     return true;
+}
+
+void
+sc_transactor::pec(
+    sc_transactor::payloadEvent<sc_transactor> * pe,
+    tlm::tlm_generic_payload& trans,
+    const tlm::tlm_phase& phase)
+{
+    sc_time delay;
+
+    if(phase == tlm::END_REQ ||
+            &trans == blockingRequest && phase == tlm::BEGIN_RESP) {
+        sc_assert(&trans == blockingRequest);
+        blockingRequest = NULL;
+
+        /* Did another request arrive while blocked, schedule a retry */
+        if (needToSendRequestRetry) {
+            needToSendRequestRetry = false;
+           iSocket.sendRetryReq();
+        }
+    }
+    else if(phase == tlm::BEGIN_RESP)
+    {
+        CAUGHT_UP;
+
+        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
+
+        sc_assert(!blockingResponse);
+
+        bool need_retry;
+        if (packet->needsResponse()) {
+            packet->makeResponse();
+            need_retry = !iSocket.sendTimingResp(packet);
+        } else {
+            need_retry = false;
+        }
+
+        if (need_retry) {
+            blockingResponse = &trans;
+        } else {
+            if (phase == tlm::BEGIN_RESP) {
+                /* Send END_RESP and we're finished: */
+                tlm::tlm_phase fw_phase = tlm::END_RESP;
+                sc_time delay = SC_ZERO_TIME;
+                iSocket->nb_transport_fw(trans, fw_phase, delay);
+                /* Release the transaction with all the extensions */
+                trans.release();
+            }
+        }
+    } else if (phase == tlm::END_RESP) {
+        CAUGHT_UP;       
+
+        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
+
+        sc_assert(!blockingResponse);        
+
+        bool need_retry;
+        if (packet->needsResponse()) {
+            packet->makeResponse();
+            need_retry = !iSocket.sendTimingResp(packet);
+        } else {
+            need_retry = false;
+        }
+        
+        if (need_retry) {
+            blockingResponse = &trans;
+        } else {                                  
+            trans.release();        
+        }
+    } else {
+        SC_REPORT_FATAL("transactor", "Invalid protocol phase in pec");
+    }
+    delete pe;
 }
 
 
@@ -367,17 +446,7 @@ sc_transactor::checkLockedAddrList(PacketPtr pkt)
                 // ThreadContext* ctx = owner.getSystem()->getThreadContext(i->contextId);
                 // ctx->getCpuPtr()->wakeup(ctx->threadId());                  
                 
-                // FIXME: enable above!!
-                // right now not getting the true system instance in owner.getSystem()
-                // can explore why we are not getting the true system instance even though 
-                // its address is similar to the one that is actually created               
-
-                // i think we are fairly OK with non-LLSC if we ignore this as this would have
-                // been handled in locked_mem.hh as without caches, each SMP-core request 
-                // is being snooped by all others before issuing it to the memory
-                
-                // But for LLSC succeeding stores, is waking up that CPU necessary??
-                // can we also do this in locked_mem.hh???
+                owner.handle_lock_erasure(i->contextId);
                 
                 i = lockedAddrList.erase(i);
             } else {
@@ -419,78 +488,6 @@ sc_transactor::trackLoadLocked(PacketPtr pkt)
 }
 
 
-
-void
-sc_transactor::pec(
-    sc_transactor::payloadEvent<sc_transactor> * pe,
-    tlm::tlm_generic_payload& trans,
-    const tlm::tlm_phase& phase)
-{
-    sc_time delay;
-    
-    if(phase == tlm::END_REQ ||
-            &trans == blockingRequest && phase == tlm::BEGIN_RESP) {
-        sc_assert(&trans == blockingRequest);
-        blockingRequest = NULL;
-
-        /* Did another request arrive while blocked, schedule a retry */
-        if (needToSendRequestRetry) {
-            needToSendRequestRetry = false;
-           iSocket.sendRetryReq();
-        }
-    }
-    else if(phase == tlm::BEGIN_RESP)
-    {                    
-        CAUGHT_UP;        
-        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
-
-        sc_assert(!blockingResponse);
-
-        bool need_retry;
-        if (packet->needsResponse()) {
-            packet->makeResponse();
-            need_retry = !iSocket.sendTimingResp(packet);
-        } else {
-            need_retry = false;
-        }
-
-        if (need_retry) {
-            blockingResponse = &trans;
-        } else {
-            if (phase == tlm::BEGIN_RESP) {
-                /* Send END_RESP and we're finished: */
-                tlm::tlm_phase fw_phase = tlm::END_RESP;
-                sc_time delay = SC_ZERO_TIME;
-                iSocket->nb_transport_fw(trans, fw_phase, delay);
-                /* Release the transaction with all the extensions */
-                trans.release();
-            }
-        }
-    } else if (phase == tlm::END_RESP) {
-        CAUGHT_UP;       
-        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
-         
-        sc_assert(!blockingResponse);        
-
-        bool need_retry;
-        if (packet->needsResponse()) {
-            packet->makeResponse();
-            need_retry = !iSocket.sendTimingResp(packet);
-        } else {
-            need_retry = false;
-        }
-        
-        if (need_retry) {
-            blockingResponse = &trans;
-        } else {                                  
-            trans.release();        
-        }
-    } else {
-        SC_REPORT_FATAL("transactor", "Invalid protocol phase in pec");
-    }
-    delete pe;
-}
-
 void
 sc_transactor::recvRespRetry()
 {
@@ -501,24 +498,25 @@ sc_transactor::recvRespRetry()
 
     tlm::tlm_generic_payload *trans = blockingResponse;
     blockingResponse = NULL;
-
     PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
 
     bool need_retry = !iSocket.sendTimingResp(packet);
 
     sc_assert(!need_retry);
 
-    /*sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::END_RESP;
-    iSocket->nb_transport_fw(*trans, phase, delay);*/
-    // Release transaction with all the extensions
-    
+    iSocket->nb_transport_fw(*trans, phase, delay);
+
+// use this if 1 phase TLM protocol is used for nb_transport_.. by sc_target.hh/cc
+/*    
     if (needToSendRequestRetry) {
         needToSendRequestRetry = false;
         iSocket.sendRetryReq();
-    }    
-    
-    
+    }   
+*/
+
+    // Release transaction with all the extensions
     trans->release();
 }
 

@@ -74,6 +74,8 @@ class System(MemObject):
     cache_line_size = Param.Unsigned(64, "Cache line size in bytes")
     disable_cache = Param.Bool(False, "Disable gem5-cache in system")
 
+    exit_on_work_items = Param.Bool(True, "Exit from the simulation loop when "
+                                    "encountering work item annotations.")
     work_item_id = Param.Int(-1, "specific work item id")
     num_work_ids = Param.Int(16, "Number of distinct work item types")
     work_begin_cpu_id_exit = Param.Int(-1,

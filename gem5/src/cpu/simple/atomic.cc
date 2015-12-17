@@ -342,10 +342,20 @@ AtomicSimpleCPU::readMem(Addr addr, uint8_t * data,
 
     //The size of the data we're trying to read.
     int fullSize = size;
+    
+    // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
+    // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
+    bool disable_cache = areCachesDisabled();
+    unsigned block_size;
+    if (disable_cache) {
+        block_size = 64;
+    } else {
+        block_size = cacheLineSize();
+    }    
 
     //The address of the second part of this access if it needs to be split
     //across a cache line boundary.
-    Addr secondAddr = roundDown(addr + size - 1, cacheLineSize());
+    Addr secondAddr = roundDown(addr + size - 1, block_size);
 
     if (secondAddr > addr)
         size = secondAddr - addr;
@@ -439,10 +449,20 @@ AtomicSimpleCPU::writeMem(uint8_t *data, unsigned size,
 
     //The size of the data we're trying to read.
     int fullSize = size;
+    
+    // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
+    // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
+    unsigned block_size;
+    bool disable_cache = areCachesDisabled();
+    if (disable_cache) {
+        block_size = 64;
+    } else {
+        block_size = cacheLineSize();
+    }       
 
     //The address of the second part of this access if it needs to be split
     //across a cache line boundary.
-    Addr secondAddr = roundDown(addr + size - 1, cacheLineSize());
+    Addr secondAddr = roundDown(addr + size - 1, block_size);
 
     if(secondAddr > addr)
         size = secondAddr - addr;

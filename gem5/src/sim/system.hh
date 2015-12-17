@@ -189,7 +189,7 @@ class System : public MemObject
      * Get the cache line size of the system.
      */
     unsigned int cacheLineSize() const { return _cacheLineSize; }
-    
+
     /**
      * Are caches present
      */

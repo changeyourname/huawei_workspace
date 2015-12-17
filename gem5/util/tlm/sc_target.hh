@@ -65,7 +65,8 @@ struct Target: sc_module
     Target(sc_core::sc_module_name name,
         bool debug,
         unsigned long long int size,
-        unsigned int offset, unsigned char *mem);
+        unsigned int offset, 
+        unsigned char *mem);
     SC_HAS_PROCESS(Target);
 
     /** TLM interface functions */

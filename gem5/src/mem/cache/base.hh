@@ -207,7 +207,7 @@ class BaseCache : public MemObject
     {
         // check that the address is block aligned since we rely on
         // this in a number of places when checking for matches and
-        // overlap        
+        // overlap
         assert(addr == blockAlign(addr));
 
         MSHR *mshr = mq->allocate(addr, size, pkt, time, order++,

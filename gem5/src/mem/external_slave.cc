@@ -42,6 +42,9 @@
 
 #include "debug/ExternalPort.hh"
 #include "mem/external_slave.hh"
+#include "sim/system.hh"
+#include "cpu/thread_context.hh"
+#include "cpu/base.hh"
 
 /** Implement a `stub' port which just responds to requests by printing
  *  a message.  The stub port can be used to configure and test a system
@@ -187,23 +190,17 @@ ExternalSlave::Port::getAddrRanges() const
 
 ExternalSlave::ExternalSlave(ExternalSlaveParams *params) :
     MemObject(params),
-    _system(params->system),    
     externalPort(NULL),
     portName(params->name + ".port"),
     portType(params->port_type),
     portData(params->port_data),
-    addrRanges(params->addr_ranges.begin(), params->addr_ranges.end())
+    addrRanges(params->addr_ranges.begin(), params->addr_ranges.end()),
+    system(params->system)
 {
     /* Register the stub handler if it hasn't already been registered */
     if (portHandlers.find("stub") == portHandlers.end())
         registerHandler("stub", new StubSlavePortHandler);
 }
-
-System *
-ExternalSlave::getSystem() {
-    return _system;
-}
-
 
 BaseSlavePort &
 ExternalSlave::getSlavePort(const std::string &if_name,
@@ -257,3 +254,17 @@ ExternalSlave::registerHandler(const std::string &handler_name,
 {
     portHandlers[handler_name] = handler;
 }
+
+
+
+void 
+ExternalSlave::handle_lock_erasure(ContextID ctx_id) 
+{
+    ThreadContext* ctx = system->getThreadContext(ctx_id);
+    ctx->getCpuPtr()->wakeup(ctx->threadId());    
+}
+
+
+
+
+

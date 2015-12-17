@@ -109,7 +109,7 @@ System::System(Params *p)
             debugSymbolTable = new SymbolTable;
     }
 
-    // check if the cache line size is a value known to work    
+    // check if the cache line size is a value known to work
     if (!(_cacheLineSize == 16 || _cacheLineSize == 32 ||
           _cacheLineSize == 64 || _cacheLineSize == 128) && !_cachesDisabled)
         warn_once("Cache line size is neither 16, 32, 64 nor 128 bytes.\n");

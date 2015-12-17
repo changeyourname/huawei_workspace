@@ -189,7 +189,7 @@ def build_test_system(np):
         elif not options.external_memory_system:
             test_sys.iobridge = Bridge(delay='50ns', ranges = test_sys.mem_ranges)
             test_sys.iobridge.slave = test_sys.iobus.master
-            test_sys.iobridge.master = test_sys.membus.slave                                  
+            test_sys.iobridge.master = test_sys.membus.slave
 
         # Sanity check
         if options.fastmem:
@@ -213,6 +213,17 @@ def build_test_system(np):
             if options.checker:
                 test_sys.cpu[i].addCheckerCpu()
             test_sys.cpu[i].createThreads()
+
+        # If elastic tracing is enabled when not restoring from checkpoint and
+        # when not fast forwarding using the atomic cpu, then check that the
+        # TestCPUClass is DerivO3CPU or inherits from DerivO3CPU. If the check
+        # passes then attach the elastic trace probe.
+        # If restoring from checkpoint or fast forwarding, the code that does this for
+        # FutureCPUClass is in the Simulation module. If the check passes then the
+        # elastic trace probe is attached to the switch CPUs.
+        if options.elastic_trace_en and options.checkpoint_restore == None and \
+            not options.fast_forward:
+            CpuConfig.config_etrace(TestCPUClass, test_sys.cpu, options)
 
         CacheConfig.config_cache(options, test_sys)
 

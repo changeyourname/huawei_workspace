@@ -4,7 +4,7 @@ default = http://repo.gem5.org/gem5
 # The following lines were automatically added by gem5/SConstruct
 # to provide the gem5 style-checking hooks
 [extensions]
-style = /home/uzair/huawei_workspace/gem5/util/style.py
+style = /home/uzleo/Desktop/test_1/gem5/util/style.py
 
 [hooks]
 pretxncommit.style = python:style.check_style

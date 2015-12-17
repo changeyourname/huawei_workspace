@@ -416,6 +416,7 @@ FullO3CPU<Impl>::regProbePoints()
     ppDataAccessComplete = new ProbePointArg<std::pair<DynInstPtr, PacketPtr> >(getProbeManager(), "DataAccessComplete");
 
     fetch.regProbePoints();
+    rename.regProbePoints();
     iew.regProbePoints();
     commit.regProbePoints();
 }
@@ -790,8 +791,8 @@ FullO3CPU<Impl>::insertThread(ThreadID tid)
     }
 
     //Bind Float Regs to Rename Map
-    int max_reg = TheISA::NumIntRegs + TheISA::NumFloatRegs;
-    for (int freg = TheISA::NumIntRegs; freg < max_reg; freg++) {
+    int max_reg = TheISA::FP_Reg_Base + TheISA::NumFloatRegs;
+    for (int freg = TheISA::FP_Reg_Base; freg < max_reg; freg++) {
         PhysRegIndex phys_reg = freeList.getFloatReg();
 
         renameMap[tid].setEntry(freg,phys_reg);
@@ -799,8 +800,8 @@ FullO3CPU<Impl>::insertThread(ThreadID tid)
     }
 
     //Bind condition-code Regs to Rename Map
-    max_reg = TheISA::NumIntRegs + TheISA::NumFloatRegs + TheISA::NumCCRegs;
-    for (int creg = TheISA::NumIntRegs + TheISA::NumFloatRegs;
+    max_reg = TheISA::CC_Reg_Base + TheISA::NumCCRegs;
+    for (int creg = TheISA::CC_Reg_Base;
          creg < max_reg; creg++) {
         PhysRegIndex phys_reg = freeList.getCCReg();
 

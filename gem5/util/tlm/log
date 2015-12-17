@@ -1,0 +1,466 @@
+In file included from ../../build/ARM/cpu/base_dyn_inst.hh:61:0,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/exec_context.hh:248:24: error: ‘PacketPtr’ has not been declared
+     virtual bool mwait(PacketPtr pkt) = 0;
+                        ^
+../../build/ARM/cpu/exec_context.hh:250:13: error: ‘AddressMonitor’ does not name a type
+     virtual AddressMonitor *getAddrMonitor() = 0;
+             ^
+In file included from ../../build/ARM/sim/system.hh:62:0,
+                 from ../../build/ARM/cpu/base_dyn_inst.hh:69,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/mem/port_proxy.hh:89:5: error: ‘MasterPort’ does not name a type
+     MasterPort &_port;
+     ^
+../../build/ARM/mem/port_proxy.hh:95:26: error: expected ‘)’ before ‘&’ token
+     PortProxy(MasterPort &port, unsigned int cacheLineSize) :
+                          ^
+In file included from ../../build/ARM/sim/system.hh:63:0,
+                 from ../../build/ARM/cpu/base_dyn_inst.hh:69,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/mem/physical.hh:180:17: error: ‘PacketPtr’ has not been declared
+     void access(PacketPtr pkt);
+                 ^
+../../build/ARM/mem/physical.hh:190:27: error: ‘PacketPtr’ has not been declared
+     void functionalAccess(PacketPtr pkt);
+                           ^
+In file included from ../../build/ARM/cpu/base_dyn_inst.hh:69:0,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/sim/system.hh:81:23: error: invalid use of incomplete type ‘class MemObject’
+ class System : public MemObject
+                       ^
+In file included from ../../build/ARM/params/AbstractMemory.hh:13:0,
+                 from ../../build/ARM/params/System.hh:27,
+                 from ../../build/ARM/sim/system.hh:64,
+                 from ../../build/ARM/cpu/base_dyn_inst.hh:69,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/params/MemObject.hh:4:7: error: forward declaration of ‘class MemObject’
+ class MemObject;
+       ^
+In file included from ../../build/ARM/cpu/base_dyn_inst.hh:69:0,
+                 from ../../build/ARM/cpu/checker/cpu.hh:54,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/sim/system.hh:91:5: error: expected class-name before ‘{’ token
+     {
+     ^
+../../build/ARM/sim/system.hh:100:29: error: ‘PacketPtr’ has not been declared
+         bool recvTimingResp(PacketPtr pkt) override
+                             ^
+../../build/ARM/sim/system.hh:100:14: error: ‘bool System::SystemPort::recvTimingResp(int)’ marked override, but does not override
+         bool recvTimingResp(PacketPtr pkt) override
+              ^
+../../build/ARM/sim/system.hh:102:14: error: ‘void System::SystemPort::recvReqRetry()’ marked override, but does not override
+         void recvReqRetry() override
+              ^
+../../build/ARM/sim/system.hh:124:5: error: ‘MasterPort’ does not name a type
+     MasterPort& getSystemPort() { return _systemPort; }
+     ^
+../../build/ARM/sim/system.hh:114:10: error: ‘void System::init()’ marked override, but does not override
+     void init() override;
+          ^
+../../build/ARM/sim/system.hh:129:21: error: ‘BaseMasterPort& System::getMasterPort(const string&, PortID)’ marked override, but does not override
+     BaseMasterPort& getMasterPort(const std::string &if_name,
+                     ^
+../../build/ARM/sim/system.hh:344:10: error: ‘void System::regStats()’ marked override, but does not override
+     void regStats() override;
+          ^
+../../build/ARM/sim/system.hh:496:10: error: ‘void System::initState()’ marked override, but does not override
+     void initState() override;
+          ^
+../../build/ARM/sim/system.hh:528:10: error: ‘void System::serialize(CheckpointOut&) const’ marked override, but does not override
+     void serialize(CheckpointOut &cp) const override;
+          ^
+../../build/ARM/sim/system.hh:529:10: error: ‘void System::unserialize(CheckpointIn&)’ marked override, but does not override
+     void unserialize(CheckpointIn &cp) override;
+          ^
+../../build/ARM/sim/system.hh:531:10: error: ‘void System::drainResume()’ marked override, but does not override
+     void drainResume() override;
+          ^
+../../build/ARM/sim/system.hh: In constructor ‘System::SystemPort::SystemPort(const string&, MemObject*)’:
+../../build/ARM/sim/system.hh:98:15: error: class ‘System::SystemPort’ does not have any field named ‘MasterPort’
+             : MasterPort(_name, _owner)
+               ^
+In file included from ../../build/ARM/cpu/checker/cpu.hh:54:0,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/base_dyn_inst.hh: At global scope:
+../../build/ARM/cpu/base_dyn_inst.hh:867:16: error: ‘PacketPtr’ has not been declared
+     bool mwait(PacketPtr pkt) { return cpu->mwait(threadNumber, pkt); }
+                ^
+../../build/ARM/cpu/base_dyn_inst.hh:870:5: error: ‘AddressMonitor’ does not name a type
+     AddressMonitor *getAddrMonitor()
+     ^
+In file included from ../../build/ARM/sim/process.hh:44:0,
+                 from ../../build/ARM/cpu/thread_state.hh:40,
+                 from ../../build/ARM/cpu/simple_thread.hh:57,
+                 from ../../build/ARM/cpu/checker/cpu.hh:57,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/mem/se_translating_port_proxy.hh:83:38: error: expected ‘)’ before ‘&’ token
+     SETranslatingPortProxy(MasterPort& port, Process* p, AllocType alloc);
+                                      ^
+In file included from ../../build/ARM/cpu/simple_thread.hh:57:0,
+                 from ../../build/ARM/cpu/checker/cpu.hh:57,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_state.hh: In member function ‘int ThreadState::cpuId() const’:
+../../build/ARM/cpu/thread_state.hh:70:39: error: invalid use of incomplete type ‘class BaseCPU’
+     int cpuId() const { return baseCpu->cpuId(); }
+                                       ^
+In file included from ../../build/ARM/cpu/static_inst.hh:46:0,
+                 from ../../build/ARM/arch/arm/utility.hh:54,
+                 from ../../build/ARM/arch/arm/pagetable.hh:49,
+                 from ../../build/ARM/arch/arm/faults.hh:51,
+                 from ../../build/ARM/arch/arm/interrupts.hh:46,
+                 from ../../build/ARM/arch/interrupts.hh:1,
+                 from ../../build/ARM/cpu/base.hh:57,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_context.hh:62:7: error: forward declaration of ‘class BaseCPU’
+ class BaseCPU;
+       ^
+In file included from ../../build/ARM/cpu/simple_thread.hh:57:0,
+                 from ../../build/ARM/cpu/checker/cpu.hh:57,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_state.hh: In member function ‘uint32_t ThreadState::socketId() const’:
+../../build/ARM/cpu/thread_state.hh:72:47: error: invalid use of incomplete type ‘class BaseCPU’
+     uint32_t socketId() const { return baseCpu->socketId(); }
+                                               ^
+In file included from ../../build/ARM/cpu/static_inst.hh:46:0,
+                 from ../../build/ARM/arch/arm/utility.hh:54,
+                 from ../../build/ARM/arch/arm/pagetable.hh:49,
+                 from ../../build/ARM/arch/arm/faults.hh:51,
+                 from ../../build/ARM/arch/arm/interrupts.hh:46,
+                 from ../../build/ARM/arch/interrupts.hh:1,
+                 from ../../build/ARM/cpu/base.hh:57,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_context.hh:62:7: error: forward declaration of ‘class BaseCPU’
+ class BaseCPU;
+       ^
+In file included from ../../build/ARM/cpu/checker/cpu.hh:57:0,
+                 from ../../build/ARM/cpu/simple/base.hh:52,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/simple_thread.hh: In member function ‘std::string SimpleThread::name() const’:
+../../build/ARM/cpu/simple_thread.hh:127:47: error: invalid use of incomplete type ‘class BaseCPU’
+         return csprintf("%s.[tid:%i]", baseCpu->name(), tc->threadId());
+                                               ^
+In file included from ../../build/ARM/cpu/static_inst.hh:46:0,
+                 from ../../build/ARM/arch/arm/utility.hh:54,
+                 from ../../build/ARM/arch/arm/pagetable.hh:49,
+                 from ../../build/ARM/arch/arm/faults.hh:51,
+                 from ../../build/ARM/arch/arm/interrupts.hh:46,
+                 from ../../build/ARM/arch/interrupts.hh:1,
+                 from ../../build/ARM/cpu/base.hh:57,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_context.hh:62:7: error: forward declaration of ‘class BaseCPU’
+ class BaseCPU;
+       ^
+In file included from ../../build/ARM/cpu/simple/base.hh:52:0,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/checker/cpu.hh: At global scope:
+../../build/ARM/cpu/checker/cpu.hh:90:43: error: invalid use of incomplete type ‘class BaseCPU’
+ class CheckerCPU : public BaseCPU, public ExecContext
+                                           ^
+In file included from ../../build/ARM/cpu/static_inst.hh:46:0,
+                 from ../../build/ARM/arch/arm/utility.hh:54,
+                 from ../../build/ARM/arch/arm/pagetable.hh:49,
+                 from ../../build/ARM/arch/arm/faults.hh:51,
+                 from ../../build/ARM/arch/arm/interrupts.hh:46,
+                 from ../../build/ARM/arch/interrupts.hh:1,
+                 from ../../build/ARM/cpu/base.hh:57,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_context.hh:62:7: error: forward declaration of ‘class BaseCPU’
+ class BaseCPU;
+       ^
+In file included from ../../build/ARM/cpu/simple/base.hh:52:0,
+                 from ../../build/ARM/cpu/simple/atomic.hh:46,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/checker/cpu.hh:109:24: error: ‘MasterPort’ has not been declared
+     void setIcachePort(MasterPort *icache_port);
+                        ^
+../../build/ARM/cpu/checker/cpu.hh:111:24: error: ‘MasterPort’ has not been declared
+     void setDcachePort(MasterPort *dcache_port);
+                        ^
+../../build/ARM/cpu/checker/cpu.hh:113:5: error: ‘MasterPort’ does not name a type
+     MasterPort &getDataPort() override
+     ^
+../../build/ARM/cpu/checker/cpu.hh:121:5: error: ‘MasterPort’ does not name a type
+     MasterPort &getInstPort() override
+     ^
+../../build/ARM/cpu/checker/cpu.hh:135:5: error: ‘MasterPort’ does not name a type
+     MasterPort *icachePort;
+     ^
+../../build/ARM/cpu/checker/cpu.hh:136:5: error: ‘MasterPort’ does not name a type
+     MasterPort *dcachePort;
+     ^
+../../build/ARM/cpu/checker/cpu.hh:360:16: error: ‘PacketPtr’ has not been declared
+     bool mwait(PacketPtr pkt) override { return BaseCPU::mwait(0, pkt); }
+                ^
+../../build/ARM/cpu/checker/cpu.hh:363:5: error: ‘AddressMonitor’ does not name a type
+     AddressMonitor *getAddrMonitor() override
+     ^
+../../build/ARM/cpu/checker/cpu.hh:101:10: error: ‘void CheckerCPU::init()’ marked override, but does not override
+     void init() override;
+          ^
+../../build/ARM/cpu/checker/cpu.hh:178:21: error: ‘virtual Counter CheckerCPU::totalInsts() const’ marked override, but does not override
+     virtual Counter totalInsts() const override
+                     ^
+../../build/ARM/cpu/checker/cpu.hh:183:21: error: ‘virtual Counter CheckerCPU::totalOps() const’ marked override, but does not override
+     virtual Counter totalOps() const override
+                     ^
+../../build/ARM/cpu/checker/cpu.hh:192:10: error: ‘void CheckerCPU::serialize(CheckpointOut&) const’ marked override, but does not override
+     void serialize(CheckpointOut &cp) const override;
+          ^
+../../build/ARM/cpu/checker/cpu.hh:193:10: error: ‘void CheckerCPU::unserialize(CheckpointIn&)’ marked override, but does not override
+     void unserialize(CheckpointIn &cp) override;
+          ^
+../../build/ARM/cpu/checker/cpu.hh:392:10: error: ‘void CheckerCPU::wakeup(ThreadID)’ marked override, but does not override
+     void wakeup(ThreadID tid) override { }
+          ^
+../../build/ARM/cpu/checker/cpu.hh: In member function ‘virtual void CheckerCPU::armMonitor(Addr)’:
+../../build/ARM/cpu/checker/cpu.hh:359:7: error: incomplete type ‘BaseCPU’ used in nested name specifier
+     { BaseCPU::armMonitor(0, address); }
+       ^
+../../build/ARM/cpu/checker/cpu.hh: In member function ‘virtual bool CheckerCPU::mwait(int)’:
+../../build/ARM/cpu/checker/cpu.hh:360:49: error: incomplete type ‘BaseCPU’ used in nested name specifier
+     bool mwait(PacketPtr pkt) override { return BaseCPU::mwait(0, pkt); }
+                                                 ^
+../../build/ARM/cpu/checker/cpu.hh: In member function ‘virtual void CheckerCPU::mwaitAtomic(ThreadContext*)’:
+../../build/ARM/cpu/checker/cpu.hh:362:14: error: incomplete type ‘BaseCPU’ used in nested name specifier
+     { return BaseCPU::mwaitAtomic(0, tc, thread->dtb); }
+              ^
+../../build/ARM/cpu/checker/cpu.hh:362:53: error: return-statement with a value, in function returning 'void' [-fpermissive]
+     { return BaseCPU::mwaitAtomic(0, tc, thread->dtb); }
+                                                     ^
+In file included from ../../build/ARM/cpu/simple/atomic.hh:46:0,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/simple/base.hh: At global scope:
+../../build/ARM/cpu/simple/base.hh:84:30: error: invalid use of incomplete type ‘class BaseCPU’
+ class BaseSimpleCPU : public BaseCPU
+                              ^
+In file included from ../../build/ARM/cpu/static_inst.hh:46:0,
+                 from ../../build/ARM/arch/arm/utility.hh:54,
+                 from ../../build/ARM/arch/arm/pagetable.hh:49,
+                 from ../../build/ARM/arch/arm/faults.hh:51,
+                 from ../../build/ARM/arch/arm/interrupts.hh:46,
+                 from ../../build/ARM/arch/interrupts.hh:1,
+                 from ../../build/ARM/cpu/base.hh:57,
+                 from main.cc:56:
+../../build/ARM/cpu/thread_context.hh:62:7: error: forward declaration of ‘class BaseCPU’
+ class BaseCPU;
+       ^
+In file included from ../../build/ARM/cpu/simple/atomic.hh:46:0,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/simple/base.hh:96:10: error: ‘void BaseSimpleCPU::wakeup(ThreadID)’ marked override, but does not override
+     void wakeup(ThreadID tid) override;
+          ^
+../../build/ARM/cpu/simple/base.hh:97:10: error: ‘void BaseSimpleCPU::init()’ marked override, but does not override
+     void init() override;
+          ^
+../../build/ARM/cpu/simple/base.hh:137:10: error: ‘void BaseSimpleCPU::haltContext(ThreadID)’ marked override, but does not override
+     void haltContext(ThreadID thread_num) override;
+          ^
+../../build/ARM/cpu/simple/base.hh:140:10: error: ‘void BaseSimpleCPU::regStats()’ marked override, but does not override
+     void regStats() override;
+          ^
+../../build/ARM/cpu/simple/base.hh:141:10: error: ‘void BaseSimpleCPU::resetStats()’ marked override, but does not override
+     void resetStats() override;
+          ^
+../../build/ARM/cpu/simple/base.hh:143:10: error: ‘void BaseSimpleCPU::startup()’ marked override, but does not override
+     void startup() override;
+          ^
+../../build/ARM/cpu/simple/base.hh:152:13: error: ‘Counter BaseSimpleCPU::totalInsts() const’ marked override, but does not override
+     Counter totalInsts() const override;
+             ^
+../../build/ARM/cpu/simple/base.hh:153:13: error: ‘Counter BaseSimpleCPU::totalOps() const’ marked override, but does not override
+     Counter totalOps() const override;
+             ^
+../../build/ARM/cpu/simple/base.hh:155:10: error: ‘void BaseSimpleCPU::serializeThread(CheckpointOut&, ThreadID) const’ marked override, but does not override
+     void serializeThread(CheckpointOut &cp, ThreadID tid) const override;
+          ^
+../../build/ARM/cpu/simple/base.hh:156:10: error: ‘void BaseSimpleCPU::unserializeThread(CheckpointIn&, ThreadID)’ marked override, but does not override
+     void unserializeThread(CheckpointIn &cp, ThreadID tid) override;
+          ^
+In file included from ../../build/ARM/cpu/simple/atomic.hh:47:0,
+                 from ../../build/ARM/mem/packet.hh:67,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/simple/exec_context.hh:378:16: error: ‘PacketPtr’ has not been declared
+     bool mwait(PacketPtr pkt) override
+                ^
+../../build/ARM/cpu/simple/exec_context.hh:388:5: error: ‘AddressMonitor’ does not name a type
+     AddressMonitor *getAddrMonitor() override
+     ^
+../../build/ARM/cpu/simple/exec_context.hh: In member function ‘virtual void SimpleExecContext::armMonitor(Addr)’:
+../../build/ARM/cpu/simple/exec_context.hh:375:14: error: ‘class BaseSimpleCPU’ has no member named ‘armMonitor’
+         cpu->armMonitor(thread->threadId(), address);
+              ^
+../../build/ARM/cpu/simple/exec_context.hh: In member function ‘virtual bool SimpleExecContext::mwait(int)’:
+../../build/ARM/cpu/simple/exec_context.hh:380:21: error: ‘class BaseSimpleCPU’ has no member named ‘mwait’
+         return cpu->mwait(thread->threadId(), pkt);
+                     ^
+../../build/ARM/cpu/simple/exec_context.hh: In member function ‘virtual void SimpleExecContext::mwaitAtomic(ThreadContext*)’:
+../../build/ARM/cpu/simple/exec_context.hh:385:14: error: ‘class BaseSimpleCPU’ has no member named ‘mwaitAtomic’
+         cpu->mwaitAtomic(thread->threadId(), tc, thread->dtb);
+              ^
+In file included from ../../build/ARM/mem/packet.hh:67:0,
+                 from ../../build/ARM/mem/port.hh:54,
+                 from ../../build/ARM/mem/mem_object.hh:52,
+                 from ../../build/ARM/cpu/base.hh:61,
+                 from main.cc:56:
+../../build/ARM/cpu/simple/atomic.hh: At global scope:
+../../build/ARM/cpu/simple/atomic.hh:121:5: error: expected class-name before ‘{’ token
+     {
+     ^
+../../build/ARM/cpu/simple/atomic.hh:130:38: error: ‘PacketPtr’ has not been declared
+         virtual Tick recvAtomicSnoop(PacketPtr pkt) { return 0; }
+                                      ^
+../../build/ARM/cpu/simple/atomic.hh:132:29: error: ‘PacketPtr’ has not been declared
+         bool recvTimingResp(PacketPtr pkt)
+                             ^
+../../build/ARM/cpu/simple/atomic.hh:162:38: error: ‘PacketPtr’ has not been declared
+         virtual Tick recvAtomicSnoop(PacketPtr pkt);
+                                      ^
+../../build/ARM/cpu/simple/atomic.hh:163:42: error: ‘PacketPtr’ has not been declared
+         virtual void recvFunctionalSnoop(PacketPtr pkt);
+                                          ^
+../../build/ARM/cpu/simple/atomic.hh:184:5: error: ‘MasterPort’ does not name a type
+     MasterPort &getDataPort() override { return dcachePort; }
+     ^
+../../build/ARM/cpu/simple/atomic.hh:187:5: error: ‘MasterPort’ does not name a type
+     MasterPort &getInstPort() override { return icachePort; }
+     ^
+../../build/ARM/cpu/simple/atomic.hh:190:22: error: ‘PacketPtr’ has not been declared
+     void threadSnoop(PacketPtr pkt, ThreadID sender);
+                      ^
+../../build/ARM/cpu/simple/atomic.hh:58:10: error: ‘void AtomicSimpleCPU::init()’ marked override, but does not override
+     void init() override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:194:16: error: ‘DrainState AtomicSimpleCPU::drain()’ marked override, but does not override
+     DrainState drain() override;
+                ^
+../../build/ARM/cpu/simple/atomic.hh:195:10: error: ‘void AtomicSimpleCPU::drainResume()’ marked override, but does not override
+     void drainResume() override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:197:10: error: ‘void AtomicSimpleCPU::switchOut()’ marked override, but does not override
+     void switchOut() override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:198:10: error: ‘void AtomicSimpleCPU::takeOverFrom(BaseCPU*)’ marked override, but does not override
+     void takeOverFrom(BaseCPU *oldCPU) override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:200:10: error: ‘void AtomicSimpleCPU::verifyMemoryMode() const’ marked override, but does not override
+     void verifyMemoryMode() const override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:202:10: error: ‘void AtomicSimpleCPU::activateContext(ThreadID)’ marked override, but does not override
+     void activateContext(ThreadID thread_num) override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:203:10: error: ‘void AtomicSimpleCPU::suspendContext(ThreadID)’ marked override, but does not override
+     void suspendContext(ThreadID thread_num) override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh:211:10: error: ‘void AtomicSimpleCPU::regProbePoints()’ marked override, but does not override
+     void regProbePoints() override;
+          ^
+../../build/ARM/cpu/simple/atomic.hh: In constructor ‘AtomicSimpleCPU::AtomicCPUPort::AtomicCPUPort(const string&, BaseSimpleCPU*)’:
+../../build/ARM/cpu/simple/atomic.hh:126:15: error: class ‘AtomicSimpleCPU::AtomicCPUPort’ does not have any field named ‘MasterPort’
+             : MasterPort(_name, _cpu)
+               ^
+../../build/ARM/cpu/simple/atomic.hh: In constructor ‘AtomicSimpleCPU::AtomicCPUDPort::AtomicCPUDPort(const string&, BaseSimpleCPU*)’:
+../../build/ARM/cpu/simple/atomic.hh:153:37: error: ‘class BaseSimpleCPU’ has no member named ‘cacheLineSize’
+             cacheBlockMask = ~(cpu->cacheLineSize() - 1);
+                                     ^
+In file included from sc_port.hh:45:0,
+                 from main.cc:59:
+../../build/ARM/mem/abstract_mem.hh: At global scope:
+../../build/ARM/mem/abstract_mem.hh:93:30: error: ‘AtomicSimpleCpu’ has not been declared
+     LockedAddr(Request *req, AtomicSimpleCpu *cpu) : addr(mask(req->getPaddr())),
+                              ^
+../../build/ARM/mem/abstract_mem.hh: In constructor ‘LockedAddr::LockedAddr(Request*, int*)’:
+../../build/ARM/mem/abstract_mem.hh:95:42: error: cannot convert ‘int*’ to ‘AtomicSimpleCPU*’ in initialization
+                                my_cpu(cpu)
+                                          ^
+make: *** [main.o] Error 1

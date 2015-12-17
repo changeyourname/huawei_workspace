@@ -63,7 +63,7 @@ Target::Target(sc_core::sc_module_name name,
 
     SC_METHOD(execute_transaction_process);
     sensitive << target_done_event;
-    dont_initialize();    
+    dont_initialize();
 }
 
 void
@@ -76,7 +76,6 @@ Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 unsigned int
 Target::transport_dbg(tlm::tlm_generic_payload& trans)
 {
-    //printf("(%s):DEBUG addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
     tlm::tlm_command cmd = trans.get_command();
     sc_dt::uint64    adr = trans.get_address() - offset;
     unsigned char*   ptr = trans.get_data_ptr();
@@ -106,19 +105,16 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
                                            tlm::tlm_phase& phase,
                                            sc_time& delay)
 {
-    /*if (phase == tlm::BEGIN_REQ) {
-        printf("(%s):NORMAL addr:0x%08x..req_type:%d\r\n", name(), trans.get_address(), trans.get_command());
-        req_count++;
-    }*/
     /* Queue the transaction until the annotated time has elapsed */
-    
-    /*m_peq.notify(trans, phase, delay);
-    return tlm::TLM_ACCEPTED;*/
-    
+    m_peq.notify(trans, phase, delay);
+    return tlm::TLM_ACCEPTED;
 
+// use this if 1-phase tlm protocol is going to be used
+/*
     execute_transaction(trans);
     phase = tlm::END_RESP;
     return tlm::TLM_COMPLETED;
+*/
 }
 
 void
@@ -177,8 +173,10 @@ Target::send_end_req(tlm::tlm_generic_payload& trans)
 
     /* Queue the acceptance and the response with the appropriate latency */
     bw_phase = tlm::END_REQ;
-    //delay = sc_time(10, SC_NS); // Accept delay
-    delay = sc_core::SC_ZERO_TIME;
+
+    delay = sc_time(10, SC_NS); // Accept delay
+// for 1 phase protocol
+// delay = sc_core::SC_ZERO_TIME;
 
     tlm::tlm_sync_enum status;
     status = socket->nb_transport_bw(trans, bw_phase, delay);
@@ -186,8 +184,11 @@ Target::send_end_req(tlm::tlm_generic_payload& trans)
     /* Ignore return value;
      * initiator cannot terminate transaction at this point
      * Queue internal event to mark beginning of response: */
-    //delay = delay + sc_time(40, SC_NS); // Latency
-    target_done_event.notify(delay);    
+
+    delay = delay + sc_time(40, SC_NS); // Latency
+// for 1 phase protocol, comment above
+
+    target_done_event.notify(delay);
 
     assert(transaction_in_progress == 0);
     transaction_in_progress = &trans;
@@ -262,13 +263,13 @@ Target::send_response(tlm::tlm_generic_payload& trans)
 
     response_in_progress = true;
     bw_phase = tlm::BEGIN_RESP;
-    //delay = sc_time(10, SC_NS);
+    delay = sc_time(10, SC_NS);
+// for 1-phase protocol
     delay = sc_core::SC_ZERO_TIME;
     status = socket->nb_transport_bw( trans, bw_phase, delay );
 
     if (status == tlm::TLM_UPDATED) {
         /* The timing annotation must be honored */
-        //m_peq.notify(trans, bw_phase, delay);
         m_peq.notify(trans, bw_phase, delay);
     } else if (status == tlm::TLM_COMPLETED) {
         /* The initiator has terminated the transaction */

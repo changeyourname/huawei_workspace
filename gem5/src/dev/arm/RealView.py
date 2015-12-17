@@ -45,7 +45,7 @@ from m5.proxy import *
 from ClockDomain import ClockDomain
 from VoltageDomain import VoltageDomain
 from Device import BasicPioDevice, PioDevice, IsaFake, BadAddr, DmaDevice
-from Pci import PciConfigAll
+from PciHost import *
 from Ethernet import NSGigE, IGbE_igb, IGbE_e1000
 from Ide import *
 from Platform import Platform
@@ -55,6 +55,7 @@ from SimpleMemory import SimpleMemory
 from Gic import *
 from EnergyCtrl import EnergyCtrl
 from ClockDomain import SrcClockDomain
+from SubSystem import SubSystem
 
 class AmbaPioDevice(BasicPioDevice):
     type = 'AmbaPioDevice'
@@ -114,26 +115,40 @@ class RealViewOsc(ClockDomain):
 
     freq = Param.Clock("Default frequency")
 
-class VExpressCoreTileCtrl(RealViewCtrl):
-    class MotherBoardOsc(RealViewOsc):
+class VExpressMCC(SubSystem):
+    """ARM V2M-P1 Motherboard Configuration Controller
+
+This subsystem describes a subset of the devices that sit behind the
+motherboard configuration controller on the the ARM Motherboard
+Express (V2M-P1) motherboard. See ARM DUI 0447J for details.
+    """
+
+    class Osc(RealViewOsc):
         site, position, dcc = (0, 0, 0)
 
-    class CoreTileOsc(RealViewOsc):
+    osc_mcc = Osc(device=0, freq="50MHz")
+    osc_clcd = Osc(device=1, freq="23.75MHz")
+    osc_peripheral = Osc(device=2, freq="24MHz")
+    osc_system_bus = Osc(device=4, freq="24MHz")
+
+class CoreTile2A15DCC(SubSystem):
+    """ARM CoreTile Express A15x2 Daughterboard Configuration Controller
+
+This subsystem describes a subset of the devices that sit behind the
+daughterboard configuration controller on a CoreTile Express A15x2. See
+ARM DUI 0604E for details.
+    """
+
+    class Osc(RealViewOsc):
         site, position, dcc = (1, 0, 0)
 
-    # See ARM DUI 0447J (ARM Motherboard Express uATX -- V2M-P1)
-    osc_mcc = MotherBoardOsc(device=0, freq="50MHz")
-    osc_clcd = MotherBoardOsc(device=1, freq="23.75MHz")
-    osc_peripheral = MotherBoardOsc(device=2, freq="24MHz")
-    osc_system_bus = MotherBoardOsc(device=4, freq="24MHz")
-
-    # See Table 2.8 in ARM DUI 0604E (CoreTile Express A15x2 TRM).
-    osc_cpu = CoreTileOsc(device=0, freq="60MHz")
-    osc_hsbm = CoreTileOsc(device=4, freq="40MHz")
-    osc_pxl = CoreTileOsc(device=5, freq="23.75MHz")
-    osc_smb = CoreTileOsc(device=6, freq="50MHz")
-    osc_sys = CoreTileOsc(device=7, freq="60MHz")
-    osc_ddr = CoreTileOsc(device=8, freq="40MHz")
+    # See Table 2.8 in ARM DUI 0604E (CoreTile Express A15x2 TRM)
+    osc_cpu = Osc(device=0, freq="60MHz")
+    osc_hsbm = Osc(device=4, freq="40MHz")
+    osc_pxl = Osc(device=5, freq="23.75MHz")
+    osc_smb = Osc(device=6, freq="50MHz")
+    osc_sys = Osc(device=7, freq="60MHz")
+    osc_ddr = Osc(device=8, freq="40MHz")
 
 class VGic(PioDevice):
     type = 'VGic'
@@ -225,7 +240,7 @@ class HDLcd(AmbaDmaDevice):
     vnc = Param.VncInput(Parent.any, "Vnc server for remote frame buffer "
                                      "display")
     amba_id = 0x00141000
-    workaround_swap_rb = Param.Bool(True, "Workaround incorrect color "
+    workaround_swap_rb = Param.Bool(False, "Workaround incorrect color "
                                     "selector order in some kernels")
     workaround_dma_line_count = Param.Bool(True, "Workaround incorrect "
                                            "DMA line count (off by 1)")
@@ -240,10 +255,6 @@ class RealView(Platform):
     type = 'RealView'
     cxx_header = "dev/arm/realview.hh"
     system = Param.System(Parent.any, "system")
-    pci_io_base = Param.Addr(0, "Base address of PCI IO Space")
-    pci_cfg_base = Param.Addr(0, "Base address of PCI Configuraiton Space")
-    pci_cfg_gen_offsets = Param.Bool(False, "Should the offsets used for PCI cfg access"
-            " be compatible with the pci-generic-host or the legacy host bridge?")
     _mem_regions = [(Addr(0), Addr('256MB'))]
 
     def attachPciDevices(self):
@@ -273,8 +284,13 @@ class RealView(Platform):
 # Chapter 4: Programmer's Reference
 class RealViewPBX(RealView):
     uart = Pl011(pio_addr=0x10009000, int_num=44)
-    realview_io = VExpressCoreTileCtrl(pio_addr=0x10000000)
+    realview_io = RealViewCtrl(pio_addr=0x10000000)
+    mcc = VExpressMCC()
+    dcc = CoreTile2A15DCC()
     gic = Pl390()
+    pci_host = GenericPciHost(
+        conf_base=0x30000000, conf_size='256MB', conf_device_bits=16,
+        pci_pio_base=0)
     timer0 = Sp804(int_num0=36, int_num1=36, pio_addr=0x10011000)
     timer1 = Sp804(int_num0=37, int_num1=37, pio_addr=0x10012000)
     local_cpu_timer = CpuLocalTimer(int_num_timer=29, int_num_watchdog=30, pio_addr=0x1f000600)
@@ -339,6 +355,7 @@ class RealViewPBX(RealView):
     def attachIO(self, bus):
        self.uart.pio          = bus.master
        self.realview_io.pio   = bus.master
+       self.pci_host.pio      = bus.master
        self.timer0.pio        = bus.master
        self.timer1.pio        = bus.master
        self.clcd.pio          = bus.master
@@ -346,7 +363,6 @@ class RealViewPBX(RealView):
        self.kmi0.pio          = bus.master
        self.kmi1.pio          = bus.master
        self.cf_ctrl.pio       = bus.master
-       self.cf_ctrl.config    = bus.master
        self.cf_ctrl.dma       = bus.slave
        self.dmac_fake.pio     = bus.master
        self.uart1_fake.pio    = bus.master
@@ -400,7 +416,9 @@ class RealViewPBX(RealView):
 # Chapter 4: Programmer's Reference
 class RealViewEB(RealView):
     uart = Pl011(pio_addr=0x10009000, int_num=44)
-    realview_io = VExpressCoreTileCtrl(pio_addr=0x10000000, idreg=0x01400500)
+    realview_io = RealViewCtrl(pio_addr=0x10000000, idreg=0x01400500)
+    mcc = VExpressMCC()
+    dcc = CoreTile2A15DCC()
     gic = Pl390(dist_addr=0x10041000, cpu_addr=0x10040000)
     timer0 = Sp804(int_num0=36, int_num1=36, pio_addr=0x10011000)
     timer1 = Sp804(int_num0=37, int_num1=37, pio_addr=0x10012000)
@@ -452,6 +470,7 @@ class RealViewEB(RealView):
     def attachIO(self, bus):
        self.uart.pio          = bus.master
        self.realview_io.pio   = bus.master
+       self.pci_host.pio      = bus.master
        self.timer0.pio        = bus.master
        self.timer1.pio        = bus.master
        self.clcd.pio          = bus.master
@@ -508,19 +527,24 @@ class RealViewEB(RealView):
 
 class VExpress_EMM(RealView):
     _mem_regions = [(Addr('2GB'), Addr('2GB'))]
-    pci_cfg_base = 0x30000000
     uart = Pl011(pio_addr=0x1c090000, int_num=37)
-    realview_io = VExpressCoreTileCtrl(
+    realview_io = RealViewCtrl(
         proc_id0=0x14000000, proc_id1=0x14000000,
         idreg=0x02250000, pio_addr=0x1C010000)
+    mcc = VExpressMCC()
+    dcc = CoreTile2A15DCC()
     gic = Pl390(dist_addr=0x2C001000, cpu_addr=0x2C002000)
+    pci_host = GenericPciHost(
+        conf_base=0x30000000, conf_size='256MB', conf_device_bits=16,
+        pci_pio_base=0)
     local_cpu_timer = CpuLocalTimer(int_num_timer=29, int_num_watchdog=30, pio_addr=0x2C080000)
     generic_timer = GenericTimer(int_phys=29, int_virt=27)
     timer0 = Sp804(int_num0=34, int_num1=34, pio_addr=0x1C110000, clock0='1MHz', clock1='1MHz')
     timer1 = Sp804(int_num0=35, int_num1=35, pio_addr=0x1C120000, clock0='1MHz', clock1='1MHz')
     clcd   = Pl111(pio_addr=0x1c1f0000, int_num=46)
-    hdlcd  = HDLcd(pxl_clk=realview_io.osc_pxl,
-                   pio_addr=0x2b000000, int_num=117)
+    hdlcd  = HDLcd(pxl_clk=dcc.osc_pxl,
+                   pio_addr=0x2b000000, int_num=117,
+                   workaround_swap_rb=True)
     kmi0   = Pl050(pio_addr=0x1c060000, int_num=44)
     kmi1   = Pl050(pio_addr=0x1c070000, int_num=45, is_mouse=True)
     vgic   = VGic(vcpu_addr=0x2c006000, hv_addr=0x2c004000, ppint=25)
@@ -530,7 +554,6 @@ class VExpress_EMM(RealView):
                             BAR1 = 0x1C1A0100, BAR1Size = '4096B',
                             BAR0LegacyIO = True, BAR1LegacyIO = True)
 
-    pciconfig = PciConfigAll(size='256MB')
     vram           = SimpleMemory(range = AddrRange(0x18000000, size='32MB'),
                                   conf_table_reported = False)
     rtc            = PL031(pio_addr=0x1C170000, int_num=36)
@@ -602,6 +625,7 @@ class VExpress_EMM(RealView):
     def attachIO(self, bus):
        self.uart.pio            = bus.master
        self.realview_io.pio     = bus.master
+       self.pci_host.pio        = bus.master
        self.timer0.pio          = bus.master
        self.timer1.pio          = bus.master
        self.clcd.pio            = bus.master
@@ -611,11 +635,8 @@ class VExpress_EMM(RealView):
        self.kmi1.pio            = bus.master
        self.cf_ctrl.pio         = bus.master
        self.cf_ctrl.dma         = bus.slave
-       self.cf_ctrl.config      = bus.master
        self.rtc.pio             = bus.master
-       bus.use_default_range    = True
        self.vram.port           = bus.master
-       self.pciconfig.pio       = bus.default
 
        self.l2x0_fake.pio       = bus.master
        self.uart1_fake.pio      = bus.master
@@ -632,10 +653,8 @@ class VExpress_EMM(RealView):
        # Try to attach the I/O if it exists
        try:
            self.ide.pio         = bus.master
-           self.ide.config      = bus.master
            self.ide.dma         = bus.slave
            self.ethernet.pio    = bus.master
-           self.ethernet.config = bus.master
            self.ethernet.dma    = bus.slave
        except:
            pass
@@ -653,7 +672,6 @@ class VExpress_EMM(RealView):
         self.cf_ctrl.clk_domain       = clkdomain
         self.rtc.clk_domain           = clkdomain
         self.vram.clk_domain          = clkdomain
-        self.pciconfig.clk_domain     = clkdomain
 
         self.l2x0_fake.clk_domain     = clkdomain
         self.uart1_fake.clk_domain    = clkdomain
@@ -668,11 +686,13 @@ class VExpress_EMM(RealView):
         self.energy_ctrl.clk_domain   = clkdomain
 
 class VExpress_EMM64(VExpress_EMM):
-    pci_io_base = 0x2f000000
-    pci_cfg_gen_offsets = True
     # Three memory regions are specified totalling 512GB
     _mem_regions = [(Addr('2GB'), Addr('2GB')), (Addr('34GB'), Addr('30GB')),
                     (Addr('512GB'), Addr('480GB'))]
+    pci_host = GenericPciHost(
+        conf_base=0x30000000, conf_size='256MB', conf_device_bits=12,
+        pci_pio_base=0x2f000000)
+
     def setupBootLoader(self, mem_bus, cur_sys, loc):
         self.nvmem = SimpleMemory(range = AddrRange(0, size = '64MB'))
         self.nvmem.port = mem_bus.master
