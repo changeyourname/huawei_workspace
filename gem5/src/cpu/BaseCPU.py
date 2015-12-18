@@ -43,6 +43,7 @@
 
 import sys
 
+import m5.objects
 from m5.defines import buildEnv
 from m5.params import *
 from m5.proxy import *
@@ -247,9 +248,10 @@ class BaseCPU(MemObject):
             sys.exit(1)
 
     def connectCachedPorts(self, bus):
-        for p in self._cached_ports:
+        for p in self._cached_ports:          
             exec('self.%s = bus.slave' % p)
 
+   
     def connectUncachedPorts(self, bus):
         for p in self._uncached_slave_ports:
             exec('self.%s = bus.master' % p)
@@ -258,9 +260,11 @@ class BaseCPU(MemObject):
 
     def connectAllPorts(self, cached_bus, uncached_bus = None):
         self.connectCachedPorts(cached_bus)
+            
         if not uncached_bus:
             uncached_bus = cached_bus
-        self.connectUncachedPorts(uncached_bus)
+        self.connectUncachedPorts(uncached_bus)        
+        
 
     def addPrivateSplitL1Caches(self, ic, dc, iwc = None, dwc = None):
         self.icache = ic

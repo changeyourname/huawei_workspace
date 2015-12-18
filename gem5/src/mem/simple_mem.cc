@@ -72,7 +72,8 @@ SimpleMemory::init()
 Tick
 SimpleMemory::recvAtomic(PacketPtr pkt)
 {
-    //std::cout << curTick() << ": " << pkt->getAddr() << std::endl; 
+    std::cout << curTick() << ": " << pkt->req->masterId() << 
+            " receives req:" << pkt->isRead() << "@adr:" << std::hex << pkt->getAddr() << std::dec << std::endl; 
     access(pkt);
     return pkt->memInhibitAsserted() ? 0 : getLatency();
 }

@@ -90,9 +90,6 @@ sc_transactor::recvAtomic(PacketPtr packet)
 {
     CAUGHT_UP;
     //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
-    
-    //std::cout << curTick() << ": " << packet->getAddr() << std::endl; 
-
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
 
     /* Prepare the transaction */

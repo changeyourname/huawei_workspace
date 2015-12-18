@@ -294,30 +294,68 @@ sc_main(int argc, char **argv)
     sc_core::sc_report_handler::set_handler(reportHandler);
 
     SimControl sim_control("gem5", argc, argv);
-    Target *memory;
-
-    tlm::tlm_initiator_socket <> *mem_port =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.memory")
-                );
-
     unsigned long long int size = 512*1024*1024ULL;
-    unsigned char *mem = new unsigned char[size];
-
-    if (mem_port) {
-        SC_REPORT_INFO("sc_main", "Port Found");
-        unsigned long long int size = 512*1024*1024ULL;
-        memory = new Target("memory",
+    unsigned char *mem = new unsigned char[size];    
+    
+    // membus port
+    Target *memory;    
+    tlm::tlm_initiator_socket <> *membus_port =
+        dynamic_cast<tlm::tlm_initiator_socket<> *>(
+                    sc_core::sc_find_object("gem5.membus_port")
+                );                
+    if (membus_port) {
+        SC_REPORT_INFO("sc_main", "membus_port Found");
+        memory = new Target("membus",
                             sim_control.getDebugFlag(),
                             size,
                             sim_control.getOffset(),
                             mem);
 
-        memory->socket.bind(*mem_port);
+        memory->socket.bind(*membus_port);
     } else {
-        SC_REPORT_FATAL("sc_main", "Port Not Found");
+        SC_REPORT_FATAL("sc_main", "membus_port Not Found");
         std::exit(EXIT_FAILURE);
-    }
+    }                
+/*                
+    // cpu0 icache_port 
+    Target *icache_0;                  
+    tlm::tlm_initiator_socket <> *icache_port_0 =
+        dynamic_cast<tlm::tlm_initiator_socket<> *>(
+                    sc_core::sc_find_object("gem5.icache_port_0")
+                ); 
+    if (icache_port_0) {
+        SC_REPORT_INFO("sc_main", "icache_port_0 Found");
+        icache_0 = new Target("icache_0",
+                            sim_control.getDebugFlag(),
+                            size,
+                            0,
+                            mem);
+
+        icache_0->socket.bind(*icache_port_0);
+    } else {
+        SC_REPORT_FATAL("sc_main", "icache_port_0 port Not Found");
+        std::exit(EXIT_FAILURE);
+    }                                
+    // cpu0 dcache_port                
+    Target *dcache_0;                           
+    tlm::tlm_initiator_socket <> *dcache_port_0 =
+        dynamic_cast<tlm::tlm_initiator_socket<> *>(
+                    sc_core::sc_find_object("gem5.dcache_port_0")
+                );                    
+    if (dcache_port_0) {
+        SC_REPORT_INFO("sc_main", "dcache_port_0 Found");
+        dcache_0 = new Target("dcache_0",
+                            sim_control.getDebugFlag(),
+                            size,
+                            0,
+                            mem);
+
+        dcache_0->socket.bind(*dcache_port_0);
+    } else {
+        SC_REPORT_FATAL("sc_main", "dcache_port_0 port Not Found");
+        std::exit(EXIT_FAILURE);
+    }      
+*/     
 
     sc_core::sc_start();
 

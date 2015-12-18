@@ -223,6 +223,17 @@ Target::execute_transaction(tlm::tlm_generic_payload& trans)
     unsigned int     len = trans.get_data_length();
     unsigned char*   byt = trans.get_byte_enable_ptr();
     unsigned int     wid = trans.get_streaming_width();
+    
+    cout << sc_time_stamp() << ": " << name() << " recevies req @adr:" << hex << trans.get_address() << endl;
+    
+    if (offset == 0) {          // this is directly connected to a CPU port
+        // as this is memory target so we expect the address from CPU to be in {0x0:mem_size}
+        //assert(adr >= 0 && adr <size);
+        if (!(adr>=0 && adr<size)) {            
+            printf("adr:0x%08x\r\n", (unsigned int) adr);
+            assert(0);
+        }
+    }
 
     if ( byt != 0 ) {
         cout << "Byte Error" << endl;
@@ -251,7 +262,7 @@ Target::execute_transaction(tlm::tlm_generic_payload& trans)
         std::memcpy(mem_array_ptr, ptr, len);
     }
 
-    trans.set_response_status( tlm::TLM_OK_RESPONSE );
+    trans.set_response_status( tlm::TLM_OK_RESPONSE );    
 }
 
 void
