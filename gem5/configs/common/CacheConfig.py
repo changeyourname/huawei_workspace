@@ -93,6 +93,11 @@ def config_cache(options, system):
 
     if options.memchecker:
         system.memchecker = MemChecker()
+        
+    # hooking each cpu's memory request (via cache ports) to SystemC world
+    if options.disable_cache and options.tlm_memory:
+        system.tlm = {"bus":[], "port":[], "bridge":[]}        
+        
 
     for i in xrange(options.num_cpus):
         if options.caches:
@@ -150,12 +155,67 @@ def config_cache(options, system):
 
         system.cpu[i].createInterruptController()
         
-        if options.l2cache:
-            system.cpu[i].connectAllPorts(system.tol2bus, system.membus)
-        elif options.external_memory_system:
-            system.cpu[i].connectUncachedPorts(system.membus)
-        else:
-            system.cpu[i].connectAllPorts(system.membus)
+        if options.disable_cache and options.tlm_memory:      
+        #TODO: automate address ranges            
+            system.icache_bus_0 = SystemXBar()
+            system.icache_bridge_0 = Bridge()
+            system.icache_bridge_0.master = system.membus.slave
+            system.icache_bridge_0.slave = system.icache_bus_0.master           
+            system.icache_bridge_0.ranges = [AddrRange(start=0x00000000, end=0x7fffffff), 
+                                             AddrRange(start=0xa0000000, end=0xffffffff)]    
+            system.icache_port_0 = ExternalSlave()
+            system.icache_port_0.port_type = "tlm"
+            system.icache_port_0.port_data = "icache_port_0"
+            system.icache_port_0.port = system.icache_bus_0.master
+            system.icache_port_0.addr_ranges = [AddrRange(start=0x80000000, end=0x9fffffff)]         
+            system.cpu[i].icache_port = system.icache_bus_0.slave   
+                
+            system.dcache_bus_0 = SystemXBar()
+            system.dcache_bridge_0 = Bridge()
+            system.dcache_bridge_0.master = system.membus.slave
+            system.dcache_bridge_0.slave = system.dcache_bus_0.master            
+            system.dcache_bridge_0.ranges = [AddrRange(start=0x00000000, end=0x7fffffff), 
+                                             AddrRange(start=0xa0000000, end=0xffffffff)]
+            system.dcache_port_0 = ExternalSlave()
+            system.dcache_port_0.port_type = "tlm"
+            system.dcache_port_0.port_data = "dcache_port_0"
+            system.dcache_port_0.port = system.dcache_bus_0.master
+            system.dcache_port_0.addr_ranges = [AddrRange(start=0x80000000, end=0x9fffffff)]            
+            system.cpu[i].dcache_port = system.dcache_bus_0.slave
+                                  
+            
+            
+            system.cpu[i].connectAllPorts(system.membus, None, tlm=True)
+            
+            
+            
+            
+            #temp_bus = [SystemXBar(), SystemXBar()]
+            #temp_bridge = [Bridge(), Bridge()]
+            #temp_port = [ExternalSlave(), ExternalSlave()]
+            #temp_port_name = ["icache_port", "dcache_port"]
+            #for j in xrange(2):
+            #    temp_port[j].port_type = "tlm"
+            #    temp_port[j].port_data = temp_port_name + "_%s"%str(i)
+            #    temp_port[j].port = temp_bus[j].master
+            #    temp_port[j].addr_ranges = [AddrRange(start=0x80000000, end=0x9fffffff)]
+            #                
+            #    temp_bridge[j].master = system.membus.slave
+            #    temp_bridge[j].slave = temp_bus[j].master
+            #    temp_bridge[j].ranges = [
+            #                                AddrRange(start=0x0, end=0x7fffffff),
+            #                                AddrRange(start=0xa0000000, end=0xffffffff)
+            #                            ]
+            #    system.tlm.append(
+            #                            
+            #system.cpu[i].icache_port
+        else:            
+            if options.l2cache:
+                system.cpu[i].connectAllPorts(system.tol2bus, system.membus)
+            elif options.external_memory_system:
+                system.cpu[i].connectUncachedPorts(system.membus)
+            else:
+                system.cpu[i].connectAllPorts(system.membus)            
 
     return system
 

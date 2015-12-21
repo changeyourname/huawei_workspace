@@ -297,26 +297,28 @@ sc_main(int argc, char **argv)
     unsigned long long int size = 512*1024*1024ULL;
     unsigned char *mem = new unsigned char[size];    
     
-    // membus port
-    Target *memory;    
+    // memory port
+    Target *membus;    
     tlm::tlm_initiator_socket <> *membus_port =
         dynamic_cast<tlm::tlm_initiator_socket<> *>(
                     sc_core::sc_find_object("gem5.membus_port")
                 );                
     if (membus_port) {
-        SC_REPORT_INFO("sc_main", "membus_port Found");
-        memory = new Target("membus",
+        SC_REPORT_INFO("sc_main", "gem5.membus_port Found");
+        membus = new Target("membus",
                             sim_control.getDebugFlag(),
                             size,
                             sim_control.getOffset(),
                             mem);
 
-        memory->socket.bind(*membus_port);
+        membus->socket.bind(*membus_port);
     } else {
-        SC_REPORT_FATAL("sc_main", "membus_port Not Found");
+        SC_REPORT_FATAL("sc_main", "gem5.membus_port Not Found");
         std::exit(EXIT_FAILURE);
-    }                
-/*                
+    }    
+    
+                   
+                
     // cpu0 icache_port 
     Target *icache_0;                  
     tlm::tlm_initiator_socket <> *icache_port_0 =
@@ -328,7 +330,7 @@ sc_main(int argc, char **argv)
         icache_0 = new Target("icache_0",
                             sim_control.getDebugFlag(),
                             size,
-                            0,
+                            sim_control.getOffset(),
                             mem);
 
         icache_0->socket.bind(*icache_port_0);
@@ -347,7 +349,7 @@ sc_main(int argc, char **argv)
         dcache_0 = new Target("dcache_0",
                             sim_control.getDebugFlag(),
                             size,
-                            0,
+                            sim_control.getOffset(),
                             mem);
 
         dcache_0->socket.bind(*dcache_port_0);
@@ -355,7 +357,7 @@ sc_main(int argc, char **argv)
         SC_REPORT_FATAL("sc_main", "dcache_port_0 port Not Found");
         std::exit(EXIT_FAILURE);
     }      
-*/     
+     
 
     sc_core::sc_start();
 

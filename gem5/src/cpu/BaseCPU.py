@@ -247,9 +247,12 @@ class BaseCPU(MemObject):
                 buildEnv['TARGET_ISA']
             sys.exit(1)
 
-    def connectCachedPorts(self, bus):
-        for p in self._cached_ports:          
-            exec('self.%s = bus.slave' % p)
+    def connectCachedPorts(self, bus, tlm=False):
+        for p in self._cached_ports:
+            if tlm and (p=="icache_port" or p=="dcache_port"):
+                pass
+            else:         
+                exec('self.%s = bus.slave' % p)
 
    
     def connectUncachedPorts(self, bus):
@@ -258,8 +261,8 @@ class BaseCPU(MemObject):
         for p in self._uncached_master_ports:
             exec('self.%s = bus.slave' % p)
 
-    def connectAllPorts(self, cached_bus, uncached_bus = None):
-        self.connectCachedPorts(cached_bus)
+    def connectAllPorts(self, cached_bus, uncached_bus=None, tlm=False):
+        self.connectCachedPorts(cached_bus, tlm)
             
         if not uncached_bus:
             uncached_bus = cached_bus

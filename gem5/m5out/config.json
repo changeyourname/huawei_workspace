@@ -86,19 +86,61 @@
         "symbolfile": "", 
         "readfile": "", 
         "have_large_asid_64": false, 
+        "icache_bridge_0": {
+            "ranges": [
+                "0:2147483647", 
+                "2684354560:4294967295"
+            ], 
+            "slave": {
+                "peer": "system.icache_bus_0.master[0]", 
+                "role": "SLAVE"
+            }, 
+            "name": "icache_bridge_0", 
+            "req_size": 16, 
+            "clk_domain": "system.clk_domain", 
+            "delay": 0, 
+            "eventq_index": 0, 
+            "master": {
+                "peer": "system.membus.slave[3]", 
+                "role": "MASTER"
+            }, 
+            "cxx_class": "Bridge", 
+            "path": "system.icache_bridge_0", 
+            "resp_size": 16, 
+            "type": "Bridge"
+        }, 
         "phys_addr_range_64": 40, 
         "have_lpae": false, 
         "cxx_class": "LinuxArmSystem", 
         "load_offset": 2147483648, 
-        "vncserver": {
-            "name": "vncserver", 
-            "number": 0, 
-            "frame_capture": false, 
+        "icache_bus_0": {
+            "slave": {
+                "peer": [
+                    "system.cpu.icache_port"
+                ], 
+                "role": "SLAVE"
+            }, 
+            "name": "icache_bus_0", 
+            "snoop_filter": null, 
+            "forward_latency": 4, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "width": 16, 
             "eventq_index": 0, 
-            "cxx_class": "VncServer", 
-            "path": "system.vncserver", 
-            "type": "VncServer", 
-            "port": 5900
+            "master": {
+                "peer": [
+                    "system.icache_bridge_0.slave", 
+                    "system.icache_port_0.port"
+                ], 
+                "role": "MASTER"
+            }, 
+            "response_latency": 2, 
+            "cxx_class": "CoherentXBar", 
+            "path": "system.icache_bus_0", 
+            "snoop_response_latency": 4, 
+            "type": "CoherentXBar", 
+            "use_default_range": false, 
+            "frontend_latency": 3
         }, 
         "multi_proc": true, 
         "early_kernel_symbols": false, 
@@ -1140,6 +1182,38 @@
                 "ClassCode": 1
             }
         }, 
+        "dcache_bus_0": {
+            "slave": {
+                "peer": [
+                    "system.cpu.dcache_port"
+                ], 
+                "role": "SLAVE"
+            }, 
+            "name": "dcache_bus_0", 
+            "snoop_filter": null, 
+            "forward_latency": 4, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "width": 16, 
+            "eventq_index": 0, 
+            "master": {
+                "peer": [
+                    "system.dcache_bridge_0.slave", 
+                    "system.dcache_port_0.port"
+                ], 
+                "role": "MASTER"
+            }, 
+            "response_latency": 2, 
+            "cxx_class": "CoherentXBar", 
+            "path": "system.dcache_bus_0", 
+            "snoop_response_latency": 4, 
+            "type": "CoherentXBar", 
+            "use_default_range": false, 
+            "frontend_latency": 3
+        }, 
+        "multi_thread": false, 
+        "eventq_index": 0, 
+        "work_begin_cpu_id_exit": -1, 
         "membus": {
             "default": {
                 "peer": "system.membus.badaddr_responder.pio", 
@@ -1150,8 +1224,8 @@
                     "system.realview.hdlcd.dma", 
                     "system.system_port", 
                     "system.iobridge.master", 
-                    "system.cpu.icache_port", 
-                    "system.cpu.dcache_port", 
+                    "system.icache_bridge_0.master", 
+                    "system.dcache_bridge_0.master", 
                     "system.cpu.itb.walker.port", 
                     "system.cpu.dtb.walker.port"
                 ], 
@@ -1207,9 +1281,6 @@
             "use_default_range": false, 
             "frontend_latency": 3
         }, 
-        "multi_thread": false, 
-        "eventq_index": 0, 
-        "work_begin_cpu_id_exit": -1, 
         "dvfs_handler": {
             "enable": false, 
             "name": "dvfs_handler", 
@@ -1272,6 +1343,16 @@
             "type": "VoltageDomain"
         }, 
         "boot_osflags": "earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1", 
+        "vncserver": {
+            "name": "vncserver", 
+            "number": 0, 
+            "frame_capture": false, 
+            "eventq_index": 0, 
+            "cxx_class": "VncServer", 
+            "path": "system.vncserver", 
+            "type": "VncServer", 
+            "port": 5900
+        }, 
         "terminal": {
             "name": "terminal", 
             "output": true, 
@@ -1358,7 +1439,7 @@
                 "fastmem": false, 
                 "profile": 0, 
                 "icache_port": {
-                    "peer": "system.membus.slave[3]", 
+                    "peer": "system.icache_bus_0.slave[0]", 
                     "role": "MASTER"
                 }, 
                 "interrupts": [
@@ -1371,7 +1452,7 @@
                     }
                 ], 
                 "dcache_port": {
-                    "peer": "system.membus.slave[4]", 
+                    "peer": "system.dcache_bus_0.slave[0]", 
                     "role": "MASTER"
                 }, 
                 "socket_id": 0, 
@@ -1549,13 +1630,72 @@
             "path": "system.intrctrl", 
             "type": "IntrControl"
         }, 
+        "icache_port_0": {
+            "name": "icache_port_0", 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "addr_ranges": [
+                "2147483648:2684354559"
+            ], 
+            "eventq_index": 0, 
+            "port_type": "tlm", 
+            "cxx_class": "ExternalSlave", 
+            "path": "system.icache_port_0", 
+            "type": "ExternalSlave", 
+            "port": {
+                "peer": "system.icache_bus_0.master[1]", 
+                "role": "SLAVE"
+            }, 
+            "port_data": "icache_port_0"
+        }, 
         "have_security": false, 
         "atags_addr": 134217728, 
         "memories": [
             "system.realview.nvmem", 
             "system.realview.vram"
         ], 
+        "dcache_bridge_0": {
+            "ranges": [
+                "0:2147483647", 
+                "2684354560:4294967295"
+            ], 
+            "slave": {
+                "peer": "system.dcache_bus_0.master[0]", 
+                "role": "SLAVE"
+            }, 
+            "name": "dcache_bridge_0", 
+            "req_size": 16, 
+            "clk_domain": "system.clk_domain", 
+            "delay": 0, 
+            "eventq_index": 0, 
+            "master": {
+                "peer": "system.membus.slave[4]", 
+                "role": "MASTER"
+            }, 
+            "cxx_class": "Bridge", 
+            "path": "system.dcache_bridge_0", 
+            "resp_size": 16, 
+            "type": "Bridge"
+        }, 
         "num_work_ids": 16, 
+        "dcache_port_0": {
+            "name": "dcache_port_0", 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "addr_ranges": [
+                "2147483648:2684354559"
+            ], 
+            "eventq_index": 0, 
+            "port_type": "tlm", 
+            "cxx_class": "ExternalSlave", 
+            "path": "system.dcache_port_0", 
+            "type": "ExternalSlave", 
+            "port": {
+                "peer": "system.dcache_bus_0.master[1]", 
+                "role": "SLAVE"
+            }, 
+            "port_data": "dcache_port_0"
+        }, 
         "boot_loader": [
             "/home/uzleo/Desktop/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
