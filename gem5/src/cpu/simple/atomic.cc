@@ -63,6 +63,8 @@
 using namespace std;
 using namespace TheISA;
 
+uint64_t AtomicSimpleCPU::req_count = 0;
+
 AtomicSimpleCPU::TickEvent::TickEvent(AtomicSimpleCPU *c)
     : Event(CPU_Tick_Pri), cpu(c)
 {
@@ -380,8 +382,11 @@ AtomicSimpleCPU::readMem(Addr addr, uint8_t * data,
             else {
                 if (fastmem && system->isMemAddr(pkt.getAddr()))
                     system->getPhysMem().access(&pkt);
-                else
-                    dcache_latency += dcachePort.sendAtomic(&pkt);
+                else {
+                    req_count++;
+                    pkt.req_count = req_count;
+                    dcache_latency += dcachePort.sendAtomic(&pkt);                       
+                }
             }
             dcache_access = true;
 
@@ -502,8 +507,11 @@ AtomicSimpleCPU::writeMem(uint8_t *data, unsigned size,
                 } else {
                     if (fastmem && system->isMemAddr(pkt.getAddr()))
                         system->getPhysMem().access(&pkt);
-                    else
+                    else {
+                        req_count++;
+                        pkt.req_count = req_count;
                         dcache_latency += dcachePort.sendAtomic(&pkt);
+                    }
 
                     // Notify other threads on this CPU of write
                     threadSnoop(&pkt, curThread);
@@ -622,8 +630,11 @@ AtomicSimpleCPU::tick()
 
                     if (fastmem && system->isMemAddr(ifetch_pkt.getAddr()))
                         system->getPhysMem().access(&ifetch_pkt);
-                    else
+                    else {
+                        req_count++;
+                        ifetch_pkt.req_count = req_count;                    
                         icache_latency = icachePort.sendAtomic(&ifetch_pkt);
+                    }
 
                     assert(!ifetch_pkt.isError());
 

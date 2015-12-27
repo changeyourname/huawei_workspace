@@ -430,6 +430,8 @@ class BaseXBar : public MemObject
 
     /** Port that handles requests that don't match any of the interfaces.*/
     PortID defaultPortID;
+    
+    //PortID hookID;
 
     /** If true, use address range provided by default device.  Any
        address not handled by another port and not in default device's

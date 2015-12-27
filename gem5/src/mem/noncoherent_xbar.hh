@@ -168,6 +168,8 @@ class NoncoherentXBar : public BaseXBar
         { xbar.recvReqRetry(id); }
 
     };
+    
+    //NoncoherentXBarMasterPort *hook;
 
     /** Function called by the port when the crossbar is recieving a Timing
       request packet.*/

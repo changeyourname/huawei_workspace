@@ -88,6 +88,7 @@ packet2payload(PacketPtr packet, tlm::tlm_generic_payload &trans)
 Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
+
     CAUGHT_UP;
     //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
@@ -101,9 +102,9 @@ sc_transactor::recvAtomic(PacketPtr packet)
     gem5Extension* extension = new gem5Extension(packet);
     trans->set_auto_extension(extension);
     
-    //std::cout << sc_time_stamp();
-    //printf("..%d..%d..%d..0x%08x\r\n", packet->req->masterId(), packet->isRead(), packet->isWrite(), trans->get_address());
 
+        
+#if 0
     /* Execute b_transport: */
     if (packet->memInhibitAsserted() || packet->cmd==MemCmd::CleanEvict
         || packet->cmd==MemCmd::WritebackClean) {
@@ -141,11 +142,38 @@ sc_transactor::recvAtomic(PacketPtr packet)
 
     if (packet->needsResponse()) {
         packet->makeResponse();
-    }
+    } 
 
     trans->release();
 
     return delay.value();
+    
+#endif 
+
+
+
+    /* Execute b_transport: */
+    if (packet->cmd == MemCmd::SwapReq) {
+        SC_REPORT_FATAL("transactor", "SwapReq not supported");
+    } else if (packet->isRead()) {
+        iSocket->b_transport(*trans, delay);
+    } else if (packet->isInvalidate()) {
+        // do nothing
+    } else if (packet->isWrite()) {
+        iSocket->b_transport(*trans, delay);
+    } else {
+        SC_REPORT_FATAL("transactor", "Typo of request not supported");
+    }
+
+    /*if (packet->needsResponse()) {
+        packet->makeResponse();
+    }*/
+
+    trans->release();
+
+    return delay.value();     
+      
+
 }
 
 /**

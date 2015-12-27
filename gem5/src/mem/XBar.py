@@ -88,6 +88,7 @@ class BaseXBar(MemObject):
 class NoncoherentXBar(BaseXBar):
     type = 'NoncoherentXBar'
     cxx_header = "mem/noncoherent_xbar.hh"
+    
 
 class CoherentXBar(BaseXBar):
     type = 'CoherentXBar'
@@ -151,6 +152,8 @@ class SystemXBar(CoherentXBar):
 # or more on-chip I/O crossbars. Note that at some point we might want
 # to also define an off-chip I/O crossbar such as PCIe.
 class IOXBar(NoncoherentXBar):
+    #hook = MasterPort("hook")
+    
     # 128-bit crossbar by default
     width = 16
 
@@ -160,3 +163,5 @@ class IOXBar(NoncoherentXBar):
     frontend_latency = 2
     forward_latency = 1
     response_latency = 2
+    
+    

@@ -62,7 +62,7 @@ BaseXBar::BaseXBar(const BaseXBarParams *p)
       width(p->width),
       gotAddrRanges(p->port_default_connection_count +
                           p->port_master_connection_count, false),
-      gotAllAddrRanges(false), defaultPortID(InvalidPortID),
+      gotAllAddrRanges(false), defaultPortID(InvalidPortID),// hookID(InvalidPortID),
       useDefaultRange(p->use_default_range)
 {}
 
@@ -88,7 +88,9 @@ BaseXBar::getMasterPort(const std::string &if_name, PortID idx)
         return *masterPorts[idx];
     } else  if (if_name == "default") {
         return *masterPorts[defaultPortID];
-    } else {
+    }/* else if (if_name == "hook") {
+        return *masterPorts[hookID];
+    } */else {
         return MemObject::getMasterPort(if_name, idx);
     }
 }

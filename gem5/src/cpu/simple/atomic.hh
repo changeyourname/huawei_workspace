@@ -47,6 +47,7 @@
 #include "cpu/simple/exec_context.hh"
 #include "params/AtomicSimpleCPU.hh"
 #include "sim/probe/probe.hh"
+//#include <stdint.h>
 
 class AtomicSimpleCPU : public BaseSimpleCPU
 {
@@ -190,6 +191,7 @@ class AtomicSimpleCPU : public BaseSimpleCPU
     void threadSnoop(PacketPtr pkt, ThreadID sender);
 
   public:
+    static uint64_t req_count;
 
     DrainState drain() override;
     void drainResume() override;

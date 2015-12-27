@@ -65,12 +65,12 @@ NoncoherentXBar::NoncoherentXBar(const NoncoherentXBarParams *p)
         masterPorts.push_back(bp);
         reqLayers.push_back(new ReqLayer(*bp, *this,
                                          csprintf(".reqLayer%d", i)));
-    }
+    }   
 
     // see if we have a default slave device connected and if so add
     // our corresponding master port
     if (p->port_default_connection_count) {
-        defaultPortID = masterPorts.size();
+        defaultPortID = masterPorts.size();              
         std::string portName = name() + ".default";
         MasterPort* bp = new NoncoherentXBarMasterPort(portName, *this,
                                                       defaultPortID);
@@ -78,6 +78,12 @@ NoncoherentXBar::NoncoherentXBar(const NoncoherentXBarParams *p)
         reqLayers.push_back(new ReqLayer(*bp, *this, csprintf(".reqLayer%d",
                                                               defaultPortID)));
     }
+    
+    /*hookID = masterPorts.size();
+    hook = new NoncoherentXBarMasterPort(name() + ".hook", *this, hookID); 
+    masterPorts.push_back(hook);
+    reqLayers.push_back(new ReqLayer(*hook, *this, csprintf(".reqLayer%d", 
+                                                              hookID)));*/
 
     // create the slave ports, once again starting at zero
     for (int i = 0; i < p->port_slave_connection_count; ++i) {
@@ -263,9 +269,27 @@ NoncoherentXBar::recvAtomic(PacketPtr pkt, PortID slave_port_id)
     pktCount[slave_port_id][master_port_id]++;
     pktSize[slave_port_id][master_port_id] += pkt_size;
     transDist[pkt_cmd]++;
+    
+    
+    // hooking memory request to systemc world as well via default port
+    // TODO: somehow get addresses in a generic fashion
+    // TODO: make a seperate modified crossbar so as not to interfere with other crossbars
+    //       like system.iobus should be seperated    
+    if (name() != "system.iobus" && 
+        (pkt->getAddr() >= 0x80000000 && pkt->getAddr() <= 0x9fffffff)) 
+    {
+        Tick temp = masterPorts[defaultPortID]->sendAtomic(pkt);
+        if (temp < 0) {
+            assert(0);
+        }    
+    }
+    
+   
 
     // forward the request to the appropriate destination
     Tick response_latency = masterPorts[master_port_id]->sendAtomic(pkt);
+    
+    
 
     // add the response data
     if (pkt->isResponse()) {

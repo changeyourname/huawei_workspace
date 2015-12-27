@@ -39,6 +39,8 @@
 using namespace sc_core;
 using namespace std;
 
+uint64_t Target::prev_req_cnt = 0;
+
 Target::Target(sc_core::sc_module_name name,
     bool debug,
     unsigned long long int size,
@@ -69,9 +71,23 @@ Target::Target(sc_core::sc_module_name name,
 void
 Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 {
-    cout << sc_time_stamp() << ": " << name() << ": addr=0x" << hex <<trans.get_address() << dec << endl;
+    //cout << sc_time_stamp() << ": " << name() << ": addr=0x" << hex <<trans.get_address() << dec << endl;
+    
+    //TODO: cache stuff comes here
+    
+/*
+    gem5Extension *ext;
+    trans.get_extension(ext);
+    PacketPtr pkt = ext->getPacket();
+    //cout << sc_time_stamp() << "  " << pkt->req_count << endl; 
+    if ((prev_req_cnt >= pkt->req_count) && (pkt->req_count!=0)) {
+        assert(0);
+    }
+    prev_req_cnt = pkt->req_count;
+*/
+    
     /* Execute the read or write commands */
-    execute_transaction(trans);
+    //execute_transaction(trans);
 }
 
 unsigned int

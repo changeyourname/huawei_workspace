@@ -41,6 +41,7 @@
 #include <iostream>
 #include <systemc>
 #include <tlm>
+#include "sc_ext.hh"
 
 using namespace sc_core;
 using namespace std;
@@ -96,6 +97,8 @@ struct Target: sc_module
     unsigned long long int size;
     unsigned offset;
     unsigned int req_count;
+    
+    static uint64_t prev_req_cnt;
     
     unsigned int get_reqCount();
 };
