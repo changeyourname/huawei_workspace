@@ -160,14 +160,14 @@ def config_mem(options, system):
         subsystem = system
         xbar = system.membus
 
-    #if options.tlm_memory:
-    #    system.external_memory = m5.objects.ExternalSlave(
-    #        port_type="tlm",
-    #        port_data="membus_port",
-    #        port=system.membus.master,
-    #        addr_ranges=system.mem_ranges)
-    #    system.kernel_addr_check = False
-    #    return
+    if options.tlm_memory:
+        system.external_memory = m5.objects.ExternalSlave(
+            port_type="tlm",
+            port_data="membus_port",
+            port=system.membus.master,
+            addr_ranges=system.mem_ranges)
+        system.kernel_addr_check = False
+        return
 
     if options.external_memory_system:
         subsystem.external_memory = m5.objects.ExternalSlave(

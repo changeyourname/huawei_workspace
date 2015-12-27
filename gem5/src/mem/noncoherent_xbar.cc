@@ -278,6 +278,7 @@ NoncoherentXBar::recvAtomic(PacketPtr pkt, PortID slave_port_id)
     if (name() != "system.iobus" && 
         (pkt->getAddr() >= 0x80000000 && pkt->getAddr() <= 0x9fffffff)) 
     {
+        pkt->hook_pkt = true;
         Tick temp = masterPorts[defaultPortID]->sendAtomic(pkt);
         if (temp < 0) {
             assert(0);
@@ -285,7 +286,7 @@ NoncoherentXBar::recvAtomic(PacketPtr pkt, PortID slave_port_id)
     }
     
    
-
+    pkt->hook_pkt = false;
     // forward the request to the appropriate destination
     Tick response_latency = masterPorts[master_port_id]->sendAtomic(pkt);
     

@@ -297,7 +297,7 @@ sc_main(int argc, char **argv)
     unsigned long long int size = 512*1024*1024ULL;
     unsigned char *mem = new unsigned char[size];    
     
- /*   // memory port
+    // memory port
     Target *membus;    
     tlm::tlm_initiator_socket <> *membus_port =
         dynamic_cast<tlm::tlm_initiator_socket<> *>(
@@ -310,6 +310,7 @@ sc_main(int argc, char **argv)
                             size,
                             sim_control.getOffset(),
                             mem);
+        membus->isMemory = true;
 
         membus->socket.bind(*membus_port);
     } else {
@@ -317,7 +318,7 @@ sc_main(int argc, char **argv)
         std::exit(EXIT_FAILURE);
     }    
     
-*/
+
 
     // cpu0 icache_port 
     Target *icache_0;                  

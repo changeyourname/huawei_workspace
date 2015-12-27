@@ -295,6 +295,7 @@ class Packet : public Printable
     const RequestPtr req;
     
     uint64_t req_count;
+    bool hook_pkt;
 
   private:
    /**
@@ -600,9 +601,9 @@ class Packet : public Printable
      * not be valid. The command must be supplied.
      */
     Packet(const RequestPtr _req, MemCmd _cmd)
-        :  cmd(_cmd), req(_req), req_count(0), data(nullptr), addr(0), _isSecure(false),
-           size(0), headerDelay(0), snoopDelay(0), payloadDelay(0),
-           senderState(NULL)
+        :  cmd(_cmd), req(_req), req_count(0), hook_pkt(false), data(nullptr), 
+           addr(0), _isSecure(false),size(0), headerDelay(0), snoopDelay(0), 
+           payloadDelay(0), senderState(NULL)
     {
         if (req->hasPaddr()) {
             addr = req->getPaddr();

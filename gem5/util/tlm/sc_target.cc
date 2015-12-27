@@ -54,6 +54,7 @@ Target::Target(sc_core::sc_module_name name,
     debug(debug),
     size(size),
     offset(offset),
+    isMemory(false),
     m_mem(mem),
     req_count(0)
 {
@@ -72,9 +73,7 @@ void
 Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 {
     //cout << sc_time_stamp() << ": " << name() << ": addr=0x" << hex <<trans.get_address() << dec << endl;
-    
-    //TODO: cache stuff comes here
-    
+       
 /*
     gem5Extension *ext;
     trans.get_extension(ext);
@@ -87,7 +86,11 @@ Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 */
     
     /* Execute the read or write commands */
-    //execute_transaction(trans);
+    if (isMemory) {
+        execute_transaction(trans);
+    } else {
+        //TODO: cache stuff comes here    
+    }
 }
 
 unsigned int

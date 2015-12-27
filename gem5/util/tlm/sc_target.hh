@@ -61,6 +61,7 @@ struct Target: sc_module
     tlm_utils::peq_with_cb_and_phase<Target> m_peq;
 
     /** Storage, may be implemented with a map for large devices */
+    bool isMemory;
     unsigned char *m_mem;
 
     Target(sc_core::sc_module_name name,
