@@ -152,8 +152,6 @@ class SystemXBar(CoherentXBar):
 # or more on-chip I/O crossbars. Note that at some point we might want
 # to also define an off-chip I/O crossbar such as PCIe.
 class IOXBar(NoncoherentXBar):
-    #hook = MasterPort("hook")
-    
     # 128-bit crossbar by default
     width = 16
 
@@ -163,5 +161,35 @@ class IOXBar(NoncoherentXBar):
     frontend_latency = 2
     forward_latency = 1
     response_latency = 2
+    
+    
+    
+# customized xbar (like noncoherent xbar) that sends each of the request (intended for one of its master) to default port as well
+# currently this xbar only supports atomic interface
+# We can read those requests by connecting this default port to gem5 ExternalSlave's port (which is SystemC port)
+class HookXBar(BaseXBar):  
+    type = 'HookXBar'
+    cxx_header = "mem/hook_xbar.hh"
+    
+    hook = MasterPort("Hook port")
+      
+    # TODO: just copied from IOXBar..see if they are needed? or can use other values that make sense?
+    width = 16    
+    frontend_latency = 2
+    forward_latency = 1
+    response_latency = 2
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     

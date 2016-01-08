@@ -98,19 +98,19 @@ def config_cache(options, system):
 
 
         
-    system.icache_bus_0 = IOXBar()
+    system.icache_bus_0 = HookXBar()
     system.icache_port_0 = ExternalSlave()
     system.icache_port_0.port_type = "tlm"
     system.icache_port_0.port_data = "icache_port_0"
-    system.icache_port_0.port = system.icache_bus_0.default
+    system.icache_port_0.port = system.icache_bus_0.hook
     system.icache_bus_0.master = system.membus.slave
     system.cpu[0].icache_port = system.icache_bus_0.slave   
-        
-    system.dcache_bus_0 = IOXBar()    
+       
+    system.dcache_bus_0 = HookXBar()    
     system.dcache_port_0 = ExternalSlave()
     system.dcache_port_0.port_type = "tlm"
     system.dcache_port_0.port_data = "dcache_port_0"
-    system.dcache_port_0.port = system.dcache_bus_0.default
+    system.dcache_port_0.port = system.dcache_bus_0.hook
     system.dcache_bus_0.master = system.membus.slave
     system.cpu[0].dcache_port = system.dcache_bus_0.slave        
 
@@ -118,37 +118,37 @@ def config_cache(options, system):
         
            
         
-    system.icache_bus_1 = IOXBar()
+    system.icache_bus_1 = HookXBar()
     system.icache_port_1 = ExternalSlave()
     system.icache_port_1.port_type = "tlm"
     system.icache_port_1.port_data = "icache_port_1"
-    system.icache_port_1.port = system.icache_bus_1.default
+    system.icache_port_1.port = system.icache_bus_1.hook
     system.icache_bus_1.master = system.membus.slave
     system.cpu[1].icache_port = system.icache_bus_1.slave   
         
-    system.dcache_bus_1 = IOXBar()
+    system.dcache_bus_1 = HookXBar()
     system.dcache_port_1 = ExternalSlave()
     system.dcache_port_1.port_type = "tlm"
     system.dcache_port_1.port_data = "dcache_port_1"
-    system.dcache_port_1.port = system.dcache_bus_1.default
+    system.dcache_port_1.port = system.dcache_bus_1.hook
     system.dcache_bus_1.master = system.membus.slave   
     system.cpu[1].dcache_port = system.dcache_bus_1.slave        
   
         
         
-    system.icache_bus_2 = IOXBar()
+    system.icache_bus_2 = HookXBar()
     system.icache_port_2 = ExternalSlave()
     system.icache_port_2.port_type = "tlm"
     system.icache_port_2.port_data = "icache_port_2"
-    system.icache_port_2.port = system.icache_bus_2.default
+    system.icache_port_2.port = system.icache_bus_2.hook
     system.icache_bus_2.master = system.membus.slave
     system.cpu[2].icache_port = system.icache_bus_2.slave   
 
-    system.dcache_bus_2 = IOXBar()   
+    system.dcache_bus_2 = HookXBar()   
     system.dcache_port_2 = ExternalSlave()
     system.dcache_port_2.port_type = "tlm"
     system.dcache_port_2.port_data = "dcache_port_2"
-    system.dcache_port_2.port = system.dcache_bus_2.default  
+    system.dcache_port_2.port = system.dcache_bus_2.hook  
     system.dcache_bus_2.master = system.membus.slave  
     system.cpu[2].dcache_port = system.dcache_bus_2.slave
 
@@ -156,19 +156,19 @@ def config_cache(options, system):
     
     
     
-    system.icache_bus_3 = IOXBar()    
+    system.icache_bus_3 = HookXBar()    
     system.icache_port_3 = ExternalSlave()
     system.icache_port_3.port_type = "tlm"
     system.icache_port_3.port_data = "icache_port_3"
-    system.icache_port_3.port = system.icache_bus_3.default    
+    system.icache_port_3.port = system.icache_bus_3.hook    
     system.icache_bus_3.master = system.membus.slave
     system.cpu[3].icache_port = system.icache_bus_3.slave   
         
-    system.dcache_bus_3 = IOXBar()    
+    system.dcache_bus_3 = HookXBar()    
     system.dcache_port_3 = ExternalSlave()
     system.dcache_port_3.port_type = "tlm"
     system.dcache_port_3.port_data = "dcache_port_3"
-    system.dcache_port_3.port = system.dcache_bus_3.default
+    system.dcache_port_3.port = system.dcache_bus_3.hook
     system.dcache_bus_3.master = system.membus.slave    
     system.cpu[3].dcache_port = system.dcache_bus_3.slave    
             
@@ -233,8 +233,25 @@ def config_cache(options, system):
 
         system.cpu[i].createInterruptController()
         
-        if options.disable_cache and options.tlm_memory:      
-        #TODO: automate address ranges                                                                      
+        if options.disable_cache and options.tlm_memory:            
+            #system.icache_bus_0 = HookXBar()
+            #system.icache_port_0 = ExternalSlave()
+            #system.icache_port_0.port_type = "tlm"
+            #system.icache_port_0.port_data = "icache_port_0"
+            #system.icache_port_0.port = system.icache_bus_0.hook
+            #system.icache_bus_0.master = system.membus.slave
+            #system.cpu[0].icache_port = system.icache_bus_0.slave   
+                
+            #system.dcache_bus_0 = HookXBar()    
+            #system.dcache_port_0 = ExternalSlave()
+            #system.dcache_port_0.port_type = "tlm"
+            #system.dcache_port_0.port_data = "dcache_port_0"
+            #system.dcache_port_0.port = system.dcache_bus_0.hook
+            #system.dcache_bus_0.master = system.membus.slave
+            #system.cpu[0].dcache_port = system.dcache_bus_0.slave  
+         
+                                                                           
+    
             system.cpu[i].connectAllPorts(system.membus, None, tlm=True)
         else:  
             if options.l2cache:
@@ -242,14 +259,7 @@ def config_cache(options, system):
             elif options.external_memory_system:
                 system.cpu[i].connectUncachedPorts(system.membus)
             else:
-                system.cpu[i].connectAllPorts(system.membus)
-                                  
-        #if options.l2cache:
-        #    system.cpu[i].connectAllPorts(system.tol2bus, system.membus)
-        #elif options.external_memory_system:
-        #    system.cpu[i].connectUncachedPorts(system.membus)
-        #else:
-        #    system.cpu[i].connectAllPorts(system.membus)            
+                system.cpu[i].connectAllPorts(system.membus)           
 
     return system
 

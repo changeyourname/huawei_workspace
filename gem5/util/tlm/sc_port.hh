@@ -42,9 +42,6 @@
 #include <tlm>
 
 #include "mem/external_slave.hh"
-// TODO: is below needed??
-#include "mem/abstract_mem.hh"
-// TODO: -------------------
 #include "sc_mm.hh"
 #include "sc_module.hh"
 
@@ -165,20 +162,9 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
   public:
     sc_transactor(const std::string &name_,
            const std::string &systemc_name,
-           ExternalSlave &owner_);
+           ExternalSlave &owner_);     
            
-  private:
-    std::list<LockedAddr> lockedAddrList; 
-      
-    // Record the address of a load-locked operation so that we can
-    // clear the execution context's lock flag if a matching store is
-    // performed
-    void trackLoadLocked(PacketPtr pkt);    
-    // helper function for checkLockedAddrs(): we really want to
-    // inline a quick check for an empty locked addr list (hopefully
-    // the common case), and do the full list search (if necessary) in
-    // this out-of-line function
-    bool checkLockedAddrList(PacketPtr pkt);     
+    ExternalSlave *getOwner();           
 };
 
 void registerPort(const std::string &name, Port &port);

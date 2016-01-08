@@ -62,18 +62,18 @@
 using namespace std;
 
 MSHR::MSHR() : readyTime(0), _isUncacheable(false), downstreamPending(false),
-               pendingDirty(false),
+               pendingModified(false),
                postInvalidate(false), postDowngrade(false),
                queue(NULL), order(0), blkAddr(0),
                blkSize(0), isSecure(false), inService(false),
                isForward(false), allocOnFill(false),
-               threadNum(InvalidThreadID), data(NULL)
+               data(NULL)
 {
 }
 
 
 MSHR::TargetList::TargetList()
-    : needsExclusive(false), hasUpgrade(false)
+    : needsWritable(false), hasUpgrade(false)
 {}
 
 
@@ -82,8 +82,8 @@ MSHR::TargetList::add(PacketPtr pkt, Tick readyTime,
                       Counter order, Target::Source source, bool markPending)
 {
     if (source != Target::FromSnoop) {
-        if (pkt->needsExclusive()) {
-            needsExclusive = true;
+        if (pkt->needsWritable()) {
+            needsWritable = true;
         }
 
         // StoreCondReq is effectively an upgrade if it's in an MSHR
@@ -115,6 +115,9 @@ MSHR::TargetList::add(PacketPtr pkt, Tick readyTime,
 static void
 replaceUpgrade(PacketPtr pkt)
 {
+    // remember if the current packet has data allocated
+    bool has_data = pkt->hasData() || pkt->hasRespData();
+
     if (pkt->cmd == MemCmd::UpgradeReq) {
         pkt->cmd = MemCmd::ReadExReq;
         DPRINTF(Cache, "Replacing UpgradeReq with ReadExReq\n");
@@ -124,6 +127,19 @@ replaceUpgrade(PacketPtr pkt)
     } else if (pkt->cmd == MemCmd::StoreCondReq) {
         pkt->cmd = MemCmd::StoreCondFailReq;
         DPRINTF(Cache, "Replacing StoreCondReq with StoreCondFailReq\n");
+    }
+
+    if (!has_data) {
+        // there is no sensible way of setting the data field if the
+        // new command actually would carry data
+        assert(!pkt->hasData());
+
+        if (pkt->hasRespData()) {
+            // we went from a packet that had no data (neither request,
+            // nor response), to one that does, and therefore we need to
+            // actually allocate space for the data payload
+            pkt->allocate();
+        }
     }
 }
 
@@ -216,7 +232,6 @@ MSHR::allocate(Addr blk_addr, unsigned blk_size, PacketPtr target,
     _isUncacheable = target->req->isUncacheable();
     inService = false;
     downstreamPending = false;
-    threadNum = 0;
     assert(targets.isReset());
     // Don't know of a case where we would allocate a new MSHR for a
     // snoop (mem-side request), so set source according to request here
@@ -239,7 +254,7 @@ MSHR::clearDownstreamPending()
 }
 
 bool
-MSHR::markInService(bool pending_dirty_resp)
+MSHR::markInService(bool pending_modified_resp)
 {
     assert(!inService);
     if (isForwardNoResponse()) {
@@ -251,7 +266,7 @@ MSHR::markInService(bool pending_dirty_resp)
     }
 
     inService = true;
-    pendingDirty = targets.needsExclusive || pending_dirty_resp;
+    pendingModified = targets.needsWritable || pending_modified_resp;
     postInvalidate = postDowngrade = false;
 
     if (!downstreamPending) {
@@ -298,14 +313,14 @@ MSHR::allocateTarget(PacketPtr pkt, Tick whenReady, Counter _order,
     // - there are other targets already deferred
     // - there's a pending invalidate to be applied after the response
     //   comes back (but before this target is processed)
-    // - this target requires an exclusive block and either we're not
-    //   getting an exclusive block back or we have already snooped
-    //   another read request that will downgrade our exclusive block
-    //   to shared
+    // - this target requires a writable block and either we're not
+    //   getting a writable block back or we have already snooped
+    //   another read request that will downgrade our writable block
+    //   to non-writable (Shared or Owned)
     if (inService &&
         (!deferredTargets.empty() || hasPostInvalidate() ||
-         (pkt->needsExclusive() &&
-          (!isPendingDirty() || hasPostDowngrade() || isForward)))) {
+         (pkt->needsWritable() &&
+          (!isPendingModified() || hasPostDowngrade() || isForward)))) {
         // need to put on deferred list
         if (hasPostInvalidate())
             replaceUpgrade(pkt);
@@ -324,6 +339,15 @@ MSHR::handleSnoop(PacketPtr pkt, Counter _order)
 {
     DPRINTF(Cache, "%s for %s addr %#llx size %d\n", __func__,
             pkt->cmdString(), pkt->getAddr(), pkt->getSize());
+
+    // when we snoop packets the needsWritable and isInvalidate flags
+    // should always be the same, however, this assumes that we never
+    // snoop writes as they are currently not marked as invalidations
+    panic_if(pkt->needsWritable() != pkt->isInvalidate(),
+             "%s got snoop %s to addr %#llx where needsWritable, "
+             "does not match isInvalidate", name(), pkt->cmdString(),
+             pkt->getAddr());
+
     if (!inService || (pkt->isExpressSnoop() && downstreamPending)) {
         // Request has not been issued yet, or it's been issued
         // locally but is buffered unissued at some downstream cache
@@ -338,7 +362,7 @@ MSHR::handleSnoop(PacketPtr pkt, Counter _order)
         // That is, even though the upper-level cache got out on its
         // local bus first, some other invalidating transaction
         // reached the global bus before the upgrade did.
-        if (pkt->needsExclusive()) {
+        if (pkt->needsWritable()) {
             targets.replaceUpgrades();
             deferredTargets.replaceUpgrades();
         }
@@ -348,7 +372,7 @@ MSHR::handleSnoop(PacketPtr pkt, Counter _order)
 
     // From here on down, the request issued by this MSHR logically
     // precedes the request we're snooping.
-    if (pkt->needsExclusive()) {
+    if (pkt->needsWritable()) {
         // snooped request still precedes the re-request we'll have to
         // issue for deferred targets, if any...
         deferredTargets.replaceUpgrades();
@@ -361,17 +385,18 @@ MSHR::handleSnoop(PacketPtr pkt, Counter _order)
         return true;
     }
 
-    if (isPendingDirty() || pkt->isInvalidate()) {
+    if (isPendingModified() || pkt->isInvalidate()) {
         // We need to save and replay the packet in two cases:
-        // 1. We're awaiting an exclusive copy, so ownership is pending,
-        //    and we need to deal with the snoop after we receive data.
+        // 1. We're awaiting a writable copy (Modified or Exclusive),
+        //    so this MSHR is the orgering point, and we need to respond
+        //    after we receive data.
         // 2. It's an invalidation (e.g., UpgradeReq), and we need
         //    to forward the snoop up the hierarchy after the current
         //    transaction completes.
 
         // Start by determining if we will eventually respond or not,
         // matching the conditions checked in Cache::handleSnoop
-        bool will_respond = isPendingDirty() && pkt->needsResponse() &&
+        bool will_respond = isPendingModified() && pkt->needsResponse() &&
             pkt->cmd != MemCmd::InvalidateReq;
 
         // The packet we are snooping may be deleted by the time we
@@ -387,29 +412,39 @@ MSHR::handleSnoop(PacketPtr pkt, Counter _order)
         PacketPtr cp_pkt = will_respond ? new Packet(pkt, true, true) :
             new Packet(new Request(*pkt->req), pkt->cmd);
 
-        if (isPendingDirty()) {
-            // The new packet will need to get the response from the
-            // MSHR already queued up here
-            pkt->assertMemInhibit();
+        if (isPendingModified()) {
+            // we are the ordering point, and will consequently
+            // respond, and depending on whether the packet
+            // needsWritable or not we either pass a Shared line or a
+            // Modified line
+            pkt->setCacheResponding();
+
+            // inform the cache hierarchy that this cache had the line
+            // in the Modified state, even if the response is passed
+            // as Shared (and thus non-writable)
+            pkt->setResponderHadWritable();
+
             // in the case of an uncacheable request there is no need
-            // to set the exclusive flag, but since the recipient does
-            // not care there is no harm in doing so
-            pkt->setSupplyExclusive();
+            // to set the responderHadWritable flag, but since the
+            // recipient does not care there is no harm in doing so
         }
         targets.add(cp_pkt, curTick(), _order, Target::FromSnoop,
-                    downstreamPending && targets.needsExclusive);
+                    downstreamPending && targets.needsWritable);
 
-        if (pkt->needsExclusive()) {
+        if (pkt->needsWritable()) {
             // This transaction will take away our pending copy
             postInvalidate = true;
         }
     }
 
-    if (!pkt->needsExclusive() && !pkt->req->isUncacheable()) {
+    if (!pkt->needsWritable() && !pkt->req->isUncacheable()) {
         // This transaction will get a read-shared copy, downgrading
-        // our copy if we had an exclusive one
+        // our copy if we had a writable one
         postDowngrade = true;
-        pkt->assertShared();
+        // make sure that any downstream cache does not respond with a
+        // writable (and dirty) copy even if it has one, unless it was
+        // explicitly asked for one
+        pkt->setHasSharers();
     }
 
     return true;
@@ -438,20 +473,19 @@ MSHR::promoteDeferredTargets()
 
 
 void
-MSHR::promoteExclusive()
+MSHR::promoteWritable()
 {
-    if (deferredTargets.needsExclusive &&
+    if (deferredTargets.needsWritable &&
         !(hasPostInvalidate() || hasPostDowngrade())) {
-        // We got an exclusive response, but we have deferred targets
-        // which are waiting to request an exclusive copy (not because
+        // We got a writable response, but we have deferred targets
+        // which are waiting to request a writable copy (not because
         // of a pending invalidate).  This can happen if the original
-        // request was for a read-only (non-exclusive) block, but we
-        // got an exclusive copy anyway because of the E part of the
-        // MOESI/MESI protocol.  Since we got the exclusive copy
-        // there's no need to defer the targets, so move them up to
-        // the regular target list.
-        assert(!targets.needsExclusive);
-        targets.needsExclusive = true;
+        // request was for a read-only block, but we got a writable
+        // response anyway. Since we got the writable copy there's no
+        // need to defer the targets, so move them up to the regular
+        // target list.
+        assert(!targets.needsWritable);
+        targets.needsWritable = true;
         // if any of the deferred targets were upper-level cache
         // requests marked downstreamPending, need to clear that
         assert(!downstreamPending);  // not pending here anymore
@@ -488,7 +522,7 @@ MSHR::print(std::ostream &os, int verbosity, const std::string &prefix) const
              isForward ? "Forward" : "",
              allocOnFill ? "AllocOnFill" : "",
              isForwardNoResponse() ? "ForwNoResp" : "",
-             needsExclusive() ? "Excl" : "",
+             needsWritable() ? "Wrtbl" : "",
              _isUncacheable ? "Unc" : "",
              inService ? "InSvc" : "",
              downstreamPending ? "DwnPend" : "",

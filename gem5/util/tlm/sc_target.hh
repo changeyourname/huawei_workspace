@@ -37,11 +37,12 @@
 
 #include <tlm_utils/peq_with_cb_and_phase.h>
 #include <tlm_utils/simple_target_socket.h>
-
 #include <iostream>
 #include <systemc>
 #include <tlm>
 #include "sc_ext.hh"
+#include "mem/external_slave.hh"
+#include "mem/abstract_mem.hh"
 
 using namespace sc_core;
 using namespace std;
@@ -61,14 +62,14 @@ struct Target: sc_module
     tlm_utils::peq_with_cb_and_phase<Target> m_peq;
 
     /** Storage, may be implemented with a map for large devices */
-    bool isMemory;
     unsigned char *m_mem;
 
     Target(sc_core::sc_module_name name,
         bool debug,
         unsigned long long int size,
         unsigned int offset, 
-        unsigned char *mem);
+        unsigned char *mem,
+        ExternalSlave *gem5_master);
     SC_HAS_PROCESS(Target);
 
     /** TLM interface functions */
@@ -102,6 +103,21 @@ struct Target: sc_module
     static uint64_t prev_req_cnt;
     
     unsigned int get_reqCount();
+    
+  private:
+    ExternalSlave *gem5_master;
+  
+    std::list<LockedAddr> lockedAddrList; 
+      
+    // Record the address of a load-locked operation so that we can
+    // clear the execution context's lock flag if a matching store is
+    // performed
+    void trackLoadLocked(PacketPtr pkt);    
+    // helper function for checkLockedAddrs(): we really want to
+    // inline a quick check for an empty locked addr list (hopefully
+    // the common case), and do the full list search (if necessary) in
+    // this out-of-line function
+    bool checkLockedAddrList(PacketPtr pkt);    
 };
 
 #endif //__SIM_SC_TARGET_HH__

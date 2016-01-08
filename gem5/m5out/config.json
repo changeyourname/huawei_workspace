@@ -17,12 +17,12 @@
             "path": "system.icache_port_3", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.icache_bus_3.default", 
+                "peer": "system.icache_bus_3.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "icache_port_3"
         }, 
-        "kernel": "/home/uzleo/Desktop/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzleo/Desktop/aarch-system-2014-10/binaries/vmlinux.aarch64.20140821", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -85,7 +85,7 @@
                 "role": "SLAVE"
             }, 
             "name": "dcache_bus_1", 
-            "default": {
+            "hook": {
                 "peer": "system.dcache_port_1.port", 
                 "role": "MASTER"
             }, 
@@ -100,9 +100,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.dcache_bus_1", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -143,7 +143,7 @@
                 "role": "SLAVE"
             }, 
             "name": "icache_bus_0", 
-            "default": {
+            "hook": {
                 "peer": "system.icache_port_0.port", 
                 "role": "MASTER"
             }, 
@@ -158,16 +158,16 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.icache_bus_0", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzleo/Desktop/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.4cpu.dtb", 
+        "dtb_filename": "/home/uzleo/Desktop/aarch-system-2014-10/binaries/vexpress.aarch64.20140821.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "external_memory": {
@@ -539,7 +539,7 @@
             "pci_host": {
                 "conf_size": 268435456, 
                 "name": "pci_host", 
-                "conf_device_bits": 16, 
+                "conf_device_bits": 12, 
                 "pio": {
                     "peer": "system.iobus.master[2]", 
                     "role": "SLAVE"
@@ -552,7 +552,7 @@
                 "eventq_index": 0, 
                 "cxx_class": "GenericPciHost", 
                 "path": "system.realview.pci_host", 
-                "pci_pio_base": 0, 
+                "pci_pio_base": 788529152, 
                 "type": "GenericPciHost", 
                 "pci_mem_base": 0
             }, 
@@ -779,7 +779,7 @@
                 "clk_domain": "system.clk_domain", 
                 "latency_var": 0, 
                 "bandwidth": "73.000000", 
-                "conf_table_reported": false, 
+                "conf_table_reported": true, 
                 "cxx_class": "SimpleMemory", 
                 "path": "system.realview.nvmem", 
                 "null": false, 
@@ -1212,7 +1212,7 @@
                 "role": "SLAVE"
             }, 
             "name": "dcache_bus_0", 
-            "default": {
+            "hook": {
                 "peer": "system.dcache_port_0.port", 
                 "role": "MASTER"
             }, 
@@ -1227,9 +1227,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.dcache_bus_0", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -1242,7 +1242,7 @@
                 "role": "SLAVE"
             }, 
             "name": "dcache_bus_2", 
-            "default": {
+            "hook": {
                 "peer": "system.dcache_port_2.port", 
                 "role": "MASTER"
             }, 
@@ -1257,9 +1257,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.dcache_bus_2", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -1271,7 +1271,7 @@
                 "role": "SLAVE"
             }, 
             "name": "dcache_bus_3", 
-            "default": {
+            "hook": {
                 "peer": "system.dcache_port_3.port", 
                 "role": "MASTER"
             }, 
@@ -1286,9 +1286,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.dcache_bus_3", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -1423,7 +1423,7 @@
             "path": "system.voltage_domain", 
             "type": "VoltageDomain"
         }, 
-        "cache_line_size": 4, 
+        "cache_line_size": 8, 
         "dcache_port_3": {
             "name": "dcache_port_3", 
             "clk_domain": "system.clk_domain", 
@@ -1435,7 +1435,7 @@
             "path": "system.dcache_port_3", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.dcache_bus_3.default", 
+                "peer": "system.dcache_bus_3.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "dcache_port_3"
@@ -1472,7 +1472,7 @@
             "path": "system.dcache_port_1", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.dcache_bus_1.default", 
+                "peer": "system.dcache_bus_1.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "dcache_port_1"
@@ -2286,7 +2286,7 @@
         "gic_cpu_addr": 738205696, 
         "work_cpus_ckpt_count": 0, 
         "work_begin_exit_count": 0, 
-        "machine_type": "VExpress_EMM", 
+        "machine_type": "VExpress_EMM64", 
         "flags_addr": 469827632, 
         "path": "system", 
         "cpu_clk_domain": {
@@ -2316,7 +2316,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzleo/Desktop/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzleo/Desktop/aarch-system-2014-10/disks/linaro-minimal-aarch64.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -2347,7 +2347,7 @@
                 "role": "SLAVE"
             }, 
             "name": "icache_bus_3", 
-            "default": {
+            "hook": {
                 "peer": "system.icache_port_3.port", 
                 "role": "MASTER"
             }, 
@@ -2362,9 +2362,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.icache_bus_3", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -2376,7 +2376,7 @@
                 "role": "SLAVE"
             }, 
             "name": "icache_bus_2", 
-            "default": {
+            "hook": {
                 "peer": "system.icache_port_2.port", 
                 "role": "MASTER"
             }, 
@@ -2391,9 +2391,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.icache_bus_2", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -2405,7 +2405,7 @@
                 "role": "SLAVE"
             }, 
             "name": "icache_bus_1", 
-            "default": {
+            "hook": {
                 "peer": "system.icache_port_1.port", 
                 "role": "MASTER"
             }, 
@@ -2420,9 +2420,9 @@
                 "role": "MASTER"
             }, 
             "response_latency": 2, 
-            "cxx_class": "NoncoherentXBar", 
+            "cxx_class": "HookXBar", 
             "path": "system.icache_bus_1", 
-            "type": "NoncoherentXBar", 
+            "type": "HookXBar", 
             "use_default_range": false, 
             "frontend_latency": 2
         }, 
@@ -2438,7 +2438,7 @@
             "path": "system.icache_port_1", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.icache_bus_1.default", 
+                "peer": "system.icache_bus_1.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "icache_port_1"
@@ -2454,7 +2454,7 @@
             "path": "system.icache_port_0", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.icache_bus_0.default", 
+                "peer": "system.icache_bus_0.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "icache_port_0"
@@ -2471,7 +2471,7 @@
             "path": "system.icache_port_2", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.icache_bus_2.default", 
+                "peer": "system.icache_bus_2.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "icache_port_2"
@@ -2487,7 +2487,7 @@
             "path": "system.dcache_port_2", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.dcache_bus_2.default", 
+                "peer": "system.dcache_bus_2.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "dcache_port_2"
@@ -2517,13 +2517,13 @@
             "path": "system.dcache_port_0", 
             "type": "ExternalSlave", 
             "port": {
-                "peer": "system.dcache_bus_0.default", 
+                "peer": "system.dcache_bus_0.hook", 
                 "role": "SLAVE"
             }, 
             "port_data": "dcache_port_0"
         }, 
         "boot_loader": [
-            "/home/uzleo/Desktop/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzleo/Desktop/aarch-system-2014-10/binaries/boot_emm.arm64"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false

@@ -44,7 +44,8 @@ uint64_t Target::prev_req_cnt = 0;
 Target::Target(sc_core::sc_module_name name,
     bool debug,
     unsigned long long int size,
-    unsigned int offset, unsigned char *mem) :
+    unsigned int offset, unsigned char *mem,
+    ExternalSlave *gem5_master) :
     socket("socket"),
     transaction_in_progress(0),
     response_in_progress(false),
@@ -54,8 +55,8 @@ Target::Target(sc_core::sc_module_name name,
     debug(debug),
     size(size),
     offset(offset),
-    isMemory(false),
     m_mem(mem),
+    gem5_master(gem5_master),
     req_count(0)
 {
     /* Register tlm transport functions */
@@ -69,28 +70,159 @@ Target::Target(sc_core::sc_module_name name,
     dont_initialize();
 }
 
+
+
+// Add load-locked to tracking list.  Should only be called if the
+// operation is a load and the LLSC flag is set.
+void
+Target::trackLoadLocked(PacketPtr pkt)
+{
+    Request *req = pkt->req;
+    Addr paddr = LockedAddr::mask(req->getPaddr());
+
+    // first we check if we already have a locked addr for this
+    // xc.  Since each xc only gets one, we just update the
+    // existing record with the new address.
+    std::list<LockedAddr>::iterator i;
+
+    for (i = lockedAddrList.begin(); i != lockedAddrList.end(); ++i) {
+        if (i->matchesContext(req)) {
+            /*DPRINTF(LLSC, "Modifying lock record: context %d addr %#x\n",
+                    req->contextId(), paddr);*/
+            i->addr = paddr;
+            return;
+        }
+    }
+
+    // no record for this xc: need to allocate a new one
+    /*DPRINTF(LLSC, "Adding lock record: context %d addr %#x\n",
+            req->contextId(), paddr);*/
+    lockedAddrList.push_front(LockedAddr(req));
+}
+
+
+
+// Called on *writes* only... both regular stores and
+// store-conditional operations.  Check for conventional stores which
+// conflict with locked addresses, and for success/failure of store
+// conditionals.
+bool
+Target::checkLockedAddrList(PacketPtr pkt)
+{
+    Request *req = pkt->req;
+    Addr paddr = LockedAddr::mask(req->getPaddr());
+    bool isLLSC = pkt->isLLSC();
+    
+    bool allowStore = !isLLSC;
+
+    // Iterate over list.  Note that there could be multiple matching records,
+    // as more than one context could have done a load locked to this location.
+    // Only remove records when we succeed in finding a record for (xc, addr);
+    // then, remove all records with this address.  Failed store-conditionals do
+    // not blow unrelated reservations.
+    std::list<LockedAddr>::iterator i = lockedAddrList.begin();
+
+    if (isLLSC) {
+        while (i != lockedAddrList.end()) {
+            if (i->addr == paddr && i->matchesContext(req)) {
+                // it's a store conditional, and as far as the memory system can
+                // tell, the requesting context's lock is still valid.
+                /*DPRINTF(LLSC, "StCond success: context %d addr %#x\n",
+                        req->contextId(), paddr);*/
+                allowStore = true;
+                break;
+            }
+            // If we didn't find a match, keep searching!  Someone else may well
+            // have a reservation on this line here but we may find ours in just
+            // a little while.
+            i++;
+        }
+        req->setExtraData(allowStore ? 1 : 0);
+    }
+
+    // LLSCs that succeeded AND non-LLSC stores both fall into here:
+    if (allowStore) {
+        // We write address paddr.  However, there may be several entries with a
+        // reservation on this address (for other contextIds) and they must all
+        // be removed.
+        i = lockedAddrList.begin();
+        while (i != lockedAddrList.end()) {
+            if (i->addr == paddr) {
+                /*DPRINTF(LLSC, "Erasing lock record: context %d addr %#x\n",
+                        i->contextId, paddr);*/
+                        
+                // For ARM, a spinlock would typically include a Wait
+                // For Event (WFE) to conserve energy. The ARMv8
+                // architecture specifies that an event is
+                // automatically generated when clearing the exclusive
+                // monitor to wake up the processor in WFE. 
+                         
+                gem5_master->handle_lock_erasure(i->contextId);
+                
+                i = lockedAddrList.erase(i);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    return allowStore;
+}
+
+
+
 void
 Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 {
     //cout << sc_time_stamp() << ": " << name() << ": addr=0x" << hex <<trans.get_address() << dec << endl;
        
-/*
     gem5Extension *ext;
     trans.get_extension(ext);
-    PacketPtr pkt = ext->getPacket();
-    //cout << sc_time_stamp() << "  " << pkt->req_count << endl; 
-    if ((prev_req_cnt >= pkt->req_count) && (pkt->req_count!=0)) {
+    PacketPtr packet = ext->getPacket();
+/*    
+    if ((prev_req_cnt >= packet->req_count) && (packet->req_count!=0)) {
         assert(0);
     }
-    prev_req_cnt = pkt->req_count;
-*/
+    prev_req_cnt = packet->req_count;*/
+
     
     /* Execute the read or write commands */
-    if (isMemory) {
-        execute_transaction(trans);
+    if (packet->cacheResponding() || packet->cmd==MemCmd::CleanEvict
+        || packet->cmd==MemCmd::WritebackClean) {
+        return;
     } else {
-        //TODO: cache stuff comes here    
+        if (packet->cmd == MemCmd::SwapReq) {
+            SC_REPORT_FATAL("transactor", "SwapReq not supported");
+        } else if (packet->isRead()) {
+            if (packet->isLLSC()) {
+                trackLoadLocked(packet);
+            }
+        } else if (packet->isInvalidate()) {
+            // do nothing
+            assert(0);
+        } else if (packet->isWrite()) {
+            Request *req = packet->req;
+            if (lockedAddrList.empty()) {
+                bool isLLSC = packet->isLLSC();
+                if (isLLSC) {
+                    req->setExtraData(0);
+                    return;
+                }
+            } else {
+                if (!checkLockedAddrList(packet)) {
+                    return;
+                }
+            }            
+        } else {
+            SC_REPORT_FATAL("transactor", "Typo of request not supported");
+        }
     }
+
+    execute_transaction(trans);
+    
+    if (packet->needsResponse()) {
+        packet->makeResponse();
+    }        
 }
 
 unsigned int

@@ -200,9 +200,9 @@ MSHRQueue::moveToFront(MSHR *mshr)
 }
 
 void
-MSHRQueue::markInService(MSHR *mshr, bool pending_dirty_resp)
+MSHRQueue::markInService(MSHR *mshr, bool pending_modified_resp)
 {
-    if (mshr->markInService(pending_dirty_resp)) {
+    if (mshr->markInService(pending_modified_resp)) {
         deallocate(mshr);
     } else {
         readyList.erase(mshr->readyIter);
@@ -237,30 +237,6 @@ MSHRQueue::forceDeallocateTarget(MSHR *mshr)
 
     // Notify if MSHR queue no longer full
     return was_full && !isFull();
-}
-
-void
-MSHRQueue::squash(int threadNum)
-{
-    for (auto i = allocatedList.begin(); i != allocatedList.end();) {
-        MSHR *mshr = *i;
-        if (mshr->threadNum == threadNum) {
-            while (mshr->hasTargets()) {
-                mshr->popTarget();
-                assert(0/*target->req->threadId()*/ == threadNum);
-            }
-            assert(!mshr->hasTargets());
-            assert(mshr->getNumTargets()==0);
-            if (!mshr->inService) {
-                i = deallocateOne(mshr);
-            } else {
-                //mshr->pkt->flags &= ~CACHE_LINE_FILL;
-                ++i;
-            }
-        } else {
-            ++i;
-        }
-    }
 }
 
 DrainState

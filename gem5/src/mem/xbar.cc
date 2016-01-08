@@ -88,9 +88,10 @@ BaseXBar::getMasterPort(const std::string &if_name, PortID idx)
         return *masterPorts[idx];
     } else  if (if_name == "default") {
         return *masterPorts[defaultPortID];
-    }/* else if (if_name == "hook") {
-        return *masterPorts[hookID];
-    } */else {
+    } else if (if_name == "hook") {
+        return *masterPorts[masterPorts.size()-1];
+    }
+    else {
         return MemObject::getMasterPort(if_name, idx);
     }
 }
