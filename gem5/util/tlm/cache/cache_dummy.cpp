@@ -27,6 +27,7 @@ cache::~cache() {
 
 // port interface method
 void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
-
+//    std::cout << sc_core::sc_time_stamp() << "   " << name() 
+//              << ": addr=0x" << std::hex << trans.get_address() << std::dec << std::endl;
 }
 

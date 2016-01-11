@@ -49,6 +49,8 @@
 #include <systemc>
 #include <tlm>
 #include <typeinfo>
+#include <vector>
+#include <string>
 
 #include "base/statistics.hh"
 #include "base/str.hh"
@@ -85,6 +87,8 @@ void usage(const std::string &prog_name)
         "    -D                           -- debug on\n"
         "    -e <ticks>                   -- end of simulation after a \n"
         "                                    given number of ticks\n"
+        "    -mem                         -- enable SystemC memory as main memory\n"
+        "    -n_cpu <value>               -- set number of gem5 smp cores\n"
         "\n"
         );
     std::exit(EXIT_FAILURE);
@@ -105,15 +109,14 @@ class SimControl : public Gem5SystemC::Module
     public:
     SC_HAS_PROCESS(SimControl);
 
+    bool enable_SystemC_mem;
+    unsigned int num_gem5_smp_cores;
+
     SimControl(sc_core::sc_module_name name, int argc_, char **argv_);
-
     void before_end_of_elaboration();
-
     bool getDebugFlag() { return debug; }
-
     unsigned int getOffset() { return offset; }
-
-    void run();
+    void run();        
 };
 
 SimControl::SimControl(sc_core::sc_module_name name,
@@ -150,6 +153,8 @@ SimControl::SimControl(sc_core::sc_module_name name,
     sim_end = 0;
     debug = false;
     offset = 0;
+    enable_SystemC_mem = false;
+    num_gem5_smp_cores = 1;
 
     const std::string config_file(argv[arg_ptr]);
 
@@ -213,6 +218,14 @@ SimControl::SimControl(sc_core::sc_module_name name,
                 std::istringstream(argv[arg_ptr]) >> offset;
                 arg_ptr++;
                 /* code */
+            } else if (option == "-mem") {
+                enable_SystemC_mem = true;
+            } else if (option == "-n_cpu") {
+                if (num_args < 1) {
+                    usage(prog_name);
+                }
+                std::istringstream(argv[arg_ptr]) >> num_gem5_smp_cores;
+                arg_ptr++;
             } else {
                 usage(prog_name);
             }
@@ -300,163 +313,59 @@ sc_main(int argc, char **argv)
     unsigned long long int size = 512*1024*1024ULL;
     unsigned char *mem = new unsigned char[size];    
     
-    // memory port
-    Target *membus;    
-    Gem5SystemC::sc_transactor 
-            *membus_port = dynamic_cast<Gem5SystemC::sc_transactor *> (   
-                                sc_core::sc_find_object("gem5.membus_port")
-                            );          
-    if (membus_port) {
-        SC_REPORT_INFO("sc_main", "gem5.membus_port Found");
-        membus = new Target("membus",
-                            sim_control.getDebugFlag(),
-                            size,
-                            sim_control.getOffset(),
-                            mem,
-                            membus_port->getOwner());
-        membus->socket.bind(*membus_port);
-    } else {
-        SC_REPORT_FATAL("sc_main", "gem5.membus_port Not Found");
-        std::exit(EXIT_FAILURE);
+    if (sim_control.enable_SystemC_mem) {
+        // if gem5 system uses SystemC memory
+        Target *membus;    
+        Gem5SystemC::sc_transactor 
+                *membus_port = dynamic_cast<Gem5SystemC::sc_transactor *> (   
+                                    sc_core::sc_find_object("gem5.membus_port")
+                                );          
+        if (membus_port) {
+            SC_REPORT_INFO("sc_main", "gem5.membus_port Found");
+            membus = new Target("membus",
+                                sim_control.getDebugFlag(),
+                                size,
+                                sim_control.getOffset(),
+                                mem,
+                                membus_port->getOwner());
+            membus->socket.bind(*membus_port);
+        } else {
+            SC_REPORT_FATAL("sc_main", "gem5.membus_port Not Found");
+            std::exit(EXIT_FAILURE);
+        }
+    }  
+
+
+    // right now gem5 should have named its hooks "gem5.icache_port_X", 
+    // "gem5.dcache_port_X" for smp core X to be picked up here!!
+    std::vector< tlm::tlm_initiator_socket<> * > smp_cache_ports;
+    std::vector< cache * > smp_caches;
+    std::string temp;
+    
+    for (int i=0; i<sim_control.num_gem5_smp_cores*2; i++) {
+        // icache hooks
+        temp = (i%2==0) ? "gem5.icache_port_" + std::to_string(i/2) : 
+                          "gem5.dcache_port_" + std::to_string(i/2) ;
+        smp_cache_ports.push_back( 
+            dynamic_cast<tlm::tlm_initiator_socket<> *> (
+                sc_core::sc_find_object(temp.c_str())
+            )
+        );
+        if (smp_cache_ports[i]) {
+            temp = temp + " found";
+            SC_REPORT_INFO("sc_main", temp.c_str());
+            
+            temp = (i%2==0) ? "icache_" + std::to_string(i/2) :
+                              "dcache_" + std::to_string(i/2) ;
+            smp_caches.push_back(new cache(temp.c_str()));
+            smp_caches[i]->socket.bind(*smp_cache_ports[i]);
+        } else {
+            temp = temp + " not found!";
+            SC_REPORT_FATAL("sc_main", temp.c_str());
+            std::exit(EXIT_FAILURE);
+        }        
     }
-    
 
-
-    // cpu0 icache_port     
-    tlm::tlm_initiator_socket <> *icache_port_0 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.icache_port_0")
-                ); 
-
-    cache *icache_0;                                 
-    if (icache_port_0) {
-        SC_REPORT_INFO("sc_main", "icache_port_0 Found");
-
-        icache_0 = new cache("icache_0");
-        icache_0->socket.bind(*icache_port_0);        
-    } else {
-        SC_REPORT_FATAL("sc_main", "icache_port_0 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }                                
-    // cpu0 dcache_port                                          
-    tlm::tlm_initiator_socket <> *dcache_port_0 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.dcache_port_0")
-                );                    
-     
-    cache *dcache_0;        
-    if (dcache_port_0) {
-        SC_REPORT_INFO("sc_main", "dcache_port_0 Found");
-        
-        dcache_0 = new cache("dcache_0");
-        dcache_0->socket.bind(*dcache_port_0);        
-    } else {
-        SC_REPORT_FATAL("sc_main", "dcache_port_0 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }  
-    
-                     
-               
-    // cpu1 icache_port                 
-    tlm::tlm_initiator_socket <> *icache_port_1 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.icache_port_1")
-                ); 
-                
-    cache *icache_1;                  
-    if (icache_port_1) {
-        SC_REPORT_INFO("sc_main", "icache_port_1 Found");
-
-        icache_1 = new cache("icache_1");
-        icache_1->socket.bind(*icache_port_1);
-    } else {
-        SC_REPORT_FATAL("sc_main", "icache_port_1 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }                                
-    // cpu1 dcache_port                                         
-    tlm::tlm_initiator_socket <> *dcache_port_1 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.dcache_port_1")
-                );     
-                               
-    cache *dcache_1;
-    if (dcache_port_1) {
-        SC_REPORT_INFO("sc_main", "dcache_port_1 Found");
-
-        dcache_1 = new cache("dcache_1");
-        dcache_1->socket.bind(*dcache_port_1);
-    } else {
-        SC_REPORT_FATAL("sc_main", "dcache_port_1 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }  
-    
-   
-    // cpu2 icache_port                   
-    tlm::tlm_initiator_socket <> *icache_port_2 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.icache_port_2")
-                ); 
-                
-    cache *icache_2;
-    if (icache_port_2) {
-        SC_REPORT_INFO("sc_main", "icache_port_2 Found");
-        
-        icache_2 = new cache("icache_2");
-        icache_2->socket.bind(*icache_port_2);
-    } else {
-        SC_REPORT_FATAL("sc_main", "icache_port_2 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }                                
-    // cpu2 dcache_port                                      
-    tlm::tlm_initiator_socket <> *dcache_port_2 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.dcache_port_2")
-                ); 
-                
-    cache *dcache_2;                   
-    if (dcache_port_2) {
-        SC_REPORT_INFO("sc_main", "dcache_port_2 Found");
-
-        dcache_2 = new cache("dcache_2");
-        dcache_2->socket.bind(*dcache_port_2);
-    } else {
-        SC_REPORT_FATAL("sc_main", "dcache_port_2 port Not Found");
-        std::exit(EXIT_FAILURE);
-    } 
-    
-    // cpu3 icache_port                
-    tlm::tlm_initiator_socket <> *icache_port_3 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.icache_port_3")
-                ); 
-                
-    cache *icache_3;
-    if (icache_port_3) {
-        SC_REPORT_INFO("sc_main", "icache_port_3 Found");
-
-        icache_3 = new cache("icache_3");
-        icache_3->socket.bind(*icache_port_3);
-    } else {
-        SC_REPORT_FATAL("sc_main", "icache_port_3 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }                                
-    // cpu3 dcache_port                                      
-    tlm::tlm_initiator_socket <> *dcache_port_3 =
-        dynamic_cast<tlm::tlm_initiator_socket<> *>(
-                    sc_core::sc_find_object("gem5.dcache_port_3")
-                );        
-                
-    cache *dcache_3;            
-    if (dcache_port_3) {
-        SC_REPORT_INFO("sc_main", "dcache_port_3 Found");
-        
-        dcache_3 = new cache("dcache_3");
-        dcache_3->socket.bind(*dcache_port_3);
-    } else {
-        SC_REPORT_FATAL("sc_main", "dcache_port_3 port Not Found");
-        std::exit(EXIT_FAILURE);
-    }             
-  
     sc_core::sc_start();
 
     SC_REPORT_INFO("sc_main", "End of Simulation");

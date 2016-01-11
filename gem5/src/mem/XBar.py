@@ -164,16 +164,19 @@ class IOXBar(NoncoherentXBar):
     
     
     
-# customized xbar (like noncoherent xbar) that sends each of the request (intended for one of its master) to default port as well
-# currently this xbar only supports atomic interface
-# We can read those requests by connecting this default port to gem5 ExternalSlave's port (which is SystemC port)
+# customized xbar (like noncoherent xbar) that sends each of the request (intended for 
+# one of its master) to default port as well currently this xbar only supports atomic 
+# interface. 
+# We can read those requests by connecting this default port to gem5 ExternalSlave's port 
+# (which is SystemC port)
 class HookXBar(BaseXBar):  
     type = 'HookXBar'
     cxx_header = "mem/hook_xbar.hh"
     
     hook = MasterPort("Hook port")
       
-    # TODO: just copied from IOXBar..see if they are needed? or can use other values that make sense?
+    # TODO: just copied from IOXBar..see if they are needed? or can use other values 
+    #       that make sense?
     width = 16    
     frontend_latency = 2
     forward_latency = 1
