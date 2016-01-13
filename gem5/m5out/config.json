@@ -4,7 +4,7 @@
     "system": {
         "have_virtualization": false, 
         "mmap_using_noreserve": false, 
-        "kernel_addr_check": true, 
+        "kernel_addr_check": false, 
         "highest_el_is_64": false, 
         "icache_port_3": {
             "name": "icache_port_3", 
@@ -170,6 +170,24 @@
         "dtb_filename": "/home/uzleo/Desktop/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.4cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
+        "external_memory": {
+            "name": "external_memory", 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "addr_ranges": [
+                "2147483648:2684354559"
+            ], 
+            "eventq_index": 0, 
+            "port_type": "tlm", 
+            "cxx_class": "ExternalSlave", 
+            "path": "system.external_memory", 
+            "type": "ExternalSlave", 
+            "port": {
+                "peer": "system.membus.master[5]", 
+                "role": "SLAVE"
+            }, 
+            "port_data": "membus_port"
+        }, 
         "work_begin_ckpt_count": 0, 
         "clk_domain": {
             "name": "clk_domain", 
@@ -1343,7 +1361,7 @@
                     "system.realview.gic.pio", 
                     "system.realview.vgic.pio", 
                     "system.realview.local_cpu_timer.pio", 
-                    "system.mem_ctrls.port"
+                    "system.external_memory.port"
                 ], 
                 "role": "MASTER"
             }, 
@@ -2266,27 +2284,6 @@
             }
         ], 
         "gic_cpu_addr": 738205696, 
-        "mem_ctrls": [
-            {
-                "range": "2147483648:2684354559", 
-                "latency": 30000, 
-                "name": "mem_ctrls", 
-                "eventq_index": 0, 
-                "clk_domain": "system.clk_domain", 
-                "latency_var": 0, 
-                "bandwidth": "73.000000", 
-                "conf_table_reported": true, 
-                "cxx_class": "SimpleMemory", 
-                "path": "system.mem_ctrls", 
-                "null": false, 
-                "type": "SimpleMemory", 
-                "port": {
-                    "peer": "system.membus.master[5]", 
-                    "role": "SLAVE"
-                }, 
-                "in_addr_map": true
-            }
-        ], 
         "work_cpus_ckpt_count": 0, 
         "work_begin_exit_count": 0, 
         "machine_type": "VExpress_EMM", 
@@ -2497,7 +2494,6 @@
         }, 
         "atags_addr": 134217728, 
         "memories": [
-            "system.mem_ctrls", 
             "system.realview.nvmem", 
             "system.realview.vram"
         ], 
