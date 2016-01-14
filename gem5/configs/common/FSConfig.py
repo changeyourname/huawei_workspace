@@ -366,6 +366,8 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
     self.vncserver = VncServer()
 
     self.system_port = self.membus.slave
+    
+    self.realview.my_device.pio = self.membus.master
 
     return self
 

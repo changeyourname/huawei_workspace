@@ -62,6 +62,11 @@ class AmbaPioDevice(BasicPioDevice):
     abstract = True
     cxx_header = "dev/arm/amba_device.hh"
     amba_id = Param.UInt32("ID of AMBA device for kernel detection")
+    
+
+class MyDevice(BasicPioDevice):
+    type = 'MyDevice'
+    cxx_header = "dev/arm/my_device.hh"
 
 class AmbaIntDevice(AmbaPioDevice):
     type = 'AmbaIntDevice'
@@ -165,7 +170,7 @@ class AmbaFake(AmbaPioDevice):
     type = 'AmbaFake'
     cxx_header = "dev/arm/amba_fake.hh"
     ignore_access = Param.Bool(False, "Ignore reads/writes to this device, (e.g. IsaFake + AMBA)")
-    amba_id = 0;
+    amba_id = 0
 
 class Pl011(Uart):
     type = 'Pl011'
@@ -562,6 +567,9 @@ class VExpress_EMM(RealView):
     uart1_fake     = AmbaFake(pio_addr=0x1C0A0000)
     uart2_fake     = AmbaFake(pio_addr=0x1C0B0000)
     uart3_fake     = AmbaFake(pio_addr=0x1C0C0000)
+    
+    my_device      = MyDevice(pio_addr=0xD000D000)
+    
     sp810_fake     = AmbaFake(pio_addr=0x1C020000, ignore_access=True)
     watchdog_fake  = AmbaFake(pio_addr=0x1C0F0000)
     aaci_fake      = AmbaFake(pio_addr=0x1C040000)
