@@ -205,4 +205,25 @@ EXT3-fs (sda1): mounted filesystem with writeback data mode
 VFS: Mounted root (ext3 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 random: init urandom read with 19 bits of entropy available
- 
+ init: ssh main process (1152) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1160) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1165) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1169) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1175) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1181) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1186) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1193) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1203) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1212) terminated with status 255
+init: ssh main process ended, respawning
+init: ssh main process (1231) terminated with status 255
+init: ssh respawning too fast, stopped
