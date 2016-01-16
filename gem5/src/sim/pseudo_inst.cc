@@ -63,8 +63,10 @@
 #include "debug/PseudoInst.hh"
 #include "debug/Quiesce.hh"
 #include "debug/WorkItems.hh"
+#include "dev/net/dist_iface.hh"
 #include "params/BaseCPU.hh"
 #include "sim/full_system.hh"
+#include "sim/initparam_keys.hh"
 #include "sim/process.hh"
 #include "sim/pseudo_inst.hh"
 #include "sim/serialize.hh"
@@ -141,7 +143,7 @@ pseudoInst(ThreadContext *tc, uint8_t func, uint8_t subfunc)
         break;
 
       case 0x30: // initparam_func
-        return initParam(tc);
+        return initParam(tc, args[0], args[1]);
 
       case 0x31: // loadsymbol_func
         loadsymbol(tc);
@@ -357,8 +359,10 @@ void
 m5exit(ThreadContext *tc, Tick delay)
 {
     DPRINTF(PseudoInst, "PseudoInst::m5exit(%i)\n", delay);
-    Tick when = curTick() + delay * SimClock::Int::ns;
-    exitSimLoop("m5_exit instruction encountered", 0, when, 0, true);
+    if (DistIface::readyToExit(delay)) {
+        Tick when = curTick() + delay * SimClock::Int::ns;
+        exitSimLoop("m5_exit instruction encountered", 0, when, 0, true);
+    }
 }
 
 void
@@ -440,15 +444,47 @@ addsymbol(ThreadContext *tc, Addr addr, Addr symbolAddr)
 }
 
 uint64_t
-initParam(ThreadContext *tc)
+initParam(ThreadContext *tc, uint64_t key_str1, uint64_t key_str2)
 {
-    DPRINTF(PseudoInst, "PseudoInst::initParam()\n");
+    DPRINTF(PseudoInst, "PseudoInst::initParam() key:%s%s\n", (char *)&key_str1,
+            (char *)&key_str2);
     if (!FullSystem) {
         panicFsOnlyPseudoInst("initParam");
         return 0;
     }
 
-    return tc->getCpuPtr()->system->init_param;
+    // The key parameter string is passed in via two 64-bit registers. We copy
+    // out the characters from the 64-bit integer variables here and concatenate
+    // them in the key_str character buffer
+    const int len = 2 * sizeof(uint64_t) + 1;
+    char key_str[len];
+    memset(key_str, '\0', len);
+    if (key_str1 == 0) {
+        assert(key_str2 == 0);
+    } else {
+        strncpy(key_str, (char *)&key_str1, sizeof(uint64_t));
+    }
+
+    if (strlen(key_str) == sizeof(uint64_t)) {
+        strncpy(key_str + sizeof(uint64_t), (char *)&key_str2,
+                sizeof(uint64_t));
+    } else {
+        assert(key_str2 == 0);
+    }
+
+    // Compare the key parameter with the known values to select the return
+    // value
+    uint64_t val;
+    if (strcmp(key_str, InitParamKey::DEFAULT) == 0) {
+        val = tc->getCpuPtr()->system->init_param;
+    } else if (strcmp(key_str, InitParamKey::DIST_RANK) == 0) {
+        val = DistIface::rankParam();
+    } else if (strcmp(key_str, InitParamKey::DIST_SIZE) == 0) {
+        val = DistIface::sizeParam();
+    } else {
+        panic("Unknown key for initparam pseudo instruction:\"%s\"", key_str);
+    }
+    return val;
 }
 
 
@@ -501,10 +537,11 @@ m5checkpoint(ThreadContext *tc, Tick delay, Tick period)
     if (!tc->getCpuPtr()->params()->do_checkpoint_insts)
         return;
 
-    Tick when = curTick() + delay * SimClock::Int::ns;
-    Tick repeat = period * SimClock::Int::ns;
-
-    exitSimLoop("checkpoint", 0, when, repeat);
+    if (DistIface::readyToCkpt(delay, period)) {
+        Tick when = curTick() + delay * SimClock::Int::ns;
+        Tick repeat = period * SimClock::Int::ns;
+        exitSimLoop("checkpoint", 0, when, repeat);
+    }
 }
 
 uint64_t
