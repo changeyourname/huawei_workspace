@@ -76,3 +76,5 @@ clean:
 	$(RM) $(ALL)
 	$(RM) *.o
 	$(RM) -r m5out
+	$(RM) ../systemc/*.o
+	$(RM) cache/*.o

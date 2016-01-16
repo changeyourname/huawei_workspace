@@ -336,7 +336,7 @@ sc_main(int argc, char **argv)
     }  
 
 
-    // right now gem5 should have named its hooks "gem5.icache_port_X", 
+    // right now, gem5 should have named its hooks "gem5.icache_port_X", 
     // "gem5.dcache_port_X" for smp core X to be picked up here!!
     std::vector< tlm::tlm_initiator_socket<> * > smp_cache_ports;
     std::vector< cache * > smp_caches;
