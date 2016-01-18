@@ -105,9 +105,6 @@ def build_test_system(np):
     else:
         fatal("Incapable of building %s full system!", buildEnv['TARGET_ISA'])
 
-    # Set the cache line size for the entire system
-    test_sys.cache_line_size = options.cacheline_size
-
     # Create a top-level voltage domain
     test_sys.voltage_domain = VoltageDomain(voltage = options.sys_voltage)
 
@@ -228,6 +225,17 @@ def build_test_system(np):
         CacheConfig.config_cache(options, test_sys)
 
         MemConfig.config_mem(options, test_sys)
+        
+        if options.disable_cache:
+            # connect cache_monitor peripheral
+            test_sys.realview.my_device = MyDevice(
+                                                pio_addr = 0xD000D000,  # free address!!
+                                                word_width = options.cacheline_size, 
+                                                num_caches = np*2,
+                                                icache0 = test_sys.icache_port_0,
+                                                dcache0 = test_sys.dcache_port_0,
+                                                pio = test_sys.membus.master
+                                              )                                                                                                       
 
     return test_sys
 

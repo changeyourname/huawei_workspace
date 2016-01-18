@@ -63,6 +63,12 @@ class CowIdeDisk(IdeDisk):
     def childImage(self, ci):
         self.image.child.image_file = ci
 
+
+class RawIdeDisk(IdeDisk):
+    image = RawDiskImage(read_only=False)
+    def childImage(self, ci):
+        self.image.image_file = ci
+
 class MemBus(SystemXBar):
     badaddr_responder = BadAddr()
     default = Self.badaddr_responder.pio
@@ -245,7 +251,7 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
     # Resolve the real platform name, the original machine_type
     # variable might have been an alias.
     machine_type = platform_class.__name__
-    self.realview = platform_class()
+    self.realview = platform_class()    
 
     if not dtb_filename and not bare_metal:
         try:
@@ -264,6 +270,7 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
     self.realview.attachPciDevices()
 
     self.cf0 = CowIdeDisk(driveID='master')
+#    self.cf0 =  RawIdeDisk(driveID='master')
     self.cf0.childImage(mdesc.disk())
     # Old platforms have a built-in IDE or CF controller. Default to
     # the IDE controller if both exist. New platforms expect the
@@ -379,9 +386,7 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
     self.terminal = Terminal()
     self.vncserver = VncServer()
 
-    self.system_port = self.membus.slave
-    
-    self.realview.my_device.pio = self.membus.master
+    self.system_port = self.membus.slave        
 
     return self
 

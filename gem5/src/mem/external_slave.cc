@@ -264,6 +264,11 @@ ExternalSlave::handle_lock_erasure(ContextID ctx_id)
     ctx->getCpuPtr()->wakeup(ctx->threadId());    
 }
 
+void 
+ExternalSlave::uzair() {
+    printf("uzair.........hahahaha\r\n");
+}
+
 
 
 

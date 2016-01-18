@@ -140,7 +140,8 @@ class ExternalSlave : public MemObject
         Handler *handler);
 
     void init();
-    
+
+    //TODO: put these extra functions in a new class derived from ExternalSlave()
     void handle_lock_erasure(ContextID ctx_id);
 };
 

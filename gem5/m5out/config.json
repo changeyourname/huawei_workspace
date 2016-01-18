@@ -6,7 +6,7 @@
         "mmap_using_noreserve": false, 
         "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzair/huawei_workspace/gem5/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -122,7 +122,7 @@
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
+        "dtb_filename": "/home/uzair/huawei_workspace/gem5/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -210,9 +210,11 @@
                 "type": "PL031"
             }, 
             "my_device": {
+                "dcache0": "system.dcache_port_0", 
                 "name": "my_device", 
+                "word_width": 4, 
                 "pio": {
-                    "peer": "system.membus.master[5]", 
+                    "peer": "system.membus.master[6]", 
                     "role": "SLAVE"
                 }, 
                 "pio_latency": 100000, 
@@ -220,9 +222,11 @@
                 "system": "system", 
                 "eventq_index": 0, 
                 "cxx_class": "MyDevice", 
+                "icache0": "system.icache_port_0", 
                 "path": "system.realview.my_device", 
                 "pio_addr": 3489714176, 
-                "type": "MyDevice"
+                "type": "MyDevice", 
+                "num_caches": 2
             }, 
             "watchdog_fake": {
                 "name": "watchdog_fake", 
@@ -1243,8 +1247,8 @@
                     "system.realview.gic.pio", 
                     "system.realview.vgic.pio", 
                     "system.realview.local_cpu_timer.pio", 
-                    "system.realview.my_device.pio", 
-                    "system.mem_ctrls.port"
+                    "system.mem_ctrls.port", 
+                    "system.realview.my_device.pio"
                 ], 
                 "role": "MASTER"
             }, 
@@ -1573,7 +1577,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzleo/Downloads/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzair/huawei_workspace/gem5/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -1643,7 +1647,7 @@
                 "null": false, 
                 "type": "SimpleMemory", 
                 "port": {
-                    "peer": "system.membus.master[6]", 
+                    "peer": "system.membus.master[5]", 
                     "role": "SLAVE"
                 }, 
                 "in_addr_map": true
@@ -1667,7 +1671,7 @@
             "port_data": "dcache_port_0"
         }, 
         "boot_loader": [
-            "/home/uzleo/Downloads/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzair/huawei_workspace/gem5/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false

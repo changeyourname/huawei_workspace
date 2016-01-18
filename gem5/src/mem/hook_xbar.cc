@@ -139,9 +139,11 @@ HookXBar::recvAtomic(PacketPtr pkt, PortID slave_port_id)
     // determine the destination port
     PortID master_port_id = findPort(pkt->getAddr());          
 
-    Tick response_latency;       
+    Tick response_latency;  
+         
     // forward the request to hook port so as to maybe pick it up in SystemC world    
-    response_latency = HookPort->sendAtomic(pkt);        
+//    response_latency = HookPort->sendAtomic(pkt);  
+      
     // forward the request to the appropriate destination (actual master)
     response_latency = masterPorts[master_port_id]->sendAtomic(pkt);    
 

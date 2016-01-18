@@ -46,28 +46,55 @@
 #include "mem/packet.hh"
 #include "mem/packet_access.hh"
 
+
+
+
+// right now my_device dummies a cache_monitor peripheral for 32 bit platform
+// no write interface...only can read its registers
+// each register is 64bit...there are no actual registers but give illusion
+// to gem5 that its a peripheral with registers. whenever its register is read
+// by gem5, it will internally make call to SystemC cache models and get the 
+// required info and send it back to gem5 via passed pkt
+
+// for each cache (i/d) this provides 2 registers
+// (1) total accesses         (2) total misses
+
+
+
+
+
+
+
 MyDevice::MyDevice(const Params *p)
-    : BasicPioDevice(p, 0xfff)
+    : BasicPioDevice(p, 0xfff),
+      reg_size(p->word_width),
+      num_regs(2*p->num_caches),
+      icache0(p->icache0),
+      dcache0(p->dcache0)
 {
 }
 
 Tick
 MyDevice::read(PacketPtr pkt)
 {
-//    assert(pkt->getAddr() >= pioAddr && pkt->getAddr() < pioAddr + pioSize);
+    assert(pioAddr%reg_size == 0);             // must be correctly aligned
+    uint32_t reg = (pkt->getAddr() - pioAddr) / reg_size;
+    assert(reg < num_regs);        
+    assert(pkt->getSize() == reg_size);     // reg to read should be 8B in gem5
 
-//    Addr daddr = pkt->getAddr() - pioAddr;
-
-//    DPRINTF(AMBA, " read register %#x\n", daddr);
-
-//    pkt->set<uint32_t>(0);
-//    if (!readId(pkt, ambaId, pioAddr) && !params()->ignore_access)
-//        panic("Tried to read AmbaFake at offset %#x that doesn't exist\n", daddr);
-
-//    pkt->makeAtomicResponse();
-//    return pioDelay;
-
-    assert(0);
+    // TODO: read requested info from systemc cache models
+    icache0->uzair();
+ 
+    if (reg == 0) {
+        pkt->set<uint32_t>(0x22222222);
+    } else if (reg == 1) {
+        pkt->set<uint32_t>(0x44444444);
+    } else {
+        pkt->set<uint32_t>(0);
+    }
+    
+    pkt->makeAtomicResponse();
+    return pioDelay;
 }
 
 Tick

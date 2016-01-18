@@ -47,10 +47,16 @@
 
 #include "dev/io_device.hh"
 #include "params/MyDevice.hh"
+#include "mem/external_slave.hh"
 
 class MyDevice : public BasicPioDevice
 {
   public:
+   unsigned int reg_size;
+   unsigned int num_regs;
+   ExternalSlave *icache0;
+   ExternalSlave *dcache0;
+  
    typedef MyDeviceParams Params;
    const Params *
     params() const
