@@ -224,18 +224,7 @@ def build_test_system(np):
 
         CacheConfig.config_cache(options, test_sys)
 
-        MemConfig.config_mem(options, test_sys)
-        
-        if options.disable_cache:
-            # connect cache_monitor peripheral
-            test_sys.realview.my_device = MyDevice(
-                                                pio_addr = 0xD000D000,  # free address!!
-                                                word_width = options.cacheline_size, 
-                                                num_caches = np*2,
-                                                icache0 = test_sys.icache_port_0,
-                                                dcache0 = test_sys.dcache_port_0,
-                                                pio = test_sys.membus.master
-                                              )                                                                                                       
+        MemConfig.config_mem(options, test_sys)                                                                                                                                                         
 
     return test_sys
 

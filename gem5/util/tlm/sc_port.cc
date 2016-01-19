@@ -381,6 +381,24 @@ sc_transactor::getOwner() {
 }
 
 
+unsigned long long
+sc_transactor::readReg(unsigned int idx, unsigned int len) {
+    tlm::tlm_generic_payload trans;
+    unsigned char *ptr = new unsigned char[len];
+    
+    trans.set_command(tlm::TLM_READ_COMMAND);
+    trans.set_address(idx);
+    trans.set_data_length(len);
+    trans.set_data_ptr(ptr);
+        
+    iSocket->transport_dbg(trans);
+    sc_dt::uint64 ret = *((sc_dt::uint64 *) ptr);
+
+    delete ptr;
+    
+    return (unsigned long long) ret;
+}
+
 
 
 }

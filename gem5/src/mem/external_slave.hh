@@ -86,6 +86,8 @@ class ExternalSlave : public MemObject
          *  functionality */
 
         AddrRangeList getAddrRanges() const;
+        
+        virtual unsigned long long readReg(unsigned int idx, unsigned int len) {return 0;}
     };
 
     /* Handlers are specific to *types* of port not specific port
@@ -141,8 +143,8 @@ class ExternalSlave : public MemObject
 
     void init();
 
-    //TODO: put these extra functions in a new class derived from ExternalSlave()
-    void handle_lock_erasure(ContextID ctx_id);
+    void handleLockErasure(ContextID ctx_id);
+    unsigned long long readReg(unsigned int idx, unsigned int len);
 };
 
 

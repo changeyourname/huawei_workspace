@@ -93,7 +93,13 @@ def config_cache(options, system):
 
     if options.memchecker:
         system.memchecker = MemChecker()    
-
+        
+        
+    if options.disable_cache:
+        # parameters specific to using systemc caches    
+        sysc_cache_monitor_base = 0xD000D000        
+        sysc_cache_monitor_size = 4096
+        sysc_cache_num_regs = 2
         
     for i in xrange(options.num_cpus):
         if options.caches:
@@ -155,7 +161,9 @@ def config_cache(options, system):
             # following code is just making HookXBar() for each of i/d cache ports
             # this HookXBar() is then connected to system.membus via its master interface
             # while it is connected to ExternalSlave() via hook interface          
-            # This ExternalSlave()'s port is picked up in SystemC world
+            # This ExternalSlave()'s port is picked up in SystemC world            
+            # Moreover a gem5 peripheral is provided via which these SysC cache's registers
+            # can be read/programmed
             for j in xrange(2):
                 temp = ['i', 'd']
                 exec("system.%scache_bus_%d = HookXBar()" % (temp[j], i))
@@ -169,7 +177,14 @@ def config_cache(options, system):
                 exec("system.cpu[%d].%scache_port = system.%scache_bus_%d.slave" \
                                                     % (i, temp[j], temp[j], i))
                                                     
-                                                                
+                exec("system.%scache_mon_%d = SysC_CacheMonitor( \
+                                                pio_addr = sysc_cache_monitor_base, \
+                                                word_width = system.cache_line_size, \
+                                                num_regs = sysc_cache_num_regs, \
+                                                cache = system.%scache_port_%d, \
+                                                pio = system.membus.master\
+                                              )" % (temp[j], i, temp[j], i))
+                sysc_cache_monitor_base = sysc_cache_monitor_base + sysc_cache_monitor_size                                                                
 
             system.cpu[i].connectAllPorts(system.membus, None, tlm=True)
         else:  

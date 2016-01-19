@@ -258,17 +258,16 @@ ExternalSlave::registerHandler(const std::string &handler_name,
 
 
 void 
-ExternalSlave::handle_lock_erasure(ContextID ctx_id) 
+ExternalSlave::handleLockErasure(ContextID ctx_id) 
 {
     ThreadContext* ctx = system->getThreadContext(ctx_id);
     ctx->getCpuPtr()->wakeup(ctx->threadId());    
 }
 
-void 
-ExternalSlave::uzair() {
-    printf("uzair.........hahahaha\r\n");
+unsigned long long
+ExternalSlave::readReg(unsigned int idx, unsigned int len) {
+    return externalPort->readReg(idx, len);
 }
-
 
 
 

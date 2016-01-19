@@ -157,7 +157,7 @@ Target::checkLockedAddrList(PacketPtr pkt)
                 // automatically generated when clearing the exclusive
                 // monitor to wake up the processor in WFE. 
                          
-                gem5_master->handle_lock_erasure(i->contextId);
+                gem5_master->handleLockErasure(i->contextId);
                 
                 i = lockedAddrList.erase(i);
             } else {

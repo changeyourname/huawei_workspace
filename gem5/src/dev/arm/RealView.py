@@ -64,14 +64,13 @@ class AmbaPioDevice(BasicPioDevice):
     amba_id = Param.UInt32("ID of AMBA device for kernel detection")
     
 
-class MyDevice(BasicPioDevice):
-    type = 'MyDevice'
-    cxx_header = "dev/arm/my_device.hh"
+class SysC_CacheMonitor(BasicPioDevice):
+    type = 'SysC_CacheMonitor'
+    cxx_header = "dev/arm/sysc_cache_monitor.hh"
     
     word_width = Param.UInt32("word width (reg size) in bytes")
-    num_caches = Param.UInt32("number of i/d caches used in the platform")
-    icache0 = Param.ExternalSlave(Parent.any, "icache0 in sysc")
-    dcache0 = Param.ExternalSlave(Parent.any, "dcache0 in sysc")
+    num_regs = Param.UInt32("number of registers in the sysc cache")
+    cache = Param.ExternalSlave(Parent.any, "sysc cache to monitor")
 
 class AmbaIntDevice(AmbaPioDevice):
     type = 'AmbaIntDevice'

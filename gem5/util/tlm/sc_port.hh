@@ -150,6 +150,8 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
     bool recvTimingSnoopResp(PacketPtr packet);
     void recvRespRetry();
     void recvFunctionalSnoop(PacketPtr packet);
+    
+    unsigned long long readReg(unsigned int idx, unsigned int len) override;
 
     /** The TLM initiator interface */
     tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload& trans,

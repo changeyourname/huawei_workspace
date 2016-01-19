@@ -338,7 +338,7 @@ sc_main(int argc, char **argv)
 
     // right now, gem5 should have named its hooks "gem5.icache_port_X", 
     // "gem5.dcache_port_X" for smp core X to be picked up here!!
-    std::vector< tlm::tlm_initiator_socket<> * > smp_cache_ports;
+    std::vector< Gem5SystemC::sc_transactor * > smp_cache_ports;
     std::vector< cache * > smp_caches;
     std::string temp;
     
@@ -347,7 +347,7 @@ sc_main(int argc, char **argv)
         temp = (i%2==0) ? "gem5.icache_port_" + std::to_string(i/2) : 
                           "gem5.dcache_port_" + std::to_string(i/2) ;
         smp_cache_ports.push_back( 
-            dynamic_cast<tlm::tlm_initiator_socket<> *> (
+            dynamic_cast<Gem5SystemC::sc_transactor *> (
                 sc_core::sc_find_object(temp.c_str())
             )
         );

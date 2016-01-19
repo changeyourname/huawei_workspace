@@ -51,7 +51,7 @@ if env['TARGET_ISA'] == 'arm':
     Source('a9scu.cc')
     Source('amba_device.cc')
     Source('amba_fake.cc')
-    Source('my_device.cc')
+    Source('sysc_cache_monitor.cc')
     Source('base_gic.cc')
     Source('flash_device.cc')
     Source('generic_timer.cc')

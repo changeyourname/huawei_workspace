@@ -40,34 +40,70 @@
  * Authors: Uzair
  */
 
+#include "base/trace.hh"
+#include "dev/arm/sysc_cache_monitor.hh"
+#include "mem/packet.hh"
+#include "mem/packet_access.hh"
 
 
-#ifndef __DEV_ARM_MY_DEVICE_H__
-#define __DEV_ARM_MY_DEVICE_H__
 
-#include "dev/io_device.hh"
-#include "params/MyDevice.hh"
-#include "mem/external_slave.hh"
 
-class MyDevice : public BasicPioDevice
+
+// no write interface...only can read its registers
+// each register is 64bit...there are no actual registers but give illusion
+// to gem5 that its a peripheral with registers. whenever its register is read
+// by gem5, it will internally make call to corresponding SystemC cache model and get the 
+// required info and send it back to gem5 via passed pkt
+
+
+
+SysC_CacheMonitor::SysC_CacheMonitor(const Params *p)
+    : BasicPioDevice(p, 0xfff),
+      reg_size(p->word_width),
+      num_regs(p->num_regs),
+      gem5_cacheMaster(p->cache)
 {
-  public:
-   unsigned int reg_size;
-   unsigned int num_regs;
-   ExternalSlave *icache0;
-   ExternalSlave *dcache0;
-  
-   typedef MyDeviceParams Params;
-   const Params *
-    params() const
-    {
-        return dynamic_cast<const Params *>(_params);
+}
+
+Tick
+SysC_CacheMonitor::read(PacketPtr pkt)
+{
+    assert(pioAddr%reg_size == 0);             // must be correctly aligned
+    assert(pkt->getSize() == reg_size);         
+    
+    uint32_t reg_idx = (pkt->getAddr() - pioAddr) / reg_size;
+    assert(reg_idx < num_regs);        
+
+    if (reg_size == 4) {
+        pkt->set<uint32_t>(gem5_cacheMaster->readReg(reg_idx, 4));
+    } else if (reg_size == 8) {
+        pkt->set<uint64_t>(gem5_cacheMaster->readReg(reg_idx, 8));
+    } else {
+        assert(0);
     }
-    MyDevice(const Params *p);
 
-    virtual Tick read(PacketPtr pkt);
-    virtual Tick write(PacketPtr pkt);
+    pkt->makeAtomicResponse();
+    return pioDelay;
+}
 
-};
+Tick
+SysC_CacheMonitor::write(PacketPtr pkt)
+{
 
-#endif //__DEV_ARM_MY_DEVICE_H__
+//    Addr daddr = pkt->getAddr() - pioAddr;
+
+//    if (!params()->ignore_access)
+//        panic("Tried to write AmbaFake at offset %#x that doesn't exist\n", daddr);
+
+//    pkt->makeAtomicResponse();
+//    return pioDelay;
+
+    assert(0);
+}
+
+
+SysC_CacheMonitor *
+SysC_CacheMonitorParams::create()
+{
+    return new SysC_CacheMonitor(this);
+}

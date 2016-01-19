@@ -20,6 +20,9 @@ class cache : public sc_core::sc_module {
 	cache(sc_core::sc_module_name name);
 	~cache();
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);
+	unsigned int transport_dbg(tlm::tlm_generic_payload &trans);
+	
+	sc_dt::uint64 regs[2];
 };
 
 
