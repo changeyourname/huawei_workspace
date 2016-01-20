@@ -224,7 +224,7 @@ Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
         packet->makeResponse();
         ext->sendResponseToGem5 = true;
     }    
-    //delay += sc_core::sc_time(2, sc_core::SC_NS);        
+    delay += sc_core::sc_time(500, sc_core::SC_PS);        
 }
 
 unsigned int

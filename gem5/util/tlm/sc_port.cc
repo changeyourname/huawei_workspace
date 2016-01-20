@@ -188,6 +188,8 @@ sc_transactor::recvTimingReq(PacketPtr packet)
         (*this, &sc_transactor::pec, "PEQ");    
     phase = tlm::BEGIN_RESP;
     pe->notify(*trans, phase, delay);
+    //TODO: somehow avoid this below serialization!!
+    blockingResponse = trans;
 
     return true;
 }
@@ -210,6 +212,9 @@ sc_transactor::pec(
         gem5Extension *ext;
         trans.get_extension(ext);
         PacketPtr packet = ext->getPacket();
+        if (blockingResponse == &trans) {
+            blockingResponse = NULL;
+        }
 
         sc_assert(!blockingResponse);
 
