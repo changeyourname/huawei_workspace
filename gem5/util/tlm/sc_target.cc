@@ -222,7 +222,9 @@ Target::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
     
     if (packet->needsResponse()) {
         packet->makeResponse();
-    }        
+        ext->sendResponseToGem5 = true;
+    }    
+    //delay += sc_core::sc_time(2, sc_core::SC_NS);        
 }
 
 unsigned int
@@ -260,13 +262,6 @@ tlm::tlm_sync_enum Target::nb_transport_fw(tlm::tlm_generic_payload& trans,
     /* Queue the transaction until the annotated time has elapsed */
     m_peq.notify(trans, phase, delay);
     return tlm::TLM_ACCEPTED;
-
-// use this if 1-phase tlm protocol is going to be used
-/*
-    execute_transaction(trans);
-    phase = tlm::END_RESP;
-    return tlm::TLM_COMPLETED;
-*/
 }
 
 void

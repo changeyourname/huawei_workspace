@@ -46,7 +46,7 @@
 class gem5Extension: public tlm::tlm_extension<gem5Extension>
 {
   public:
-    gem5Extension(PacketPtr packet);
+    gem5Extension(PacketPtr packet);    
 
     virtual tlm_extension_base* clone() const;
     virtual void copy_from(const tlm_extension_base& ext);
@@ -54,6 +54,7 @@ class gem5Extension: public tlm::tlm_extension<gem5Extension>
     static gem5Extension& getExtension(const tlm::tlm_generic_payload *payload);
     static gem5Extension& getExtension(const tlm::tlm_generic_payload &payload);
     PacketPtr getPacket();
+    bool sendResponseToGem5;    
 
   private:
     PacketPtr Packet;

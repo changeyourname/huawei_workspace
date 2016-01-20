@@ -40,6 +40,7 @@ using namespace tlm;
 gem5Extension::gem5Extension(PacketPtr packet)
 {
     Packet = packet;
+    sendResponseToGem5 = false;
 }
 
 gem5Extension& gem5Extension::getExtension(const tlm_generic_payload *payload)

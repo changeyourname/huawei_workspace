@@ -154,7 +154,7 @@ SimControl::SimControl(sc_core::sc_module_name name,
     debug = false;
     offset = 0;
     enable_SystemC_mem = false;
-    num_gem5_smp_cores = 1;
+    num_gem5_smp_cores = 0;
 
     const std::string config_file(argv[arg_ptr]);
 
@@ -339,7 +339,7 @@ sc_main(int argc, char **argv)
     // right now, gem5 should have named its hooks "gem5.icache_port_X", 
     // "gem5.dcache_port_X" for smp core X to be picked up here!!
     std::vector< Gem5SystemC::sc_transactor * > smp_cache_ports;
-    std::vector< cache * > smp_caches;
+    std::vector< cache_dum * > smp_caches;
     std::string temp;
     
     for (int i=0; i<sim_control.num_gem5_smp_cores*2; i++) {
@@ -357,7 +357,7 @@ sc_main(int argc, char **argv)
             
             temp = (i%2==0) ? "icache_" + std::to_string(i/2) :
                               "dcache_" + std::to_string(i/2) ;
-            smp_caches.push_back(new cache(temp.c_str()));
+            smp_caches.push_back(new cache_dum(temp.c_str()));
             smp_caches[i]->socket.bind(*smp_cache_ports[i]);
         } else {
             temp = temp + " not found!";

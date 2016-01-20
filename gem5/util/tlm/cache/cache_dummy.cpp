@@ -11,33 +11,27 @@
 #include "cache_dummy.hpp"
 
 // constructor
-cache::cache(sc_core::sc_module_name name)
+cache_dum::cache_dum(sc_core::sc_module_name name)
 	:	sc_module(name),
 		socket("socket")												// initiator socket to downstream slave
 {
-    socket.register_b_transport(this, &cache::b_transport);
-    socket.register_transport_dbg(this, &cache::transport_dbg);
+    socket.register_b_transport(this, &cache_dum::b_transport);
+    socket.register_transport_dbg(this, &cache_dum::transport_dbg);
     
     regs[0] = 0x0;
     regs[1] = 0x0;
 }
 
 
-// deleting allocated stuff to avoid memory leaks
-cache::~cache() {
-
-}
-
 
 // port interface method
-void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
-//    std::cout << sc_core::sc_time_stamp() << "   " << name() 
-//              << ": addr=0x" << std::hex << trans.get_address() << std::dec << std::endl;
+void cache_dum::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
+    delay += sc_core::sc_time(2, sc_core::SC_NS);
 }
 
 
 unsigned int 
-cache::transport_dbg(tlm::tlm_generic_payload &trans) 
+cache_dum::transport_dbg(tlm::tlm_generic_payload &trans) 
 {
     // specifically use only for reading cache misses or access registers!!!    
         

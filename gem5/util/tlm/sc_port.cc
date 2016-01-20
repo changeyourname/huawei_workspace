@@ -101,7 +101,7 @@ sc_transactor::recvAtomic(PacketPtr packet)
     gem5Extension* extension = new gem5Extension(packet);
     trans->set_auto_extension(extension);
     
-    iSocket->b_transport(*trans, delay);    
+    iSocket->b_transport(*trans, delay);                    
         
     trans->release();        
     
@@ -160,28 +160,15 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     sc_assert(!needToSendRequestRetry);
 
     // simply drop inhibited packets and clean evictions
-    if (packet->cacheResponding() ||
-        packet->cmd == MemCmd::CleanEvict)
+    if (packet->cacheResponding() || packet->cmd == MemCmd::CleanEvict) {
         return true;
+    }
 
-    /* Remember if a request comes in while we're blocked so that a retry
-     * can be sent to gem5 */
-    if (blockingRequest) {
+    if (blockingResponse) {   
         needToSendRequestRetry = true;
         return false;
     }
 
-    /*  NOTE: normal tlm is blocking here. But in our case we return false
-     *  and tell gem5 when a retry can be done. This is the main difference
-     *  in the protocol:
-     *  if(requestInProgress)
-     *  {
-     *      wait(endRequestEvent);
-     *  }
-     *  requestInProgress = trans;
-    */
-
-    /* Prepare the transaction */
     tlm::tlm_generic_payload * trans = mm.allocate();
     trans->acquire();
     packet2payload(packet, *trans);
@@ -194,26 +181,13 @@ sc_transactor::recvTimingReq(PacketPtr packet)
      * Standard Page 507 for a visualisation of the procedure */
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
-    tlm::tlm_sync_enum status;
-    status = iSocket->nb_transport_fw(*trans, phase, delay);
-    /* Check returned value: */
-    if(status == tlm::TLM_ACCEPTED) {
-        sc_assert(phase == tlm::BEGIN_REQ);
-        /* Accepted but is now blocking until END_REQ (exclusion rule)*/
-        blockingRequest = trans;
-    } else if(status == tlm::TLM_UPDATED) {
-        /* The Timing annotation must be honored: */
-        sc_assert(phase == tlm::END_REQ || phase == tlm::BEGIN_RESP);
+    
+    iSocket->b_transport(*trans, delay);    
 
-        payloadEvent<sc_transactor> * pe;
-        pe = new payloadEvent<sc_transactor>(*this,
-            &sc_transactor::pec, "PEQ");
-        pe->notify(*trans, phase, delay);
-    } else if(status == tlm::TLM_COMPLETED) {
-        /* Transaction is over nothing has do be done. */
-        sc_assert(phase == tlm::END_RESP);
-        trans->release();
-    }
+    payloadEvent< sc_transactor > *pe = new payloadEvent< sc_transactor >
+        (*this, &sc_transactor::pec, "PEQ");    
+    phase = tlm::BEGIN_RESP;
+    pe->notify(*trans, phase, delay);
 
     return true;
 }
@@ -228,26 +202,19 @@ sc_transactor::pec(
 
     if(phase == tlm::END_REQ ||
             &trans == blockingRequest && phase == tlm::BEGIN_RESP) {
-        sc_assert(&trans == blockingRequest);
-        blockingRequest = NULL;
-
-        /* Did another request arrive while blocked, schedule a retry */
-        if (needToSendRequestRetry) {
-            needToSendRequestRetry = false;
-           iSocket.sendRetryReq();
-        }
+        assert(0);
     }
     else if(phase == tlm::BEGIN_RESP)
     {
         CAUGHT_UP;
-
-        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
+        gem5Extension *ext;
+        trans.get_extension(ext);
+        PacketPtr packet = ext->getPacket();
 
         sc_assert(!blockingResponse);
 
         bool need_retry;
-        if (packet->needsResponse()) {
-            packet->makeResponse();
+        if (ext->sendResponseToGem5) {
             need_retry = !iSocket.sendTimingResp(packet);
         } else {
             need_retry = false;
@@ -256,35 +223,10 @@ sc_transactor::pec(
         if (need_retry) {
             blockingResponse = &trans;
         } else {
-            if (phase == tlm::BEGIN_RESP) {
-                /* Send END_RESP and we're finished: */
-                tlm::tlm_phase fw_phase = tlm::END_RESP;
-                sc_time delay = SC_ZERO_TIME;
-                iSocket->nb_transport_fw(trans, fw_phase, delay);
-                /* Release the transaction with all the extensions */
-                trans.release();
-            }
+            trans.release();
         }
     } else if (phase == tlm::END_RESP) {
-        CAUGHT_UP;       
-
-        PacketPtr packet = gem5Extension::getExtension(trans).getPacket();
-
-        sc_assert(!blockingResponse);        
-
-        bool need_retry;
-        if (packet->needsResponse()) {
-            packet->makeResponse();
-            need_retry = !iSocket.sendTimingResp(packet);
-        } else {
-            need_retry = false;
-        }
-        
-        if (need_retry) {
-            blockingResponse = &trans;
-        } else {                                  
-            trans.release();        
-        }
+        assert(0);
     } else {
         SC_REPORT_FATAL("transactor", "Invalid protocol phase in pec");
     }
@@ -308,19 +250,13 @@ sc_transactor::recvRespRetry()
     bool need_retry = !iSocket.sendTimingResp(packet);
 
     sc_assert(!need_retry);
-
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-    tlm::tlm_phase phase = tlm::END_RESP;
-    iSocket->nb_transport_fw(*trans, phase, delay);
-
-// use this if 1 phase TLM protocol is used for nb_transport_.. by sc_target.hh/cc
-/*    
+    
+    /* Did another request arrive while blocked, schedule a retry */
     if (needToSendRequestRetry) {
         needToSendRequestRetry = false;
         iSocket.sendRetryReq();
-    }   
-*/
-
+    }    
+    
     // Release transaction with all the extensions
     trans->release();
 }
