@@ -57,11 +57,15 @@
  * object).
  */
 
+
+//TODO: remove systemc cache integration stuff!!
+
 #ifndef __MEM_EXTERNAL_SLAVE__
 #define __MEM_EXTERNAL_SLAVE__
 
 #include "mem/mem_object.hh"
 #include "params/ExternalSlave.hh"
+
 
 class System;
 

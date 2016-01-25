@@ -182,7 +182,8 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
     
-    iSocket->b_transport(*trans, delay);    
+    iSocket->b_transport(*trans, delay);  
+    //packet->cacheDelay = delay.to_seconds()/1e-12;  
 
     payloadEvent< sc_transactor > *pe = new payloadEvent< sc_transactor >
         (*this, &sc_transactor::pec, "PEQ");    

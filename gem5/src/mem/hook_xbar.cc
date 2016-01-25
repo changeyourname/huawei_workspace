@@ -109,24 +109,123 @@ HookXBar::~HookXBar()
 bool
 HookXBar::recvTimingReq(PacketPtr pkt, PortID slave_port_id)
 {
-    // not supported
-    assert(0);
-    return false;
+    // determine the source port based on the id
+    SlavePort *src_port = slavePorts[slave_port_id];
+
+    // determine the destination based on the address
+    PortID master_port_id = findPort(pkt->getAddr());
+
+    // test if the layer should be considered occupied for the current
+    // port
+    if (!reqLayers[master_port_id]->tryTiming(src_port)) {
+        DPRINTF(HookXBar, "recvTimingReq: src %s %s 0x%x BUSY\n",
+                src_port->name(), pkt->cmdString(), pkt->getAddr());
+        return false;
+    }
+
+    DPRINTF(HookXBar, "recvTimingReq: src %s %s 0x%x\n",
+            src_port->name(), pkt->cmdString(), pkt->getAddr());
+
+    // store the old header delay so we can restore it if needed
+    Tick old_header_delay = pkt->headerDelay;
+
+    // a request sees the frontend and forward latency
+//    Tick xbar_delay = (frontendLatency + forwardLatency) * clockPeriod();
+
+    // set the packet header and payload delay
+    //calcPacketTiming(pkt, xbar_delay);
+
+    // determine how long to be crossbar layer is busy
+    Tick packetFinishTime = clockEdge(Cycles(1)) + pkt->payloadDelay;
+
+    // before forwarding the packet (and possibly altering it),
+    // remember if we are expecting a response
+    const bool expect_response = pkt->needsResponse() &&
+        !pkt->cacheResponding();
+
+    pkt->cacheDelay = HookPort->sendAtomic(pkt);
+    // since it is a normal request, attempt to send the packet
+    bool success = masterPorts[master_port_id]->sendTimingReq(pkt);
+
+    if (!success)  {
+        DPRINTF(HookXBar, "recvTimingReq: src %s %s 0x%x RETRY\n",
+                src_port->name(), pkt->cmdString(), pkt->getAddr());
+
+        // restore the header delay as it is additive
+        pkt->headerDelay = old_header_delay;
+
+        // occupy until the header is sent
+        reqLayers[master_port_id]->failedTiming(src_port,
+                                                clockEdge(Cycles(1)));
+
+        return false;
+    }
+
+    // remember where to route the response to
+    if (expect_response) {
+        assert(routeTo.find(pkt->req) == routeTo.end());
+        routeTo[pkt->req] = slave_port_id;
+    }
+
+    reqLayers[master_port_id]->succeededTiming(packetFinishTime);
+
+    return true;
 }
 
 bool
 HookXBar::recvTimingResp(PacketPtr pkt, PortID master_port_id)
 {
-    // not supported
-    assert(0);
-    return false;
+    // determine the source port based on the id
+    MasterPort *src_port = masterPorts[master_port_id];
+
+    // determine the destination
+    const auto route_lookup = routeTo.find(pkt->req);
+    assert(route_lookup != routeTo.end());
+    const PortID slave_port_id = route_lookup->second;
+    assert(slave_port_id != InvalidPortID);
+    assert(slave_port_id < respLayers.size());
+
+    // test if the layer should be considered occupied for the current
+    // port
+    if (!respLayers[slave_port_id]->tryTiming(src_port)) {
+        DPRINTF(HookXBar, "recvTimingResp: src %s %s 0x%x BUSY\n",
+                src_port->name(), pkt->cmdString(), pkt->getAddr());
+        return false;
+    }
+
+    DPRINTF(HookXBar, "recvTimingResp: src %s %s 0x%x\n",
+            src_port->name(), pkt->cmdString(), pkt->getAddr());
+
+    // a response sees the response latency
+//    Tick xbar_delay = responseLatency * clockPeriod();
+
+    // set the packet header and payload delay
+//    calcPacketTiming(pkt, xbar_delay);
+
+    // determine how long to be crossbar layer is busy
+    Tick packetFinishTime = clockEdge(Cycles(1)) + pkt->payloadDelay;
+
+    // send the packet through the destination slave port, and pay for
+    // any outstanding latency
+    Tick latency = pkt->headerDelay;
+    pkt->headerDelay = 0;
+    slavePorts[slave_port_id]->schedTimingResp(pkt, curTick() + latency);
+
+    // remove the request from the routing table
+    routeTo.erase(route_lookup);
+
+    respLayers[slave_port_id]->succeededTiming(packetFinishTime);
+
+    return true;
 }
 
 void
 HookXBar::recvReqRetry(PortID master_port_id)
 {
-    // not supported
-    assert(0);
+    // responses never block on forwarding them, so the retry will
+    // always be coming from a port to which we tried to forward a
+    // request
+    reqLayers[master_port_id]->recvRetry();
 }
 
 Tick

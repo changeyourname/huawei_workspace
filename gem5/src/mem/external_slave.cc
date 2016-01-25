@@ -36,6 +36,9 @@
  *
  * Authors: Andrew Bardsley
  */
+ 
+ 
+ //TODO: remove systemc cache integration stuff!!
 
 #include <cctype>
 #include <iomanip>

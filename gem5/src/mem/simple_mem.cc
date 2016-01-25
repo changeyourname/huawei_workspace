@@ -121,7 +121,7 @@ SimpleMemory::recvTimingReq(PacketPtr pkt)
     // technically the packet only reaches us after the header delay,
     // and since this is a memory controller we also need to
     // deserialise the payload before performing any write operation
-    Tick receive_delay = pkt->headerDelay + pkt->payloadDelay;
+    Tick receive_delay = pkt->headerDelay + pkt->payloadDelay + pkt->cacheDelay;
     pkt->headerDelay = pkt->payloadDelay = 0;
 
     // update the release time according to the bandwidth limit, and

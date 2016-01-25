@@ -26,7 +26,7 @@ cache_dum::cache_dum(sc_core::sc_module_name name)
 
 // port interface method
 void cache_dum::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
-    delay += sc_core::sc_time(2, sc_core::SC_NS);
+    //delay += sc_core::sc_time(20, sc_core::SC_NS);
 }
 
 
