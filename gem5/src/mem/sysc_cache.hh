@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 ARM Limited
+ * Copyright (c) 2012-2013, 2015 ARM Limited
  * All rights reserved
  *
  * The license below extends only to copyright in the software and shall
@@ -34,67 +34,223 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Authors: Andrew Bardsley
+ * Authors: Thomas Grass
+ *          Andreas Hansson
  */
 
-/**
- * @file
- *
- * TODO: documentation!!
- */
-
-#ifndef __SYSC_CACHE__
-#define __SYSC_CACHE__
+#ifndef __SYSC_CACHE_HH__
+#define __SYSC_CACHE_HH__
 
 #include "mem/mem_object.hh"
 #include "params/SysC_Cache.hh"
 
-class System;
 
-class SysC_Cache : public ExternalSlave
+// TODO: documentation!!
+
+class SysC_Cache : public MemObject
 {
-  public:    
-    class MemPort : public MasterPort
+
+  public: // Construction & SimObject interfaces
+
+    /** Parameters of communication monitor */
+    typedef SysC_CacheParams Params;
+    const Params* params() const
+    { return reinterpret_cast<const Params*>(_params); }
+
+    /**
+     * Constructor based on the Python params
+     *
+     * @param params Python parameters
+     */
+    SysC_Cache(Params* params);
+
+    void init() override;
+
+  public: // MemObject interfaces
+    BaseMasterPort &getMasterPort(const std::string &if_name,
+                                  PortID idx = InvalidPortID) override;
+
+    BaseSlavePort &getSlavePort(const std::string &if_name,
+                                PortID idx = InvalidPortID) override;
+
+  private:
+
+    /**
+     * Sender state class for the monitor so that we can annotate
+     * packets with a transmit time and receive time.
+     */
+    class SysC_CacheSenderState : public Packet::SenderState
     {
+
       public:
-        MemPort(const std::string& _name, SysC_Cache& _owner)
-            : MasterPort(_name, &_owner), mon(_owner)
+
+        /**
+         * Construct a new sender state and store the time so we can
+         * calculate round-trip latency.
+         *
+         * @param _transmitTime Time of packet transmission
+         */
+        SysC_CacheSenderState(Tick _transmitTime)
+            : transmitTime(_transmitTime)
+        { }
+
+        /** Destructor */
+        ~SysC_CacheSenderState() { }
+
+        /** Tick when request is transmitted */
+        Tick transmitTime;
+
+    };
+
+    /**
+     * This is the master port of the communication monitor. All recv
+     * functions call a function in CommMonitor, where the
+     * send function of the slave port is called. Besides this, these
+     * functions can also perform actions for capturing statistics.
+     */
+    class MPort : public MasterPort
+    {
+
+      public:
+
+        MPort(const std::string &_name, SysC_Cache &_owner)
+            : MasterPort(_name, &_owner), owner(_owner)
         { }
 
       protected:
+
+        void recvFunctionalSnoop(PacketPtr pkt)
+        {
+            owner.recvFunctionalSnoop(pkt);
+        }
+
+        Tick recvAtomicSnoop(PacketPtr pkt)
+        {
+            return owner.recvAtomicSnoop(pkt);
+        }
+
         bool recvTimingResp(PacketPtr pkt)
         {
+            return owner.recvTimingResp(pkt);
+        }
+
+        void recvTimingSnoopReq(PacketPtr pkt)
+        {
+            owner.recvTimingSnoopReq(pkt);
         }
 
         void recvRangeChange()
         {
+            owner.recvRangeChange();
+        }
+
+        bool isSnooping() const
+        {
+            return owner.isSnooping();
         }
 
         void recvReqRetry()
         {
+            owner.recvReqRetry();
+        }
+
+        void recvRetrySnoopResp()
+        {
+            owner.recvRetrySnoopResp();
         }
 
       private:
-        SysC_Cache& owner;
+
+        SysC_Cache &owner;
+
     };
 
     /** Instance of master port, facing the memory side */
-    MonitorMasterPort masterPort;  
+    MPort memPort;
 
-  protected:
-    System *system;
+    /**
+     * This is the slave port of the communication monitor. All recv
+     * functions call a function in CommMonitor, where the
+     * send function of the master port is called. Besides this, these
+     * functions can also perform actions for capturing statistics.
+     */
+    class SPort : public SlavePort
+    {
 
-  public:
-    SysC_Cache(SysC_CacheParams *params);
-    
-    BaseMasterPort& getMasterPort(const std::string& if_name,
-                                  PortID idx = InvalidPortID) override;
-    BaseSlavePort& getSlavePort(const std::string& if_name,
-                                PortID idx = InvalidPortID) override;                                      
-    void init() override;
-    void handleLockErasure(ContextID ctx_id);
-    unsigned long long readReg(unsigned int idx, unsigned int len);
+      public:
+
+        SPort(const std::string &_name, SysC_Cache &_owner)
+            : SlavePort(_name, &_owner), owner(_owner)
+        { }
+
+      protected:
+
+        void recvFunctional(PacketPtr pkt)
+        {
+            owner.recvFunctional(pkt);
+        }
+
+        Tick recvAtomic(PacketPtr pkt)
+        {
+            return owner.recvAtomic(pkt);
+        }
+
+        bool recvTimingReq(PacketPtr pkt)
+        {
+            return owner.recvTimingReq(pkt);
+        }
+
+        bool recvTimingSnoopResp(PacketPtr pkt)
+        {
+            return owner.recvTimingSnoopResp(pkt);
+        }
+
+        AddrRangeList getAddrRanges() const
+        {
+            return owner.getAddrRanges();
+        }
+
+        void recvRespRetry()
+        {
+            owner.recvRespRetry();
+        }
+
+      private:
+
+        SysC_Cache &owner;
+
+    };
+
+    /** Instance of slave port, i.e. on the CPU side */
+    SPort extPort;
+
+    void recvFunctional(PacketPtr pkt);
+
+    void recvFunctionalSnoop(PacketPtr pkt);
+
+    Tick recvAtomic(PacketPtr pkt);
+
+    Tick recvAtomicSnoop(PacketPtr pkt);
+
+    bool recvTimingReq(PacketPtr pkt);
+
+    bool recvTimingResp(PacketPtr pkt);
+
+    void recvTimingSnoopReq(PacketPtr pkt);
+
+    bool recvTimingSnoopResp(PacketPtr pkt);
+
+    void recvRetrySnoopResp();
+
+    AddrRangeList getAddrRanges() const;
+
+    bool isSnooping() const;
+
+    void recvReqRetry();
+
+    void recvRespRetry();
+
+    void recvRangeChange();
 };
 
-
-#endif // __SYSC_CACHE__
+#endif //__MEM_COMM_MONITOR_HH__

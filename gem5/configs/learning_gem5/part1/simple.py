@@ -51,62 +51,39 @@ system.clk_domain.clock = '1GHz'
 system.clk_domain.voltage_domain = VoltageDomain()
 
 # Set up the system
-system.mem_mode = 'atomic'
+system.mem_mode = 'atomic'               # Use timing accesses
 system.mem_ranges = [AddrRange('512MB')] # Create an address range
 
 # Create a simple CPU
 system.cpu = AtomicSimpleCPU()
-# create the interrupt controller for the CPU and connect to the membus
-system.cpu.createInterruptController()  
 
 # Create a memory bus, a system crossbar, in this case
 system.membus = SystemXBar()
-system.icache_hook = SystemXBar()
-system.dcache_hook = SystemXBar()
 
-system.physmem = SimpleMemory()     # have to instantiate this even if not needed
+# Hook the CPU ports up to the membus
+#system.icache_0 = CommMonitor()
+#system.dcache_0 = CommMonitor()
+system.icache_0 = SysC_Cache()
+system.dcache_0 = SysC_Cache()
+system.cpu.icache_port = system.icache_0.extPort
+system.cpu.dcache_port = system.dcache_0.extPort
+system.icache_0.memPort = system.membus.slave
+system.dcache_0.memPort = system.membus.slave
 
+# create the interrupt controller for the CPU and connect to the membus
+system.cpu.createInterruptController()
 
-system.cpu.icache_port = system.icache_hook.slave
-# connection to main system interconnect
-system.icache_hook_bridge = Bridge()
-system.icache_hook_bridge.master = system.membus.slave
-system.icache_hook_bridge.slave = system.icache_hook.master
-system.icache_hook_bridge.ranges = [AddrRange(start=0x0, end=0x1ff), AddrRange(start=0x400, end=0xffffffff)]
-# provide icache hook to systemc
-system.icache = ExternalSlave()
-system.icache.port_type = "tlm"
-system.icache.port_data = "icache"
-system.icache.port = system.icache_hook.master
-system.icache.addr_ranges = [AddrRange(start=0x200, end=0x3ff)]
+# For x86 only, make sure the interrupts are connected to the memory
+# Note: these are directly connected to the memory bus and are not cached
+if m5.defines.buildEnv['TARGET_ISA'] == "x86":
+    system.cpu.interrupts[0].pio = system.membus.master
+    system.cpu.interrupts[0].int_master = system.membus.slave
+    system.cpu.interrupts[0].int_slave = system.membus.master
 
-
-
-
-
-system.cpu.dcache_port = system.dcache_hook.slave
-# connection to main system interconnect
-system.dcache_hook_bridge = Bridge()
-system.dcache_hook_bridge.master = system.membus.slave
-system.dcache_hook_bridge.slave = system.dcache_hook.master
-system.dcache_hook_bridge.ranges = [AddrRange(start=0x0, end=0x3ff), AddrRange(start=0x800, end=0xffffffff)]
-# provide icache hook to systemc
-system.dcache = ExternalSlave()
-system.dcache.port_type = "tlm"
-system.dcache.port_data = "dcache"
-system.dcache.port = system.dcache_hook.master
-system.dcache.addr_ranges = [AddrRange(start=0x400, end=0x7ff)]
-
-
-
-
-
-# main system interconnect hook to systemc
-system.mem_ctrl = ExternalSlave()
-system.mem_ctrl.port_type = "tlm"
-system.mem_ctrl.port_data = "memory"
+# Create a DDR3 memory controller and connect it to the membus
+system.mem_ctrl = SimpleMemory()
+system.mem_ctrl.range = system.mem_ranges[0]
 system.mem_ctrl.port = system.membus.master
-system.mem_ctrl.addr_ranges = system.mem_ranges
 
 # Connect the system up to the membus
 system.system_port = system.membus.slave
