@@ -171,20 +171,16 @@ SysC_Cache::recvTimingReq(PacketPtr pkt)
 
 bool
 SysC_Cache::recvTimingResp(PacketPtr pkt)
-{
-    assert(0);
-    return false;
-    
-//    // should always see responses
-//    assert(pkt->isResponse());
-//    return extPort.sendTimingResp(pkt);
+{   
+    // should always see responses
+    assert(pkt->isResponse());
+    return extPort->sendTimingResp(pkt);
 }
 
 void
 SysC_Cache::recvTimingSnoopReq(PacketPtr pkt)
 {
-    assert(0);
-//    extPort.sendTimingSnoopReq(pkt);
+    extPort->sendTimingSnoopReq(pkt);
 }
 
 bool
@@ -196,8 +192,7 @@ SysC_Cache::recvTimingSnoopResp(PacketPtr pkt)
 void
 SysC_Cache::recvRetrySnoopResp()
 {
-    assert(0);
-//    extPort.sendRetrySnoopResp();
+    extPort->sendRetrySnoopResp();
 }
 
 bool
@@ -217,8 +212,7 @@ SysC_Cache::getAddrRanges() const
 void
 SysC_Cache::recvReqRetry()
 {
-    assert(0);
-//    extPort.sendRetryReq();
+    extPort->sendRetryReq();
 }
 
 void

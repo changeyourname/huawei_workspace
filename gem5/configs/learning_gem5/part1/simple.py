@@ -51,11 +51,11 @@ system.clk_domain.clock = '1GHz'
 system.clk_domain.voltage_domain = VoltageDomain()
 
 # Set up the system
-system.mem_mode = 'atomic'               # Use timing accesses
+system.mem_mode = 'timing'               # Use timing accesses
 system.mem_ranges = [AddrRange('512MB')] # Create an address range
 
 # Create a simple CPU
-system.cpu = AtomicSimpleCPU()
+system.cpu = TimingSimpleCPU()
 
 # Create a memory bus, a system crossbar, in this case
 system.membus = SystemXBar()
@@ -63,11 +63,11 @@ system.membus = SystemXBar()
 # Hook the CPU ports up to the membus
 system.icache_0 = SysC_Cache(
                                 port_type = "tlm",
-                                port_data = "icache_port_0"
+                                port_data = "icache_0"
                             )
 system.dcache_0 = SysC_Cache(
                                 port_type = "tlm",
-                                port_data = "dcache_port_0"
+                                port_data = "dcache_0"
                             )
 system.cpu.icache_port = system.icache_0.extPort
 system.cpu.dcache_port = system.dcache_0.extPort

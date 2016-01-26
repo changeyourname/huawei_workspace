@@ -6,7 +6,7 @@
         "mmap_using_noreserve": false, 
         "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzair/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzair/aarch-system-2014-10/binaries/vmlinux.aarch64.20140821", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -102,14 +102,65 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.dcache_1", 
             "type": "SysC_Cache", 
-            "port_data": "dcache_port_1"
+            "port_data": "dcache_1"
         }, 
         "readfile": "", 
         "have_large_asid_64": false, 
+        "dcache_mon_0": {
+            "name": "dcache_mon_0", 
+            "word_width": 8, 
+            "cache": "system.dcache_0", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[6]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.dcache_mon_0", 
+            "pio_addr": 3489718272, 
+            "type": "SysC_CacheMonitor"
+        }, 
+        "dcache_mon_1": {
+            "name": "dcache_mon_1", 
+            "word_width": 8, 
+            "cache": "system.dcache_1", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[8]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.dcache_mon_1", 
+            "pio_addr": 3489726464, 
+            "type": "SysC_CacheMonitor"
+        }, 
+        "dcache_mon_2": {
+            "name": "dcache_mon_2", 
+            "word_width": 8, 
+            "cache": "system.dcache_2", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[10]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.dcache_mon_2", 
+            "pio_addr": 3489734656, 
+            "type": "SysC_CacheMonitor"
+        }, 
         "phys_addr_range_64": 40, 
-        "have_lpae": false, 
-        "cxx_class": "LinuxArmSystem", 
-        "load_offset": 2147483648, 
         "vncserver": {
             "name": "vncserver", 
             "number": 0, 
@@ -119,6 +170,63 @@
             "path": "system.vncserver", 
             "type": "VncServer", 
             "port": 5900
+        }, 
+        "have_lpae": false, 
+        "cxx_class": "LinuxArmSystem", 
+        "icache_mon_2": {
+            "name": "icache_mon_2", 
+            "word_width": 8, 
+            "cache": "system.icache_2", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[9]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.icache_mon_2", 
+            "pio_addr": 3489730560, 
+            "type": "SysC_CacheMonitor"
+        }, 
+        "load_offset": 2147483648, 
+        "icache_mon_1": {
+            "name": "icache_mon_1", 
+            "word_width": 8, 
+            "cache": "system.icache_1", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[7]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.icache_mon_1", 
+            "pio_addr": 3489722368, 
+            "type": "SysC_CacheMonitor"
+        }, 
+        "icache_mon_0": {
+            "name": "icache_mon_0", 
+            "word_width": 8, 
+            "cache": "system.icache_0", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[5]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.icache_mon_0", 
+            "pio_addr": 3489714176, 
+            "type": "SysC_CacheMonitor"
         }, 
         "multi_proc": true, 
         "voltage_domain": {
@@ -133,7 +241,7 @@
         }, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.4cpu.dtb", 
+        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch64.20140821.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -487,7 +595,7 @@
             "pci_host": {
                 "conf_size": 268435456, 
                 "name": "pci_host", 
-                "conf_device_bits": 16, 
+                "conf_device_bits": 12, 
                 "pio": {
                     "peer": "system.iobus.master[2]", 
                     "role": "SLAVE"
@@ -500,7 +608,7 @@
                 "eventq_index": 0, 
                 "cxx_class": "GenericPciHost", 
                 "path": "system.realview.pci_host", 
-                "pci_pio_base": 0, 
+                "pci_pio_base": 788529152, 
                 "type": "GenericPciHost", 
                 "pci_mem_base": 0
             }, 
@@ -727,7 +835,7 @@
                 "clk_domain": "system.clk_domain", 
                 "latency_var": 0, 
                 "bandwidth": "73.000000", 
-                "conf_table_reported": false, 
+                "conf_table_reported": true, 
                 "cxx_class": "SimpleMemory", 
                 "path": "system.realview.nvmem", 
                 "null": false, 
@@ -1219,6 +1327,14 @@
                     "system.realview.gic.pio", 
                     "system.realview.vgic.pio", 
                     "system.realview.local_cpu_timer.pio", 
+                    "system.icache_mon_0.pio", 
+                    "system.dcache_mon_0.pio", 
+                    "system.icache_mon_1.pio", 
+                    "system.dcache_mon_1.pio", 
+                    "system.icache_mon_2.pio", 
+                    "system.dcache_mon_2.pio", 
+                    "system.icache_mon_3.pio", 
+                    "system.dcache_mon_3.pio", 
                     "system.mem_ctrls.port"
                 ], 
                 "role": "MASTER"
@@ -1250,7 +1366,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.dcache_3", 
             "type": "SysC_Cache", 
-            "port_data": "dcache_port_3"
+            "port_data": "dcache_3"
         }, 
         "eventq_index": 0, 
         "work_begin_cpu_id_exit": -1, 
@@ -1312,9 +1428,9 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.dcache_2", 
             "type": "SysC_Cache", 
-            "port_data": "dcache_port_2"
+            "port_data": "dcache_2"
         }, 
-        "cache_line_size": 4, 
+        "cache_line_size": 8, 
         "dcache_0": {
             "memPort": {
                 "peer": "system.membus.slave[4]", 
@@ -1333,7 +1449,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.dcache_0", 
             "type": "SysC_Cache", 
-            "port_data": "dcache_port_0"
+            "port_data": "dcache_0"
         }, 
         "cpu_voltage_domain": {
             "name": "cpu_voltage_domain", 
@@ -1364,7 +1480,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.icache_0", 
             "type": "SysC_Cache", 
-            "port_data": "icache_port_0"
+            "port_data": "icache_0"
         }, 
         "icache_1": {
             "memPort": {
@@ -1384,7 +1500,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.icache_1", 
             "type": "SysC_Cache", 
-            "port_data": "icache_port_1"
+            "port_data": "icache_1"
         }, 
         "icache_2": {
             "memPort": {
@@ -1404,7 +1520,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.icache_2", 
             "type": "SysC_Cache", 
-            "port_data": "icache_port_2"
+            "port_data": "icache_2"
         }, 
         "icache_3": {
             "memPort": {
@@ -1424,7 +1540,7 @@
             "cxx_class": "SysC_Cache", 
             "path": "system.icache_3", 
             "type": "SysC_Cache", 
-            "port_data": "icache_port_3"
+            "port_data": "icache_3"
         }, 
         "terminal": {
             "name": "terminal", 
@@ -2235,7 +2351,7 @@
         "gic_cpu_addr": 738205696, 
         "work_cpus_ckpt_count": 0, 
         "work_begin_exit_count": 0, 
-        "machine_type": "VExpress_EMM", 
+        "machine_type": "VExpress_EMM64", 
         "flags_addr": 469827632, 
         "path": "system", 
         "cpu_clk_domain": {
@@ -2265,7 +2381,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzair/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzair/aarch-system-2014-10/disks/linaro-minimal-aarch64.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -2298,6 +2414,24 @@
             "type": "IntrControl"
         }, 
         "have_security": false, 
+        "dcache_mon_3": {
+            "name": "dcache_mon_3", 
+            "word_width": 8, 
+            "cache": "system.dcache_3", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[12]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.dcache_mon_3", 
+            "pio_addr": 3489742848, 
+            "type": "SysC_CacheMonitor"
+        }, 
         "atags_addr": 134217728, 
         "memories": [
             "system.mem_ctrls", 
@@ -2319,15 +2453,33 @@
                 "null": false, 
                 "type": "SimpleMemory", 
                 "port": {
-                    "peer": "system.membus.master[5]", 
+                    "peer": "system.membus.master[13]", 
                     "role": "SLAVE"
                 }, 
                 "in_addr_map": true
             }
         ], 
+        "icache_mon_3": {
+            "name": "icache_mon_3", 
+            "word_width": 8, 
+            "cache": "system.icache_3", 
+            "pio_latency": 100000, 
+            "clk_domain": "system.clk_domain", 
+            "system": "system", 
+            "eventq_index": 0, 
+            "num_regs": 2, 
+            "cxx_class": "SysC_CacheMonitor", 
+            "pio": {
+                "peer": "system.membus.master[11]", 
+                "role": "SLAVE"
+            }, 
+            "path": "system.icache_mon_3", 
+            "pio_addr": 3489738752, 
+            "type": "SysC_CacheMonitor"
+        }, 
         "num_work_ids": 16, 
         "boot_loader": [
-            "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm64"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false
