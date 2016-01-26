@@ -41,7 +41,7 @@
 #include <systemc>
 #include <tlm>
 #include "sc_ext.hh"
-#include "mem/external_slave.hh"
+#include "mem/sysc_cache.hh"
 #include "mem/abstract_mem.hh"
 
 using namespace sc_core;
@@ -69,7 +69,7 @@ struct Target: sc_module
         unsigned long long int size,
         unsigned int offset, 
         unsigned char *mem,
-        ExternalSlave *gem5_master);
+        SysC_Cache *gem5_master);
     SC_HAS_PROCESS(Target);
 
     /** TLM interface functions */
@@ -105,7 +105,7 @@ struct Target: sc_module
     unsigned int get_reqCount();
     
   private:
-    ExternalSlave *gem5_master;
+    SysC_Cache *gem5_master;
   
     std::list<LockedAddr> lockedAddrList; 
       

@@ -41,7 +41,7 @@
 #include <systemc>
 #include <tlm>
 
-#include "mem/external_slave.hh"
+#include "mem/sysc_cache.hh"
 #include "sc_mm.hh"
 #include "sc_module.hh"
 
@@ -57,7 +57,7 @@ namespace Gem5SystemC
 
 class sc_transactor : public tlm::tlm_initiator_socket<>,
         public tlm::tlm_bw_transport_if<>,
-        public ExternalSlave::Port
+        public SysC_Cache::SPort
 {
   public:
     sc_transactor &iSocket;
@@ -151,7 +151,7 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
     void recvRespRetry();
     void recvFunctionalSnoop(PacketPtr packet);
     
-    unsigned long long readReg(unsigned int idx, unsigned int len) override;
+//    unsigned long long readReg(unsigned int idx, unsigned int len) override;
 
     /** The TLM initiator interface */
     tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload& trans,
@@ -164,9 +164,9 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
   public:
     sc_transactor(const std::string &name_,
            const std::string &systemc_name,
-           ExternalSlave &owner_);     
+           SysC_Cache &owner_);     
            
-    ExternalSlave *getOwner();           
+    SysC_Cache *getOwner();           
 };
 
 void registerPort(const std::string &name, Port &port);

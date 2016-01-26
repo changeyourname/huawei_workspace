@@ -37,16 +37,44 @@
  * Authors: Thomas Grass
  *          Andreas Hansson
  */
+ 
+//TODO: remove extra functions and logic
 
-#include "base/trace.hh"
 #include "mem/sysc_cache.hh"
+#include "sim/system.hh"
+#include "cpu/thread_context.hh"
+#include "cpu/base.hh"
+
+
+std::map<std::string, SysC_Cache::Handler *>
+    SysC_Cache::portHandlers;
+
+AddrRangeList
+SysC_Cache::SPort::getAddrRanges() const
+{
+    return owner.addrRanges;
+}
+
+
 
 SysC_Cache::SysC_Cache(Params* params)
     : MemObject(params),
       memPort(name() + "-memPort", *this),
-      extPort(name() + "-extPort", *this)
+      extPort(NULL),
+      portName(params->name + ".extPort"),
+      portType(params->port_type),
+      portData(params->port_data),
+      addrRanges(params->addr_ranges.begin(), params->addr_ranges.end())
 {
 }
+
+
+void
+SysC_Cache::registerHandler(const std::string &handler_name, Handler *handler)
+{
+    portHandlers[handler_name] = handler;
+}
+
 
 SysC_Cache*
 SysC_CacheParams::create()
@@ -58,8 +86,17 @@ void
 SysC_Cache::init()
 {
     // make sure both sides of the monitor are connected
-    if (!extPort.isConnected() || !memPort.isConnected())
-        fatal("SysC_Cache ports not connected on both sides.\n");
+    if (!memPort.isConnected()) {
+        fatal("SysC_Cache ports not connected on memory sides.\n");
+    }
+    
+    if (!extPort) {
+        fatal("SysC_Cache %s: externalPort not set!\n", name());
+    } else if (!extPort->isConnected()) {
+        fatal("SysC_Cache %s is unconnected\n", name());        
+    } else {
+        extPort->sendRangeChange();
+    }
 }
 
 
@@ -77,11 +114,26 @@ BaseSlavePort &
 SysC_Cache::getSlavePort(const std::string &if_name, PortID idx)
 {
     if (if_name == "extPort") {
-        return extPort;
+        if (!extPort) {
+            auto handlerIter = portHandlers.find(portType);
+            
+            if (handlerIter == portHandlers.end()) {
+                fatal("Can't find port handler type '%s'\n", portType);
+            }   
+            
+            extPort = portHandlers[portType]->getExternalPort(portName, *this, portData);
+            
+            if (!extPort) {
+                fatal("%s: Can't find external port type: %s"
+                    " port_data: '%s'\n", portName, portType, portData);
+            }
+        }
+        return *extPort;
     } else {
         return MemObject::getSlavePort(if_name, idx);
     }
 }
+
 
 void
 SysC_Cache::recvFunctional(PacketPtr pkt)
@@ -92,7 +144,7 @@ SysC_Cache::recvFunctional(PacketPtr pkt)
 void
 SysC_Cache::recvFunctionalSnoop(PacketPtr pkt)
 {
-    extPort.sendFunctionalSnoop(pkt);
+    extPort->sendFunctionalSnoop(pkt);
 }
 
 Tick
@@ -106,129 +158,15 @@ SysC_Cache::recvAtomic(PacketPtr pkt)
 Tick
 SysC_Cache::recvAtomicSnoop(PacketPtr pkt)
 {
-    return extPort.sendAtomicSnoop(pkt);
+    return extPort->sendAtomicSnoop(pkt);
 }
 
 bool
 SysC_Cache::recvTimingReq(PacketPtr pkt)
 {
-    assert(0);
-    return false;
-    
-//    // should always see a request
-//    assert(pkt->isRequest());
-
-//    // Store relevant fields of packet, because packet may be modified
-//    // or even deleted when sendTiming() is called.
-//    const ProbePoints::PacketInfo pkt_info(pkt);
-
-//    const bool is_read = pkt->isRead();
-//    const bool is_write = pkt->isWrite();
-//    const bool expects_response(
-//        pkt->needsResponse() && !pkt->cacheResponding());
-
-//    // If a cache miss is served by a cache, a monitor near the memory
-//    // would see a request which needs a response, but this response
-//    // would not come back from the memory. Therefore we additionally
-//    // have to check the cacheResponding flag
-//    if (expects_response && !stats.disableLatencyHists) {
-//        pkt->pushSenderState(new CommMonitorSenderState(curTick()));
-//    }
-
-//    // Attempt to send the packet
-//    bool successful = masterPort.sendTimingReq(pkt);
-
-//    // If not successful, restore the sender state
-//    if (!successful && expects_response && !stats.disableLatencyHists) {
-//        delete pkt->popSenderState();
-//    }
-
-//    if (successful) {
-//        ppPktReq->notify(pkt_info);
-//    }
-
-//    if (successful && is_read) {
-//        DPRINTF(CommMonitor, "Forwarded read request\n");
-
-//        // Increment number of observed read transactions
-//        if (!stats.disableTransactionHists) {
-//            ++stats.readTrans;
-//        }
-
-//        // Get sample of burst length
-//        if (!stats.disableBurstLengthHists) {
-//            stats.readBurstLengthHist.sample(pkt_info.size);
-//        }
-
-//        // Sample the masked address
-//        if (!stats.disableAddrDists) {
-//            stats.readAddrDist.sample(pkt_info.addr & readAddrMask);
-//        }
-
-//        // If it needs a response increment number of outstanding read
-//        // requests
-//        if (!stats.disableOutstandingHists && expects_response) {
-//            ++stats.outstandingReadReqs;
-//        }
-
-//        if (!stats.disableITTDists) {
-//            // Sample value of read-read inter transaction time
-//            if (stats.timeOfLastRead != 0) {
-//                stats.ittReadRead.sample(curTick() - stats.timeOfLastRead);
-//            }
-//            stats.timeOfLastRead = curTick();
-
-//            // Sample value of req-req inter transaction time
-//            if (stats.timeOfLastReq != 0) {
-//                stats.ittReqReq.sample(curTick() - stats.timeOfLastReq);
-//            }
-//            stats.timeOfLastReq = curTick();
-//        }
-//    } else if (successful && is_write) {
-//        DPRINTF(CommMonitor, "Forwarded write request\n");
-
-//        // Same as for reads
-//        if (!stats.disableTransactionHists) {
-//            ++stats.writeTrans;
-//        }
-
-//        if (!stats.disableBurstLengthHists) {
-//            stats.writeBurstLengthHist.sample(pkt_info.size);
-//        }
-
-//        // Update the bandwidth stats on the request
-//        if (!stats.disableBandwidthHists) {
-//            stats.writtenBytes += pkt_info.size;
-//            stats.totalWrittenBytes += pkt_info.size;
-//        }
-
-//        // Sample the masked write address
-//        if (!stats.disableAddrDists) {
-//            stats.writeAddrDist.sample(pkt_info.addr & writeAddrMask);
-//        }
-
-//        if (!stats.disableOutstandingHists && expects_response) {
-//            ++stats.outstandingWriteReqs;
-//        }
-
-//        if (!stats.disableITTDists) {
-//            // Sample value of write-to-write inter transaction time
-//            if (stats.timeOfLastWrite != 0) {
-//                stats.ittWriteWrite.sample(curTick() - stats.timeOfLastWrite);
-//            }
-//            stats.timeOfLastWrite = curTick();
-
-//            // Sample value of req-to-req inter transaction time
-//            if (stats.timeOfLastReq != 0) {
-//                stats.ittReqReq.sample(curTick() - stats.timeOfLastReq);
-//            }
-//            stats.timeOfLastReq = curTick();
-//        }
-//    } else if (successful) {
-//        DPRINTF(CommMonitor, "Forwarded non read/write request\n");
-//    }
-
-//    return successful;
+    // should always see a request
+    assert(pkt->isRequest());
+    return memPort.sendTimingReq(pkt);
 }
 
 bool
@@ -236,112 +174,37 @@ SysC_Cache::recvTimingResp(PacketPtr pkt)
 {
     assert(0);
     return false;
-//    
+    
 //    // should always see responses
 //    assert(pkt->isResponse());
-
-//    // Store relevant fields of packet, because packet may be modified
-//    // or even deleted when sendTiming() is called.
-//    const ProbePoints::PacketInfo pkt_info(pkt);
-
-//    bool is_read = pkt->isRead();
-//    bool is_write = pkt->isWrite();
-//    Tick latency = 0;
-//    CommMonitorSenderState* received_state =
-//        dynamic_cast<CommMonitorSenderState*>(pkt->senderState);
-
-//    if (!stats.disableLatencyHists) {
-//        // Restore initial sender state
-//        if (received_state == NULL)
-//            panic("Monitor got a response without monitor sender state\n");
-
-//        // Restore the sate
-//        pkt->senderState = received_state->predecessor;
-//    }
-
-//    // Attempt to send the packet
-//    bool successful = slavePort.sendTimingResp(pkt);
-
-//    if (!stats.disableLatencyHists) {
-//        // If packet successfully send, sample value of latency,
-//        // afterwards delete sender state, otherwise restore state
-//        if (successful) {
-//            latency = curTick() - received_state->transmitTime;
-//            DPRINTF(CommMonitor, "Latency: %d\n", latency);
-//            delete received_state;
-//        } else {
-//            // Don't delete anything and let the packet look like we
-//            // did not touch it
-//            pkt->senderState = received_state;
-//        }
-//    }
-
-//    if (successful) {
-//        ppPktResp->notify(pkt_info);
-//    }
-
-//    if (successful && is_read) {
-//        // Decrement number of outstanding read requests
-//        DPRINTF(CommMonitor, "Received read response\n");
-//        if (!stats.disableOutstandingHists) {
-//            assert(stats.outstandingReadReqs != 0);
-//            --stats.outstandingReadReqs;
-//        }
-
-//        if (!stats.disableLatencyHists) {
-//            stats.readLatencyHist.sample(latency);
-//        }
-
-//        // Update the bandwidth stats based on responses for reads
-//        if (!stats.disableBandwidthHists) {
-//            stats.readBytes += pkt_info.size;
-//            stats.totalReadBytes += pkt_info.size;
-//        }
-
-//    } else if (successful && is_write) {
-//        // Decrement number of outstanding write requests
-//        DPRINTF(CommMonitor, "Received write response\n");
-//        if (!stats.disableOutstandingHists) {
-//            assert(stats.outstandingWriteReqs != 0);
-//            --stats.outstandingWriteReqs;
-//        }
-
-//        if (!stats.disableLatencyHists) {
-//            stats.writeLatencyHist.sample(latency);
-//        }
-//    } else if (successful) {
-//        DPRINTF(CommMonitor, "Received non read/write response\n");
-//    }
-//    return successful;
+//    return extPort.sendTimingResp(pkt);
 }
 
 void
 SysC_Cache::recvTimingSnoopReq(PacketPtr pkt)
 {
     assert(0);
-//    slavePort.sendTimingSnoopReq(pkt);
+//    extPort.sendTimingSnoopReq(pkt);
 }
 
 bool
 SysC_Cache::recvTimingSnoopResp(PacketPtr pkt)
 {
-    assert(0);
-    return false;
-    
-//    return masterPort.sendTimingSnoopResp(pkt);
+    return memPort.sendTimingSnoopResp(pkt);
 }
 
 void
 SysC_Cache::recvRetrySnoopResp()
 {
-    extPort.sendRetrySnoopResp();
+    assert(0);
+//    extPort.sendRetrySnoopResp();
 }
 
 bool
 SysC_Cache::isSnooping() const
 {
     // check if the connected master port is snooping
-    return extPort.isSnooping();
+    return extPort->isSnooping();
 }
 
 AddrRangeList
@@ -354,7 +217,8 @@ SysC_Cache::getAddrRanges() const
 void
 SysC_Cache::recvReqRetry()
 {
-    extPort.sendRetryReq();
+    assert(0);
+//    extPort.sendRetryReq();
 }
 
 void
@@ -366,9 +230,23 @@ SysC_Cache::recvRespRetry()
 void
 SysC_Cache::recvRangeChange()
 {
-    extPort.sendRangeChange();
+    extPort->sendRangeChange();
 }
 
+
+
+
+void 
+SysC_Cache::handleLockErasure(ContextID ctx_id) 
+{
+    ThreadContext* ctx = system->getThreadContext(ctx_id);
+    ctx->getCpuPtr()->wakeup(ctx->threadId());    
+}
+
+unsigned long long
+SysC_Cache::readReg(unsigned int idx, unsigned int len) {
+    return extPort->readReg(idx, len);
+}
 
 
 

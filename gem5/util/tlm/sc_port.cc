@@ -88,24 +88,27 @@ packet2payload(PacketPtr packet, tlm::tlm_generic_payload &trans)
 Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
-    CAUGHT_UP;
-    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+//    assert(0);
+//    CAUGHT_UP;
+//    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
+//    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
 
-    /* Prepare the transaction */
-    tlm::tlm_generic_payload * trans = mm.allocate();
-    trans->acquire();
-    packet2payload(packet, *trans);
+//    /* Prepare the transaction */
+//    tlm::tlm_generic_payload * trans = mm.allocate();
+//    trans->acquire();
+//    packet2payload(packet, *trans);
 
-    /* Attach the packet pointer to the TLM transaction to keep track */
-    gem5Extension* extension = new gem5Extension(packet);
-    trans->set_auto_extension(extension);
-    
-    iSocket->b_transport(*trans, delay);                    
-        
-    trans->release();        
-    
-    return delay.value();
+//    /* Attach the packet pointer to the TLM transaction to keep track */
+//    gem5Extension* extension = new gem5Extension(packet);
+//    trans->set_auto_extension(extension);
+//    
+//    iSocket->b_transport(*trans, delay);                    
+//        
+//    trans->release();        
+//    
+//    return delay.value();
+
+    owner.recvAtomic(packet);
 }
 
 /**
@@ -114,22 +117,24 @@ sc_transactor::recvAtomic(PacketPtr packet)
 void
 sc_transactor::recvFunctional(PacketPtr packet)
 {
-    /* Prepare the transaction */
-    tlm::tlm_generic_payload * trans = mm.allocate();
-    trans->acquire();
-    packet2payload(packet, *trans);
+//    /* Prepare the transaction */
+//    tlm::tlm_generic_payload * trans = mm.allocate();
+//    trans->acquire();
+//    packet2payload(packet, *trans);
 
-    /* Attach the packet pointer to the TLM transaction to keep track */
-    gem5Extension* extension = new gem5Extension(packet);
-    trans->set_auto_extension(extension);
+//    /* Attach the packet pointer to the TLM transaction to keep track */
+//    gem5Extension* extension = new gem5Extension(packet);
+//    trans->set_auto_extension(extension);
 
-    /* Execute Debug Transport: */
-    unsigned int bytes = iSocket->transport_dbg(*trans);
-    if (bytes != trans->get_data_length()) {
-        SC_REPORT_FATAL("transactor","debug transport was not completed");
-    }
+//    /* Execute Debug Transport: */
+//    unsigned int bytes = iSocket->transport_dbg(*trans);
+//    if (bytes != trans->get_data_length()) {
+//        SC_REPORT_FATAL("transactor","debug transport was not completed");
+//    }
 
-    trans->release();
+//    trans->release();
+
+    owner.recvFunctional(packet);
 }
 
 bool
@@ -153,6 +158,7 @@ sc_transactor::recvFunctionalSnoop(PacketPtr packet)
 bool
 sc_transactor::recvTimingReq(PacketPtr packet)
 {
+    assert(0);
     CAUGHT_UP;
 
     /* We should never get a second request after noting that a retry is
@@ -287,9 +293,9 @@ sc_transactor::invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
 
 sc_transactor::sc_transactor(const std::string &name_,
     const std::string &systemc_name,
-    ExternalSlave &owner_) :
+    SysC_Cache &owner_) :
     tlm::tlm_initiator_socket<>(systemc_name.c_str()),
-    ExternalSlave::Port(name_, owner_),
+    SysC_Cache::SPort(name_, owner_),
     iSocket(*this),
     blockingRequest(NULL),
     needToSendRequestRetry(false),
@@ -298,11 +304,11 @@ sc_transactor::sc_transactor(const std::string &name_,
     m_export.bind(*this);
 }
 
-class sc_transactorHandler : public ExternalSlave::Handler
+class sc_transactorHandler : public SysC_Cache::Handler
 {
   public:
-    ExternalSlave::Port *getExternalPort(const std::string &name,
-        ExternalSlave &owner,
+    SysC_Cache::SPort *getExternalPort(const std::string &name,
+        SysC_Cache &owner,
         const std::string &port_data)
     {
         // This will make a new initiatiator port
@@ -313,33 +319,33 @@ class sc_transactorHandler : public ExternalSlave::Handler
 void
 registerSCPorts()
 {
-    ExternalSlave::registerHandler("tlm", new sc_transactorHandler);
+    SysC_Cache::registerHandler("tlm", new sc_transactorHandler);
 }
 
 
-ExternalSlave *
+SysC_Cache *
 sc_transactor::getOwner() {
     return &owner;
 }
 
 
-unsigned long long
-sc_transactor::readReg(unsigned int idx, unsigned int len) {
-    tlm::tlm_generic_payload trans;
-    unsigned char *ptr = new unsigned char[len];
-    
-    trans.set_command(tlm::TLM_READ_COMMAND);
-    trans.set_address(idx);
-    trans.set_data_length(len);
-    trans.set_data_ptr(ptr);
-        
-    iSocket->transport_dbg(trans);
-    sc_dt::uint64 ret = *((sc_dt::uint64 *) ptr);
+//unsigned long long
+//sc_transactor::readReg(unsigned int idx, unsigned int len) {
+//    tlm::tlm_generic_payload trans;
+//    unsigned char *ptr = new unsigned char[len];
+//    
+//    trans.set_command(tlm::TLM_READ_COMMAND);
+//    trans.set_address(idx);
+//    trans.set_data_length(len);
+//    trans.set_data_ptr(ptr);
+//        
+//    iSocket->transport_dbg(trans);
+//    sc_dt::uint64 ret = *((sc_dt::uint64 *) ptr);
 
-    delete ptr;
-    
-    return (unsigned long long) ret;
-}
+//    delete ptr;
+//    
+//    return (unsigned long long) ret;
+//}
 
 
 

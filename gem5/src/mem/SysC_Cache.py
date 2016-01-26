@@ -46,11 +46,19 @@ class SysC_Cache(MemObject):
     type = 'SysC_Cache'
     cxx_header = "mem/sysc_cache.hh"
 
-    system = Param.System(Parent.any, "System that the monitor belongs to.")
-
     # one port in each direction
     memPort = MasterPort("Master port")
     extPort = SlavePort("Slave port")
+    
+    system = Param.System(Parent.any, "System that the monitor belongs to.")
+    
+    addr_ranges = VectorParam.AddrRange([], 'Addresses served by'
+        ' this port\'s external agent')
+    port_type = Param.String('stub', 'Registered external port handler'
+        ' to pass this port to in instantiation')
+    port_data = Param.String('stub', 'A string to pass to the port'
+        ' handler (in a format specific to the handler) to describe how'
+        ' the port should be bound/bindable/discoverable')    
 
 
 

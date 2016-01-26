@@ -47,14 +47,14 @@
 
 #include "dev/io_device.hh"
 #include "params/SysC_CacheMonitor.hh"
-#include "mem/external_slave.hh"
+#include "mem/sysc_cache.hh"
 
 class SysC_CacheMonitor : public BasicPioDevice
 {
   public:
    unsigned int reg_size;  
    unsigned int num_regs;
-   ExternalSlave *gem5_cacheMaster;
+   SysC_Cache *gem5_cacheMaster;
   
    typedef SysC_CacheMonitorParams Params;
    const Params *

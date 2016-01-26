@@ -166,25 +166,40 @@ def config_cache(options, system):
             # can be read/programmed
             for j in xrange(2):
                 temp = ['i', 'd']
-                exec("system.%scache_bus_%d = HookXBar()" % (temp[j], i))
-                exec("system.%scache_port_%d = ExternalSlave(\
-                                                    port_type = \"tlm\",\
-                                                    port_data = \"%scache_port_%d\",\
-                                                    port = system.%scache_bus_%d.hook\
-                                               )" % (temp[j], i, temp[j], i, temp[j], i))
-                exec("system.%scache_bus_%d.master = system.membus.slave" \
-                                                    % (temp[j], i))
-                exec("system.cpu[%d].%scache_port = system.%scache_bus_%d.slave" \
-                                                    % (i, temp[j], temp[j], i))
-                                                    
+                
+                
+#                exec("system.%scache_bus_%d = HookXBar()" % (temp[j], i))
+#                exec("system.%scache_port_%d = ExternalSlave(\
+#                                                    port_type = \"tlm\",\
+#                                                    port_data = \"%scache_port_%d\",\
+#                                                    port = system.%scache_bus_%d.hook\
+#                                               )" % (temp[j], i, temp[j], i, temp[j], i))
+#                exec("system.%scache_bus_%d.master = system.membus.slave" \
+#                                                    % (temp[j], i))
+#                exec("system.cpu[%d].%scache_port = system.%scache_bus_%d.slave" \
+#                                                    % (i, temp[j], temp[j], i))
+#                                                    
+
+
+                exec("system.%scache_%d = SysC_Cache(\
+                                                       port_type = \"tlm\",\
+                                                       port_data = \"%scache_%d\",\
+                                                    )" % (temp[j], i, temp[j], i))
+                exec("system.cpu[%d].%scache_port = system.%scache_%d.extPort" 
+                     % (i, temp[j], temp[j], i))
+                exec("system.%scache_%d.memPort = system.membus.slave" % (temp[j], i))
+                
                 exec("system.%scache_mon_%d = SysC_CacheMonitor( \
                                                 pio_addr = sysc_cache_monitor_base, \
                                                 word_width = system.cache_line_size, \
                                                 num_regs = sysc_cache_num_regs, \
-                                                cache = system.%scache_port_%d, \
+                                                cache = system.%scache_%d, \
                                                 pio = system.membus.master\
                                               )" % (temp[j], i, temp[j], i))
                 sysc_cache_monitor_base = sysc_cache_monitor_base + sysc_cache_monitor_size                                                                
+                
+
+
 
             system.cpu[i].connectAllPorts(system.membus, None, tlm=True)
         else:  

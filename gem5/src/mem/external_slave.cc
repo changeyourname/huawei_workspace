@@ -36,18 +36,13 @@
  *
  * Authors: Andrew Bardsley
  */
- 
- 
- //TODO: remove systemc cache integration stuff!!
 
 #include <cctype>
 #include <iomanip>
 
 #include "debug/ExternalPort.hh"
 #include "mem/external_slave.hh"
-#include "sim/system.hh"
-#include "cpu/thread_context.hh"
-#include "cpu/base.hh"
+
 
 /** Implement a `stub' port which just responds to requests by printing
  *  a message.  The stub port can be used to configure and test a system
@@ -197,8 +192,7 @@ ExternalSlave::ExternalSlave(ExternalSlaveParams *params) :
     portName(params->name + ".port"),
     portType(params->port_type),
     portData(params->port_data),
-    addrRanges(params->addr_ranges.begin(), params->addr_ranges.end()),
-    system(params->system)
+    addrRanges(params->addr_ranges.begin(), params->addr_ranges.end())
 {
     /* Register the stub handler if it hasn't already been registered */
     if (portHandlers.find("stub") == portHandlers.end())
@@ -257,21 +251,6 @@ ExternalSlave::registerHandler(const std::string &handler_name,
 {
     portHandlers[handler_name] = handler;
 }
-
-
-
-void 
-ExternalSlave::handleLockErasure(ContextID ctx_id) 
-{
-    ThreadContext* ctx = system->getThreadContext(ctx_id);
-    ctx->getCpuPtr()->wakeup(ctx->threadId());    
-}
-
-unsigned long long
-ExternalSlave::readReg(unsigned int idx, unsigned int len) {
-    return externalPort->readReg(idx, len);
-}
-
 
 
 

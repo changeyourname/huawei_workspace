@@ -57,17 +57,12 @@
  * object).
  */
 
-
-//TODO: remove systemc cache integration stuff!!
-
 #ifndef __MEM_EXTERNAL_SLAVE__
 #define __MEM_EXTERNAL_SLAVE__
 
 #include "mem/mem_object.hh"
 #include "params/ExternalSlave.hh"
 
-
-class System;
 
 class ExternalSlave : public MemObject
 {
@@ -89,9 +84,7 @@ class ExternalSlave : public MemObject
         /** Any or all of recv... can be overloaded to provide the port's
          *  functionality */
 
-        AddrRangeList getAddrRanges() const;
-        
-        virtual unsigned long long readReg(unsigned int idx, unsigned int len) {return 0;}
+        AddrRangeList getAddrRanges() const;                
     };
 
     /* Handlers are specific to *types* of port not specific port
@@ -129,9 +122,7 @@ class ExternalSlave : public MemObject
      *  parameter on ExternalSlaves.  port_types form a global namespace
      *  across the simulation and so handlers are registered into a global
      *  structure */
-    static std::map<std::string, Handler *> portHandlers;
-    
-    System *system;
+    static std::map<std::string, Handler *> portHandlers;    
 
   public:
     ExternalSlave(ExternalSlaveParams *params);
@@ -146,9 +137,6 @@ class ExternalSlave : public MemObject
         Handler *handler);
 
     void init();
-
-    void handleLockErasure(ContextID ctx_id);
-    unsigned long long readReg(unsigned int idx, unsigned int len);
 };
 
 

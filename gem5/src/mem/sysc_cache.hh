@@ -47,6 +47,8 @@
 
 // TODO: documentation!!
 
+class System;
+
 class SysC_Cache : public MemObject
 {
 
@@ -66,41 +68,54 @@ class SysC_Cache : public MemObject
 
     void init() override;
 
-  public: // MemObject interfaces
     BaseMasterPort &getMasterPort(const std::string &if_name,
                                   PortID idx = InvalidPortID) override;
 
     BaseSlavePort &getSlavePort(const std::string &if_name,
                                 PortID idx = InvalidPortID) override;
-
-  private:
-
-    /**
-     * Sender state class for the monitor so that we can annotate
-     * packets with a transmit time and receive time.
-     */
-    class SysC_CacheSenderState : public Packet::SenderState
+                                
+/** Derive from this class to create an external port interface */
+    class SPort : public SlavePort
     {
+      protected:
+        SysC_Cache &owner;
 
       public:
-
-        /**
-         * Construct a new sender state and store the time so we can
-         * calculate round-trip latency.
-         *
-         * @param _transmitTime Time of packet transmission
-         */
-        SysC_CacheSenderState(Tick _transmitTime)
-            : transmitTime(_transmitTime)
+        SPort(const std::string &name_,
+            SysC_Cache &owner_) :
+            SlavePort(name_, &owner_), owner(owner_)
         { }
 
-        /** Destructor */
-        ~SysC_CacheSenderState() { }
+        ~SPort() { }
 
-        /** Tick when request is transmitted */
-        Tick transmitTime;
+        /** Any or all of recv... can be overloaded to provide the port's
+         *  functionality */
 
-    };
+        AddrRangeList getAddrRanges() const;   
+        virtual unsigned long long readReg(unsigned int idx, unsigned int len) {return 0;}             
+    };        
+    
+    
+    /* Handlers are specific to *types* of port not specific port
+     * instantiations.  A handler will typically build a bridge to the
+     * external port from gem5 and provide gem5 with a SlavePort that can be
+     * bound to for each call to Handler::getExternalPort.*/
+    class Handler
+    {
+      public:
+        /** Create or find an external port which can be bound.  Returns
+         *  NULL on failure */
+        virtual SPort *getExternalPort(
+            const std::string &name, SysC_Cache &owner,
+            const std::string &port_data) = 0;
+    };  
+    
+    /** Register a handler which can provide ports with port_type ==
+     *  handler_name */
+    static void registerHandler(const std::string &handler_name,
+        Handler *handler);         
+    
+                                    
 
     /**
      * This is the master port of the communication monitor. All recv
@@ -164,65 +179,10 @@ class SysC_Cache : public MemObject
         SysC_Cache &owner;
 
     };
-
     /** Instance of master port, facing the memory side */
-    MPort memPort;
-
-    /**
-     * This is the slave port of the communication monitor. All recv
-     * functions call a function in CommMonitor, where the
-     * send function of the master port is called. Besides this, these
-     * functions can also perform actions for capturing statistics.
-     */
-    class SPort : public SlavePort
-    {
-
-      public:
-
-        SPort(const std::string &_name, SysC_Cache &_owner)
-            : SlavePort(_name, &_owner), owner(_owner)
-        { }
-
-      protected:
-
-        void recvFunctional(PacketPtr pkt)
-        {
-            owner.recvFunctional(pkt);
-        }
-
-        Tick recvAtomic(PacketPtr pkt)
-        {
-            return owner.recvAtomic(pkt);
-        }
-
-        bool recvTimingReq(PacketPtr pkt)
-        {
-            return owner.recvTimingReq(pkt);
-        }
-
-        bool recvTimingSnoopResp(PacketPtr pkt)
-        {
-            return owner.recvTimingSnoopResp(pkt);
-        }
-
-        AddrRangeList getAddrRanges() const
-        {
-            return owner.getAddrRanges();
-        }
-
-        void recvRespRetry()
-        {
-            owner.recvRespRetry();
-        }
-
-      private:
-
-        SysC_Cache &owner;
-
-    };
-
-    /** Instance of slave port, i.e. on the CPU side */
-    SPort extPort;
+    MPort memPort;  
+    
+    
 
     void recvFunctional(PacketPtr pkt);
 
@@ -251,6 +211,55 @@ class SysC_Cache : public MemObject
     void recvRespRetry();
 
     void recvRangeChange();
+    
+    void handleLockErasure(ContextID ctx_id);
+    
+    unsigned long long readReg(unsigned int idx, unsigned int len);    
+    
+  protected:
+    System *system;
+      
+    SPort *extPort;  
+    /** Name of the bound port.  This will be name() + ".port" */
+    std::string portName;
+
+    /** Key to select a port handler */
+    std::string portType;
+
+    /** Handler-specific port configuration */
+    std::string portData;
+
+    /** The Range of addresses supported by the devices on the external
+     *  side of this port */
+    AddrRangeList addrRanges;
+    
+    /** Registered handlers.  Handlers are chosen using the port_type
+     *  parameter on ExternalSlaves.  port_types form a global namespace
+     *  across the simulation and so handlers are registered into a global
+     *  structure */
+    static std::map<std::string, Handler *> portHandlers;   
 };
 
 #endif //__MEM_COMM_MONITOR_HH__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

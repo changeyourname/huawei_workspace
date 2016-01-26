@@ -45,7 +45,7 @@ Target::Target(sc_core::sc_module_name name,
     bool debug,
     unsigned long long int size,
     unsigned int offset, unsigned char *mem,
-    ExternalSlave *gem5_master) :
+    SysC_Cache *gem5_master) :
     socket("socket"),
     transaction_in_progress(0),
     response_in_progress(false),
@@ -157,7 +157,7 @@ Target::checkLockedAddrList(PacketPtr pkt)
                 // automatically generated when clearing the exclusive
                 // monitor to wake up the processor in WFE. 
                          
-                gem5_master->handleLockErasure(i->contextId);
+//                gem5_master->handleLockErasure(i->contextId);
                 
                 i = lockedAddrList.erase(i);
             } else {

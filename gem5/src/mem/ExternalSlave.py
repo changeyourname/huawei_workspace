@@ -54,8 +54,6 @@ class ExternalSlave(MemObject):
         ' to pass this port to in instantiation')
     port_data = Param.String('stub', 'A string to pass to the port'
         ' handler (in a format specific to the handler) to describe how'
-        ' the port should be bound/bindable/discoverable')
-        
-    system = Param.System(Parent.any, "System that the crossbar belongs to.")    
+        ' the port should be bound/bindable/discoverable')            
 
         

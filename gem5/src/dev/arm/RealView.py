@@ -70,7 +70,7 @@ class SysC_CacheMonitor(BasicPioDevice):
     
     word_width = Param.UInt32("word width (reg size) in bytes")
     num_regs = Param.UInt32("number of registers in the sysc cache")
-    cache = Param.ExternalSlave(Parent.any, "sysc cache to monitor")
+    cache = Param.SysC_Cache(Parent.any, "sysc cache to monitor")
 
 class AmbaIntDevice(AmbaPioDevice):
     type = 'AmbaIntDevice'

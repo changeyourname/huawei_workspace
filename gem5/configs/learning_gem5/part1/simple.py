@@ -61,10 +61,14 @@ system.cpu = AtomicSimpleCPU()
 system.membus = SystemXBar()
 
 # Hook the CPU ports up to the membus
-#system.icache_0 = CommMonitor()
-#system.dcache_0 = CommMonitor()
-system.icache_0 = SysC_Cache()
-system.dcache_0 = SysC_Cache()
+system.icache_0 = SysC_Cache(
+                                port_type = "tlm",
+                                port_data = "icache_port_0"
+                            )
+system.dcache_0 = SysC_Cache(
+                                port_type = "tlm",
+                                port_data = "dcache_port_0"
+                            )
 system.cpu.icache_port = system.icache_0.extPort
 system.cpu.dcache_port = system.dcache_0.extPort
 system.icache_0.memPort = system.membus.slave

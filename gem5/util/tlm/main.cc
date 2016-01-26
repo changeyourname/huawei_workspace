@@ -344,8 +344,8 @@ sc_main(int argc, char **argv)
     
     for (int i=0; i<sim_control.num_gem5_smp_cores*2; i++) {
         // icache hooks
-        temp = (i%2==0) ? "gem5.icache_port_" + std::to_string(i/2) : 
-                          "gem5.dcache_port_" + std::to_string(i/2) ;
+        temp = (i%2==0) ? "gem5.icache_" + std::to_string(i/2) : 
+                          "gem5.dcache_" + std::to_string(i/2) ;
         smp_cache_ports.push_back( 
             dynamic_cast<Gem5SystemC::sc_transactor *> (
                 sc_core::sc_find_object(temp.c_str())
