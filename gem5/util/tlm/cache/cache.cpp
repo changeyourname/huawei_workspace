@@ -227,8 +227,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 			    // normal request path
 			
 			    // the special request except back-invalidate shouldn't result in a miss
-			    assert(type==req_extension::NORMAL);			
+			    assert(type==req_extension::NORMAL);			    			
 			    process_miss(trans, evict_needed);
+        	    // updating the misses register
+	            m_miss_register++;			    
 		    }
 	    }
 
@@ -263,9 +265,13 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         assert(len==8);
         if (req_addr == m_cache_regspace_base) {
             memcpy(ptr, &m_access_register, len);
-        } else {
+        } else if (req_addr == m_cache_regspace_base + 8) {
             memcpy(ptr, &m_miss_register, len);
-        }    
+        } else {
+            assert(0);
+        }
+        
+        trans.set_response_status(tlm::TLM_OK_RESPONSE);
     } else {
         // invalid request received
         trans.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
@@ -504,14 +510,6 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		fprintf(m_fid, "...set=%d\r\n", m_current_set);
 		fflush(m_fid);			//TODO: disable this after debugging
 	}
-	
-    req_extension *ext;
-    trans.get_extension(ext);
-    req_extension::req_type type;	
-    // updating the access register
-    if (type == req_extension::NORMAL) {
-        m_miss_register++;
-    }
 
 	if (evict_needed) {
 		do_eviction();
