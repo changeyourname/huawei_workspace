@@ -62,14 +62,14 @@ sc_mm.o: sc_mm.cc sc_mm.hh
 sc_ext.o: sc_ext.cc sc_ext.hh
 sc_port.o: sc_port.cc sc_port.hh
 sc_target.o: sc_target.cc sc_target.hh
-cache_dummy.o: cache/cache_dummy.cpp cache/cache_dummy.hpp
+cache.o: cache/cache.cpp cache/cache.hpp
 stats.o: ../systemc/stats.cc ../systemc/stats.hh
 main.o: main.cc ../systemc/sc_logger.hh ../systemc/sc_module.hh \
 	../systemc/stats.hh
 
 gem5.$(VARIANT).sc: main.o ../systemc/stats.o ../systemc/sc_gem5_control.o \
 	../systemc/sc_logger.o ../systemc/sc_module.o sc_mm.o sc_ext.o sc_port.o \
-	sc_target.o cache/cache_dummy.o
+	sc_target.o cache/cache.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
 clean:

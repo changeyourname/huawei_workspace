@@ -205,6 +205,11 @@ def config_mem(options, system):
         for i in xrange(nbr_mem_ctrls):
             mem_ctrl = create_mem_ctrl(cls, r, i, nbr_mem_ctrls, intlv_bits,
                                        intlv_size)
+                                       
+            # for cache hierarchy in SystemC, latency will be decided by cache                           
+            if options.disable_cache:
+                mem_ctrl.latency = '0ns'                           
+                                       
             # Set the number of ranks based on the command-line
             # options if it was explicitly set
             if issubclass(cls, m5.objects.DRAMCtrl) and \

@@ -72,8 +72,6 @@ SimpleMemory::init()
 Tick
 SimpleMemory::recvAtomic(PacketPtr pkt)
 {
-    /*std::cout << curTick() << ": " << pkt->req->masterId() << 
-            " receives req:" << pkt->isRead() << "@adr:" << std::hex << pkt->getAddr() << std::dec << std::endl; */
     access(pkt);
     return pkt->cacheResponding() ? 0 : getLatency();
 }
@@ -121,7 +119,7 @@ SimpleMemory::recvTimingReq(PacketPtr pkt)
     // technically the packet only reaches us after the header delay,
     // and since this is a memory controller we also need to
     // deserialise the payload before performing any write operation
-    Tick receive_delay = pkt->headerDelay + pkt->payloadDelay + pkt->cacheDelay;
+    Tick receive_delay = pkt->headerDelay + pkt->payloadDelay;
     pkt->headerDelay = pkt->payloadDelay = 0;
 
     // update the release time according to the bandwidth limit, and
@@ -156,7 +154,7 @@ SimpleMemory::recvTimingReq(PacketPtr pkt)
         // atomic response
         assert(pkt->isResponse());
 
-        Tick when_to_send = curTick() + receive_delay + getLatency();
+        Tick when_to_send = curTick() + receive_delay + getLatency() + pkt->cacheDelay;
 
         // typically this should be added at the end, so start the
         // insertion sort with the last element, also make sure not to

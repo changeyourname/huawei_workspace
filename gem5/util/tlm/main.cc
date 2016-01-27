@@ -60,8 +60,7 @@
 #include "sc_module.hh"
 #include "sc_port.hh"
 #include "sc_target.hh"
-//#include "cache/cache.hpp"
-#include "cache/cache_dummy.hpp"
+#include "cache/cache.hpp"
 #include "sim/cxx_config_ini.hh"
 #include "sim/cxx_manager.hh"
 #include "sim/init_signals.hh"
@@ -336,35 +335,66 @@ sc_main(int argc, char **argv)
     }  
 
 
-    // right now, gem5 should have named its hooks "gem5.icache_port_X", 
-    // "gem5.dcache_port_X" for smp core X to be picked up here!!
-    std::vector< Gem5SystemC::sc_transactor * > smp_cache_ports;
-    std::vector< cache_dum * > smp_caches;
-    std::string temp;
-    
-    for (int i=0; i<sim_control.num_gem5_smp_cores*2; i++) {
-        // icache hooks
-        temp = (i%2==0) ? "gem5.icache_" + std::to_string(i/2) : 
-                          "gem5.dcache_" + std::to_string(i/2) ;
-        smp_cache_ports.push_back( 
-            dynamic_cast<Gem5SystemC::sc_transactor *> (
-                sc_core::sc_find_object(temp.c_str())
-            )
-        );
-        if (smp_cache_ports[i]) {
-            temp = temp + " found";
-            SC_REPORT_INFO("sc_main", temp.c_str());
-            
-            temp = (i%2==0) ? "icache_" + std::to_string(i/2) :
-                              "dcache_" + std::to_string(i/2) ;
-            smp_caches.push_back(new cache_dum(temp.c_str()));
-            smp_caches[i]->socket.bind(*smp_cache_ports[i]);
-        } else {
-            temp = temp + " not found!";
-            SC_REPORT_FATAL("sc_main", temp.c_str());
-            std::exit(EXIT_FAILURE);
-        }        
+
+//    std::vector< Gem5SystemC::sc_transactor * > smp_cache_ports;
+//    std::vector< cache_dum * > smp_caches;
+//    std::string temp;
+//    
+//    for (int i=0; i<sim_control.num_gem5_smp_cores*2; i++) {
+//        // icache hooks
+//        temp = (i%2==0) ? "gem5.icache_" + std::to_string(i/2) : 
+//                          "gem5.dcache_" + std::to_string(i/2) ;
+//        smp_cache_ports.push_back( 
+//            dynamic_cast<Gem5SystemC::sc_transactor *> (
+//                sc_core::sc_find_object(temp.c_str())
+//            )
+//        );
+//        if (smp_cache_ports[i]) {
+//            temp = temp + " found";
+//            SC_REPORT_INFO("sc_main", temp.c_str());
+//            
+//            temp = (i%2==0) ? "icache_" + std::to_string(i/2) :
+//                              "dcache_" + std::to_string(i/2) ;
+//            smp_caches.push_back(new cache_dum(temp.c_str()));
+//            smp_caches[i]->socket.bind(*smp_cache_ports[i]);
+//        } else {
+//            temp = temp + " not found!";
+//            SC_REPORT_FATAL("sc_main", temp.c_str());
+//            std::exit(EXIT_FAILURE);
+//        }        
+//    }
+
+
+
+
+
+    Gem5SystemC::sc_transactor *gem5_icache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.icache_0"));
+    if (gem5_icache_0) {
+        cache icache_0("icache_0", NULL, 0, 1, 65536, WORD_SIZE, 
+                        1, true, true, cache::LRU, 1);
+        icache_0.m_tsocket_d[0].bind(*gem5_icache_0);
+    } else {
+        SC_REPORT_FATAL("sc_main", "gem5.icache_0 not found");
+        std::exit(EXIT_FAILURE);
+    }         
+
+                                                
+    Gem5SystemC::sc_transactor *gem5_dcache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.dcache_0")); 
+    if (gem5_dcache_0) {                                               
+        cache dcache_0("dcache_0", NULL, 1, 1, 65536, WORD_SIZE, 
+                       1, true, true, cache::LRU, 1);
+        dcache_0.m_tsocket_d[0].bind(*gem5_dcache_0);  
+    } else {        
+        SC_REPORT_FATAL("sc_main", "gem5.dcache_0 not found");
+        std::exit(EXIT_FAILURE);        
     }
+    
+    
+    
+    
+                                                                                       
 
     sc_core::sc_start();
 

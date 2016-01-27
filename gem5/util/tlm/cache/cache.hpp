@@ -41,14 +41,19 @@ public:
 
 private:
 	struct cache_block {
-		enum cache_block_state {M, S, I, MBS};				// MBS (Modified-but-stale) needed for coherence in inclusive cache hierarchy
+        // MBS (Modified-but-stale) needed for coherence in inclusive cache hierarchy	
+		enum cache_block_state {M, S, I, MBS};						
 
 		cache_block_state state;
 		uint64_t tag;
 		uint32_t evict_tag;
 	};
 
-	tlm::tlm_generic_payload m_trans;			// lt modeling so can afford a single m_trans for the whole object as there are no outstanding requests..this helps to improve performance as m_trans needs to be created only once for an object of this class
+    // lt modeling so can afford a single m_trans for the whole object as there are no 
+    // outstanding requests..this helps to improve performance as m_trans needs to be 
+    // created only once for an object of this class
+	tlm::tlm_generic_payload m_trans;	
+			
 	req_extension *m_ext;
 	uint32_t m_num_upstream_masters;
 	uint32_t m_block_size;
@@ -77,12 +82,25 @@ private:
 	void send_request(bool downstream, bool new_address=false);
 
 public:
-	tlm_utils::simple_initiator_socket< cache > m_isocket_d;		// in downstream direction
-	tlm_utils::simple_initiator_socket< cache > *m_isocket_u;		// in upstream direction
-	tlm_utils::simple_target_socket< cache > *m_tsocket_d;			// in downstream direction
-	tlm_utils::simple_target_socket< cache > *m_tsocket_u;			// in upstream direction
+	tlm_utils::simple_initiator_socket< cache > *m_isocket_d;	// in downstream direction
+	tlm_utils::simple_initiator_socket< cache > *m_isocket_u;	// in upstream direction
+	tlm_utils::simple_target_socket< cache > *m_tsocket_d;		// in downstream direction
+	tlm_utils::simple_target_socket< cache > *m_tsocket_u;		// in upstream direction
 
-	cache(sc_core::sc_module_name name, const char *logfile, uint32_t id, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level);
+    //TODO: reduce constructor interface!!
+	cache(
+            sc_core::sc_module_name name, 
+            const char *logfile, 
+            uint32_t id, 
+            uint32_t num_masters, 
+            uint32_t size, 
+            uint32_t block_size, 
+            uint32_t num_ways, 
+            bool write_back, 
+            bool write_allocate, 
+            cache::eviction_policy evict_policy, 
+            uint32_t level
+	     );
 	~cache();
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);
 	void do_logging();

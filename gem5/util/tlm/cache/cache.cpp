@@ -15,28 +15,41 @@ std::vector< cache::req_extension * > cache::req_extension::req_extension_clones
 FILE *cache::common_fid = fopen("log/cache_system.log", "w+");
 
 // constructor
-cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t id, uint32_t num_masters, uint32_t size, uint32_t block_size, uint32_t num_ways, bool write_back, bool write_allocate, cache::eviction_policy evict_policy, uint32_t level)
+cache::cache(
+             sc_core::sc_module_name name, 
+             const char *logfile, 
+             uint32_t id, 
+             uint32_t num_masters, 
+             uint32_t size, 
+             uint32_t block_size, 
+             uint32_t num_ways, 
+             bool write_back, 
+             bool write_allocate, 
+             cache::eviction_policy evict_policy, 
+             uint32_t level
+            )
 	:	sc_module(name),
-		m_trans(),																// transaction object
-		m_num_upstream_masters(num_masters),									// total upstream masters (num of children i.e num of caches that share this cache)
-		m_block_size(block_size),												// total cache size
-		m_num_of_sets(size/(block_size*num_ways)),								// total number of sets
-		m_num_of_ways(num_ways),												// total number of ways
-		m_write_back(write_back),												// write back enable/disable
-		m_write_allocate(write_allocate),										// write allocate enable/disable
-		m_evict_policy(evict_policy),											// cache block replacement policy
-		m_log(false),															// enable logging (on text files referred to by logfile
-		m_level(level),															// cache hierarchy level (first level cache (L1) is 1)
-		m_current_set(0),														// set for current request
-		m_current_tag(0),														// tag for current request
-		m_current_blockAddr(0),													// cache block address for current request
-		m_current_way(0),														// cache way for current request
-		m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					// delay object for current request
-		m_id(id),
-		m_isocket_d("m_isocket_d")												// initiator socket to downstream slave
+		m_trans(),																            // transaction object
+		m_num_upstream_masters(num_masters),									            // total upstream masters (num of children i.e num of caches that share this cache)
+		m_block_size(block_size),												            // total cache size
+		m_num_of_sets(size/(block_size*num_ways)),								            // total number of sets
+		m_num_of_ways(num_ways),												            // total number of ways
+		m_write_back(write_back),												            // write back enable/disable
+		m_write_allocate(write_allocate),										            // write allocate enable/disable
+		m_evict_policy(evict_policy),											            // cache block replacement policy
+		m_log(false),															            // enable logging (on text files referred to by logfile
+		m_level(level),															            // cache hierarchy level (first level cache (L1) is 1)
+		m_current_set(0),														            // set for current request
+		m_current_tag(0),														            // tag for current request
+		m_current_blockAddr(0),													            // cache block address for current request
+		m_current_way(0),														            // cache way for current request
+		m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					            // delay object for current request
+		m_id(id)
 {
-	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected to occur in real cache organizations
-	// if this does occur though then cache would be inefficient as it will have slots for memory words which actually dont exist in memory......cache will be bigger than memory!
+	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
+	// to occur in real cache organizations if this does occur though then cache would be 
+	// inefficient as it will have slots for memory words which actually dont exist in 
+	// memory......cache will be bigger than memory!
 	assert(log2((double) m_num_of_sets) <= log2((double) MEM_SIZE));
 
 	// cache blocks structure
@@ -62,29 +75,39 @@ cache::cache(sc_core::sc_module_name name, const char *logfile, uint32_t id, uin
 
 	// initiator sockets to upstream slaves (for back invalidation)
 	if (m_level > 1) {		// not first level cache
-		m_isocket_u = new tlm_utils::simple_initiator_socket< cache >[m_num_upstream_masters];
+		m_isocket_u = new tlm_utils::simple_initiator_socket< cache >
+		                                                 [m_num_upstream_masters];
 	}
 
-	// target sockets for downstream masters (for back invalidation)
+
 	if (m_level < LLC_LEVEL) {			// not last level cache
+    	// target sockets for downstream masters (for back invalidation)	
 		m_tsocket_u = new tlm_utils::simple_target_socket< cache >("m_tsocket_u");
 		m_tsocket_u->register_b_transport(this, &cache::b_transport);
+		
+		// initiator socket for downstream slave
+        m_isocket_d = new tlm_utils::simple_initiator_socket< cache >("m_isocket_d");        		
 	}
+	
 
 	// logging
-	m_fid = fopen(logfile, "w+");
-	assert(m_fid);
-	fprintf(m_fid, "CACHE_CONFIG \r\n");
-	fprintf(m_fid, "total_cache_size:%dB", size);
-	fprintf(m_fid, "..cache_block_size:%dB", m_block_size);
-	fprintf(m_fid, "..num_of_sets:%d", m_num_of_sets);
-	fprintf(m_fid, "..num_of_ways:%d", m_num_of_ways);
-	fprintf(m_fid, "..num_of_children:%d", m_num_upstream_masters);
-	fprintf(m_fid, "..write_back:%d", m_write_back);
-	fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
-	fprintf(m_fid, "..level:%d", m_level);
-	fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict_policy);
-	fflush(m_fid);
+	if (logfile) {
+    	m_fid = fopen(logfile, "w+");
+	    assert(m_fid);
+	    fprintf(m_fid, "CACHE_CONFIG \r\n");
+	    fprintf(m_fid, "total_cache_size:%dB", size);
+	    fprintf(m_fid, "..cache_block_size:%dB", m_block_size);
+	    fprintf(m_fid, "..num_of_sets:%d", m_num_of_sets);
+	    fprintf(m_fid, "..num_of_ways:%d", m_num_of_ways);
+	    fprintf(m_fid, "..num_of_children:%d", m_num_upstream_masters);
+	    fprintf(m_fid, "..write_back:%d", m_write_back);
+	    fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
+	    fprintf(m_fid, "..level:%d", m_level);
+	    fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict_policy);
+	    fflush(m_fid);    	
+	} else {
+	    m_fid = NULL;
+	}
 }
 
 
@@ -108,7 +131,9 @@ cache::~cache() {
 
 // enable logging
 void cache::do_logging() {
-	m_log = true;
+    if (m_fid) {
+    	m_log = true;
+	}
 }
 
 
@@ -133,25 +158,35 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 
 	if (m_log && m_level == 1 && type==req_extension::NORMAL) {
 		if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-			fprintf(common_fid, "----------------------------------------------writing at ");
+			fprintf(common_fid, "-----------------------------------------writing at ");
 		} else {
-			fprintf(common_fid, "----------------------------------------------reading at ");
+			fprintf(common_fid, "-----------------------------------------reading at ");
 		}
-		fprintf(common_fid, "0x%08x----------------------------------------------\r\n", (uint32_t)req_addr);
+		fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
+		        (uint32_t)req_addr);
 		fflush(common_fid);			// TODO: remove this after debugging
 	}
 
-	// for the back-invalidation case, keeping track of original m_current_blockAddr,_tag,_set so as not to corrupt them with the back-invalidate-block that is going to be evicted in some downstream cache
+	// for the back-invalidation case, keeping track of original 
+	// m_current_blockAddr,_tag,_set so as not to corrupt them with the 
+	// back-invalidate-block that is going to be evicted in some downstream cache
 	if (type == req_extension::BACK_INVALIDATE) {
 		current_blockAddr_orig = m_current_blockAddr;
 		current_set_orig = m_current_set;
 		current_tag_orig = m_current_tag;
 	}
 
-	// update for current request (this only works if there are no outstanding request like in LT modeling)
+	// update for current request (this only works if there are no outstanding request 
+	// like in LT modeling)
 	m_current_blockAddr = (req_addr/m_block_size)*m_block_size;
-	m_current_set = (m_current_blockAddr >> (uint32_t)(log2((double)WORD_SIZE) + log2((double)m_block_size/WORD_SIZE))) & ((1 << (uint32_t)log2((double)m_num_of_sets)) - 1);
-	m_current_tag = (req_addr >> (uint32_t)(log2((double)WORD_SIZE) + log2((double)m_block_size/WORD_SIZE) + log2((double) m_num_of_sets)));
+	m_current_set = (m_current_blockAddr >> 
+	                     (uint32_t)(log2((double)WORD_SIZE) + 
+	                                log2((double)m_block_size/WORD_SIZE))) & 
+                    ((1 << (uint32_t)log2((double)m_num_of_sets)) - 1);
+	m_current_tag = (req_addr >> 
+	                     (uint32_t)(log2((double)WORD_SIZE) + 
+	                                log2((double)m_block_size/WORD_SIZE) + 
+	                                log2((double)m_num_of_sets)));
 	m_current_delay = delay;
 
 	if (cache_lookup(evict_needed, m_current_way)) {
@@ -169,7 +204,9 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 			// this block is already invalidated (nor present in cache) so do nothing
 		} else {
 			// normal request path
-			assert(type==req_extension::NORMAL);			// the special request except back-invalidate shouldn't result in a miss
+			
+			// the special request except back-invalidate shouldn't result in a miss
+			assert(type==req_extension::NORMAL);			
 			process_miss(trans, evict_needed);
 		}
 	}
@@ -189,10 +226,12 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 }
 
 
-// performs a cache lookup for the passed req_addr and returns true if hit else false..also assert evict_needed incase if eviction needed
+// performs a cache lookup for the passed req_addr and returns true if hit else false
+// also assert evict_needed incase if eviction needed
 // way_free logic:
-//		-- incase of hit, it is set to found way
-//		-- incase of miss, it is set to the way which is going to be refilled with new block from downstream
+//      -- incase of hit, it is set to found way
+//		-- incase of miss, it is set to the way which is going to be refilled with 
+//         new block from downstream
 bool cache::cache_lookup(bool &evict_needed, uint32_t &way_free) {
 	evict_needed = true;
 
@@ -281,7 +320,8 @@ void cache::process_hit(tlm::tlm_generic_payload &trans) {
 				*state = cache_block::M;
 				if (*state == cache_block::S) {
 					if (m_level < LLC_LEVEL) {
-						// notifying the downstream caches to update their block states (from S to MBS) via special request
+						// notifying the downstream caches to update their block states 
+						// (from S to MBS) via special request
 						m_ext->m_type = req_extension::M_UPDATE;
 						send_request(true);
 					}
@@ -302,7 +342,11 @@ void cache::process_hit(tlm::tlm_generic_payload &trans) {
 	// update eviction policy stuff
 	if (m_evict_policy == LRU) {
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
-			if (j!=m_current_way && m_blocks[m_current_set][j].state!=cache_block::I && m_blocks[m_current_set][j].evict_tag<=m_blocks[m_current_set][m_current_way].evict_tag) {
+			if (j!=m_current_way && m_blocks[m_current_set][j].state!=cache_block::I && 
+			             (m_blocks[m_current_set][j].evict_tag <=
+			              m_blocks[m_current_set][m_current_way].evict_tag)
+	            ) 
+	        {
 				m_blocks[m_current_set][j].evict_tag++;
 			}
 			assert(m_blocks[m_current_set][j].evict_tag <= m_num_of_ways);
@@ -325,11 +369,15 @@ void cache::process_special_request(req_extension::req_type type) {
 	switch(type) {
 		case req_extension::M_UPDATE : {
 			// request from child that it is now caching this block in M state
-			assert(*state != cache_block::I);				// can't be in invalid state (strictly inclusive caches)
+			
+            // can't be in invalid state (strictly inclusive caches)			
+			assert(*state != cache_block::I);				
 			if (*state == cache_block::S) {
-				*state = cache_block::MBS;					// TODO: Does MBS make sense for write through caches as well???
+                // TODO: Does MBS make sense for write through caches as well???			
+				*state = cache_block::MBS;					
 			} else if (*state == cache_block::M) {
-				assert(m_write_back);						// this has to be writeback cache
+                // this has to be writeback cache			
+				assert(m_write_back);			
 				*state = cache_block::MBS;
 			}
 			// forwarding this special request to further downstream caches if present
@@ -350,7 +398,8 @@ void cache::process_special_request(req_extension::req_type type) {
 				m_ext->m_type = req_extension::WB_UPDATE;
 				send_request(true);
 			}
-			// else no need to do anything if (state = MBS) path as it will be invalidated on WB_UPDATE path
+			// else no need to do anything if (state = MBS) path as it will be invalidated 
+			// on WB_UPDATE path
 
 			// if there are upstream caches then sending back invalidation to them as well
 			if (m_level > 1) {
@@ -368,7 +417,10 @@ void cache::process_special_request(req_extension::req_type type) {
 				m_ext->m_type = req_extension::NORMAL;
 				send_request(true);
 			} else {
-				assert(*state == cache_block::MBS);				// this has to be in MBS state........TODO: right now for write-through caches as well..can MBS for write-through cache be avoided???
+                // this has to be in MBS state
+                // TODO: right now for write-through caches as well..can MBS for 
+                // write-through cache be avoided???			
+				assert(*state == cache_block::MBS);				
 				assert(m_level < LLC_LEVEL);					// this can't be last level
 				*state = cache_block::I;
 				// writing back downstream
@@ -403,7 +455,8 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 	}
 
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
-	assert(*state == cache_block::I);			// this block should be refilled with new data
+    // this block should be refilled with new data	
+	assert(*state == cache_block::I);			
 
 	tlm::tlm_command cmd = trans.get_command();
 
@@ -442,7 +495,8 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 		// update eviction policy stuff
 		if (m_evict_policy==LRU || m_evict_policy==FIFO) {
 			for (uint32_t j=0; j<m_num_of_ways; j++) {
-				if (m_current_way!=j && m_blocks[m_current_set][j].state!=cache_block::I) {
+				if (m_current_way!=j && m_blocks[m_current_set][j].state!=cache_block::I) 
+				{
 					m_blocks[m_current_set][j].evict_tag++;
 				}
 				assert(m_blocks[m_current_set][m_current_way].evict_tag <= m_num_of_ways);
@@ -467,13 +521,21 @@ void cache::do_eviction() {
 	}
 
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
-	uint64_t evict_block_addr = ((m_blocks[m_current_set][m_current_way].tag << (uint32_t)(log2((double) m_num_of_sets))) | m_current_set) << (uint32_t)(log2((double) WORD_SIZE) + log2((double) m_block_size/WORD_SIZE));
+	uint64_t evict_block_addr = ((m_blocks[m_current_set][m_current_way].tag << 
+	                             (uint32_t)(log2((double) m_num_of_sets))) | m_current_set
+	                            ) << (uint32_t)(log2((double) WORD_SIZE) + 
+	                                            log2((double) m_block_size/WORD_SIZE));
 	// incase this block is in 'S' then no writeback is needed
-	// incase this block is in 'MBS' then this means that this block is being cached somewhere upstream in 'M' state which would have been written back via the back-invalidation path above so no writeback is needed
+	
+	// incase this block is in 'MBS' then this means that this block is being cached 
+	// somewhere upstream in 'M' state which would have been written back via the 
+	// back-invalidation path above so no writeback is needed
+	
 	// incase this block is in 'M' then write back is needed downstream
 	if (*state==cache_block::M) {
 		assert(m_write_back);			// this has to be a writeback cache
-		// writing through to-be-evicted block downstream..if a cache exists on the downstream path then it can update the status of its block (MBS) to M
+		// writing through to-be-evicted block downstream..if a cache exists on the 
+		// downstream path then it can update the status of its block (MBS) to M
 		m_trans.set_write();
 		m_ext->m_type = req_extension::NORMAL;
 		m_trans.set_address(evict_block_addr);
@@ -498,7 +560,7 @@ void cache::send_request(bool downstream, bool new_address) {
 	}
 	if (downstream) {
 		// downstream 'true' will send the request downstream
-		m_isocket_d->b_transport(m_trans, m_current_delay);
+		(*m_isocket_d)->b_transport(m_trans, m_current_delay);
 	} else {
 		// for downstream 'false' will send request to all upstream masters
 		for (uint32_t i=0; i<m_num_upstream_masters; i++) {
@@ -510,7 +572,8 @@ void cache::send_request(bool downstream, bool new_address) {
 
 
 
-// prints for a given set status of all cache blocks (ways) in common log file for whole cache system
+// prints for a given set status of all cache blocks (ways) in common log file for whole 
+// cache system
 void cache::print_cache_set(uint32_t set) {
 	std::string state[4] = {"M", "S", "I", "MBS"};
 

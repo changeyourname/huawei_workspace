@@ -88,7 +88,6 @@ packet2payload(PacketPtr packet, tlm::tlm_generic_payload &trans)
 Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
-//    assert(0);
 //    CAUGHT_UP;
 //    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
 //    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
@@ -159,45 +158,17 @@ bool
 sc_transactor::recvTimingReq(PacketPtr packet)
 {
 //    CAUGHT_UP;
-
-//    /* We should never get a second request after noting that a retry is
-//     * required */
-//    sc_assert(!needToSendRequestRetry);
-
-//    // simply drop inhibited packets and clean evictions
-//    if (packet->cacheResponding() || packet->cmd == MemCmd::CleanEvict) {
-//        return true;
-//    }
-
-//    if (blockingResponse) {   
-//        needToSendRequestRetry = true;
-//        return false;
-//    }
-
-//    tlm::tlm_generic_payload * trans = mm.allocate();
+//    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+//    /* Prepare the transaction */
+//    tlm::tlm_generic_payload *trans = mm.allocate();
 //    trans->acquire();
 //    packet2payload(packet, *trans);
-
 //    /* Attach the packet pointer to the TLM transaction to keep track */
 //    gem5Extension* extension = new gem5Extension(packet);
-//    trans->set_auto_extension(extension);
-
-//    /* Starting TLM non-blocking sequence (AT) Refer to IEEE1666-2011 SystemC
-//     * Standard Page 507 for a visualisation of the procedure */
-//    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-//    tlm::tlm_phase phase = tlm::BEGIN_REQ;
-//    
-//    iSocket->b_transport(*trans, delay);  
-//    //packet->cacheDelay = delay.to_seconds()/1e-12;  
-
-//    payloadEvent< sc_transactor > *pe = new payloadEvent< sc_transactor >
-//        (*this, &sc_transactor::pec, "PEQ");    
-//    phase = tlm::BEGIN_RESP;
-//    pe->notify(*trans, phase, delay);
-//    //TODO: somehow avoid this below serialization!!
-//    blockingResponse = trans;
-
-//    return true;
+//    trans->set_auto_extension(extension);    
+//    iSocket->b_transport(*trans, delay);                            
+//    trans->release();            
+//    packet->cacheDelay = delay.value();
 
     return owner.recvTimingReq(packet);
 }
