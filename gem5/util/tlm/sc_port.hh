@@ -152,9 +152,8 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
     void recvRespRetry();
     void recvFunctionalSnoop(PacketPtr packet);
     
-    void to_SysC_Cache(PacketPtr packet); 
-    
-//    unsigned long long readReg(unsigned int idx, unsigned int len) override;
+    void to_SysC_Cache(PacketPtr packet);     
+    unsigned long long readReg(unsigned int idx, unsigned int len) override;
 
     /** The TLM initiator interface */
     tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload& trans,

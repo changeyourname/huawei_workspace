@@ -72,6 +72,9 @@ private:
 	uint32_t m_current_way;
 	sc_core::sc_time m_current_delay;
 	uint32_t m_id;
+	uint64_t m_cache_regspace_base;	
+	uint64_t m_access_register;
+	uint64_t m_miss_register;
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free);
 	uint32_t find_way_evict();
@@ -99,7 +102,8 @@ public:
             bool write_back, 
             bool write_allocate, 
             cache::eviction_policy evict_policy, 
-            uint32_t level
+            uint32_t level,
+            uint64_t regbase
 	     );
 	~cache();
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);

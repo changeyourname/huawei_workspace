@@ -381,7 +381,7 @@ sc_main(int argc, char **argv)
                                                 (sc_core::sc_find_object("gem5.icache_0"));
     if (gem5_icache_0) {
         icache_0 = new cache("icache_0", NULL, 0, 1, 65536, WORD_SIZE, 
-                             1, true, true, cache::LRU, 1);
+                             1, true, true, cache::LRU, 1, 0xD000D000);
         icache_0->m_tsocket_d[0].bind(*gem5_icache_0);
     } else {
         SC_REPORT_FATAL("sc_main", "gem5.icache_0 not found");
@@ -393,7 +393,7 @@ sc_main(int argc, char **argv)
                                                 (sc_core::sc_find_object("gem5.dcache_0")); 
     if (gem5_dcache_0) {                                               
         dcache_0 = new cache("dcache_0", NULL, 1, 1, 65536, WORD_SIZE, 
-                             1, true, true, cache::LRU, 1);
+                             1, true, true, cache::LRU, 1, 0xD000E000);
         dcache_0->m_tsocket_d[0].bind(*gem5_dcache_0);  
     } else {        
         SC_REPORT_FATAL("sc_main", "gem5.dcache_0 not found");

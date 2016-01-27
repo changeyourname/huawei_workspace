@@ -6,7 +6,7 @@
         "mmap_using_noreserve": false, 
         "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzair/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -129,7 +129,7 @@
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
+        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -1577,7 +1577,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzleo/Downloads/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzair/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -1639,7 +1639,7 @@
         ], 
         "num_work_ids": 16, 
         "boot_loader": [
-            "/home/uzleo/Downloads/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false

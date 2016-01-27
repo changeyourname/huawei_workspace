@@ -13,4 +13,5 @@
 #define LLC_LEVEL 1
 
 
+
 #endif /* __CACHE_GLOBAL_DEFS_HPP_ */

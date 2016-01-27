@@ -26,7 +26,8 @@ cache::cache(
                 bool write_back, 
                 bool write_allocate, 
                 cache::eviction_policy evict_policy, 
-                uint32_t level
+                uint32_t level,
+                uint64_t regbase
             )
 	        :	sc_module(name),
 		        m_trans(),																            // transaction object
@@ -44,7 +45,10 @@ cache::cache(
 		        m_current_blockAddr(0),													            // cache block address for current request
 		        m_current_way(0),														            // cache way for current request
 		        m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					            // delay object for current request
-		        m_id(id)
+		        m_id(id),
+		        m_access_register(0),
+		        m_miss_register(0),
+		        m_cache_regspace_base(regbase)
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
 	// to occur in real cache organizations if this does occur though then cache would be 
@@ -152,18 +156,18 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 {
     uint64_t req_addr = trans.get_address();
     if (req_addr >= 0x80000000 && req_addr < 0x9fffffff) {
-        trans.set_response_status(tlm::TLM_OK_RESPONSE);
-	    #if 0
+        // memory request!!
+        
 	    req_extension *ext;
 	    trans.get_extension(ext);
 	    req_extension::req_type type;
-
 	    if (!ext) {
 		    assert(m_level == 1);		// has to be first level
 		    type = req_extension::NORMAL;
 	    } else {
 		    type = ext->m_type;
 	    }
+	    
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
 	    uint32_t current_set_orig;
@@ -186,6 +190,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    current_blockAddr_orig = m_current_blockAddr;
 		    current_set_orig = m_current_set;
 		    current_tag_orig = m_current_tag;
+	    }
+	    
+	    // updating the access register
+	    if (type == req_extension::NORMAL) {
+	        m_access_register++;
 	    }
 
 	    // update for current request (this only works if there are no outstanding request 
@@ -235,9 +244,31 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    }
 
 	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
-	    #endif
+    } else if (req_addr>=m_cache_regspace_base && 
+                            req_addr<(m_cache_regspace_base + 8*2)) {
+        // request accessing this cache registers
+        // right now only 2 register each being 8B 
+        // that's why 8*2 -> size in B in above conditional!!
+
+        // this has to be first level cache
+        assert(m_level == 1);
+        
+        tlm::tlm_command cmd = trans.get_command();
+        // for now only support is provided to read this cahce reigsters
+        assert(cmd == tlm::TLM_READ_COMMAND);
+        
+        unsigned char *ptr = trans.get_data_ptr();
+        assert(ptr);
+        unsigned int len = trans.get_data_length();
+        assert(len==8);
+        if (req_addr == m_cache_regspace_base) {
+            memcpy(ptr, &m_access_register, len);
+        } else {
+            memcpy(ptr, &m_miss_register, len);
+        }    
     } else {
-        assert(0);
+        // invalid request received
+        trans.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
     }
 
 }
@@ -426,11 +457,8 @@ cache::process_special_request(req_extension::req_type type)
 			// else no need to do anything if (state = MBS) path as it will be invalidated 
 			// on WB_UPDATE path
 
-			// if there are upstream caches then sending back invalidation to them as well
-			if (m_level > 1) {
-				m_ext->m_type = req_extension::BACK_INVALIDATE;
-				send_request(false);
-			}
+			// sending back invalidation to them as well
+			send_request(false);
 			break;
 		}
 		case req_extension::WB_UPDATE : {
@@ -476,6 +504,11 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		fprintf(m_fid, "...set=%d\r\n", m_current_set);
 		fflush(m_fid);			//TODO: disable this after debugging
 	}
+	
+    // updating the access register
+    if (type == req_extension::NORMAL) {
+        m_miss_register++;
+    }
 
 	if (evict_needed) {
 		do_eviction();
@@ -573,11 +606,7 @@ cache::do_eviction()
 	*state = cache_block::I;
 
 	// BACK INVALIDATION
-	if (m_level > 1) {			// there are upstream caches
-		m_ext->m_type = req_extension::BACK_INVALIDATE;
-		m_trans.set_address(evict_block_addr);
-		send_request(false, true);
-	}
+	send_request(false, true);
 }
 
 
@@ -590,13 +619,23 @@ cache::send_request(bool downstream, bool new_address)
 		m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 	}
 	if (downstream) {
-		// downstream 'true' will send the request downstream
-		(*m_isocket_d)->b_transport(m_trans, m_current_delay);
-	} else {
-		// for downstream 'false' will send request to all upstream masters
-		for (uint32_t i=0; i<m_num_upstream_masters; i++) {
-			m_isocket_u[i]->b_transport(m_trans, m_current_delay);
+		// downstream 'true' will send the request downstream if there is any
+	    if (m_level < LLC_LEVEL) {
+    		(*m_isocket_d)->b_transport(m_trans, m_current_delay);
+		} else {
+		    // TODO: mem read/write delay!!
+		    return;
 		}
+	} else {	    
+		// for downstream 'false' will send request to all upstream masters if they are 
+		// present
+		if (m_level > 1) {
+		    for (uint32_t i=0; i<m_num_upstream_masters; i++) {
+			    m_isocket_u[i]->b_transport(m_trans, m_current_delay);
+		    }
+	    } else {
+	        return;
+	    }
 	}
 	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 }
@@ -622,6 +661,13 @@ cache::print_cache_set(uint32_t set)
 	    fflush(common_fid);			//TODO: disable this after debugging
     }
 }
+
+
+
+
+
+
+
 
 
 //TODO: model timing
