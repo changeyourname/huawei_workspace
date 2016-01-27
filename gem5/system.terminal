@@ -1,17 +1,120 @@
-Booting Linux on physical CPU 0x0
-Initializing cgroup subsys cpuset
-Linux version 3.13.0-rc2 (tony@vamp) (gcc version 4.8.2 (Ubuntu/Linaro 4.8.2-16ubuntu4) ) #1 SMP PREEMPT Mon Oct 13 15:09:23 EDT 2014
-Kernel was built at commit id ''
-CPU: ARMv7 Processor [410fc0f0] revision 0 (ARMv7), cr=10c53c7d
-CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-Machine model: V2P-CA15
-bootconsole [earlycon0] enabled
-Memory policy: Data cache writealloc
-kdebugv2m: Following are test values to confirm proper working
-kdebugv2m: Ranges 42000000 0 
-kdebugv2m: Regs 30000000 1000000 
-kdebugv2m: Virtual-Reg f0000000 
-kdebugv2m: pci node addr_cells 3 
-kdebugv2m: pci node size_cells 2 
-kdebugv2m: motherboard addr_cells 2 
-
+[    0.000000] Initializing cgroup subsys cpu
+[    0.000000] Linux version 3.16.0-rc6 (tony@vamp) (gcc version 4.8.2 20140110 (prerelease) [ibm/gcc-4_8-branch merged from gcc-4_8-branch, revision 205847] (Ubuntu/Linaro 4.8.2-13ubuntu1) ) #1 SMP PREEMPT Wed Oct 1 14:39:23 EDT 2014
+[    0.000000] CPU: AArch64 Processor [410fc0f0] revision 0
+[    0.000000] No Cache Writeback Granule information, assuming cache line size 64
+[    0.000000] Memory limited to 512MB
+[    0.000000] cma: CMA: reserved 16 MiB at 9f000000
+[    0.000000] On node 0 totalpages: 131072
+[    0.000000]   DMA zone: 1792 pages used for memmap
+[    0.000000]   DMA zone: 0 pages reserved
+[    0.000000]   DMA zone: 131072 pages, LIFO batch:31
+[    0.000000] PERCPU: Embedded 11 pages/cpu @ffffffc01efc3000 s12800 r8192 d24064 u45056
+[    0.000000] pcpu-alloc: s12800 r8192 d24064 u45056 alloc=11*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 129280
+[    0.000000] Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1
+[    0.000000] PID hash table entries: 2048 (order: 2, 16384 bytes)
+[    0.000000] Dentry cache hash table entries: 65536 (order: 7, 524288 bytes)
+[    0.000000] Inode-cache hash table entries: 32768 (order: 6, 262144 bytes)
+[    0.000000] Memory: 485524K/524288K available (4569K kernel code, 308K rwdata, 1640K rodata, 208K init, 187K bss, 38764K reserved)
+[    0.000000] Virtual kernel memory layout:
+[    0.000000]     vmalloc : 0xffffff8000000000 - 0xffffffbbffff0000   (245759 MB)
+[    0.000000]     vmemmap : 0xffffffbc01c00000 - 0xffffffbc02300000   (     7 MB)
+[    0.000000]     modules : 0xffffffbffc000000 - 0xffffffc000000000   (    64 MB)
+[    0.000000]     memory  : 0xffffffc000000000 - 0xffffffc020000000   (   512 MB)
+[    0.000000]       .init : 0xffffffc000692000 - 0xffffffc0006c6200   (   209 kB)
+[    0.000000]       .text : 0xffffffc000080000 - 0xffffffc0006914e4   (  6214 kB)
+[    0.000000]       .data : 0xffffffc0006c7000 - 0xffffffc0007141e0   (   309 kB)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] Preemptible hierarchical RCU implementation.
+[    0.000000] 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+[    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS:64 nr_irqs:64 0
+[    0.000000] Architected cp15 timer(s) running at 100.00MHz (phys).
+[    0.000007] sched_clock: 56 bits at 100MHz, resolution 10ns, wraps every 2748779069440ns
+[    0.000275] Console: colour dummy device 80x25
+[    0.000291] Calibrating delay loop (skipped) preset value.. 3997.69 BogoMIPS (lpj=19988480)
+[    0.000309] pid_max: default: 32768 minimum: 301
+[    0.000450] Mount-cache hash table entries: 1024 (order: 1, 8192 bytes)
+[    0.000468] Mountpoint-cache hash table entries: 1024 (order: 1, 8192 bytes)
+[    0.001411] hw perfevents: no hardware support available
+[    0.060336] CPU1: Booted secondary processor
+[    0.080352] CPU2: Booted secondary processor
+[    0.100382] CPU3: Booted secondary processor
+[    0.100465] Brought up 4 CPUs
+[    0.100499] SMP: Total of 4 processors activated.
+[    0.101192] devtmpfs: initialized
+[    0.109685] atomic64_test: passed
+[    0.110463] regulator-dummy: no parameters
+[    0.116526] NET: Registered protocol family 16
+[    0.119163] vdso: 2 pages (1 code, 1 data) at base ffffffc0006cd000
+[    0.119234] hw-breakpoint: found 2 breakpoint and 2 watchpoint registers.
+[    0.120197] software IO TLB [mem 0x9d400000-0x9d800000] (4MB) mapped at [ffffffc01d400000-ffffffc01d7fffff]
+[    0.120226] Serial: AMBA PL011 UART driver
+[    0.123630] of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/sysctl@020000
+[    0.124171] 1c090000.uart: ttyAMA0 at MMIO 0x1c090000 (irq = 37, base_baud = 0) is a PL011 rev3
+[    0.125341] console [ttyAMA0] enabled
+[    0.126072] of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0a0000
+[    0.126377] of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0b0000
+[    0.126687] of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0c0000
+[    0.126955] of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/wdt@0f0000
+[    0.201949] 3V3: 3300 mV 
+[    0.202594] vgaarb: loaded
+[    0.203418] SCSI subsystem initialized
+[    0.203868] libata version 3.00 loaded.
+[    0.204820] usbcore: registered new interface driver usbfs
+[    0.205031] usbcore: registered new interface driver hub
+[    0.205254] usbcore: registered new device driver usb
+[    0.205732] pps_core: LinuxPPS API ver. 1 registered
+[    0.205761] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.205910] PTP clock support registered
+[    0.208006] Switched to clocksource arch_sys_counter
+[    0.227775] NET: Registered protocol family 2
+[    0.228916] TCP established hash table entries: 4096 (order: 3, 32768 bytes)
+[    0.229102] TCP bind hash table entries: 4096 (order: 4, 65536 bytes)
+[    0.229323] TCP: Hash tables configured (established 4096 bind 4096)
+[    0.229407] TCP: reno registered
+[    0.229433] UDP hash table entries: 256 (order: 1, 8192 bytes)
+[    0.229501] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes)
+[    0.229809] NET: Registered protocol family 1
+[    0.230177] RPC: Registered named UNIX socket transport module.
+[    0.230202] RPC: Registered udp transport module.
+[    0.230224] RPC: Registered tcp transport module.
+[    0.230247] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.230289] PCI: CLS 0 bytes, default 64
+[    0.233108] futex hash table entries: 1024 (order: 4, 65536 bytes)
+[    0.234228] HugeTLB registered 2 MB page size, pre-allocated 0 pages
+[    0.265164] fuse init (API version 7.23)
+[    0.266550] msgmni has been set to 980
+[    0.267690] io scheduler noop registered
+[    0.268459] io scheduler cfq registered (default)
+[    0.274393] pci-host-generic 30000000.pci: PCI host bridge to bus 0000:00
+[    0.274452] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    0.274492] pci_bus 0000:00: root bus resource [mem 0x40000000-0x4fffffff]
+[    0.274534] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.274568] pci_bus 0000:00: scanning bus
+[    0.274620] pci 0000:00:00.0: [8086:1075] type 00 class 0x020000
+[    0.274670] pci 0000:00:00.0: reg 0x10: [mem 0x00000000-0x0001ffff]
+[    0.274743] pci 0000:00:00.0: reg 0x30: [mem 0x00000000-0x000007ff pref]
+[    0.275137] pci 0000:00:01.0: [8086:7111] type 00 class 0x010185
+[    0.275203] pci 0000:00:01.0: reg 0x10: [io  0x0000-0x0007]
+[    0.275246] pci 0000:00:01.0: reg 0x14: [io  0x0000-0x0003]
+[    0.275289] pci 0000:00:01.0: reg 0x18: [io  0x0000-0x0007]
+[    0.275332] pci 0000:00:01.0: reg 0x1c: [io  0x0000-0x0003]
+[    0.275375] pci 0000:00:01.0: reg 0x20: [io  0x0000-0x000f]
+[    0.275425] pci 0000:00:01.0: reg 0x30: [mem 0x00000000-0x000007ff pref]
+[    0.275867] pci_bus 0000:00: fixups for bus
+[    0.275901] pci_bus 0000:00: bus scan returning with max=00
+[    0.275945] pci 0000:00:00.0: calling quirk_e100_interrupt+0x0/0x1cc
+[    0.276055] pci 0000:00:00.0: fixup irq: got 33
+[    0.276088] pci 0000:00:00.0: assigning IRQ 33
+[    0.276151] pci 0000:00:01.0: fixup irq: got 34
+[    0.276184] pci 0000:00:01.0: assigning IRQ 34
+[    0.276244] pci 0000:00:00.0: BAR 0: assigned [mem 0x40000000-0x4001ffff]
+[    0.276291] pci 0000:00:00.0: BAR 6: assigned [mem 0x40020000-0x400207ff pref]
+[    0.276336] pci 0000:00:01.0: BAR 6: assigned [mem 0x40020800-0x40020fff pref]
+[    0.276380] pci 0000:00:01.0: BAR 4: assigned [io  0x1000-0x100f]
+[    0.276424] pci 0000:00:01.0: BAR 0: assigned [io  0x1010-0x1017]
+[    0.276468] pci 0000:00:01.0: BAR 2: assigned [io  0x1018-0x101f]
+[    0.276512] pci 0000:00:01.0: BAR 1: assigned [io  0x1020-0x1023]
+[    0.276556] pci 0000:00:01.0: BAR 3: assigned [io  0x1024-0x1027]

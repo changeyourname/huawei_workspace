@@ -12,7 +12,8 @@
 #include <tlm_utils/simple_initiator_socket.h>
 #include <tlm_utils/simple_target_socket.h>
 #include <stdint.h>
-#include "global_defs.hpp"
+#include "cache_global_defs.hpp"
+#include "../global.hh"
 
 class cache : public sc_core::sc_module {
   public:

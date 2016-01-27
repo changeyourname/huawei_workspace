@@ -52,8 +52,8 @@ cache::cache(
 	// memory......cache will be bigger than memory!
 	assert(log2((double) m_num_of_sets) <= log2((double) MEM_SIZE));
 
-// TODO:
-/*	// cache blocks structure
+
+	// cache blocks structure
 	m_blocks.resize(m_num_of_sets);
 	for (uint32_t i=0; i<m_num_of_sets; i++) {
 		m_blocks[i].resize(m_num_of_ways);
@@ -62,7 +62,7 @@ cache::cache(
 			m_blocks[i][j].tag = 0x0;
 			m_blocks[i][j].evict_tag = 0x0;
 		}
-	}*/
+	}
 
 	// req type indicator
 	m_ext = new req_extension();
@@ -150,7 +150,12 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-    delay += sc_core::sc_time(20, sc_core::SC_NS);
+    uint64_t addr = trans.get_address();
+    if (addr >= 0x80000000 && addr < 0x9fffffff) {
+        delay += sc_core::sc_time(0, sc_core::SC_NS);
+    } else {
+        assert(0);
+    }
 #if 0
 	uint64_t req_addr = trans.get_address();
 	req_extension *ext;

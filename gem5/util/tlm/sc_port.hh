@@ -44,6 +44,7 @@
 #include "mem/sysc_cache.hh"
 #include "sc_mm.hh"
 #include "sc_module.hh"
+#include "global.hh"
 
 namespace Gem5SystemC
 {
@@ -150,6 +151,8 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
     bool recvTimingSnoopResp(PacketPtr packet);
     void recvRespRetry();
     void recvFunctionalSnoop(PacketPtr packet);
+    
+    void to_SysC_Cache(PacketPtr packet); 
     
 //    unsigned long long readReg(unsigned int idx, unsigned int len) override;
 

@@ -88,25 +88,10 @@ packet2payload(PacketPtr packet, tlm::tlm_generic_payload &trans)
 Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
-//    CAUGHT_UP;
-//    //SC_REPORT_INFO("transactor", "recvAtomic hasn't been tested much");
-//    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-
-//    /* Prepare the transaction */
-//    tlm::tlm_generic_payload * trans = mm.allocate();
-//    trans->acquire();
-//    packet2payload(packet, *trans);
-
-//    /* Attach the packet pointer to the TLM transaction to keep track */
-//    gem5Extension* extension = new gem5Extension(packet);
-//    trans->set_auto_extension(extension);
-//    
-//    iSocket->b_transport(*trans, delay);                    
-//        
-//    trans->release();        
-//    
-//    return delay.value();
-
+    uint64_t addr = packet->getAddr();
+    if (addr >= MEM_BASE && addr < (MEM_BASE + MEM_SIZE)) {
+        to_SysC_Cache(packet);
+    }         
     owner.recvAtomic(packet);
 }
 
@@ -157,20 +142,28 @@ sc_transactor::recvFunctionalSnoop(PacketPtr packet)
 bool
 sc_transactor::recvTimingReq(PacketPtr packet)
 {
-//    CAUGHT_UP;
-//    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
-//    /* Prepare the transaction */
-//    tlm::tlm_generic_payload *trans = mm.allocate();
-//    trans->acquire();
-//    packet2payload(packet, *trans);
-//    /* Attach the packet pointer to the TLM transaction to keep track */
-//    gem5Extension* extension = new gem5Extension(packet);
-//    trans->set_auto_extension(extension);    
-//    iSocket->b_transport(*trans, delay);                            
-//    trans->release();            
-//    packet->cacheDelay = delay.value();
-
+    uint64_t addr = packet->getAddr();
+    if (addr >= MEM_BASE && addr < (MEM_BASE + MEM_SIZE)) {
+        to_SysC_Cache(packet);
+    }
     return owner.recvTimingReq(packet);
+}
+
+// send request to systemc cache
+void
+sc_transactor::to_SysC_Cache(PacketPtr packet) {
+    CAUGHT_UP;
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+    /* Prepare the transaction */
+    tlm::tlm_generic_payload *trans = mm.allocate();
+    trans->acquire();
+    packet2payload(packet, *trans);
+    /* Attach the packet pointer to the TLM transaction to keep track */
+    gem5Extension* extension = new gem5Extension(packet);
+    trans->set_auto_extension(extension);    
+    iSocket->b_transport(*trans, delay);                            
+    trans->release();            
+    packet->cacheDelay = delay.value();
 }
 
 void
