@@ -238,8 +238,8 @@ SysC_Cache::handleLockErasure(ContextID ctx_id)
 }
 
 unsigned long long
-SysC_Cache::readReg(unsigned int idx, unsigned int len) {
-    return extPort->readReg(idx, len);
+SysC_Cache::readReg(uint64_t addr) {
+    return extPort->readReg(addr);
 }
 
 

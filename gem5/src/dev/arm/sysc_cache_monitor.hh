@@ -52,8 +52,6 @@
 class SysC_CacheMonitor : public BasicPioDevice
 {
   public:
-   unsigned int reg_size;  
-   unsigned int num_regs;
    SysC_Cache *gem5_cacheMaster;
   
    typedef SysC_CacheMonitorParams Params;

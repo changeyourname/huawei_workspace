@@ -59,8 +59,6 @@
 
 SysC_CacheMonitor::SysC_CacheMonitor(const Params *p)
     : BasicPioDevice(p, 0xfff),
-      reg_size(p->word_width),
-      num_regs(p->num_regs),
       gem5_cacheMaster(p->cache)
 {
 }
@@ -68,16 +66,10 @@ SysC_CacheMonitor::SysC_CacheMonitor(const Params *p)
 Tick
 SysC_CacheMonitor::read(PacketPtr pkt)
 {
-    assert(pioAddr%reg_size == 0);             // must be correctly aligned
-    assert(pkt->getSize() == reg_size);         
-    
-    uint32_t reg_idx = (pkt->getAddr() - pioAddr) / reg_size;
-    assert(reg_idx < num_regs);        
-
-    if (reg_size == 4) {
-        pkt->set<uint32_t>(gem5_cacheMaster->readReg(reg_idx, 4));
-    } else if (reg_size == 8) {
-        pkt->set<uint64_t>(gem5_cacheMaster->readReg(reg_idx, 8));
+    if (pkt->getSize() == 4) {
+        pkt->set<uint32_t>(gem5_cacheMaster->readReg(pkt->getAddr()));
+    } else if (pkt->getSize() == 8) {
+        pkt->set<uint64_t>(gem5_cacheMaster->readReg(pkt->getAddr()));
     } else {
         assert(0);
     }

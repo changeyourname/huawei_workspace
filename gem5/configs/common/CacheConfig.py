@@ -99,7 +99,6 @@ def config_cache(options, system):
         # parameters specific to using systemc caches    
         sysc_cache_monitor_base = 0xD000D000        
         sysc_cache_monitor_size = 4096
-        sysc_cache_num_regs = 2
         
     for i in xrange(options.num_cpus):
         if options.caches:
@@ -191,8 +190,6 @@ def config_cache(options, system):
                 
                 exec("system.%scache_mon_%d = SysC_CacheMonitor( \
                                                 pio_addr = sysc_cache_monitor_base, \
-                                                word_width = system.cache_line_size, \
-                                                num_regs = sysc_cache_num_regs, \
                                                 cache = system.%scache_%d, \
                                                 pio = system.membus.master\
                                               )" % (temp[j], i, temp[j], i))

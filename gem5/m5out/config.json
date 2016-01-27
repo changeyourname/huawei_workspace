@@ -6,7 +6,7 @@
         "mmap_using_noreserve": false, 
         "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzair/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -88,18 +88,16 @@
         "have_large_asid_64": false, 
         "dcache_mon_0": {
             "name": "dcache_mon_0", 
-            "word_width": 4, 
+            "pio": {
+                "peer": "system.membus.master[6]", 
+                "role": "SLAVE"
+            }, 
             "cache": "system.dcache_0", 
             "pio_latency": 100000, 
             "clk_domain": "system.clk_domain", 
             "system": "system", 
             "eventq_index": 0, 
-            "num_regs": 2, 
             "cxx_class": "SysC_CacheMonitor", 
-            "pio": {
-                "peer": "system.membus.master[6]", 
-                "role": "SLAVE"
-            }, 
             "path": "system.dcache_mon_0", 
             "pio_addr": 3489718272, 
             "type": "SysC_CacheMonitor"
@@ -110,18 +108,16 @@
         "load_offset": 2147483648, 
         "icache_mon_0": {
             "name": "icache_mon_0", 
-            "word_width": 4, 
+            "pio": {
+                "peer": "system.membus.master[5]", 
+                "role": "SLAVE"
+            }, 
             "cache": "system.icache_0", 
             "pio_latency": 100000, 
             "clk_domain": "system.clk_domain", 
             "system": "system", 
             "eventq_index": 0, 
-            "num_regs": 2, 
             "cxx_class": "SysC_CacheMonitor", 
-            "pio": {
-                "peer": "system.membus.master[5]", 
-                "role": "SLAVE"
-            }, 
             "path": "system.icache_mon_0", 
             "pio_addr": 3489714176, 
             "type": "SysC_CacheMonitor"
@@ -129,7 +125,7 @@
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
+        "dtb_filename": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -1577,7 +1573,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzair/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzleo/Downloads/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -1639,7 +1635,7 @@
         ], 
         "num_work_ids": 16, 
         "boot_loader": [
-            "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzleo/Downloads/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false

@@ -68,8 +68,6 @@ class SysC_CacheMonitor(BasicPioDevice):
     type = 'SysC_CacheMonitor'
     cxx_header = "dev/arm/sysc_cache_monitor.hh"
     
-    word_width = Param.UInt32("word width (reg size) in bytes")
-    num_regs = Param.UInt32("number of registers in the sysc cache")
     cache = Param.SysC_Cache(Parent.any, "sysc cache to monitor")
 
 class AmbaIntDevice(AmbaPioDevice):

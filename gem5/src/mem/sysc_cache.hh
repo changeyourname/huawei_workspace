@@ -92,7 +92,7 @@ class SysC_Cache : public MemObject
          *  functionality */
 
         AddrRangeList getAddrRanges() const;   
-        virtual unsigned long long readReg(unsigned int idx, unsigned int len) {return 0;}             
+        virtual unsigned long long readReg(uint64_t addr) {return 0;}             
     };        
     
     
@@ -214,7 +214,7 @@ class SysC_Cache : public MemObject
     
     void handleLockErasure(ContextID ctx_id);
     
-    unsigned long long readReg(unsigned int idx, unsigned int len);    
+    unsigned long long readReg(uint64_t addr);    
     
   protected:
     System *system;

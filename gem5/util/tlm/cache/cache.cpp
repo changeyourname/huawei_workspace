@@ -155,7 +155,7 @@ void
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
     uint64_t req_addr = trans.get_address();
-    if (req_addr >= 0x80000000 && req_addr < 0x9fffffff) {
+    if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
         // memory request!!
         
 	    req_extension *ext;
@@ -505,6 +505,9 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		fflush(m_fid);			//TODO: disable this after debugging
 	}
 	
+    req_extension *ext;
+    trans.get_extension(ext);
+    req_extension::req_type type;	
     // updating the access register
     if (type == req_extension::NORMAL) {
         m_miss_register++;

@@ -296,16 +296,18 @@ sc_transactor::getOwner() {
 
 
 unsigned long long
-sc_transactor::readReg(unsigned int idx, unsigned int len) {
+sc_transactor::readReg(uint64_t addr) {
     tlm::tlm_generic_payload trans;
-    unsigned char *ptr = new unsigned char[len];
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;    
+    unsigned char *ptr = new unsigned char[8];      // cache registers are of 8B 
     
     trans.set_command(tlm::TLM_READ_COMMAND);
-    trans.set_address(idx);
-    trans.set_data_length(len);
+    trans.set_address(addr);
+    trans.set_data_length(8);
     trans.set_data_ptr(ptr);
         
-    iSocket->transport_dbg(trans);
+    iSocket->b_transport(trans, delay);
+    assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);
     sc_dt::uint64 ret = *((sc_dt::uint64 *) ptr);
 
     delete ptr;    
