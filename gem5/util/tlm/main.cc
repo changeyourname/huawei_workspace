@@ -399,6 +399,12 @@ sc_main(int argc, char **argv)
     sc_core::sc_start();
 
     SC_REPORT_INFO("sc_main", "End of Simulation");
+    
+//TODO: clean up allocated global stuff from cache module!!     
+    
 
     return EXIT_SUCCESS;
 }
+
+
+

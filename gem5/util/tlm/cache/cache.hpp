@@ -15,10 +15,10 @@
 #include "global_defs.hpp"
 
 class cache : public sc_core::sc_module {
-public:
+  public:
 	enum eviction_policy {LRU, LFU, FIFO, RAND};
 	static FILE *common_fid;
-
+    
 	// for special requests (e.g back-invalidation) between caches
 	class req_extension : public tlm::tlm_extension< req_extension > {
 	public:
@@ -53,7 +53,6 @@ private:
     // outstanding requests..this helps to improve performance as m_trans needs to be 
     // created only once for an object of this class
 	tlm::tlm_generic_payload m_trans;	
-			
 	req_extension *m_ext;
 	uint32_t m_num_upstream_masters;
 	uint32_t m_block_size;

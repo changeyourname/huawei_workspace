@@ -12,7 +12,7 @@
 
 // to clean up allocated stuff globally for the whole class
 std::vector< cache::req_extension * > cache::req_extension::req_extension_clones;
-FILE *cache::common_fid = fopen("log/cache_system.log", "w+");
+FILE *cache::common_fid = NULL;        //fopen("log/cache_system.log", "w+");
 
 // constructor
 cache::cache(
@@ -52,7 +52,8 @@ cache::cache(
 	// memory......cache will be bigger than memory!
 	assert(log2((double) m_num_of_sets) <= log2((double) MEM_SIZE));
 
-	// cache blocks structure
+// TODO:
+/*	// cache blocks structure
 	m_blocks.resize(m_num_of_sets);
 	for (uint32_t i=0; i<m_num_of_sets; i++) {
 		m_blocks[i].resize(m_num_of_ways);
@@ -61,7 +62,7 @@ cache::cache(
 			m_blocks[i][j].tag = 0x0;
 			m_blocks[i][j].evict_tag = 0x0;
 		}
-	}
+	}*/
 
 	// req type indicator
 	m_ext = new req_extension();
@@ -77,8 +78,9 @@ cache::cache(
 	if (m_level > 1) {		// not first level cache
 		m_isocket_u = new tlm_utils::simple_initiator_socket< cache >
 		                                                 [m_num_upstream_masters];
-	}
-
+	} else {
+        m_isocket_u = NULL;
+    }
 
 	if (m_level < LLC_LEVEL) {			// not last level cache
     	// target sockets for downstream masters (for back invalidation)	
@@ -87,8 +89,10 @@ cache::cache(
 		
 		// initiator socket for downstream slave
         m_isocket_d = new tlm_utils::simple_initiator_socket< cache >("m_isocket_d");        		
-	}
-	
+	} else {
+        m_tsocket_u = NULL;
+        m_isocket_d = NULL;
+    }
 
 	// logging
 	if (logfile) {
@@ -119,9 +123,12 @@ cache::~cache() {
 	}
 	if (m_level < LLC_LEVEL) {
 		delete m_tsocket_u;
+        delete m_isocket_d;
 	}
-
-	fclose(m_fid);
+    
+    if (m_fid) {
+    	fclose(m_fid);
+    }
 
 	m_trans.clear_extension(m_ext);
 	delete m_ext;
@@ -130,7 +137,9 @@ cache::~cache() {
 
 
 // enable logging
-void cache::do_logging() {
+void 
+cache::do_logging() 
+{
     if (m_fid) {
     	m_log = true;
 	}
@@ -138,9 +147,11 @@ void cache::do_logging() {
 
 
 // port interface method
-void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) {
-    assert(0);
-
+void 
+cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
+{
+    delay += sc_core::sc_time(20, sc_core::SC_NS);
+#if 0
 	uint64_t req_addr = trans.get_address();
 	req_extension *ext;
 	trans.get_extension(ext);
@@ -223,6 +234,7 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 	}
 
 	trans.set_response_status(tlm::TLM_OK_RESPONSE);
+#endif
 }
 
 
@@ -232,7 +244,9 @@ void cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay
 //      -- incase of hit, it is set to found way
 //		-- incase of miss, it is set to the way which is going to be refilled with 
 //         new block from downstream
-bool cache::cache_lookup(bool &evict_needed, uint32_t &way_free) {
+bool 
+cache::cache_lookup(bool &evict_needed, uint32_t &way_free) 
+{
 	evict_needed = true;
 
 	for (uint32_t i=0; i<m_num_of_ways; i++) {
@@ -257,7 +271,9 @@ bool cache::cache_lookup(bool &evict_needed, uint32_t &way_free) {
 
 
 // based on the eviction policy, choose the way to be replaced
-uint32_t cache::find_way_evict() {
+uint32_t 
+cache::find_way_evict() 
+{
 	int way_free = -1;
 
 	switch(m_evict_policy) {
@@ -300,7 +316,9 @@ uint32_t cache::find_way_evict() {
 
 
 // handle normal hit request
-void cache::process_hit(tlm::tlm_generic_payload &trans) {
+void 
+cache::process_hit(tlm::tlm_generic_payload &trans) 
+{
 	// logging
 	if (m_log) 	{
 		fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
@@ -358,7 +376,9 @@ void cache::process_hit(tlm::tlm_generic_payload &trans) {
 }
 
 // handle special request on hit
-void cache::process_special_request(req_extension::req_type type) {
+void 
+cache::process_special_request(req_extension::req_type type) 
+{
 	// logging
 	if (m_log) {
 		// TODO
@@ -442,7 +462,9 @@ void cache::process_special_request(req_extension::req_type type) {
 
 
 // handle miss request
-void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
+void 
+cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) 
+{
 	if (m_log) {
 		fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)trans.get_address());
 		fprintf(m_fid, "..tag=0x%08x", (uint32_t)m_current_tag);
@@ -515,7 +537,9 @@ void cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) {
 }
 
 // performs cache block eviction
-void cache::do_eviction() {
+void 
+cache::do_eviction() 
+{
 	if (m_log) {
 		//TODO
 	}
@@ -553,7 +577,9 @@ void cache::do_eviction() {
 
 
 // request transport mechanism
-void cache::send_request(bool downstream, bool new_address) {
+void 
+cache::send_request(bool downstream, bool new_address) 
+{
 	if (!new_address) {
 		m_trans.set_address(m_current_blockAddr);
 		m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
@@ -571,23 +597,25 @@ void cache::send_request(bool downstream, bool new_address) {
 }
 
 
-
 // prints for a given set status of all cache blocks (ways) in common log file for whole 
 // cache system
-void cache::print_cache_set(uint32_t set) {
+void 
+cache::print_cache_set(uint32_t set) 
+{
 	std::string state[4] = {"M", "S", "I", "MBS"};
-
-	fprintf(common_fid, "(%s)..", name());
-	fprintf(common_fid, "set:%d\r\n", set);
-	fprintf(common_fid, "------------------\r\n");
-	for (uint32_t x=0; x<m_num_of_ways; x++) {
-		fprintf(common_fid, "way[%d]..", x);
-		fprintf(common_fid, "state=%s..", state[m_blocks[set][x].state].c_str());
-		fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
-		fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
-	}
-	fprintf(common_fid, "\r\n\r\n");
-	fflush(common_fid);			//TODO: disable this after debugging
+    if (common_fid) {
+	    fprintf(common_fid, "(%s)..", name());
+	    fprintf(common_fid, "set:%d\r\n", set);
+	    fprintf(common_fid, "------------------\r\n");
+	    for (uint32_t x=0; x<m_num_of_ways; x++) {
+		    fprintf(common_fid, "way[%d]..", x);
+		    fprintf(common_fid, "state=%s..", state[m_blocks[set][x].state].c_str());
+		    fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
+		    fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
+	    }
+	    fprintf(common_fid, "\r\n\r\n");
+	    fflush(common_fid);			//TODO: disable this after debugging
+    }
 }
 
 
