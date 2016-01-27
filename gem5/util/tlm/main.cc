@@ -407,7 +407,7 @@ sc_main(int argc, char **argv)
    
    
    
-   
+ #if 0  
     cache *icache_1;
     Gem5SystemC::sc_transactor *gem5_icache_1 = dynamic_cast<Gem5SystemC::sc_transactor *>
                                                 (sc_core::sc_find_object("gem5.icache_1"));
@@ -496,7 +496,7 @@ sc_main(int argc, char **argv)
     
     
     
-    
+    #endif
     
     
     
@@ -525,7 +525,7 @@ sc_main(int argc, char **argv)
     if (gem5_dcache_0) {
         delete dcache_0;
     }
-    if (gem5_icache_1) {
+   /* if (gem5_icache_1) {
         delete icache_1;
     }
     if (gem5_dcache_1) {
@@ -542,7 +542,7 @@ sc_main(int argc, char **argv)
     }
     if (gem5_dcache_3) {
         delete dcache_3;
-    }    
+    } */   
         
     
     //TODO: clean up allocated global stuff from cache module!!  

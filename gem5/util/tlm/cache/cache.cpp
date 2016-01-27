@@ -16,35 +16,35 @@ FILE *cache::common_fid = NULL;        //fopen("log/cache_system.log", "w+");
 
 // constructor
 cache::cache(
-             sc_core::sc_module_name name, 
-             const char *logfile, 
-             uint32_t id, 
-             uint32_t num_masters, 
-             uint32_t size, 
-             uint32_t block_size, 
-             uint32_t num_ways, 
-             bool write_back, 
-             bool write_allocate, 
-             cache::eviction_policy evict_policy, 
-             uint32_t level
+                sc_core::sc_module_name name, 
+                const char *logfile, 
+                uint32_t id, 
+                uint32_t num_masters, 
+                uint32_t size, 
+                uint32_t block_size, 
+                uint32_t num_ways, 
+                bool write_back, 
+                bool write_allocate, 
+                cache::eviction_policy evict_policy, 
+                uint32_t level
             )
-	:	sc_module(name),
-		m_trans(),																            // transaction object
-		m_num_upstream_masters(num_masters),									            // total upstream masters (num of children i.e num of caches that share this cache)
-		m_block_size(block_size),												            // total cache size
-		m_num_of_sets(size/(block_size*num_ways)),								            // total number of sets
-		m_num_of_ways(num_ways),												            // total number of ways
-		m_write_back(write_back),												            // write back enable/disable
-		m_write_allocate(write_allocate),										            // write allocate enable/disable
-		m_evict_policy(evict_policy),											            // cache block replacement policy
-		m_log(false),															            // enable logging (on text files referred to by logfile
-		m_level(level),															            // cache hierarchy level (first level cache (L1) is 1)
-		m_current_set(0),														            // set for current request
-		m_current_tag(0),														            // tag for current request
-		m_current_blockAddr(0),													            // cache block address for current request
-		m_current_way(0),														            // cache way for current request
-		m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					            // delay object for current request
-		m_id(id)
+	        :	sc_module(name),
+		        m_trans(),																            // transaction object
+		        m_num_upstream_masters(num_masters),									            // total upstream masters (num of children i.e num of caches that share this cache)
+		        m_block_size(block_size),												            // total cache size
+		        m_num_of_sets(size/(block_size*num_ways)),								            // total number of sets
+		        m_num_of_ways(num_ways),												            // total number of ways
+		        m_write_back(write_back),												            // write back enable/disable
+		        m_write_allocate(write_allocate),										            // write allocate enable/disable
+		        m_evict_policy(evict_policy),											            // cache block replacement policy
+		        m_log(false),															            // enable logging (on text files referred to by logfile
+		        m_level(level),															            // cache hierarchy level (first level cache (L1) is 1)
+		        m_current_set(0),														            // set for current request
+		        m_current_tag(0),														            // tag for current request
+		        m_current_blockAddr(0),													            // cache block address for current request
+		        m_current_way(0),														            // cache way for current request
+		        m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					            // delay object for current request
+		        m_id(id)
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
 	// to occur in real cache organizations if this does occur though then cache would be 
@@ -150,96 +150,96 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-    uint64_t addr = trans.get_address();
-    if (addr >= 0x80000000 && addr < 0x9fffffff) {
-        delay += sc_core::sc_time(0, sc_core::SC_NS);
+    uint64_t req_addr = trans.get_address();
+    if (req_addr >= 0x80000000 && req_addr < 0x9fffffff) {
+        trans.set_response_status(tlm::TLM_OK_RESPONSE);
+	    #if 0
+	    req_extension *ext;
+	    trans.get_extension(ext);
+	    req_extension::req_type type;
+
+	    if (!ext) {
+		    assert(m_level == 1);		// has to be first level
+		    type = req_extension::NORMAL;
+	    } else {
+		    type = ext->m_type;
+	    }
+	    bool evict_needed;
+	    uint64_t current_blockAddr_orig, current_tag_orig;
+	    uint32_t current_set_orig;
+
+	    if (m_log && m_level == 1 && type==req_extension::NORMAL) {
+		    if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+			    fprintf(common_fid, "-----------------------------------------writing at ");
+		    } else {
+			    fprintf(common_fid, "-----------------------------------------reading at ");
+		    }
+		    fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
+		            (uint32_t)req_addr);
+		    fflush(common_fid);			// TODO: remove this after debugging
+	    }
+
+	    // for the back-invalidation case, keeping track of original 
+	    // m_current_blockAddr,_tag,_set so as not to corrupt them with the 
+	    // back-invalidate-block that is going to be evicted in some downstream cache
+	    if (type == req_extension::BACK_INVALIDATE) {
+		    current_blockAddr_orig = m_current_blockAddr;
+		    current_set_orig = m_current_set;
+		    current_tag_orig = m_current_tag;
+	    }
+
+	    // update for current request (this only works if there are no outstanding request 
+	    // like in LT modeling)
+	    m_current_blockAddr = (req_addr/m_block_size)*m_block_size;
+	    m_current_set = (m_current_blockAddr >> 
+	                         (uint32_t)(log2((double)WORD_SIZE) + 
+	                                    log2((double)m_block_size/WORD_SIZE))) & 
+                        ((1 << (uint32_t)log2((double)m_num_of_sets)) - 1);
+	    m_current_tag = (req_addr >> 
+	                         (uint32_t)(log2((double)WORD_SIZE) + 
+	                                    log2((double)m_block_size/WORD_SIZE) + 
+	                                    log2((double)m_num_of_sets)));
+	    m_current_delay = delay;
+
+	    if (cache_lookup(evict_needed, m_current_way)) {
+		    // cache hit
+		    if (type == req_extension::NORMAL) {
+			    // normal request
+			    process_hit(trans);
+		    } else {
+			    // special request
+			    process_special_request(type);
+		    }
+	    } else {
+		    // cache miss
+		    if (type == req_extension::BACK_INVALIDATE) {
+			    // this block is already invalidated (nor present in cache) so do nothing
+		    } else {
+			    // normal request path
+			
+			    // the special request except back-invalidate shouldn't result in a miss
+			    assert(type==req_extension::NORMAL);			
+			    process_miss(trans, evict_needed);
+		    }
+	    }
+
+	    if (m_log) {
+		    print_cache_set(m_current_set);
+	    }
+
+	    // when done with back invalidation, setting back to original values
+	    if (type == req_extension::BACK_INVALIDATE) {
+		    m_current_blockAddr = current_blockAddr_orig;
+		    m_current_set = current_set_orig;
+		    m_current_tag = current_tag_orig;
+	    }
+
+	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
+	    #endif
     } else {
         assert(0);
     }
-#if 0
-	uint64_t req_addr = trans.get_address();
-	req_extension *ext;
-	trans.get_extension(ext);
-	req_extension::req_type type;
 
-	if (!ext) {
-		assert(m_level == 1);		// has to be first level
-		type = req_extension::NORMAL;
-	} else {
-		type = ext->m_type;
-	}
-	bool evict_needed;
-	uint64_t current_blockAddr_orig, current_tag_orig;
-	uint32_t current_set_orig;
-
-	if (m_log && m_level == 1 && type==req_extension::NORMAL) {
-		if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-			fprintf(common_fid, "-----------------------------------------writing at ");
-		} else {
-			fprintf(common_fid, "-----------------------------------------reading at ");
-		}
-		fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
-		        (uint32_t)req_addr);
-		fflush(common_fid);			// TODO: remove this after debugging
-	}
-
-	// for the back-invalidation case, keeping track of original 
-	// m_current_blockAddr,_tag,_set so as not to corrupt them with the 
-	// back-invalidate-block that is going to be evicted in some downstream cache
-	if (type == req_extension::BACK_INVALIDATE) {
-		current_blockAddr_orig = m_current_blockAddr;
-		current_set_orig = m_current_set;
-		current_tag_orig = m_current_tag;
-	}
-
-	// update for current request (this only works if there are no outstanding request 
-	// like in LT modeling)
-	m_current_blockAddr = (req_addr/m_block_size)*m_block_size;
-	m_current_set = (m_current_blockAddr >> 
-	                     (uint32_t)(log2((double)WORD_SIZE) + 
-	                                log2((double)m_block_size/WORD_SIZE))) & 
-                    ((1 << (uint32_t)log2((double)m_num_of_sets)) - 1);
-	m_current_tag = (req_addr >> 
-	                     (uint32_t)(log2((double)WORD_SIZE) + 
-	                                log2((double)m_block_size/WORD_SIZE) + 
-	                                log2((double)m_num_of_sets)));
-	m_current_delay = delay;
-
-	if (cache_lookup(evict_needed, m_current_way)) {
-		// cache hit
-		if (type == req_extension::NORMAL) {
-			// normal request
-			process_hit(trans);
-		} else {
-			// special request
-			process_special_request(type);
-		}
-	} else {
-		// cache miss
-		if (type == req_extension::BACK_INVALIDATE) {
-			// this block is already invalidated (nor present in cache) so do nothing
-		} else {
-			// normal request path
-			
-			// the special request except back-invalidate shouldn't result in a miss
-			assert(type==req_extension::NORMAL);			
-			process_miss(trans, evict_needed);
-		}
-	}
-
-	if (m_log) {
-		print_cache_set(m_current_set);
-	}
-
-	// when done with back invalidation, setting back to original values
-	if (type == req_extension::BACK_INVALIDATE) {
-		m_current_blockAddr = current_blockAddr_orig;
-		m_current_set = current_set_orig;
-		m_current_tag = current_tag_orig;
-	}
-
-	trans.set_response_status(tlm::TLM_OK_RESPONSE);
-#endif
 }
 
 

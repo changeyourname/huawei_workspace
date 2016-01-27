@@ -161,7 +161,8 @@ sc_transactor::to_SysC_Cache(PacketPtr packet) {
     /* Attach the packet pointer to the TLM transaction to keep track */
     gem5Extension* extension = new gem5Extension(packet);
     trans->set_auto_extension(extension);    
-    iSocket->b_transport(*trans, delay);                            
+    iSocket->b_transport(*trans, delay); 
+    assert(trans->get_response_status() == tlm::TLM_OK_RESPONSE);                           
     trans->release();            
     packet->cacheDelay = delay.value();
 }
