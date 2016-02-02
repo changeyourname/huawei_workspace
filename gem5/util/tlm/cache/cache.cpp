@@ -154,6 +154,11 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
+    if (sc_core::sc_time_stamp() > sc_core::sc_time(100000000000, sc_core::SC_SEC)) {
+        m_log = true;
+    } else {
+        m_log = false;
+    }
     uint64_t req_addr = trans.get_address();
     if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
         // memory request!!
@@ -191,7 +196,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    // for the back-invalidation case, keeping track of original 
 	    // m_current_blockAddr,_tag,_set so as not to corrupt them with the 
 	    // back-invalidate-block that is going to be evicted in some downstream cache
-	    if (type == req_extension::BACK_INVALIDATE) {
+	    if (type==req_extension::BACK_INVALIDATE || type==req_extension::WB_UPDATE) {
 		    current_blockAddr_orig = m_current_blockAddr;
 		    current_set_orig = m_current_set;
 		    current_tag_orig = m_current_tag;
@@ -255,20 +260,20 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    }
 	    }
 
-	    // when done with back invalidation, setting back to original values
-	    if (type == req_extension::BACK_INVALIDATE) {
-		    m_current_blockAddr = current_blockAddr_orig;
-		    m_current_set = current_set_orig;
-		    m_current_tag = current_tag_orig;
-		    m_current_delay = &delay;
-		    *m_current_delay = current_delay_orig; 
-	    }
-
 	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
 	    
 	    if (m_log) {
 	        fprintf(common_fid, "end     ");
 		    print_cache_set(m_current_set);
+	    }	    
+	    
+	    // when done with back invalidation, setting back to original values
+	    if (type==req_extension::BACK_INVALIDATE || type==req_extension::WB_UPDATE) {
+		    m_current_blockAddr = current_blockAddr_orig;
+		    m_current_set = current_set_orig;
+		    m_current_tag = current_tag_orig;
+		    m_current_delay = &delay;
+		    *m_current_delay = current_delay_orig; 
 	    }	    
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 8*2)) {

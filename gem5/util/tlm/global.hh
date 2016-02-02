@@ -7,6 +7,6 @@
 #define MEM_SIZE 536870912
 #define MEM_DELAY 30            // in ns
 
-//#define CACHE_DEBUG
+#define CACHE_DEBUG
 
 #endif  // __GLOBAL__
