@@ -90,7 +90,7 @@ private:
 	sc_core::sc_time m_read_delay;
 	sc_core::sc_time m_write_delay;
 
-	bool cache_lookup(bool &evict_needed, uint32_t &way_free);
+	bool cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE);
 	uint32_t find_way_evict();
 	void process_hit(tlm::tlm_generic_payload &trans);
 	void process_special_request(req_extension::req_type type);
@@ -104,12 +104,12 @@ public:
 	tlm_utils::simple_target_socket< cache > *m_tsocket_u;		// in upstream direction
 
 	cache(	        
-            sc_core::sc_module_name name, 
-            const char *logfile, 
+            sc_core::sc_module_name name,  
             uint32_t id,
             cache::cache_specs specs, 
             uint32_t level,
-            uint64_t regbase
+            uint64_t regbase,
+            const char *logfile = NULL            
 	     );
 	~cache();	
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);

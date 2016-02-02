@@ -388,8 +388,16 @@ sc_main(int argc, char **argv)
     Gem5SystemC::sc_transactor *gem5_icache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
                                                 (sc_core::sc_find_object("gem5.icache_0"));
     if (gem5_icache_0) {     
-        icache_0 = new cache("icache_0", "icache0.log", 0, specs, 1, 0xD000D000);
-        icache_0->set_delays(1, 1, 1);                             
+        icache_0 = new cache("icache_0", 
+                             0, 
+                             specs, 
+                             1, 
+                             0xD000D000
+                             #ifdef CACHE_DEBUG
+                             , "log/icache0.log"
+                             #endif
+                            );
+        icache_0->set_delays(0, 0, 0);                             
         icache_0->do_logging();        
                              
         icache_0->m_tsocket_d[0].bind(*gem5_icache_0);
@@ -402,8 +410,16 @@ sc_main(int argc, char **argv)
     Gem5SystemC::sc_transactor *gem5_dcache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
                                                 (sc_core::sc_find_object("gem5.dcache_0")); 
     if (gem5_dcache_0) {                                        
-        dcache_0 = new cache("dcache_0", "dcache0.log", 1, specs, 1, 0xD000E000);
-        dcache_0->set_delays(1, 1, 1);                             
+        dcache_0 = new cache("dcache_0", 
+                             1, 
+                             specs, 
+                             1, 
+                             0xD000E000
+                             #ifdef CACHE_DEBUG
+                             , "log/dcache_0.log"
+                             #endif
+                            );
+        dcache_0->set_delays(0, 0, 0);                             
         dcache_0->do_logging();
                              
         dcache_0->m_tsocket_d[0].bind(*gem5_dcache_0);  
@@ -418,8 +434,16 @@ sc_main(int argc, char **argv)
     specs.block_size = WORD_SIZE;
     specs.num_ways = 2;    
     cache *l2cache;
-    l2cache = new cache("l2cache", "l2cache.log", 2, specs, 2, 0xD000F000);
-    l2cache->set_delays(5, 10, 10);
+    l2cache = new cache("l2cache", 
+                         2, 
+                         specs, 
+                         2, 
+                         0xD000F000
+                         #ifdef CACHE_DEBUG
+                         , "log/l2cache.log"
+                         #endif
+                       );
+    l2cache->set_delays(0, 0, 0);
     l2cache->do_logging();
     
     l2cache->m_tsocket_d[0].bind(*(icache_0->m_isocket_d));

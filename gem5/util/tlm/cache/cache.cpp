@@ -12,16 +12,20 @@
 
 // to clean up allocated stuff globally for the whole class
 std::vector< cache::req_extension * > cache::req_extension::req_extension_clones;
-FILE *cache::common_fid = NULL;        //fopen("log/cache_system.log", "w+");
+#ifndef CACHE_DEBUG
+    FILE *cache::common_fid = NULL;
+#else
+    FILE *cache::common_fid = fopen("log/cache_system.log", "w+");
+#endif
 
 // constructor
 cache::cache(
                 sc_core::sc_module_name name, 
-                const char *logfile, 
                 uint32_t id,
                 cache::cache_specs specs,
                 uint32_t level,
-                uint64_t regbase
+                uint64_t regbase,
+                const char *logfile
             )
 	        :	sc_module(name),
 		        m_trans(),																            // transaction object
@@ -167,19 +171,22 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
 	    uint32_t current_set_orig;
+	    sc_core::sc_time current_delay_orig;
 
-	    if (m_log && m_level == 1 && type==req_extension::NORMAL) {
-	        if (common_fid) {
-		        if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-			        fprintf(common_fid, "-----------------------------------------writing at ");
-		        } else {
-			        fprintf(common_fid, "-----------------------------------------reading at ");
-		        }
-		        fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
-		                (uint32_t)req_addr);
-		        fflush(common_fid);
-	        }		
-	    }
+        if (m_log) {
+	        if (m_level == 1 && type==req_extension::NORMAL) {
+	            if (common_fid) {
+		            if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+			            fprintf(common_fid, "-----------------------------------------writing at ");
+		            } else {
+			            fprintf(common_fid, "-----------------------------------------reading at ");
+		            }
+		            fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
+		                    (uint32_t)req_addr);
+		            fflush(common_fid);
+	            }		
+	        }	        
+        }
 
 	    // for the back-invalidation case, keeping track of original 
 	    // m_current_blockAddr,_tag,_set so as not to corrupt them with the 
@@ -188,6 +195,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    current_blockAddr_orig = m_current_blockAddr;
 		    current_set_orig = m_current_set;
 		    current_tag_orig = m_current_tag;
+		    current_delay_orig = *m_current_delay;
 	    }
 	    
 	    // updating the access register
@@ -197,6 +205,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 
 	    // update for current request (this only works if there are no outstanding request 
 	    // like in LT modeling)
+        m_current_delay = &delay;	    
 	    m_current_blockAddr = (req_addr/m_block_size)*m_block_size;
 	    m_current_set = (m_current_blockAddr >> 
 	                         (uint32_t)(log2((double)WORD_SIZE) + 
@@ -206,16 +215,20 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	                         (uint32_t)(log2((double)WORD_SIZE) + 
 	                                    log2((double)m_block_size/WORD_SIZE) + 
 	                                    log2((double)m_num_of_sets)));
-        if (type == req_extension::NORMAL) {
-    	    m_current_delay = &delay;
-    	    
-            // doing cache lookup for this new memory request
-            *m_current_delay += m_lookup_delay;    	    
-	    } else {
-	        m_current_delay = NULL;
-	    }
 
-	    if (cache_lookup(evict_needed, m_current_way)) {
+
+        if (m_log) {
+        	std::string req_type[4] = {"NORMAL", "M_UPDATE", 
+        	                           "BACK_INVALIDATE", "WB_UPDATE"};
+                    
+	        fprintf(common_fid, "(%s) begin     ", req_type[type].c_str());
+		    print_cache_set(m_current_set);	                
+        }
+
+        // doing cache lookup for this new memory request
+        *m_current_delay += m_lookup_delay;    	    
+	    if (cache_lookup(evict_needed, m_current_way, 
+	                       (type == req_extension::WB_UPDATE))) {
 		    // cache hit
 		    if (type == req_extension::NORMAL) {
 			    // normal request
@@ -231,7 +244,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    } else {
 			    // normal request path
 			
-			    // the special request except back-invalidate shouldn't result in a miss
+			    // any special request except back-invalidate shouldn't result in a miss
+			    if (type != req_extension::NORMAL) {
+			        printf("m_id:%d..type=%d\r\n", m_id, type);
+			    }
 			    assert(type==req_extension::NORMAL);			    			
 			    process_miss(trans, evict_needed);
         	    // updating the misses register
@@ -239,18 +255,21 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    }
 	    }
 
-	    if (m_log) {
-		    print_cache_set(m_current_set);
-	    }
-
 	    // when done with back invalidation, setting back to original values
 	    if (type == req_extension::BACK_INVALIDATE) {
 		    m_current_blockAddr = current_blockAddr_orig;
 		    m_current_set = current_set_orig;
 		    m_current_tag = current_tag_orig;
+		    m_current_delay = &delay;
+		    *m_current_delay = current_delay_orig; 
 	    }
 
 	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
+	    
+	    if (m_log) {
+	        fprintf(common_fid, "end     ");
+		    print_cache_set(m_current_set);
+	    }	    
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 8*2)) {
         // request accessing this cache registers
@@ -292,20 +311,28 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 //		-- incase of miss, it is set to the way which is going to be refilled with 
 //         new block from downstream
 bool 
-cache::cache_lookup(bool &evict_needed, uint32_t &way_free) 
+cache::cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE) 
 {
 	evict_needed = true;
 
 	for (uint32_t i=0; i<m_num_of_ways; i++) {
+	    bool hit = (m_blocks[m_current_set][i].tag == m_current_tag); 
+	    
 		if (m_blocks[m_current_set][i].state != cache_block::I) {
-			if (m_blocks[m_current_set][i].tag == m_current_tag) {
+			if (hit) {
 				evict_needed = false;
 				way_free = i;
 				return true;
 			}
 		} else {
-			evict_needed = false;
-			way_free = i;
+		    if (WB_UPDATE && hit) {
+		        evict_needed = false;
+		        way_free = i;
+		        return true;
+		    } else if (!hit) {
+			    evict_needed = false;
+			    way_free = i;
+		    }
 		}
 	}
 
@@ -428,11 +455,6 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 void 
 cache::process_special_request(req_extension::req_type type) 
 {
-	// logging
-	if (m_log) {
-		// TODO
-	}
-
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
 
 	switch(type) {
@@ -523,7 +545,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 	}
 
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
-    // this block should be refilled with new data	
+    // this block should be refilled with new data
 	assert(*state == cache_block::I);			
 
 	tlm::tlm_command cmd = trans.get_command();
@@ -588,15 +610,14 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 void 
 cache::do_eviction() 
 {
-	if (m_log) {
-		//TODO
-	}
-
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
 	uint64_t evict_block_addr = ((m_blocks[m_current_set][m_current_way].tag << 
 	                             (uint32_t)(log2((double) m_num_of_sets))) | m_current_set
 	                            ) << (uint32_t)(log2((double) WORD_SIZE) + 
 	                                            log2((double) m_block_size/WORD_SIZE));
+	
+	m_trans.set_address(evict_block_addr);
+	                                            	                                            
 	// incase this block is in 'S' then no writeback is needed
 	
 	// incase this block is in 'MBS' then this means that this block is being cached 
@@ -610,12 +631,12 @@ cache::do_eviction()
 		// downstream path then it can update the status of its block (MBS) to M
 		m_trans.set_write();
 		m_ext->m_type = req_extension::NORMAL;
-		m_trans.set_address(evict_block_addr);
 		send_request(true, true);
 	}
 	*state = cache_block::I;
 
 	// BACK INVALIDATION
+	m_ext->m_type = req_extension::BACK_INVALIDATE;
 	send_request(false, true);
 }
 
@@ -624,9 +645,10 @@ cache::do_eviction()
 void 
 cache::send_request(bool downstream, bool new_address) 
 {
+    m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+    
 	if (!new_address) {
 		m_trans.set_address(m_current_blockAddr);
-//		m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 	}
 	
 	if (downstream) {
@@ -645,16 +667,16 @@ cache::send_request(bool downstream, bool new_address)
 	        return;
 		}
 	} else {	    
-		// for downstream 'false' will send request to all upstream masters if they are 
-		// present
+		// send request to all upstream masters if they are present
 		if (m_level > 1) {
 		    for (uint32_t i=0; i<m_num_upstream_masters; i++) {
-			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);
+			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		    
 		    }
 	    } else {
 	        return;
 	    }
 	}
+	
 	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 }
 
