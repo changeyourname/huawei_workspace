@@ -1,17 +1,0 @@
-Booting Linux on physical CPU 0x0
-Initializing cgroup subsys cpuset
-Linux version 3.13.0-rc2 (tony@vamp) (gcc version 4.8.2 (Ubuntu/Linaro 4.8.2-16ubuntu4) ) #1 SMP PREEMPT Mon Oct 13 15:09:23 EDT 2014
-Kernel was built at commit id ''
-CPU: ARMv7 Processor [410fc0f0] revision 0 (ARMv7), cr=10c53c7d
-CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-Machine model: V2P-CA15
-bootconsole [earlycon0] enabled
-Memory policy: Data cache writealloc
-kdebugv2m: Following are test values to confirm proper working
-kdebugv2m: Ranges 42000000 0 
-kdebugv2m: Regs 30000000 1000000 
-kdebugv2m: Virtual-Reg f0000000 
-kdebugv2m: pci node addr_cells 3 
-kdebugv2m: pci node size_cells 2 
-kdebugv2m: motherboard addr_cells 2 
-

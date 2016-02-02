@@ -6,7 +6,7 @@
         "mmap_using_noreserve": false, 
         "kernel_addr_check": true, 
         "highest_el_is_64": false, 
-        "kernel": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
+        "kernel": "/home/uzair/aarch-system-2014-10/binaries/vmlinux.aarch32.ll_20131205.0-gem5", 
         "iobus": {
             "slave": {
                 "peer": [
@@ -125,7 +125,7 @@
         "multi_proc": true, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzleo/Downloads/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
+        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -1368,7 +1368,7 @@
                     "type": "ArmTLB", 
                     "size": 64
                 }, 
-                "simulate_data_stalls": false, 
+                "system": "system", 
                 "istage2_mmu": {
                     "name": "istage2_mmu", 
                     "tlb": "system.cpu.itb", 
@@ -1400,18 +1400,15 @@
                 }, 
                 "function_trace": false, 
                 "do_checkpoint_insts": true, 
-                "cxx_class": "AtomicSimpleCPU", 
+                "cxx_class": "TimingSimpleCPU", 
                 "max_loads_all_threads": 0, 
-                "system": "system", 
                 "clk_domain": "system.cpu_clk_domain", 
                 "function_trace_start": 0, 
                 "cpu_id": 0, 
-                "width": 1, 
                 "checker": null, 
                 "eventq_index": 0, 
                 "do_quiesce": true, 
-                "type": "AtomicSimpleCPU", 
-                "fastmem": false, 
+                "type": "TimingSimpleCPU", 
                 "profile": 0, 
                 "icache_port": {
                     "peer": "system.icache_0.extPort", 
@@ -1492,7 +1489,6 @@
                 }, 
                 "simpoint_start_insts": [], 
                 "max_insts_any_thread": 0, 
-                "simulate_inst_stalls": false, 
                 "progress_interval": 0, 
                 "branchPred": null, 
                 "isa": [
@@ -1573,7 +1569,7 @@
                     "eventq_index": 0, 
                     "cxx_class": "RawDiskImage", 
                     "path": "system.cf0.image.child", 
-                    "image_file": "/home/uzleo/Downloads/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
+                    "image_file": "/home/uzair/aarch-system-2014-10/disks/linux-aarch32-ael.img", 
                     "type": "RawDiskImage"
                 }, 
                 "path": "system.cf0.image", 
@@ -1588,7 +1584,7 @@
             "type": "IdeDisk"
         }, 
         "work_end_ckpt_count": 0, 
-        "mem_mode": "atomic", 
+        "mem_mode": "timing", 
         "name": "system", 
         "init_param": 0, 
         "system_port": {
@@ -1635,7 +1631,7 @@
         ], 
         "num_work_ids": 16, 
         "boot_loader": [
-            "/home/uzleo/Downloads/aarch-system-2014-10/binaries/boot_emm.arm"
+            "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
         "disable_cache": true, 
         "exit_on_work_items": false

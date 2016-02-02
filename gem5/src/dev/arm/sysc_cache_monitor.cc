@@ -91,6 +91,7 @@ SysC_CacheMonitor::write(PacketPtr pkt)
 //    return pioDelay;
 
     assert(0);
+    return 0;
 }
 
 

@@ -10,7 +10,6 @@
 
 
 #define WORD_SIZE 4
-#define LLC_LEVEL 1
 
 
 

@@ -1,0 +1,1 @@
+g++ -Wall -Werror cache_main.cc -I/usr/local/systemc-2.3.1/include -I../. -L/usr/local/systemc-2.3.1/lib-linux64/ -lsystemc

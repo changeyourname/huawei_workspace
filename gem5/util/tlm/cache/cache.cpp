@@ -18,37 +18,34 @@ FILE *cache::common_fid = NULL;        //fopen("log/cache_system.log", "w+");
 cache::cache(
                 sc_core::sc_module_name name, 
                 const char *logfile, 
-                uint32_t id, 
-                uint32_t num_masters, 
-                uint32_t size, 
-                uint32_t block_size, 
-                uint32_t num_ways, 
-                bool write_back, 
-                bool write_allocate, 
-                cache::eviction_policy evict_policy, 
+                uint32_t id,
+                cache::cache_specs specs,
                 uint32_t level,
                 uint64_t regbase
             )
 	        :	sc_module(name),
 		        m_trans(),																            // transaction object
-		        m_num_upstream_masters(num_masters),									            // total upstream masters (num of children i.e num of caches that share this cache)
-		        m_block_size(block_size),												            // total cache size
-		        m_num_of_sets(size/(block_size*num_ways)),								            // total number of sets
-		        m_num_of_ways(num_ways),												            // total number of ways
-		        m_write_back(write_back),												            // write back enable/disable
-		        m_write_allocate(write_allocate),										            // write allocate enable/disable
-		        m_evict_policy(evict_policy),											            // cache block replacement policy
+		        m_num_upstream_masters(specs.num_masters),									            // total upstream masters (num of children i.e num of caches that share this cache)
+		        m_block_size(specs.block_size),												            // total cache size
+		        m_num_of_sets(specs.size/(specs.block_size*specs.num_ways)),								            // total number of sets
+		        m_num_of_ways(specs.num_ways),												            // total number of ways
+		        m_write_back(specs.write_back),												            // write back enable/disable
+		        m_write_allocate(specs.write_allocate),										            // write allocate enable/disable
+		        m_evict_policy(specs.evict_policy),											            // cache block replacement policy
 		        m_log(false),															            // enable logging (on text files referred to by logfile
 		        m_level(level),															            // cache hierarchy level (first level cache (L1) is 1)
 		        m_current_set(0),														            // set for current request
 		        m_current_tag(0),														            // tag for current request
 		        m_current_blockAddr(0),													            // cache block address for current request
 		        m_current_way(0),														            // cache way for current request
-		        m_current_delay(sc_core::sc_time(0, sc_core::SC_NS)),					            // delay object for current request
+		        m_current_delay(NULL),                              					            // delay object for current request
 		        m_id(id),
+		        m_cache_regspace_base(regbase),		        
 		        m_access_register(0),
 		        m_miss_register(0),
-		        m_cache_regspace_base(regbase)
+		        m_lookup_delay(sc_core::SC_ZERO_TIME),
+		        m_read_delay(sc_core::SC_ZERO_TIME),
+		        m_write_delay(sc_core::SC_ZERO_TIME)
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
 	// to occur in real cache organizations if this does occur though then cache would be 
@@ -103,11 +100,10 @@ cache::cache(
     	m_fid = fopen(logfile, "w+");
 	    assert(m_fid);
 	    fprintf(m_fid, "CACHE_CONFIG \r\n");
-	    fprintf(m_fid, "total_cache_size:%dB", size);
+	    fprintf(m_fid, "total_cache_size:%dB", specs.size);
 	    fprintf(m_fid, "..cache_block_size:%dB", m_block_size);
 	    fprintf(m_fid, "..num_of_sets:%d", m_num_of_sets);
 	    fprintf(m_fid, "..num_of_ways:%d", m_num_of_ways);
-	    fprintf(m_fid, "..num_of_children:%d", m_num_upstream_masters);
 	    fprintf(m_fid, "..write_back:%d", m_write_back);
 	    fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
 	    fprintf(m_fid, "..level:%d", m_level);
@@ -173,14 +169,16 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    uint32_t current_set_orig;
 
 	    if (m_log && m_level == 1 && type==req_extension::NORMAL) {
-		    if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-			    fprintf(common_fid, "-----------------------------------------writing at ");
-		    } else {
-			    fprintf(common_fid, "-----------------------------------------reading at ");
-		    }
-		    fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
-		            (uint32_t)req_addr);
-		    fflush(common_fid);			// TODO: remove this after debugging
+	        if (common_fid) {
+		        if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+			        fprintf(common_fid, "-----------------------------------------writing at ");
+		        } else {
+			        fprintf(common_fid, "-----------------------------------------reading at ");
+		        }
+		        fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
+		                (uint32_t)req_addr);
+		        fflush(common_fid);
+	        }		
 	    }
 
 	    // for the back-invalidation case, keeping track of original 
@@ -208,7 +206,14 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	                         (uint32_t)(log2((double)WORD_SIZE) + 
 	                                    log2((double)m_block_size/WORD_SIZE) + 
 	                                    log2((double)m_num_of_sets)));
-	    m_current_delay = delay;
+        if (type == req_extension::NORMAL) {
+    	    m_current_delay = &delay;
+    	    
+            // doing cache lookup for this new memory request
+            *m_current_delay += m_lookup_delay;    	    
+	    } else {
+	        m_current_delay = NULL;
+	    }
 
 	    if (cache_lookup(evict_needed, m_current_way)) {
 		    // cache hit
@@ -393,10 +398,12 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 			m_ext->m_type = req_extension::NORMAL;
 			send_request(true);
 		}
-		// TODO: model write cache delay
+		assert(m_current_delay);
+        *m_current_delay += m_write_delay;
 	} else {
 		// read hit
-		// TODO: delay timing for reading cache block
+		assert(m_current_delay);		
+		*m_current_delay += m_read_delay;
 	}
 
 	// update eviction policy stuff
@@ -478,7 +485,7 @@ cache::process_special_request(req_extension::req_type type)
 			} else {
                 // this has to be in MBS state
                 // TODO: right now for write-through caches as well..can MBS for 
-                // write-through cache be avoided???			
+                //       write-through cache be avoided???			
 				assert(*state == cache_block::MBS);				
 				assert(m_level < LLC_LEVEL);					// this can't be last level
 				*state = cache_block::I;
@@ -503,12 +510,12 @@ cache::process_special_request(req_extension::req_type type)
 // handle miss request
 void 
 cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) 
-{
+{ 
 	if (m_log) {
 		fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)trans.get_address());
 		fprintf(m_fid, "..tag=0x%08x", (uint32_t)m_current_tag);
 		fprintf(m_fid, "...set=%d\r\n", m_current_set);
-		fflush(m_fid);			//TODO: disable this after debugging
+		fflush(m_fid);			
 	}
 
 	if (evict_needed) {
@@ -547,10 +554,12 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 				m_ext->m_type = req_extension::NORMAL;
 				send_request(true);
 			}
-			// TODO: model write cache delay
+			assert(m_current_delay);
+            *m_current_delay += m_write_delay;
 		} else {
 			*state = cache_block::S;
-			// TODO: model read cache delay
+    		assert(m_current_delay);			
+            *m_current_delay += m_read_delay;
 		}
 
 		// update eviction policy stuff
@@ -617,22 +626,30 @@ cache::send_request(bool downstream, bool new_address)
 {
 	if (!new_address) {
 		m_trans.set_address(m_current_blockAddr);
-		m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+//		m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 	}
+	
 	if (downstream) {
 		// downstream 'true' will send the request downstream if there is any
 	    if (m_level < LLC_LEVEL) {
-    		(*m_isocket_d)->b_transport(m_trans, m_current_delay);
+    		(*m_isocket_d)->b_transport(m_trans, *m_current_delay);
 		} else {
-		    // TODO: mem read/write delay!!
-		    return;
+		    if (m_trans.get_command() == tlm::TLM_READ_COMMAND) {
+		        // reading cache block from memory
+        		assert(m_current_delay);		        
+                *m_current_delay += sc_core::sc_time((uint32_t)MEM_DELAY, sc_core::SC_NS);
+            } else {
+                // assuming write buffers on way to memory so ignoring this delay of 
+                // writing the cache block to main memory!!
+            }
+	        return;
 		}
 	} else {	    
 		// for downstream 'false' will send request to all upstream masters if they are 
 		// present
 		if (m_level > 1) {
 		    for (uint32_t i=0; i<m_num_upstream_masters; i++) {
-			    m_isocket_u[i]->b_transport(m_trans, m_current_delay);
+			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);
 		    }
 	    } else {
 	        return;
@@ -659,8 +676,19 @@ cache::print_cache_set(uint32_t set)
 		    fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	    }
 	    fprintf(common_fid, "\r\n\r\n");
-	    fflush(common_fid);			//TODO: disable this after debugging
+	    fflush(common_fid);			
     }
+}
+
+
+
+// set delays (in ns) for this cache module
+void 
+cache::set_delays(uint32_t lookup, uint32_t read, uint32_t write)
+{
+    m_lookup_delay = sc_core::sc_time(lookup, sc_core::SC_NS);
+    m_read_delay = sc_core::sc_time(read, sc_core::SC_NS);
+    m_write_delay = sc_core::sc_time(write, sc_core::SC_NS);
 }
 
 
@@ -670,17 +698,7 @@ cache::print_cache_set(uint32_t set)
 
 
 
-
-//TODO: model timing
-
-
-
-
-
-
-
-
-
+//TODO: more accurate delay modeling
 
 
 

@@ -39,6 +39,17 @@ class cache : public sc_core::sc_module {
 			m_type = static_cast< req_extension const & >(ext).m_type;
 		}
 	};
+	
+	struct cache_specs {
+	    uint32_t num_masters;
+	    uint32_t size;
+	    uint32_t block_size;
+	    uint32_t num_ways;
+	    bool write_back;
+	    bool write_allocate;
+	    cache::eviction_policy evict_policy;
+	};
+		
 
 private:
 	struct cache_block {
@@ -48,7 +59,7 @@ private:
 		cache_block_state state;
 		uint64_t tag;
 		uint32_t evict_tag;
-	};
+	};	
 
     // lt modeling so can afford a single m_trans for the whole object as there are no 
     // outstanding requests..this helps to improve performance as m_trans needs to be 
@@ -70,11 +81,14 @@ private:
 	uint64_t m_current_tag;
 	uint64_t m_current_blockAddr;
 	uint32_t m_current_way;
-	sc_core::sc_time m_current_delay;
+	sc_core::sc_time *m_current_delay;
 	uint32_t m_id;
 	uint64_t m_cache_regspace_base;	
 	uint64_t m_access_register;
 	uint64_t m_miss_register;
+    sc_core::sc_time m_lookup_delay;
+	sc_core::sc_time m_read_delay;
+	sc_core::sc_time m_write_delay;
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free);
 	uint32_t find_way_evict();
@@ -83,32 +97,25 @@ private:
 	void process_miss(tlm::tlm_generic_payload &trans, bool evict_needed);
 	void do_eviction();
 	void send_request(bool downstream, bool new_address=false);
-
 public:
 	tlm_utils::simple_initiator_socket< cache > *m_isocket_d;	// in downstream direction
 	tlm_utils::simple_initiator_socket< cache > *m_isocket_u;	// in upstream direction
 	tlm_utils::simple_target_socket< cache > *m_tsocket_d;		// in downstream direction
 	tlm_utils::simple_target_socket< cache > *m_tsocket_u;		// in upstream direction
 
-    //TODO: reduce constructor interface!!
-	cache(
+	cache(	        
             sc_core::sc_module_name name, 
             const char *logfile, 
-            uint32_t id, 
-            uint32_t num_masters, 
-            uint32_t size, 
-            uint32_t block_size, 
-            uint32_t num_ways, 
-            bool write_back, 
-            bool write_allocate, 
-            cache::eviction_policy evict_policy, 
+            uint32_t id,
+            cache::cache_specs specs, 
             uint32_t level,
             uint64_t regbase
 	     );
-	~cache();
+	~cache();	
 	void b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay);
 	void do_logging();
 	void print_cache_set(uint32_t set);
+	void set_delays(uint32_t lookup, uint32_t read, uint32_t write);	
 };
 
 
