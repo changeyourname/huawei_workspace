@@ -154,12 +154,17 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-//    if (sc_core::sc_time_stamp() > sc_core::sc_time(590, sc_core::SC_MS) && 
-//        sc_core::sc_time_stamp() <= sc_core::sc_time(595, sc_core::SC_MS)) {
+//    if (sc_core::sc_time_stamp() > sc_core::sc_time(70, sc_core::SC_MS)) {
 //        m_log = true;
 //    } else {
 //        m_log = false;
 //    }
+
+
+//    trans.set_response_status(tlm::TLM_OK_RESPONSE);
+//    return;
+
+
     uint64_t req_addr = trans.get_address();
     if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
         // memory request!!
@@ -173,6 +178,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    } else {
 		    type = ext->m_type;
 	    }
+	    
+
+        if (m_id == 0) {
+            assert(trans.get_command() != tlm::TLM_WRITE_COMMAND);
+        }	    
 	    
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
@@ -412,6 +422,7 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 						// notifying the downstream caches to update their block states 
 						// (from S to MBS) via special request
 						m_ext->m_type = req_extension::M_UPDATE;
+						m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 						send_request(true);
 					}
 				}
@@ -472,6 +483,7 @@ cache::process_special_request(req_extension::req_type type)
 			// forwarding this special request to further downstream caches if present
 			if (m_level < LLC_LEVEL) {
 				m_ext->m_type = req_extension::M_UPDATE;
+				m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 				send_request(true);
 			}
 			break;
@@ -487,6 +499,7 @@ cache::process_special_request(req_extension::req_type type)
                 invalidation_done = true;
 				// writing back downstream
 				m_ext->m_type = req_extension::WB_UPDATE;
+				m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 				send_request(true);
 			}
 			// else no need to do anything if (state = MBS) path as it will be invalidated 
@@ -514,6 +527,7 @@ cache::process_special_request(req_extension::req_type type)
                 invalidation_done = true;
 				// writing back downstream
 				m_ext->m_type = req_extension::WB_UPDATE;
+				m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 				send_request(true);
 			}
 			break;
@@ -583,6 +597,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 				m_blocks[m_current_set][m_current_way].state = cache_block::M;
 				if (m_level < LLC_LEVEL) {
 					m_ext->m_type = req_extension::M_UPDATE;
+					m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 					send_request(true);
 				}
 			} else {
@@ -657,6 +672,7 @@ cache::do_eviction()
 
 	// BACK INVALIDATION
 	m_ext->m_type = req_extension::BACK_INVALIDATE;
+	m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 	send_request(false, true);
 }
 
