@@ -180,7 +180,8 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    }
 	    
 
-        if (m_id == 0) {
+        if (m_id==0 || m_id==2) {
+            // icaches can't get write requests
             assert(trans.get_command() != tlm::TLM_WRITE_COMMAND);
         }	    
 	    
@@ -435,8 +436,12 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 		}
 		assert(m_current_delay);
         *m_current_delay += m_write_delay;
-	} else {
+	} else {	    
 		// read hit
+		
+		//TODO: handle this case if state is MBS!!
+		//      maybe send back-invalidations to all upstream caches
+		
 		assert(m_current_delay);		
 		*m_current_delay += m_read_delay;
 	}
@@ -505,7 +510,7 @@ cache::process_special_request(req_extension::req_type type)
 			// else no need to do anything if (state = MBS) path as it will be invalidated 
 			// on WB_UPDATE path
 
-			// sending back invalidation to them as well
+			// sending back invalidation to its upstream masters as well
 			send_request(false);
 			break;
 		}
@@ -671,8 +676,6 @@ cache::do_eviction()
 //	// in process_miss()!!
 
 	// BACK INVALIDATION
-	m_ext->m_type = req_extension::BACK_INVALIDATE;
-	m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 	send_request(false, true);
 }
 
@@ -691,6 +694,7 @@ cache::send_request(bool downstream, bool new_address)
 		// downstream 'true' will send the request downstream if there is any
 	    if (m_level < LLC_LEVEL) {
     		(*m_isocket_d)->b_transport(m_trans, *m_current_delay);
+			assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
 		} else {
 		    if (m_trans.get_command() == tlm::TLM_READ_COMMAND) {
 		        // reading cache block from memory
@@ -706,14 +710,16 @@ cache::send_request(bool downstream, bool new_address)
 		// send request to all upstream masters if they are present
 		if (m_level > 1) {
 		    for (uint32_t i=0; i<m_num_upstream_masters; i++) {
-			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		    
+		        // TODO: right now this interface is only used to send back-invalidates!!
+                m_ext->m_type = req_extension::BACK_INVALIDATE;
+                m_trans.set_command(tlm::TLM_IGNORE_COMMAND);		        
+			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		
+            	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);			        
 		    }
 	    } else {
 	        return;
 	    }
-	}
-	
-	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+	}	
 }
 
 
