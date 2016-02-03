@@ -378,7 +378,7 @@ sc_main(int argc, char **argv)
     cache::cache_specs specs;
     specs.num_masters = 1;
     specs.size = 65536;
-    specs.block_size = 4*WORD_SIZE;
+    specs.block_size = WORD_SIZE;
     specs.num_ways = 2;
     specs.write_back = true;
     specs.write_allocate = true;
@@ -431,7 +431,7 @@ sc_main(int argc, char **argv)
     
     specs.num_masters = 2;
     specs.size = 2*1024*1024;
-    specs.block_size = 16*WORD_SIZE;
+    specs.block_size = WORD_SIZE;
     specs.num_ways = 8;    
     cache *l2cache;
     l2cache = new cache("l2cache", 
