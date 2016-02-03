@@ -154,11 +154,6 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-    if (sc_core::sc_time_stamp() > sc_core::sc_time(100000000000, sc_core::SC_SEC)) {
-        m_log = true;
-    } else {
-        m_log = false;
-    }
     uint64_t req_addr = trans.get_address();
     if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
         // memory request!!
@@ -176,7 +171,6 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
 	    uint32_t current_set_orig;
-	    sc_core::sc_time current_delay_orig;
 
         if (m_log) {
 	        if (m_level == 1 && type==req_extension::NORMAL) {
@@ -200,17 +194,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    current_blockAddr_orig = m_current_blockAddr;
 		    current_set_orig = m_current_set;
 		    current_tag_orig = m_current_tag;
-		    current_delay_orig = *m_current_delay;
 	    }
 	    
-	    // updating the access register
-	    if (type == req_extension::NORMAL) {
-	        m_access_register++;
-	    }
-
+	    
 	    // update for current request (this only works if there are no outstanding request 
 	    // like in LT modeling)
-        m_current_delay = &delay;	    
 	    m_current_blockAddr = (req_addr/m_block_size)*m_block_size;
 	    m_current_set = (m_current_blockAddr >> 
 	                         (uint32_t)(log2((double)WORD_SIZE) + 
@@ -230,8 +218,13 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    print_cache_set(m_current_set);	                
         }
 
-        // doing cache lookup for this new memory request
-        *m_current_delay += m_lookup_delay;    	    
+	    // updating the access register
+	    if (type == req_extension::NORMAL) {
+	        m_access_register++;
+            m_current_delay = &delay;	    	        
+            // doing cache lookup for this new memory request
+            *m_current_delay += m_lookup_delay;            
+	    }    	    
 	    if (cache_lookup(evict_needed, m_current_way, 
 	                       (type == req_extension::WB_UPDATE))) {
 		    // cache hit
@@ -272,8 +265,6 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    m_current_blockAddr = current_blockAddr_orig;
 		    m_current_set = current_set_orig;
 		    m_current_tag = current_tag_orig;
-		    m_current_delay = &delay;
-		    *m_current_delay = current_delay_orig; 
 	    }	    
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 8*2)) {

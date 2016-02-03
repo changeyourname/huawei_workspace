@@ -377,9 +377,9 @@ sc_main(int argc, char **argv)
     //TODO: automate following based on num of cpus!!
     cache::cache_specs specs;
     specs.num_masters = 1;
-    specs.size = 1024;
-    specs.block_size = WORD_SIZE;
-    specs.num_ways = 1;
+    specs.size = 65536;
+    specs.block_size = 4*WORD_SIZE;
+    specs.num_ways = 2;
     specs.write_back = true;
     specs.write_allocate = true;
     specs.evict_policy = cache::LRU;       
@@ -397,7 +397,7 @@ sc_main(int argc, char **argv)
                              , "log/icache0.log"
                              #endif
                             );
-        icache_0->set_delays(0, 0, 0);                             
+        icache_0->set_delays(1, 1, 1);                             
         icache_0->do_logging();        
                              
         icache_0->m_tsocket_d[0].bind(*gem5_icache_0);
@@ -419,7 +419,7 @@ sc_main(int argc, char **argv)
                              , "log/dcache_0.log"
                              #endif
                             );
-        dcache_0->set_delays(0, 0, 0);                             
+        dcache_0->set_delays(1, 1, 1);                             
         dcache_0->do_logging();
                              
         dcache_0->m_tsocket_d[0].bind(*gem5_dcache_0);  
@@ -430,9 +430,9 @@ sc_main(int argc, char **argv)
     
     
     specs.num_masters = 2;
-    specs.size = 2*1024;
-    specs.block_size = WORD_SIZE;
-    specs.num_ways = 2;    
+    specs.size = 2*1024*1024;
+    specs.block_size = 16*WORD_SIZE;
+    specs.num_ways = 8;    
     cache *l2cache;
     l2cache = new cache("l2cache", 
                          2, 
@@ -443,7 +443,7 @@ sc_main(int argc, char **argv)
                          , "log/l2cache.log"
                          #endif
                        );
-    l2cache->set_delays(0, 0, 0);
+    l2cache->set_delays(5, 10, 10);
     l2cache->do_logging();
     
     l2cache->m_tsocket_d[0].bind(*(icache_0->m_isocket_d));
