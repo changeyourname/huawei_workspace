@@ -156,17 +156,6 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-//    if (sc_core::sc_time_stamp() > sc_core::sc_time(485, sc_core::SC_MS)) {
-//        m_log = true;
-//    } else {
-//        m_log = false;
-//    }
-
-
-//    trans.set_response_status(tlm::TLM_OK_RESPONSE);
-//    return;
-
-
     uint64_t req_addr = trans.get_address();
     if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
         // memory request!!
@@ -190,9 +179,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
 	    uint32_t current_set_orig;
+	    uint32_t current_way_orig;
 
-        if (m_log) {
-	        if (m_level == 1 && type==req_extension::NORMAL) {
+        if (m_log && 0) {
+	        if (m_level == 1 && type==req_extension::NORMAL) {                	        
 	            if (common_fid) {
 		            if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
 			            fprintf(common_fid, "-----------------------------------------writing at ");
@@ -209,10 +199,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    // for the back-invalidation case, keeping track of original 
 	    // m_current_blockAddr,_tag,_set so as not to corrupt them with the 
 	    // back-invalidate-block that is going to be evicted in some downstream cache
-	    if (type==req_extension::BACK_INVALIDATE || type==req_extension::WB_UPDATE) {
+	    if (type!=req_extension::NORMAL) {
 		    current_blockAddr_orig = m_current_blockAddr;
 		    current_set_orig = m_current_set;
 		    current_tag_orig = m_current_tag;
+		    current_way_orig = m_current_way;
 	    }
 	    
 	    
@@ -228,25 +219,18 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	                                    log2((double)m_block_size/WORD_SIZE) + 
 	                                    log2((double)m_num_of_sets)));
 
+            
 
-        if (m_log) {
+
+        if (m_log) {   
+            m_debug++;        
         	std::string req_type[4] = {"NORMAL", "M_UPDATE", 
-        	                           "BACK_INVALIDATE", "WB_UPDATE"};
-        	                           
-        	                           
-//if (((m_id==1 || m_id==3) && m_current_set==70 && m_current_tag==0x201bf) ||
-//    (m_id==8 && m_current_set==7238 && m_current_tag==0x4037)) 
-//{        	
-            m_debug++;                           
+        	                           "BACK_INVALIDATE", "WB_UPDATE"};      	                           
             fprintf(common_fid, "(%s) begin tag:0x%08x, %d, %d    ", 
                                             req_type[type].c_str(), m_current_tag, 
                                             trans.get_command(),
                                             m_debug);
-		    print_cache_set(m_current_set);	                
-//}		    
-
-
-		    
+		    print_cache_set(m_current_set);	                	    
         }
 
 	    // updating the access register
@@ -283,25 +267,18 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 
 	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
 	    
-	    if (m_log) {    
-	    
-	    
-//if (((m_id==1 || m_id==3) && m_current_set==70 && m_current_tag==0x201bf) ||
-//    (m_id==8 && m_current_set==7238 && m_current_tag==0x4037)) 
-//{	    
+	    if (m_log) {       
             fprintf(common_fid, "end     ");
 	        print_cache_set(m_current_set);
-//}
-
-
 	    }	    
 
 	    
 	    // when done with back invalidation, setting back to original values
-	    if (type==req_extension::BACK_INVALIDATE || type==req_extension::WB_UPDATE) {
+	    if (type!=req_extension::NORMAL) {
 		    m_current_blockAddr = current_blockAddr_orig;
 		    m_current_set = current_set_orig;
 		    m_current_tag = current_tag_orig;
+		    m_current_way = current_way_orig;
 	    }	    	    
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 8*2)) {
@@ -510,20 +487,23 @@ cache::process_special_request(req_extension::req_type type)
 			// request from child that it is now caching this block in M state
 			
             // can't be in invalid state (strictly inclusive caches)			
-			assert(*state != cache_block::I);				
-			if (*state == cache_block::S) {
-                // TODO: Does MBS make sense for write through caches as well???			
-				*state = cache_block::MBS;					
-			} else if (*state == cache_block::M) {
-                // this has to be writeback cache			
-				assert(m_write_back);		
+			assert(*state != cache_block::I);							
+			if (*state != cache_block::MBS) {
+				// this has to be writeback cache if in M state
+                if (*state == cache_block::M) {
+                    assert(m_write_back);
+                }
+				
 				// sending back invalidations to upstream caches so that anyone caching 
 				// in 'S' state should invalidate it as their data is not up-to-date
 				m_fake_back_invalidation = false;
 				send_request(false);				
 													
-				*state = cache_block::MBS;							
+				*state = cache_block::MBS;			    
 			}
+			
+			
+			
 			// forwarding this special request to further downstream caches if present
 			if (m_level < LLC_LEVEL) {
 				m_ext->m_type = req_extension::M_UPDATE;
