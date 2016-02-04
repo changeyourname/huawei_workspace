@@ -50,7 +50,8 @@ cache::cache(
 		        m_lookup_delay(sc_core::SC_ZERO_TIME),
 		        m_read_delay(sc_core::SC_ZERO_TIME),
 		        m_write_delay(sc_core::SC_ZERO_TIME),
-		        m_fake_back_invalidation(false)
+		        m_fake_back_invalidation(false),
+		        m_debug(0)
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
 	// to occur in real cache organizations if this does occur though then cache would be 
@@ -155,7 +156,7 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
-//    if (sc_core::sc_time_stamp() > sc_core::sc_time(70, sc_core::SC_MS)) {
+//    if (sc_core::sc_time_stamp() > sc_core::sc_time(485, sc_core::SC_MS)) {
 //        m_log = true;
 //    } else {
 //        m_log = false;
@@ -181,7 +182,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	    }
 	    
 
-        if (m_id==0 || m_id==2) {
+        if (m_id==0 || m_id==2 || m_id==4 || m_id==6) {
             // icaches can't get write requests
             assert(trans.get_command() != tlm::TLM_WRITE_COMMAND);
         }	    
@@ -231,10 +232,21 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         if (m_log) {
         	std::string req_type[4] = {"NORMAL", "M_UPDATE", 
         	                           "BACK_INVALIDATE", "WB_UPDATE"};
-                    
-	        fprintf(common_fid, "(%s) begin tag:0x%08x    ", 
-	                                        req_type[type].c_str(), m_current_tag);
+        	                           
+        	                           
+//if (((m_id==1 || m_id==3) && m_current_set==70 && m_current_tag==0x201bf) ||
+//    (m_id==8 && m_current_set==7238 && m_current_tag==0x4037)) 
+//{        	
+            m_debug++;                           
+            fprintf(common_fid, "(%s) begin tag:0x%08x, %d, %d    ", 
+                                            req_type[type].c_str(), m_current_tag, 
+                                            trans.get_command(),
+                                            m_debug);
 		    print_cache_set(m_current_set);	                
+//}		    
+
+
+		    
         }
 
 	    // updating the access register
@@ -271,17 +283,26 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 
 	    trans.set_response_status(tlm::TLM_OK_RESPONSE);
 	    
-	    if (m_log) {
+	    if (m_log) {    
+	    
+	    
+//if (((m_id==1 || m_id==3) && m_current_set==70 && m_current_tag==0x201bf) ||
+//    (m_id==8 && m_current_set==7238 && m_current_tag==0x4037)) 
+//{	    
             fprintf(common_fid, "end     ");
 	        print_cache_set(m_current_set);
+//}
+
+
 	    }	    
+
 	    
 	    // when done with back invalidation, setting back to original values
 	    if (type==req_extension::BACK_INVALIDATE || type==req_extension::WB_UPDATE) {
 		    m_current_blockAddr = current_blockAddr_orig;
 		    m_current_set = current_set_orig;
 		    m_current_tag = current_tag_orig;
-	    }	    
+	    }	    	    
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 8*2)) {
         // request accessing this cache registers
@@ -418,7 +439,6 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 		// write hit
 		if (m_write_back) {
 			if (*state != cache_block::M) {
-				*state = cache_block::M;
 				if (*state == cache_block::S) {
 					if (m_level < LLC_LEVEL) {
 						// notifying the downstream caches to update their block states 
@@ -427,7 +447,14 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 						m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 						send_request(true);
 					}
+					
+					// because of back-invalidations of this block (via M_UPDATE path above)
+					// would be messed up so bringing it back up
+					if (m_blocks[m_current_set][m_current_way].evict_tag == 0) {
+    					m_blocks[m_current_set][m_current_way].evict_tag = m_num_of_ways;
+					}
 				}
+				*state = cache_block::M;
 			}
 		} else {
 			// writing through downstream
@@ -489,8 +516,13 @@ cache::process_special_request(req_extension::req_type type)
 				*state = cache_block::MBS;					
 			} else if (*state == cache_block::M) {
                 // this has to be writeback cache			
-				assert(m_write_back);			
-				*state = cache_block::MBS;
+				assert(m_write_back);		
+				// sending back invalidations to upstream caches so that anyone caching 
+				// in 'S' state should invalidate it as their data is not up-to-date
+				m_fake_back_invalidation = false;
+				send_request(false);				
+													
+				*state = cache_block::MBS;							
 			}
 			// forwarding this special request to further downstream caches if present
 			if (m_level < LLC_LEVEL) {
@@ -612,12 +644,12 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		if (cmd == tlm::TLM_WRITE_COMMAND) {
 			// write miss
 			if (m_write_back) {
-				m_blocks[m_current_set][m_current_way].state = cache_block::M;
 				if (m_level < LLC_LEVEL) {
 					m_ext->m_type = req_extension::M_UPDATE;
 					m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
 					send_request(true);
 				}
+				m_blocks[m_current_set][m_current_way].state = cache_block::M;				
 			} else {
 				m_blocks[m_current_set][m_current_way].state = cache_block::S;
 				// writing through downstream
@@ -683,10 +715,6 @@ cache::do_eviction()
 		send_request(true, true);
 	}
 	*state = cache_block::I;
-	//TODO: is below needed!!
-//	m_blocks[m_current_set][m_current_way].evict_tag = 0x0;
-//	// no need to update the eviction tags for other ways as they will be updated later
-//	// in process_miss()!!
 
 	// BACK INVALIDATION
 	m_fake_back_invalidation = false;
@@ -777,7 +805,7 @@ cache::set_delays(uint32_t lookup, uint32_t read, uint32_t write)
 
 
 //TODO: more accurate delay modeling
-
+//TODO: can M_UPDATE and WB_UPDATE be merged???
 
 
 

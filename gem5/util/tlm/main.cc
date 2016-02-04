@@ -377,9 +377,9 @@ sc_main(int argc, char **argv)
     //TODO: automate following based on num of cpus!!
     cache::cache_specs specs;
     specs.num_masters = 1;
-    specs.size = 1024;
-    specs.block_size = WORD_SIZE;
-    specs.num_ways = 2;
+    specs.size = 65536;
+    specs.block_size = 4*WORD_SIZE;
+    specs.num_ways = 4;
     specs.write_back = true;
     specs.write_allocate = true;
     specs.evict_policy = cache::LRU;       
@@ -394,7 +394,7 @@ sc_main(int argc, char **argv)
                              1, 
                              0xD000D000
                              #ifdef CACHE_DEBUG
-                             , "log/icache0.log"
+                             , "log/icache_0.log"
                              #endif
                             );
         icache_0->set_delays(1, 1, 1);                             
@@ -472,6 +472,94 @@ sc_main(int argc, char **argv)
     } else {        
         SC_REPORT_FATAL("sc_main", "gem5.dcache_1 not found");
         std::exit(EXIT_FAILURE);        
+    }
+    
+    cache *icache_2;                                                
+    Gem5SystemC::sc_transactor *gem5_icache_2 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.icache_2")); 
+    if (gem5_icache_2) {                                        
+        icache_2 = new cache("icache_2", 
+                             4, 
+                             specs, 
+                             1, 
+                             0xD0011000
+                             #ifdef CACHE_DEBUG
+                             , "log/icache_2.log"
+                             #endif
+                            );
+        icache_2->set_delays(1, 1, 1);                             
+        icache_2->do_logging();
+                             
+        icache_2->m_tsocket_d[0].bind(*gem5_icache_2);  
+    } else {        
+        SC_REPORT_FATAL("sc_main", "gem5.icache_2 not found");
+        std::exit(EXIT_FAILURE);        
+    } 
+    
+    cache *dcache_2;                                                
+    Gem5SystemC::sc_transactor *gem5_dcache_2 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.dcache_2")); 
+    if (gem5_dcache_2) {                                        
+        dcache_2 = new cache("dcache_2", 
+                             5, 
+                             specs, 
+                             1, 
+                             0xD0012000
+                             #ifdef CACHE_DEBUG
+                             , "log/dcache_2.log"
+                             #endif
+                            );
+        dcache_2->set_delays(1, 1, 1);                             
+        dcache_2->do_logging();
+                             
+        dcache_2->m_tsocket_d[0].bind(*gem5_dcache_2);  
+    } else {        
+        SC_REPORT_FATAL("sc_main", "gem5.dcache_2 not found");
+        std::exit(EXIT_FAILURE);        
+    }        
+    
+    cache *icache_3;                                                
+    Gem5SystemC::sc_transactor *gem5_icache_3 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.icache_3")); 
+    if (gem5_icache_3) {                                        
+        icache_3 = new cache("icache_3", 
+                             6, 
+                             specs, 
+                             1, 
+                             0xD0013000
+                             #ifdef CACHE_DEBUG
+                             , "log/icache_3.log"
+                             #endif
+                            );
+        icache_3->set_delays(1, 1, 1);                             
+        icache_3->do_logging();
+                             
+        icache_3->m_tsocket_d[0].bind(*gem5_icache_3);  
+    } else {        
+        SC_REPORT_FATAL("sc_main", "gem5.icache_3 not found");
+        std::exit(EXIT_FAILURE);        
+    } 
+    
+    cache *dcache_3;                                                
+    Gem5SystemC::sc_transactor *gem5_dcache_3 = dynamic_cast<Gem5SystemC::sc_transactor *>
+                                                (sc_core::sc_find_object("gem5.dcache_3")); 
+    if (gem5_dcache_3) {                                        
+        dcache_3 = new cache("dcache_3", 
+                             7, 
+                             specs, 
+                             1, 
+                             0xD0014000
+                             #ifdef CACHE_DEBUG
+                             , "log/dcache_3.log"
+                             #endif
+                            );
+        dcache_3->set_delays(1, 1, 1);                             
+        dcache_3->do_logging();
+                             
+        dcache_3->m_tsocket_d[0].bind(*gem5_dcache_3);  
+    } else {        
+        SC_REPORT_FATAL("sc_main", "gem5.dcache_3 not found");
+        std::exit(EXIT_FAILURE);        
     }    
     #endif
  
@@ -485,16 +573,16 @@ sc_main(int argc, char **argv)
     
     
     
-    specs.num_masters = 4;
-    specs.size = 2*1024;
-    specs.block_size = WORD_SIZE;
-    specs.num_ways = 4;    
+    specs.num_masters = 8;
+    specs.size = 2*1024*1024;
+    specs.block_size = 4*WORD_SIZE;
+    specs.num_ways = 16;    
     cache *l2cache;
     l2cache = new cache("l2cache", 
-                         4, 
+                         8, 
                          specs, 
                          2, 
-                         0xD0011000
+                         0xD0015000
                          #ifdef CACHE_DEBUG
                          , "log/l2cache.log"
                          #endif
@@ -506,10 +594,18 @@ sc_main(int argc, char **argv)
     l2cache->m_tsocket_d[1].bind(*(dcache_0->m_isocket_d));
     l2cache->m_tsocket_d[2].bind(*(icache_1->m_isocket_d));
     l2cache->m_tsocket_d[3].bind(*(dcache_1->m_isocket_d));
+    l2cache->m_tsocket_d[4].bind(*(icache_2->m_isocket_d));
+    l2cache->m_tsocket_d[5].bind(*(dcache_2->m_isocket_d));
+    l2cache->m_tsocket_d[6].bind(*(icache_3->m_isocket_d));
+    l2cache->m_tsocket_d[7].bind(*(dcache_3->m_isocket_d));
     l2cache->m_isocket_u[0].bind(*(icache_0->m_tsocket_u));
     l2cache->m_isocket_u[1].bind(*(dcache_0->m_tsocket_u));
     l2cache->m_isocket_u[2].bind(*(icache_1->m_tsocket_u));
-    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));    
+    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));
+    l2cache->m_isocket_u[4].bind(*(icache_2->m_tsocket_u));
+    l2cache->m_isocket_u[5].bind(*(dcache_2->m_tsocket_u));
+    l2cache->m_isocket_u[6].bind(*(icache_3->m_tsocket_u));
+    l2cache->m_isocket_u[7].bind(*(dcache_3->m_tsocket_u));    
     
     
     
@@ -542,18 +638,18 @@ sc_main(int argc, char **argv)
     if (gem5_dcache_1) {
         delete dcache_1;
     }
-//    if (gem5_icache_2) {
-//        delete icache_2;
-//    }
-//    if (gem5_dcache_2) {
-//        delete dcache_2;
-//    }
-//    if (gem5_icache_3) {
-//        delete icache_3;
-//    }
-//    if (gem5_dcache_3) {
-//        delete dcache_3;
-//    }
+    if (gem5_icache_2) {
+        delete icache_2;
+    }
+    if (gem5_dcache_2) {
+        delete dcache_2;
+    }
+    if (gem5_icache_3) {
+        delete icache_3;
+    }
+    if (gem5_dcache_3) {
+        delete dcache_3;
+    }
     #endif
     
     delete l2cache;    
