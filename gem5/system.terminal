@@ -160,8 +160,8 @@ scsi 0:0:0:0: Direct-Access     ATA      M5 IDE Disk      n/a  PQ: 0 ANSI: 5
 sd 0:0:0:0: [sda] 1048320 512-byte logical blocks: (536 MB/511 MiB)
 sd 0:0:0:0: [sda] Write Protect is off
 sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
-sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
 sd 0:0:0:0: Attached scsi generic sg0 type 0
+sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
  sda: sda1
 sd 0:0:0:0: [sda] Attached SCSI disk
 e1000 0000:00:00.0 eth0: (PCI:33MHz:32-bit) 00:90:00:00:00:01
@@ -208,11 +208,11 @@ EXT2-fs (sda1): warning: mounting unchecked fs, running e2fsck is recommended
 VFS: Mounted root (ext2 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 init started: BusyBox v1.15.3 (2010-05-07 01:27:07 BST)
-starting pid 680, tty '': '/etc/rc.d/rc.local'
+starting pid 681, tty '': '/etc/rc.d/rc.local'
 warning: can't open /etc/mtab: No such file or directory
 Thu Jan  1 00:00:06 UTC 2009
 S: devpts
 Thu Jan  1 00:00:06 UTC 2009
-starting pid 701, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+starting pid 702, tty '': '/sbin/getty -L ttySA0 38400 vt100'
 
 AEL login: 

@@ -49,7 +49,8 @@ cache::cache(
 		        m_miss_register(0),
 		        m_lookup_delay(sc_core::SC_ZERO_TIME),
 		        m_read_delay(sc_core::SC_ZERO_TIME),
-		        m_write_delay(sc_core::SC_ZERO_TIME)
+		        m_write_delay(sc_core::SC_ZERO_TIME),
+		        m_fake_back_invalidation(false)
 {
 	// ensuring that set bits <= mem_size_bits.....sort of a corner case but not expected 
 	// to occur in real cache organizations if this does occur though then cache would be 
@@ -439,8 +440,14 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 	} else {	    
 		// read hit
 		
-		//TODO: handle this case if state is MBS!!
-		//      maybe send back-invalidations to all upstream caches
+		// if this block is in M state somewhere upstream then that is invalidated and
+		// forced to write-back to this cache
+        if (*state == cache_block::MBS) {
+            m_fake_back_invalidation = true;
+            send_request(false);
+            // writeback should have been done by now
+            assert(*state == cache_block::M);
+        }
 		
 		assert(m_current_delay);		
 		*m_current_delay += m_read_delay;
@@ -511,6 +518,7 @@ cache::process_special_request(req_extension::req_type type)
 			// on WB_UPDATE path
 
 			// sending back invalidation to its upstream masters as well
+			m_fake_back_invalidation = false;
 			send_request(false);
 			break;
 		}
@@ -526,14 +534,19 @@ cache::process_special_request(req_extension::req_type type)
                 // this has to be in MBS state
                 // TODO: right now for write-through caches as well..can MBS for 
                 //       write-through cache be avoided???			
-				assert(*state == cache_block::MBS);				
-				assert(m_level < LLC_LEVEL);					// this can't be last level
-				*state = cache_block::I;
-                invalidation_done = true;
-				// writing back downstream
-				m_ext->m_type = req_extension::WB_UPDATE;
-				m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
-				send_request(true);
+				assert(*state == cache_block::MBS);		
+				if (!m_fake_back_invalidation) {		
+				    assert(m_level < LLC_LEVEL);					// this can't be last level
+				    *state = cache_block::I;
+                    invalidation_done = true;
+				    // writing back downstream
+				    m_ext->m_type = req_extension::WB_UPDATE;
+				    m_trans.set_command(tlm::TLM_IGNORE_COMMAND);
+				    send_request(true);
+			    } else {
+			        *state = cache_block::M;
+			        break;
+			    }
 			}
 			break;
 		}
@@ -676,6 +689,7 @@ cache::do_eviction()
 //	// in process_miss()!!
 
 	// BACK INVALIDATION
+	m_fake_back_invalidation = false;
 	send_request(false, true);
 }
 

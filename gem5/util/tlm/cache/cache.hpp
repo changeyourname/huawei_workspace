@@ -89,6 +89,7 @@ private:
     sc_core::sc_time m_lookup_delay;
 	sc_core::sc_time m_read_delay;
 	sc_core::sc_time m_write_delay;
+	bool m_fake_back_invalidation;
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE);
 	uint32_t find_way_evict();
