@@ -378,7 +378,7 @@ sc_main(int argc, char **argv)
     cache::cache_specs specs;
     specs.num_masters = 1;
     specs.size = 65536;
-    specs.block_size = 4*WORD_SIZE;
+    specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 4;
     specs.write_back = true;
     specs.write_allocate = true;
@@ -429,7 +429,7 @@ sc_main(int argc, char **argv)
     }
     
     
-    #if 1
+    #if 0
     cache *icache_1;                                                
     Gem5SystemC::sc_transactor *gem5_icache_1 = dynamic_cast<Gem5SystemC::sc_transactor *>
                                                 (sc_core::sc_find_object("gem5.icache_1")); 
@@ -573,9 +573,9 @@ sc_main(int argc, char **argv)
     
     
     
-    specs.num_masters = 8;
+    specs.num_masters = 2;
     specs.size = 2*1024*1024;
-    specs.block_size = 4*WORD_SIZE;
+    specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 16;    
     cache *l2cache;
     l2cache = new cache("l2cache", 
@@ -592,21 +592,21 @@ sc_main(int argc, char **argv)
     
     l2cache->m_tsocket_d[0].bind(*(icache_0->m_isocket_d));
     l2cache->m_tsocket_d[1].bind(*(dcache_0->m_isocket_d));
-    l2cache->m_tsocket_d[2].bind(*(icache_1->m_isocket_d));
-    l2cache->m_tsocket_d[3].bind(*(dcache_1->m_isocket_d));
-    l2cache->m_tsocket_d[4].bind(*(icache_2->m_isocket_d));
-    l2cache->m_tsocket_d[5].bind(*(dcache_2->m_isocket_d));
-    l2cache->m_tsocket_d[6].bind(*(icache_3->m_isocket_d));
-    l2cache->m_tsocket_d[7].bind(*(dcache_3->m_isocket_d));
+//    l2cache->m_tsocket_d[2].bind(*(icache_1->m_isocket_d));
+//    l2cache->m_tsocket_d[3].bind(*(dcache_1->m_isocket_d));
+//    l2cache->m_tsocket_d[4].bind(*(icache_2->m_isocket_d));
+//    l2cache->m_tsocket_d[5].bind(*(dcache_2->m_isocket_d));
+//    l2cache->m_tsocket_d[6].bind(*(icache_3->m_isocket_d));
+//    l2cache->m_tsocket_d[7].bind(*(dcache_3->m_isocket_d));
     l2cache->m_isocket_u[0].bind(*(icache_0->m_tsocket_u));
     l2cache->m_isocket_u[1].bind(*(dcache_0->m_tsocket_u));
-    l2cache->m_isocket_u[2].bind(*(icache_1->m_tsocket_u));
-    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));
-    l2cache->m_isocket_u[4].bind(*(icache_2->m_tsocket_u));
-    l2cache->m_isocket_u[5].bind(*(dcache_2->m_tsocket_u));
-    l2cache->m_isocket_u[6].bind(*(icache_3->m_tsocket_u));
-    l2cache->m_isocket_u[7].bind(*(dcache_3->m_tsocket_u));    
-    
+//    l2cache->m_isocket_u[2].bind(*(icache_1->m_tsocket_u));
+//    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));
+//    l2cache->m_isocket_u[4].bind(*(icache_2->m_tsocket_u));
+//    l2cache->m_isocket_u[5].bind(*(dcache_2->m_tsocket_u));
+//    l2cache->m_isocket_u[6].bind(*(icache_3->m_tsocket_u));
+//    l2cache->m_isocket_u[7].bind(*(dcache_3->m_tsocket_u));    
+//    
     
     
    
@@ -631,7 +631,7 @@ sc_main(int argc, char **argv)
         delete dcache_0;
     }
     
-    #if 1
+    #if 0
     if (gem5_icache_1) {
         delete icache_1;
     }
@@ -661,6 +661,33 @@ sc_main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+
+
+
+
+
+
+// TODO: for using strictly inclusive caches, it is common to use same block sizes for each 
+//       of L1,L2 cache in the hierarchy to simplify inclusivity and coherence 
+//       this is general practice while desiging inclusive caches (try googling it!!)
+//       (see multicore designs from intel etc......also Paul A. Clayton answer on StackOverflow)
+//
+//       right now this simulation system fails if you use different line sizes b/c of no support
+//       maybe develop support for this if there is need to
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

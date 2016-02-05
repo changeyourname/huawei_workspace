@@ -8,6 +8,11 @@
 
 
 
+
+// tries to model cache hierarchy in ARM A-series MPCOre chips
+// strictly inclusive caching
+
+
 #include "cache.hpp"
 
 // to clean up allocated stuff globally for the whole class

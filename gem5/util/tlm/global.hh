@@ -2,6 +2,7 @@
 #define __GLOBAL__
 
 #define WORD_SIZE 4
+#define CACHE_BLOCK_SIZE 64
 #define LLC_LEVEL 2
 
 #define MEM_BASE 0x80000000
