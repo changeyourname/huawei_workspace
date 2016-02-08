@@ -37,6 +37,7 @@ VARIANT = opt
 
 SYSTEMC_INC = $(SYSTEMC_HOME)/include
 SYSTEMC_LIB = $(SYSTEMC_HOME)/lib-linux64
+NUM_CPUS ?= 0
 
 CXXFLAGS = -I../../build/$(ARCH) -L../../build/$(ARCH)
 CXXFLAGS += -I../systemc/
@@ -44,6 +45,7 @@ CXXFLAGS += -I$(SYSTEMC_INC) -L$(SYSTEMC_LIB)
 CXXFLAGS += -std=c++0x
 CXXFLAGS += -g
 CXXFLAGS += -DSC_INCLUDE_DYNAMIC_PROCESSES -DDEBUG -DTRACING_ON
+CXXFLAGS += -DNUM_CPUS
 
 LIBS = -lgem5_$(VARIANT) -lsystemc
 
