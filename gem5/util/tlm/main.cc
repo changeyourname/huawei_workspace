@@ -673,7 +673,9 @@ sc_main(int argc, char **argv)
 //       (see multicore designs from intel etc......also Paul A. Clayton answer on StackOverflow)
 //
 //       right now this simulation system fails if you use different line sizes b/c of no support
-//       maybe develop support for this if there is need to
+//       maybe develop support for this if there is need to (possible idea could be to 
+//       sectorize cache block in higher level cache (L2) each having same size as that of
+//       the block in lower level cache (L1))
 
 
 
