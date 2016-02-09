@@ -3,7 +3,12 @@
 
 #define WORD_SIZE 4
 #define CACHE_BLOCK_SIZE 64
+
+#ifdef L2_CACHE
 #define LLC_LEVEL 2
+#else
+#define LLC_LEVEL 1
+#endif
 
 #define MEM_BASE 0x80000000
 #define MEM_SIZE 536870912

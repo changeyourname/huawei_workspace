@@ -194,8 +194,8 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		            } else {
 			            fprintf(common_fid, "-----------------------------------------reading at ");
 		            }
-		            fprintf(common_fid, "0x%08x----------------------------------------------\r\n", 
-		                    (uint32_t)req_addr);
+		            fprintf(common_fid, "0x%08lx----------------------------------------------\r\n", 
+		                                req_addr);
 		            fflush(common_fid);
 	            }		
 	        }	        
@@ -231,7 +231,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
             m_debug++;        
         	std::string req_type[4] = {"NORMAL", "M_UPDATE", 
         	                           "BACK_INVALIDATE", "WB_UPDATE"};      	                           
-            fprintf(common_fid, "(%s) begin tag:0x%08x, %d, %d    ", 
+            fprintf(common_fid, "(%s) begin tag:0x%08lx, %d, %d    ", 
                                             req_type[type].c_str(), m_current_tag, 
                                             trans.get_command(),
                                             m_debug);
@@ -407,8 +407,8 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 {
 	// logging
 	if (m_log) 	{
-		fprintf(m_fid, "cache hit for 0x%08x", (uint32_t)trans.get_address());
-		fprintf(m_fid, "..tag=0x%08x", (uint32_t)m_current_tag);
+		fprintf(m_fid, "cache hit for 0x%08llux", trans.get_address());
+		fprintf(m_fid, "..tag=0x%08lx", m_current_tag);
 		fprintf(m_fid, "..set=%d\r\n", m_current_set);
 		fflush(m_fid);			// disable this when not debugging
 	}
@@ -600,8 +600,8 @@ void
 cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed) 
 { 
 	if (m_log) {
-		fprintf(m_fid, "cache miss for 0x%08x", (uint32_t)trans.get_address());
-		fprintf(m_fid, "..tag=0x%08x", (uint32_t)m_current_tag);
+		fprintf(m_fid, "cache miss for 0x%08llux", trans.get_address());
+		fprintf(m_fid, "..tag=0x%08lx", m_current_tag);
 		fprintf(m_fid, "...set=%d\r\n", m_current_set);
 		fflush(m_fid);			
 	}
@@ -763,7 +763,7 @@ cache::print_cache_set(uint32_t set)
 	    for (uint32_t x=0; x<m_num_of_ways; x++) {
 		    fprintf(common_fid, "way[%d]..", x);
 		    fprintf(common_fid, "state=%s..", state[m_blocks[set][x].state].c_str());
-		    fprintf(common_fid, "tag=0x%08x..", (uint32_t)m_blocks[set][x].tag);
+		    fprintf(common_fid, "tag=0x%08lx..", m_blocks[set][x].tag);
 		    fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	    }
 	    fprintf(common_fid, "\r\n\r\n");

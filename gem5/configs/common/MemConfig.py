@@ -207,7 +207,7 @@ def config_mem(options, system):
                                        intlv_size)
                                        
             # for cache hierarchy in SystemC, latency will be decided by cache                           
-            if options.disable_cache:
+            if options.systemc_cache:
                 mem_ctrl.latency = '0ns'                           
                                        
             # Set the number of ranks based on the command-line

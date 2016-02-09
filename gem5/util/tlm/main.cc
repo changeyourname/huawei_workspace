@@ -71,6 +71,7 @@
 #include "stats.hh"
 #include "global.hh"
 
+
 void usage(const std::string &prog_name)
 {
     std::cerr << "Usage: " << prog_name << (
@@ -350,7 +351,7 @@ sc_main(int argc, char **argv)
     }
     
     
-    #if NUM_CPUS == 2
+    #if NUM_CPUS >= 2
     cache *icache_1;                                                
     Gem5SystemC::sc_transactor *gem5_icache_1 = dynamic_cast<Gem5SystemC::sc_transactor *>
                                                 (sc_core::sc_find_object("gem5.icache_1")); 
@@ -394,7 +395,7 @@ sc_main(int argc, char **argv)
         SC_REPORT_FATAL("sc_main", "gem5.dcache_1 not found");
         std::exit(EXIT_FAILURE);        
     }
-    #endif
+
     
     #if NUM_CPUS==4
     cache *icache_2;                                                
@@ -485,6 +486,7 @@ sc_main(int argc, char **argv)
         std::exit(EXIT_FAILURE);        
     }    
     #endif
+    #endif
     
     
 #endif 
@@ -497,7 +499,7 @@ sc_main(int argc, char **argv)
     
     
     
-#ifdef NUM_CPUS
+#ifdef L2_CACHE
     specs.num_masters = NUM_CPUS*2;
     specs.size = 2*1024*1024;
     specs.block_size = CACHE_BLOCK_SIZE;
@@ -517,29 +519,24 @@ sc_main(int argc, char **argv)
     
     l2cache->m_tsocket_d[0].bind(*(icache_0->m_isocket_d));
     l2cache->m_tsocket_d[1].bind(*(dcache_0->m_isocket_d));
-    #if NUM_CPUS==2
+    l2cache->m_isocket_u[0].bind(*(icache_0->m_tsocket_u));
+    l2cache->m_isocket_u[1].bind(*(dcache_0->m_tsocket_u));    
+    #if NUM_CPUS>=2
     l2cache->m_tsocket_d[2].bind(*(icache_1->m_isocket_d));
     l2cache->m_tsocket_d[3].bind(*(dcache_1->m_isocket_d));
-    #endif
+    l2cache->m_isocket_u[2].bind(*(icache_1->m_tsocket_u));
+    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));    
     #if NUM_CPUS==4
     l2cache->m_tsocket_d[4].bind(*(icache_2->m_isocket_d));
     l2cache->m_tsocket_d[5].bind(*(dcache_2->m_isocket_d));
     l2cache->m_tsocket_d[6].bind(*(icache_3->m_isocket_d));
     l2cache->m_tsocket_d[7].bind(*(dcache_3->m_isocket_d));
-    #endif
-    l2cache->m_isocket_u[0].bind(*(icache_0->m_tsocket_u));
-    l2cache->m_isocket_u[1].bind(*(dcache_0->m_tsocket_u));
-    #if NUM_CPUS==2
-    l2cache->m_isocket_u[2].bind(*(icache_1->m_tsocket_u));
-    l2cache->m_isocket_u[3].bind(*(dcache_1->m_tsocket_u));
-    #endif
-    #if NUM_CPUS==4
     l2cache->m_isocket_u[4].bind(*(icache_2->m_tsocket_u));
     l2cache->m_isocket_u[5].bind(*(dcache_2->m_tsocket_u));
     l2cache->m_isocket_u[6].bind(*(icache_3->m_tsocket_u));
-    l2cache->m_isocket_u[7].bind(*(dcache_3->m_tsocket_u));  
+    l2cache->m_isocket_u[7].bind(*(dcache_3->m_tsocket_u));     
     #endif
-  
+    #endif 
 #endif
     
     
@@ -566,14 +563,13 @@ sc_main(int argc, char **argv)
         delete dcache_0;
     }
     
-    #if NUM_CPUS==2
+    #if NUM_CPUS>=2
     if (gem5_icache_1) {
         delete icache_1;
     }
     if (gem5_dcache_1) {
         delete dcache_1;
     }
-    #endif
     #if NUM_CPUS==4
     if (gem5_icache_2) {
         delete icache_2;
@@ -588,8 +584,12 @@ sc_main(int argc, char **argv)
         delete dcache_3;
     }
     #endif
+    #endif    
+#endif    
+
+#ifdef L2_CACHE
     delete l2cache;
-#endif        
+#endif    
         
     
     //TODO: clean up allocated global stuff from cache module!!  

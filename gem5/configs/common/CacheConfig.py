@@ -46,8 +46,8 @@ from m5.objects import *
 from Caches import *
 
 def config_cache(options, system):
-    if options.disable_cache:
-        system.disable_cache = True
+    if options.systemc_cache:
+        system.systemc_caches = True
 
     if options.external_memory_system and (options.caches or options.l2cache):
         print "External caches and internal caches are exclusive options.\n"
@@ -95,7 +95,7 @@ def config_cache(options, system):
         system.memchecker = MemChecker()    
         
         
-    if options.disable_cache:
+    if options.systemc_cache:
         # parameters specific to using systemc caches    
         sysc_cache_monitor_base = 0xD000D000        
         sysc_cache_monitor_size = 4096
@@ -156,7 +156,7 @@ def config_cache(options, system):
 
         system.cpu[i].createInterruptController()
         
-        if options.disable_cache:  
+        if options.systemc_cache:  
             # following code is just making HookXBar() for each of i/d cache ports
             # this HookXBar() is then connected to system.membus via its master interface
             # while it is connected to ExternalSlave() via hook interface          
