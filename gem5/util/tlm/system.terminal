@@ -1,0 +1,61 @@
+Booting Linux on physical CPU 0x0
+Initializing cgroup subsys cpuset
+Linux version 3.13.0-rc2 (tony@vamp) (gcc version 4.8.2 (Ubuntu/Linaro 4.8.2-16ubuntu4) ) #1 SMP PREEMPT Mon Oct 13 15:09:23 EDT 2014
+Kernel was built at commit id ''
+CPU: ARMv7 Processor [410fc0f0] revision 0 (ARMv7), cr=10c53c7d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+Machine model: V2P-CA15
+bootconsole [earlycon0] enabled
+Memory policy: Data cache writealloc
+kdebugv2m: Following are test values to confirm proper working
+kdebugv2m: Ranges 42000000 0 
+kdebugv2m: Regs 30000000 1000000 
+kdebugv2m: Virtual-Reg f0000000 
+kdebugv2m: pci node addr_cells 3 
+kdebugv2m: pci node size_cells 2 
+kdebugv2m: motherboard addr_cells 2 
+On node 0 totalpages: 131072
+free_area_init_node: node 0, pgdat 8072dcc0, node_mem_map 8078f000
+  Normal zone: 1024 pages used for memmap
+  Normal zone: 0 pages reserved
+  Normal zone: 131072 pages, LIFO batch:31
+sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 178956969942ns
+PERCPU: Embedded 8 pages/cpu @80b97000 s11648 r8192 d12928 u32768
+pcpu-alloc: s11648 r8192 d12928 u32768 alloc=8*4096
+pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 130048
+Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1
+PID hash table entries: 2048 (order: 1, 8192 bytes)
+Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
+Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
+Memory: 495488K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28800K reserved, 0K highmem)
+Virtual kernel memory layout:
+    vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+    fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
+    vmalloc : 0xa0800000 - 0xff000000   (1512 MB)
+    lowmem  : 0x80000000 - 0xa0000000   ( 512 MB)
+    pkmap   : 0x7fe00000 - 0x80000000   (   2 MB)
+    modules : 0x7f000000 - 0x7fe00000   (  14 MB)
+      .text : 0x80008000 - 0x806a942c   (6790 kB)
+      .init : 0x806aa000 - 0x806f3d80   ( 296 kB)
+      .data : 0x806f4000 - 0x80732754   ( 250 kB)
+       .bss : 0x80732754 - 0x8078e9d8   ( 369 kB)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+Preemptible hierarchical RCU implementation.
+	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+NR_IRQS:16 nr_irqs:16 16
+Architected cp15 timer(s) running at 25.16MHz (phys).
+sched_clock: 56 bits at 25MHz, resolution 39ns, wraps every 2730666655744ns
+Switching to timer-based delay loop
+Console: colour dummy device 80x30
+Calibrating delay loop (skipped) preset value.. 3997.69 BogoMIPS (lpj=19988480)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 512
+CPU: Testing write buffer coherency: ok
+/cpus/cpu@1 missing clock-frequency property
+/cpus/cpu@2 missing clock-frequency property
+/cpus/cpu@3 missing clock-frequency property
+CPU0: update cpu_power 1024
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+Setting up static identity map for 0x804fee68 - 0x804fee9c
+

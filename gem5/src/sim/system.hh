@@ -193,7 +193,7 @@ class System : public MemObject
     /**
      * Are caches present
      */
-    bool areCachesDisabled() const { return _cachesDisabled; }     
+    bool SysC_Caches() const { return _cachesSysC; }     
 
 #if THE_ISA != NULL_ISA
     PCEventQueue pcEventQueue;
@@ -305,7 +305,7 @@ class System : public MemObject
     Enums::MemoryMode memoryMode;
 
     const unsigned int _cacheLineSize;
-    const bool _cachesDisabled;
+    const bool _cachesSysC;
 
     uint64_t workItemsBegin;
     uint64_t workItemsEnd;

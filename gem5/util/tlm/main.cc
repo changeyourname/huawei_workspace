@@ -71,7 +71,6 @@
 #include "stats.hh"
 #include "global.hh"
 
-
 void usage(const std::string &prog_name)
 {
     std::cerr << "Usage: " << prog_name << (
@@ -87,8 +86,6 @@ void usage(const std::string &prog_name)
         "    -D                           -- debug on\n"
         "    -e <ticks>                   -- end of simulation after a \n"
         "                                    given number of ticks\n"
-        "    -mem                         -- enable SystemC memory as main memory\n"
-        "    -n_cpu <value>               -- set number of gem5 smp cores\n"
         "\n"
         );
     std::exit(EXIT_FAILURE);
@@ -108,9 +105,6 @@ class SimControl : public Gem5SystemC::Module
 
     public:
     SC_HAS_PROCESS(SimControl);
-
-    bool enable_SystemC_mem;
-    unsigned int num_gem5_smp_cores;
 
     SimControl(sc_core::sc_module_name name, int argc_, char **argv_);
     void before_end_of_elaboration();
@@ -153,8 +147,6 @@ SimControl::SimControl(sc_core::sc_module_name name,
     sim_end = 0;
     debug = false;
     offset = 0;
-    enable_SystemC_mem = false;
-    num_gem5_smp_cores = 0;
 
     const std::string config_file(argv[arg_ptr]);
 
@@ -218,14 +210,6 @@ SimControl::SimControl(sc_core::sc_module_name name,
                 std::istringstream(argv[arg_ptr]) >> offset;
                 arg_ptr++;
                 /* code */
-            } else if (option == "-mem") {
-                enable_SystemC_mem = true;
-            } else if (option == "-n_cpu") {
-                if (num_args < 1) {
-                    usage(prog_name);
-                }
-                std::istringstream(argv[arg_ptr]) >> num_gem5_smp_cores;
-                arg_ptr++;
             } else {
                 usage(prog_name);
             }
@@ -310,32 +294,6 @@ sc_main(int argc, char **argv)
     sc_core::sc_report_handler::set_handler(reportHandler);
 
     SimControl sim_control("gem5", argc, argv);
-    unsigned long long int size = 512*1024*1024ULL;
-    unsigned char *mem = new unsigned char[size];    
-    
-    if (sim_control.enable_SystemC_mem) {
-        // if gem5 system uses SystemC memory
-        Target *membus;    
-        Gem5SystemC::sc_transactor 
-                *membus_port = dynamic_cast<Gem5SystemC::sc_transactor *> (   
-                                    sc_core::sc_find_object("gem5.membus_port")
-                                );          
-        if (membus_port) {
-            SC_REPORT_INFO("sc_main", "gem5.membus_port Found");
-            membus = new Target("membus",
-                                sim_control.getDebugFlag(),
-                                size,
-                                sim_control.getOffset(),
-                                mem,
-                                membus_port->getOwner());
-            membus->socket.bind(*membus_port);
-        } else {
-            SC_REPORT_FATAL("sc_main", "gem5.membus_port Not Found");
-            std::exit(EXIT_FAILURE);
-        }
-    }  
-
-
 
     cache::cache_specs specs;
     specs.num_masters = 1;
@@ -540,7 +498,7 @@ sc_main(int argc, char **argv)
     
     
 #ifdef NUM_CPUS
-    specs.num_masters = NUM_CPUS*4;
+    specs.num_masters = NUM_CPUS*2;
     specs.size = 2*1024*1024;
     specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 16;    

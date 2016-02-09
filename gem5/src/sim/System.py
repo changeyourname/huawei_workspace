@@ -71,9 +71,8 @@ class System(MemObject):
     # I/O bridge or cache
     mem_ranges = VectorParam.AddrRange([], "Ranges that constitute main memory")
 
-    # TODO: suggest better name for cache_line_size as it doesnt correspond to cache block
     cache_line_size = Param.Unsigned(64, "Cache line size in bytes")
-    disable_cache = Param.Bool(False, "Disable gem5-cache in system")
+    systemc_caches = Param.Bool(False, "Disable gem5-cache in system and use cache in SysC")
 
     exit_on_work_items = Param.Bool(False, "Exit from the simulation loop when "
                                     "encountering work item annotations.")

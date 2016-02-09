@@ -415,11 +415,11 @@ TimingSimpleCPU::readMem(Addr addr, uint8_t *data,
     const ThreadID tid = curThread;
     const Addr pc = thread->instAddr();
     unsigned block_size;
-    bool disable_cache = areCachesDisabled();
+    bool systemc_cache = SysC_Caches();
     BaseTLB::Mode mode = BaseTLB::Read;
     // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
     // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
-    if (disable_cache) {
+    if (systemc_cache) {
         block_size = 64;
     } else {
         block_size = cacheLineSize();
@@ -498,12 +498,12 @@ TimingSimpleCPU::writeMem(uint8_t *data, unsigned size,
     const ThreadID tid = curThread;
     const Addr pc = thread->instAddr();
     unsigned block_size;
-    bool disable_cache = areCachesDisabled();
+    bool systemc_cache = SysC_Caches();
     BaseTLB::Mode mode = BaseTLB::Write;
     // not sure but it seems to me this interface is for requesting memory access for DTB....and DTB can make 64B transactions for 32/64bit systems
     // TODO: figure out how DTB actually works for ARM processors specifically how it requests memory?? how come 64B transactions??
      
-    if (disable_cache) {
+    if (systemc_cache) {
         block_size = 64;
     } else {    
         block_size = cacheLineSize();
