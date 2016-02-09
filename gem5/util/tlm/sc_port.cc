@@ -151,7 +151,7 @@ sc_transactor::recvTimingReq(PacketPtr packet)
 
 // send request to systemc cache
 void
-sc_transactor::to_SysC_Cache(PacketPtr packet) {
+sc_transactor::to_SysC_Cache(PacketPtr packet) {   
     CAUGHT_UP;
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     /* Prepare the transaction */

@@ -1,7 +1,7 @@
 #ifndef __GLOBAL__
 #define __GLOBAL__
 
-#define WORD_SIZE 4
+//#define WORD_SIZE 4
 #define CACHE_BLOCK_SIZE 64
 
 #ifdef L2_CACHE

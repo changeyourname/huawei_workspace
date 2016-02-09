@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NUM_CPUS=1              # 1/2/4
+NUM_CPUS=4              # 1/2/4
 
 ARM_SYSTEM="armv7"      # "armv7"; "armv8"
 
@@ -17,8 +17,7 @@ DISK_IMAGE_TYPE=0       # 0->minimal; 1->ubuntu
 
 
 
-
-
+SYSC_MAKE_CMD="make NUM_CPUS=${NUM_CPUS} "
 
 
 
@@ -40,6 +39,8 @@ then
         make clean
         CACHES="--systemc-cache --cacheline_size=4"
     fi
+    
+    SYSC_MAKE_CMD+="WORD_SIZE=4 "
 else
     MACHINE_TYPE=VExpress_EMM64
     ISA=aarch64
@@ -56,6 +57,8 @@ else
         make clean
         CACHES="--systemc-cache --cacheline_size=8"
     fi
+    
+    SYSC_MAKE_CMD+="WORD_SIZE=8 "  
 fi 
 
 
@@ -74,10 +77,9 @@ fi
 
 if [ $CACHES_MODE -gt 2 ]; then
     if [ $CACHES_MODE -eq 4 ]; then
-        make NUM_CPUS=$NUM_CPUS L2_CACHE=1
-    else
-        make NUM_CPUS=$NUM_CPUS
+        SYSC_MAKE_CMD+="L2_CACHE=1 "
     fi
+    ${SYSC_MAKE_CMD}
     ./gem5.opt.sc m5out/config.ini -o 2147483648
 fi
 
