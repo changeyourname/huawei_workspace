@@ -62,13 +62,7 @@ class AmbaPioDevice(BasicPioDevice):
     abstract = True
     cxx_header = "dev/arm/amba_device.hh"
     amba_id = Param.UInt32("ID of AMBA device for kernel detection")
-    
 
-class SysC_CacheMonitor(BasicPioDevice):
-    type = 'SysC_CacheMonitor'
-    cxx_header = "dev/arm/sysc_cache_monitor.hh"
-    
-    cache = Param.SysC_Cache(Parent.any, "sysc cache to monitor")
 
 class AmbaIntDevice(AmbaPioDevice):
     type = 'AmbaIntDevice'

@@ -37,12 +37,9 @@
  * Authors: Thomas Grass
  *          Andreas Hansson
  */
- 
-//TODO: remove extra functions and logic
 
 #include "mem/sysc_cache.hh"
-#include "sim/system.hh"
-#include "cpu/thread_context.hh"
+//#include "cpu/thread_context.hh"
 #include "cpu/base.hh"
 
 
@@ -52,7 +49,7 @@ std::map<std::string, SysC_Cache::Handler *>
 AddrRangeList
 SysC_Cache::SPort::getAddrRanges() const
 {
-    return owner.addrRanges;
+    return owner.getAddrRanges();
 }
 
 
@@ -61,10 +58,8 @@ SysC_Cache::SysC_Cache(Params* params)
     : MemObject(params),
       memPort(name() + "-memPort", *this),
       extPort(NULL),
-      portName(params->name + ".extPort"),
-      portType(params->port_type),
-      portData(params->port_data),
-      addrRanges(params->addr_ranges.begin(), params->addr_ranges.end())
+      cfgPort(NULL),
+      portData(params->port_data)
 {
 }
 
@@ -87,17 +82,33 @@ SysC_Cache::init()
 {
     // make sure both sides of the monitor are connected
     if (!memPort.isConnected()) {
-        fatal("SysC_Cache ports not connected on memory sides.\n");
+        fatal("SysC_Cache not connected on memory side.\n");
     }
     
     if (!extPort) {
-        fatal("SysC_Cache %s: externalPort not set!\n", name());
+        fatal("SysC_Cache %s: extPort not set!\n", name());
     } else if (!extPort->isConnected()) {
-        fatal("SysC_Cache %s is unconnected\n", name());        
+        fatal("SysC_Cache %s is unconnected on cpu side\n", name());        
     } else {
         extPort->sendRangeChange();
     }
+    
+    // creating cfgPort!!    
+    auto handlerIter = portHandlers.find("tlm");
+    if (handlerIter == portHandlers.end()) {
+        fatal("Can't find port handler type '%s'\n", "tlm");
+    }
+    cfgPort = portHandlers["tlm"]->getExternalPort(
+                                                    name() + "-cfgPort",
+                                                    *this,
+                                                    portData + "_cfgPort"
+                                                  );
+    if (!cfgPort) {
+        fatal("%s: Can't find external port type: %s"
+            " port_data: '%s'\n", name()+"-extPort", "tlm", portData+"_cfgPort");            
+    }
 }
+
 
 
 BaseMasterPort &
@@ -115,17 +126,18 @@ SysC_Cache::getSlavePort(const std::string &if_name, PortID idx)
 {
     if (if_name == "extPort") {
         if (!extPort) {
-            auto handlerIter = portHandlers.find(portType);
-            
+            auto handlerIter = portHandlers.find("tlm");            
             if (handlerIter == portHandlers.end()) {
-                fatal("Can't find port handler type '%s'\n", portType);
-            }   
-            
-            extPort = portHandlers[portType]->getExternalPort(portName, *this, portData);
-            
+                fatal("Can't find port handler type '%s'\n", "tlm");
+            }               
+            extPort = portHandlers["tlm"]->getExternalPort(
+                                                            name()+"-extPort", 
+                                                            *this, 
+                                                            portData+"_extPort"
+                                                          );            
             if (!extPort) {
                 fatal("%s: Can't find external port type: %s"
-                    " port_data: '%s'\n", portName, portType, portData);
+                    " port_data: '%s'\n", name()+"-extPort", "tlm", portData+"_extPort");
             }
         }
         return *extPort;
@@ -228,18 +240,9 @@ SysC_Cache::recvRangeChange()
 }
 
 
-
-
-void 
-SysC_Cache::handleLockErasure(ContextID ctx_id) 
-{
-    ThreadContext* ctx = system->getThreadContext(ctx_id);
-    ctx->getCpuPtr()->wakeup(ctx->threadId());    
-}
-
 unsigned long long
 SysC_Cache::readReg(uint64_t addr) {
-    return extPort->readReg(addr);
+    return cfgPort->readReg(addr);
 }
 
 

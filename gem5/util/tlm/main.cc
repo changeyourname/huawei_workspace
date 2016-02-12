@@ -307,9 +307,13 @@ sc_main(int argc, char **argv)
 
 #ifdef NUM_CPUS
     cache *icache_0;
-    Gem5SystemC::sc_transactor *gem5_icache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
-                                                (sc_core::sc_find_object("gem5.icache_0"));
-    if (gem5_icache_0) {     
+    Gem5SystemC::sc_transactor *gem5_icache0_extPort = 
+            dynamic_cast< Gem5SystemC::sc_transactor * >
+                                        (sc_core::sc_find_object("gem5.icache0_extPort"));
+    Gem5SystemC::sc_transactor *gem5_icache0_cfgPort = 
+            dynamic_cast< Gem5SystemC::sc_transactor * >
+                                        (sc_core::sc_find_object("gem5.icache0_cfgPort"));                                                                                
+    if (gem5_icache0_extPort && gem5_icache0_cfgPort) {     
         icache_0 = new cache("icache_0", 
                              0, 
                              specs, 
@@ -322,16 +326,21 @@ sc_main(int argc, char **argv)
         icache_0->set_delays(1, 1, 1);                             
         icache_0->do_logging();        
                              
-        icache_0->m_tsocket_d[0].bind(*gem5_icache_0);
+        icache_0->m_tsocket_d[0].bind(*gem5_icache0_extPort);
+        icache_0->m_cfgsocket->bind(*gem5_icache0_cfgPort);
     } else {
-        SC_REPORT_FATAL("sc_main", "gem5.icache_0 not found");
+        SC_REPORT_FATAL("sc_main", "gem5.icache0_Ports not found");
         std::exit(EXIT_FAILURE);
-    }         
+    }
 
     cache *dcache_0;                                                
-    Gem5SystemC::sc_transactor *gem5_dcache_0 = dynamic_cast<Gem5SystemC::sc_transactor *>
-                                                (sc_core::sc_find_object("gem5.dcache_0")); 
-    if (gem5_dcache_0) {                                        
+    Gem5SystemC::sc_transactor *gem5_dcache0_extPort = 
+                dynamic_cast< Gem5SystemC::sc_transactor * >
+                                        (sc_core::sc_find_object("gem5.dcache0_extPort")); 
+    Gem5SystemC::sc_transactor *gem5_dcache0_cfgPort = 
+            dynamic_cast< Gem5SystemC::sc_transactor * >
+                                        (sc_core::sc_find_object("gem5.dcache0_cfgPort"));                                         
+    if (gem5_dcache0_extPort && gem5_dcache0_cfgPort) {                                        
         dcache_0 = new cache("dcache_0", 
                              1, 
                              specs, 
@@ -344,9 +353,10 @@ sc_main(int argc, char **argv)
         dcache_0->set_delays(1, 1, 1);                             
         dcache_0->do_logging();
                              
-        dcache_0->m_tsocket_d[0].bind(*gem5_dcache_0);  
+        dcache_0->m_tsocket_d[0].bind(*gem5_dcache0_extPort);  
+        dcache_0->m_cfgsocket->bind(*gem5_dcache0_cfgPort);
     } else {        
-        SC_REPORT_FATAL("sc_main", "gem5.dcache_0 not found");
+        SC_REPORT_FATAL("sc_main", "gem5.dcache0_Ports not found");
         std::exit(EXIT_FAILURE);        
     }
     
@@ -556,33 +566,17 @@ sc_main(int argc, char **argv)
     
 #ifdef NUM_CPUS
     // cleaning  up heap-allocated stuff!!
-    if (gem5_icache_0) {
-        delete icache_0;
-    }
-    if (gem5_dcache_0) {
-        delete dcache_0;
-    }
+    delete icache_0;
+    delete dcache_0;
     
     #if NUM_CPUS>=2
-    if (gem5_icache_1) {
-        delete icache_1;
-    }
-    if (gem5_dcache_1) {
-        delete dcache_1;
-    }
+    delete icache_1;    
+    delete dcache_1;
     #if NUM_CPUS==4
-    if (gem5_icache_2) {
-        delete icache_2;
-    }
-    if (gem5_dcache_2) {
-        delete dcache_2;
-    }
-    if (gem5_icache_3) {
-        delete icache_3;
-    }
-    if (gem5_dcache_3) {
-        delete dcache_3;
-    }
+    delete icache_2;
+    delete dcache_2;
+    delete icache_3;
+    delete dcache_3;
     #endif
     #endif    
 #endif    

@@ -103,6 +103,7 @@ public:
 	tlm_utils::simple_initiator_socket< cache > *m_isocket_u;	// in upstream direction
 	tlm_utils::simple_target_socket< cache > *m_tsocket_d;		// in downstream direction
 	tlm_utils::simple_target_socket< cache > *m_tsocket_u;		// in upstream direction
+	tlm_utils::simple_target_socket< cache > *m_cfgsocket;
 
 	cache(	        
             sc_core::sc_module_name name,  

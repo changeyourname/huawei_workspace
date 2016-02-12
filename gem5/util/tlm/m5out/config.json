@@ -86,41 +86,19 @@
         "symbolfile": "", 
         "readfile": "", 
         "have_large_asid_64": false, 
-        "dcache_mon_0": {
-            "name": "dcache_mon_0", 
-            "pio": {
-                "peer": "system.membus.master[6]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.dcache_0", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.dcache_mon_0", 
-            "pio_addr": 3489718272, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "phys_addr_range_64": 40, 
         "have_lpae": false, 
         "cxx_class": "LinuxArmSystem", 
         "load_offset": 2147483648, 
-        "icache_mon_0": {
-            "name": "icache_mon_0", 
-            "pio": {
-                "peer": "system.membus.master[5]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.icache_0", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
+        "vncserver": {
+            "name": "vncserver", 
+            "number": 0, 
+            "frame_capture": false, 
             "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.icache_mon_0", 
-            "pio_addr": 3489714176, 
-            "type": "SysC_CacheMonitor"
+            "cxx_class": "VncServer", 
+            "path": "system.vncserver", 
+            "type": "VncServer", 
+            "port": 5900
         }, 
         "multi_proc": true, 
         "early_kernel_symbols": false, 
@@ -1199,8 +1177,6 @@
                     "system.realview.gic.pio", 
                     "system.realview.vgic.pio", 
                     "system.realview.local_cpu_timer.pio", 
-                    "system.icache_mon_0.pio", 
-                    "system.dcache_mon_0.pio", 
                     "system.mem_ctrls.port"
                 ], 
                 "role": "MASTER"
@@ -1274,18 +1250,15 @@
             }, 
             "name": "dcache_0", 
             "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
             "extPort": {
                 "peer": "system.cpu.dcache_port", 
                 "role": "SLAVE"
             }, 
             "eventq_index": 0, 
-            "port_type": "tlm", 
             "cxx_class": "SysC_Cache", 
             "path": "system.dcache_0", 
             "type": "SysC_Cache", 
-            "port_data": "dcache_0"
+            "port_data": "dcache0"
         }, 
         "cpu_voltage_domain": {
             "name": "cpu_voltage_domain", 
@@ -1305,28 +1278,15 @@
             }, 
             "name": "icache_0", 
             "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
             "extPort": {
                 "peer": "system.cpu.icache_port", 
                 "role": "SLAVE"
             }, 
             "eventq_index": 0, 
-            "port_type": "tlm", 
             "cxx_class": "SysC_Cache", 
             "path": "system.icache_0", 
             "type": "SysC_Cache", 
-            "port_data": "icache_0"
-        }, 
-        "vncserver": {
-            "name": "vncserver", 
-            "number": 0, 
-            "frame_capture": false, 
-            "eventq_index": 0, 
-            "cxx_class": "VncServer", 
-            "path": "system.vncserver", 
-            "type": "VncServer", 
-            "port": 5900
+            "port_data": "icache0"
         }, 
         "terminal": {
             "name": "terminal", 
@@ -1628,7 +1588,7 @@
                 "null": false, 
                 "type": "SimpleMemory", 
                 "port": {
-                    "peer": "system.membus.master[7]", 
+                    "peer": "system.membus.master[5]", 
                     "role": "SLAVE"
                 }, 
                 "in_addr_map": true

@@ -41,6 +41,8 @@
 #include "sc_ext.hh"
 #include "sc_mm.hh"
 #include "sc_port.hh"
+#include "mem/packet.hh"
+#include "mem/packet_access.hh"
 
 namespace Gem5SystemC
 {
@@ -92,7 +94,17 @@ sc_transactor::recvAtomic(PacketPtr packet)
     if (addr >= MEM_BASE && addr < (MEM_BASE + MEM_SIZE)) {
         to_SysC_Cache(packet);
     }         
-    owner.recvAtomic(packet);
+    
+    if (addr >= CACHE_REGSPACE_BASE && addr <(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
+        if (packet->getSize() == 4) {
+            packet->set<uint32_t>(owner.readReg(packet->getAddr()));
+        } else if (packet->getSize() == 8) {
+            packet->set<uint64_t>(owner.readReg(packet->getAddr()));         
+        }
+       packet->makeAtomicResponse();                
+    } else {
+        owner.recvAtomic(packet);
+    }
 }
 
 /**
@@ -152,20 +164,21 @@ sc_transactor::recvTimingReq(PacketPtr packet)
 // send request to systemc cache
 void
 sc_transactor::to_SysC_Cache(PacketPtr packet) {   
-    CAUGHT_UP;
+    CAUGHT_UP;    
     sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
     /* Prepare the transaction */
     tlm::tlm_generic_payload *trans = mm.allocate();
     trans->acquire();
-    packet2payload(packet, *trans);
     /* Attach the packet pointer to the TLM transaction to keep track */
     gem5Extension* extension = new gem5Extension(packet);
     trans->set_auto_extension(extension);    
- 
+    packet2payload(packet, *trans);     
+    
     iSocket->b_transport(*trans, delay); 
-    assert(trans->get_response_status() == tlm::TLM_OK_RESPONSE);                           
-    trans->release();            
+    assert(trans->get_response_status() == tlm::TLM_OK_RESPONSE);
     packet->cacheDelay = delay.value();
+
+    trans->release();                 
 }
 
 void

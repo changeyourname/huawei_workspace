@@ -215,67 +215,5 @@ AEL login: root
 BusyBox v1.15.3 (2010-05-07 01:27:07 BST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
-# ls
-[1;34mgem5_ARM_SW_dev[0m  [1;32mstartup[0m
-# cd gem# cd gem5_ARM_SW_dev/[J                   ./str art# ./startup [J
-random: nonblocking pool is initialized
-# cdg    gem# cd gem5_ARM_SW_dev/[J
-# ls
-[1;34marmv7[0m     [1;34marmv8[0m     [1;34mllcbench[0m  [1;34mtest[0m
-# cd llcb# cd llcbench/[J
-# ls
-[0;0mCHANGES[0m     [0;0mREADME[0m      [1;34mconf[0m        [0;0mllcbench.h[0m  [1;36msys.def[0m     [1;34mwww[0m
-[0;0mCOPYING[0m     [1;34mblasbench[0m   [1;34mdoc[0m         [1;34mmisc[0m        [0;0mtimer.c[0m
-[0;0mMakefile[0m    [1;34mcachebench[0m  [0;0mflushall.c[0m  [1;34mmpbench[0m     [0;0muser.def[0m
-# cd cacheben# cd cachebench/[J
-# / ./cace heb# ./cachebench[J
-
-# # ./cachebench[J -r
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-256		7.692308
-384		7.216495
-512		6.976745
-768		6.735751
-
-# # ./cachebench -r[J -N
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-256		7.692308
-384		2.061856
-512		1.550388
-768		2.072539
-1024		1.556420
-1536		2.077922
-2048		1.559454
-3072		2.080624
-4096		1.560976
-6144		2.081978
-8192		1.561737
-12288		2.082655
-16384		1.562119
-24576		2.082994
-32768		1.635543
-49152		2.229636
-65536		2.477876
-98304		4.325182
-131072		6.258965
-196608		6.255976
-262144		6.254482
-393216		6.252988
-524288		6.252241
-786432		6.251494
-1048576		6.251121
-1572864		6.239473
-2097152		6.250751
-3145728		6.250501
-4194304		6.253529
-6291456		6.252112
-
-# [H# [J
+# ./startup
+# devmeme  0xd000d000

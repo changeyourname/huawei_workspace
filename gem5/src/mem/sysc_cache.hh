@@ -47,8 +47,6 @@
 
 // TODO: documentation!!
 
-class System;
-
 class SysC_Cache : public MemObject
 {
 
@@ -88,11 +86,10 @@ class SysC_Cache : public MemObject
 
         ~SPort() { }
 
-        /** Any or all of recv... can be overloaded to provide the port's
-         *  functionality */
-
         AddrRangeList getAddrRanges() const;   
-        virtual unsigned long long readReg(uint64_t addr) {return 0;}             
+        virtual unsigned long long readReg(uint64_t addr) {return 0;}      
+        /** Any or all of recv... can be overloaded to provide the port's
+         *  functionality */       
     };        
     
     
@@ -182,6 +179,9 @@ class SysC_Cache : public MemObject
     /** Instance of master port, facing the memory side */
     MPort memPort;  
     
+    SPort *extPort;  
+    SPort *cfgPort;    
+    
     
 
     void recvFunctional(PacketPtr pkt);
@@ -214,24 +214,9 @@ class SysC_Cache : public MemObject
     
     void handleLockErasure(ContextID ctx_id);
     
-    unsigned long long readReg(uint64_t addr);    
+    unsigned long long readReg(uint64_t addr);          
     
-  protected:
-    System *system;
-      
-    SPort *extPort;  
-    /** Name of the bound port.  This will be name() + ".port" */
-    std::string portName;
-
-    /** Key to select a port handler */
-    std::string portType;
-
-    /** Handler-specific port configuration */
     std::string portData;
-
-    /** The Range of addresses supported by the devices on the external
-     *  side of this port */
-    AddrRangeList addrRanges;
     
     /** Registered handlers.  Handlers are chosen using the port_type
      *  parameter on ExternalSlaves.  port_types form a global namespace

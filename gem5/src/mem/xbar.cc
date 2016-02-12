@@ -62,7 +62,7 @@ BaseXBar::BaseXBar(const BaseXBarParams *p)
       width(p->width),
       gotAddrRanges(p->port_default_connection_count +
                           p->port_master_connection_count, false),
-      gotAllAddrRanges(false), defaultPortID(InvalidPortID),// hookID(InvalidPortID),
+      gotAllAddrRanges(false), defaultPortID(InvalidPortID),
       useDefaultRange(p->use_default_range)
 {}
 
