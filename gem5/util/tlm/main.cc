@@ -515,11 +515,15 @@ sc_main(int argc, char **argv)
     specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 16;    
     cache *l2cache;
+    
+    Gem5SystemC::sc_transactor *gem5_l2cache_cfgPort = 
+            dynamic_cast< Gem5SystemC::sc_transactor * >
+                                        (sc_core::sc_find_object("gem5.l2cache_cfgPort"));     
     l2cache = new cache("l2cache", 
                          8, 
                          specs, 
                          2, 
-                         0xD0015000
+                         0xD000F000
                          #ifdef CACHE_DEBUG
                          , "log/l2cache.log"
                          #endif
@@ -527,6 +531,7 @@ sc_main(int argc, char **argv)
     l2cache->set_delays(5, 10, 10);
     l2cache->do_logging();
     
+    l2cache->m_cfgsocket->bind(*gem5_l2cache_cfgPort);
     l2cache->m_tsocket_d[0].bind(*(icache_0->m_isocket_d));
     l2cache->m_tsocket_d[1].bind(*(dcache_0->m_isocket_d));
     l2cache->m_isocket_u[0].bind(*(icache_0->m_tsocket_u));

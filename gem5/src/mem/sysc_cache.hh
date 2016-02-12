@@ -44,6 +44,7 @@
 #include "mem/mem_object.hh"
 #include "params/SysC_Cache.hh"
 
+#define CACHE_REGS_SIZE 4096 
 
 // TODO: documentation!!
 
@@ -227,6 +228,7 @@ class SysC_Cache : public MemObject
     uint64_t reg_base;
     
     bool regSpace(uint64_t addr);
+    bool first_level;
 };
 
 #endif //__MEM_COMM_MONITOR_HH__

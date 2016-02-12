@@ -94,7 +94,8 @@ def config_cache(options, system):
     if options.memchecker:
         system.memchecker = MemChecker()    
 
-    cache_reg_base = 0xd000d000
+    if options.systemc_cache:
+        cache_reg_base = 0xd000d000
         
     for i in xrange(options.num_cpus):
         if options.caches:
@@ -176,6 +177,12 @@ def config_cache(options, system):
                 system.cpu[i].connectUncachedPorts(system.membus)
             else:
                 system.cpu[i].connectAllPorts(system.membus)           
+    
+    system.l2cache = SysC_Cache(
+                                    port_data = "l2cache", 
+                                    reg_base = cache_reg_base,
+                                    first_level = False
+                               )
 
     return system
 

@@ -60,7 +60,8 @@ SysC_Cache::SysC_Cache(Params* params)
       extPort(NULL),
       cfgPort(NULL),
       portData(params->port_data),
-      reg_base(params->reg_base)
+      reg_base(params->reg_base),
+      first_level(params->first_level)
 {
 }
 
@@ -82,18 +83,19 @@ void
 SysC_Cache::init()
 {
     // make sure both sides of the monitor are connected
-    if (!memPort.isConnected()) {
-        fatal("SysC_Cache not connected on memory side.\n");
+    if (first_level) {
+        if (!memPort.isConnected()) {
+            fatal("SysC_Cache %s not connected on memory side.\n", name());
+        }
+        
+        if (!extPort) {
+            fatal("SysC_Cache %s: extPort not set!\n", name());
+        } else if (!extPort->isConnected()) {
+            fatal("SysC_Cache %s is unconnected on cpu side\n", name());        
+        } else {
+            extPort->sendRangeChange();
+        }
     }
-    
-    if (!extPort) {
-        fatal("SysC_Cache %s: extPort not set!\n", name());
-    } else if (!extPort->isConnected()) {
-        fatal("SysC_Cache %s is unconnected on cpu side\n", name());        
-    } else {
-        extPort->sendRangeChange();
-    }
-    
     // creating cfgPort!!    
     auto handlerIter = portHandlers.find("tlm");
     if (handlerIter == portHandlers.end()) {
@@ -250,8 +252,7 @@ SysC_Cache::readReg(uint64_t addr) {
 
 bool
 SysC_Cache::regSpace(uint64_t addr) {
-    //TODO: make 4096 parametrizablle
-    if (addr >= reg_base && addr < (reg_base + 4096)) {
+    if (addr >= reg_base && addr < (reg_base + CACHE_REGS_SIZE)) {
         return true;
     } else {
         return false;

@@ -215,12 +215,16 @@ AEL login: root
 BusyBox v1.15.3 (2010-05-07 01:27:07 BST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
-# cd gem      ./startup
-# devmem 0xd00random: nonblocking pool is initialized
-0d000
-0x0A7852B7
-# # devmem 0xd000d000[J000 e000000
-0x040E39D0
-# # devmem 0xd000e000[J 8
-0x000B7419
-# # devmem 0xd000e008[J c
+# ./gem5
+-sh: ./gem5: not found
+# ./startup
+# random: nonblocking pool is initialized
+
+# 
+# devmem 0xd000d000
+0x0B6BF617
+# # devmem 0xd000d000[Jd000 e000000
+0x0453FFBA
+# # devmem 0xd000e000[J# devmem 0xd000d000[J# devmem 0xd000e000[J000 f000000
+0x0022F490
+# 

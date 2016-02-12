@@ -55,6 +55,7 @@ class SysC_Cache(MemObject):
         ' handler (in a format specific to the handler) to describe how'
         ' the port should be bound/bindable/discoverable')
     reg_base = Param.UInt64("Registers base-address")
+    first_level = Param.Bool(True, "True if this is first level cache")
 
 
 
