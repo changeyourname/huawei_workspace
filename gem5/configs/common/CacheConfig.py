@@ -94,6 +94,7 @@ def config_cache(options, system):
     if options.memchecker:
         system.memchecker = MemChecker()    
 
+    cache_reg_base = 0xd000d000
         
     for i in xrange(options.num_cpus):
         if options.caches:
@@ -156,12 +157,14 @@ def config_cache(options, system):
                 temp = ['i', 'd']
                 
                 exec("system.%scache_%d = SysC_Cache(\
-                                                       port_data = \"%scache%d\"\
-                                                    )" % (temp[j], i, temp[j], i))
+                                                       port_data = \"%scache%d\",\
+                                                       reg_base = %d\
+                                                    )" % (temp[j], i, temp[j], i, cache_reg_base))
                 exec("system.cpu[%d].%scache_port = system.%scache_%d.extPort" 
                      % (i, temp[j], temp[j], i))
                 exec("system.%scache_%d.memPort = system.membus.slave" % (temp[j], i))                                                                        
                 
+                cache_reg_base = cache_reg_base + 4096
 
 
 

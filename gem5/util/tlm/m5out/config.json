@@ -1250,6 +1250,7 @@
             }, 
             "name": "dcache_0", 
             "clk_domain": "system.clk_domain", 
+            "reg_base": 3489718272, 
             "extPort": {
                 "peer": "system.cpu.dcache_port", 
                 "role": "SLAVE"
@@ -1278,6 +1279,7 @@
             }, 
             "name": "icache_0", 
             "clk_domain": "system.clk_domain", 
+            "reg_base": 3489714176, 
             "extPort": {
                 "peer": "system.cpu.icache_port", 
                 "role": "SLAVE"

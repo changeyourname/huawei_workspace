@@ -47,6 +47,9 @@
 namespace Gem5SystemC
 {
 
+
+std::vector<SysC_Cache *> sc_transactor::owners;
+
 /**
  * Instantiate a tlm memory manager that takes care about all the
  * tlm transactions in the system
@@ -96,12 +99,17 @@ sc_transactor::recvAtomic(PacketPtr packet)
     }         
     
     if (addr >= CACHE_REGSPACE_BASE && addr <(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
-        if (packet->getSize() == 4) {
-            packet->set<uint32_t>(owner.readReg(packet->getAddr()));
-        } else if (packet->getSize() == 8) {
-            packet->set<uint64_t>(owner.readReg(packet->getAddr()));         
-        }
-       packet->makeAtomicResponse();                
+        for (int i=0; i<owners.size(); i++) {
+            if (owners[i]->regSpace(packet->getAddr())) {
+                if (packet->getSize() == 4) {
+                    packet->set<uint32_t>((uint32_t)owners[i]->readReg(packet->getAddr()));
+                } else if (packet->getSize() == 8) {
+                    packet->set<uint64_t>((uint64_t)owners[i]->readReg(packet->getAddr()));
+                }
+                packet->makeAtomicResponse();
+                break;
+            }
+        }        
     } else {
         owner.recvAtomic(packet);
     }
@@ -282,6 +290,8 @@ sc_transactor::sc_transactor(const std::string &name_,
     blockingResponse(NULL)
 {
     m_export.bind(*this);
+    
+    owners.push_back(&(this->owner));
 }
 
 class sc_transactorHandler : public SysC_Cache::Handler

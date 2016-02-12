@@ -59,7 +59,8 @@ SysC_Cache::SysC_Cache(Params* params)
       memPort(name() + "-memPort", *this),
       extPort(NULL),
       cfgPort(NULL),
-      portData(params->port_data)
+      portData(params->port_data),
+      reg_base(params->reg_base)
 {
 }
 
@@ -247,7 +248,15 @@ SysC_Cache::readReg(uint64_t addr) {
 
 
 
-
+bool
+SysC_Cache::regSpace(uint64_t addr) {
+    //TODO: make 4096 parametrizablle
+    if (addr >= reg_base && addr < (reg_base + 4096)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 

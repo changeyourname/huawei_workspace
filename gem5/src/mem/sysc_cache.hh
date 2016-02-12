@@ -223,6 +223,10 @@ class SysC_Cache : public MemObject
      *  across the simulation and so handlers are registered into a global
      *  structure */
     static std::map<std::string, Handler *> portHandlers;   
+    
+    uint64_t reg_base;
+    
+    bool regSpace(uint64_t addr);
 };
 
 #endif //__MEM_COMM_MONITOR_HH__

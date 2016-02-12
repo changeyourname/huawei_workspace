@@ -61,6 +61,8 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
         public SysC_Cache::SPort
 {
   public:
+    static std::vector<SysC_Cache *> owners;
+  
     sc_transactor &iSocket;
 
     /**

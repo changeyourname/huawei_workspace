@@ -54,6 +54,7 @@ class SysC_Cache(MemObject):
     port_data = Param.String('stub', 'A string to pass to the port'
         ' handler (in a format specific to the handler) to describe how'
         ' the port should be bound/bindable/discoverable')
+    reg_base = Param.UInt64("Registers base-address")
 
 
 
