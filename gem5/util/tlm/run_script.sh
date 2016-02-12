@@ -1,15 +1,15 @@
 #!/bin/bash
 
-NUM_CPUS=4              # 1/2/4
+NUM_CPUS=1              # 1/2/4
 
 ARM_SYSTEM="armv7"      # "armv7"; "armv8"
 
 CACHES_MODE=4           # 0->no cache; 1->gem5 L1caches; 2->gem5 L1+L2caches; 
                         # 3->SystemC L1caches; 4->SystemC L1+L2caches
                     
-GEM5_BINARY=gem5.opt    # gem5.opt; gem5.fast
+GEM5_BINARY=gem5.fast    # gem5.opt; gem5.fast
 
-CPU_TYPE=timing         # timing; atomic
+CPU_TYPE=atomic         # timing; atomic
 
 DISK_IMAGE_TYPE=0       # 0->minimal; 1->ubuntu
 
@@ -17,10 +17,9 @@ DISK_IMAGE_TYPE=0       # 0->minimal; 1->ubuntu
 
 
 
+
+
 SYSC_MAKE_CMD="make NUM_CPUS=${NUM_CPUS} "
-
-
-
 
 if [ "$ARM_SYSTEM" = "armv7" ]; 
 then

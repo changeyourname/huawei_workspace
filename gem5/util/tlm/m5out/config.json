@@ -84,26 +84,6 @@
             "type": "Bridge"
         }, 
         "symbolfile": "", 
-        "dcache_1": {
-            "memPort": {
-                "peer": "system.membus.slave[8]", 
-                "role": "MASTER"
-            }, 
-            "name": "dcache_1", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu1.dcache_port", 
-                "role": "SLAVE"
-            }, 
-            "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.dcache_1", 
-            "type": "SysC_Cache", 
-            "port_data": "dcache_1"
-        }, 
         "readfile": "", 
         "have_large_asid_64": false, 
         "dcache_mon_0": {
@@ -122,74 +102,10 @@
             "pio_addr": 3489718272, 
             "type": "SysC_CacheMonitor"
         }, 
-        "dcache_mon_1": {
-            "name": "dcache_mon_1", 
-            "pio": {
-                "peer": "system.membus.master[8]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.dcache_1", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.dcache_mon_1", 
-            "pio_addr": 3489726464, 
-            "type": "SysC_CacheMonitor"
-        }, 
-        "dcache_mon_2": {
-            "name": "dcache_mon_2", 
-            "pio": {
-                "peer": "system.membus.master[10]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.dcache_2", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.dcache_mon_2", 
-            "pio_addr": 3489734656, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "phys_addr_range_64": 40, 
         "have_lpae": false, 
         "cxx_class": "LinuxArmSystem", 
-        "icache_mon_2": {
-            "name": "icache_mon_2", 
-            "pio": {
-                "peer": "system.membus.master[9]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.icache_2", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.icache_mon_2", 
-            "pio_addr": 3489730560, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "load_offset": 2147483648, 
-        "icache_mon_1": {
-            "name": "icache_mon_1", 
-            "pio": {
-                "peer": "system.membus.master[7]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.icache_1", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.icache_mon_1", 
-            "pio_addr": 3489722368, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "icache_mon_0": {
             "name": "icache_mon_0", 
             "pio": {
@@ -207,19 +123,9 @@
             "type": "SysC_CacheMonitor"
         }, 
         "multi_proc": true, 
-        "voltage_domain": {
-            "name": "voltage_domain", 
-            "eventq_index": 0, 
-            "voltage": [
-                "1.0"
-            ], 
-            "cxx_class": "VoltageDomain", 
-            "path": "system.voltage_domain", 
-            "type": "VoltageDomain"
-        }, 
         "early_kernel_symbols": false, 
         "panic_on_oops": false, 
-        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.4cpu.dtb", 
+        "dtb_filename": "/home/uzair/aarch-system-2014-10/binaries/vexpress.aarch32.ll_20131205.0-gem5.1cpu.dtb", 
         "panic_on_panic": false, 
         "enable_context_switch_stats_dump": false, 
         "work_begin_ckpt_count": 0, 
@@ -1250,20 +1156,8 @@
                     "system.iobridge.master", 
                     "system.icache_0.memPort", 
                     "system.dcache_0.memPort", 
-                    "system.cpu0.itb.walker.port", 
-                    "system.cpu0.dtb.walker.port", 
-                    "system.icache_1.memPort", 
-                    "system.dcache_1.memPort", 
-                    "system.cpu1.itb.walker.port", 
-                    "system.cpu1.dtb.walker.port", 
-                    "system.icache_2.memPort", 
-                    "system.dcache_2.memPort", 
-                    "system.cpu2.itb.walker.port", 
-                    "system.cpu2.dtb.walker.port", 
-                    "system.icache_3.memPort", 
-                    "system.dcache_3.memPort", 
-                    "system.cpu3.itb.walker.port", 
-                    "system.cpu3.dtb.walker.port"
+                    "system.cpu.itb.walker.port", 
+                    "system.cpu.dtb.walker.port"
                 ], 
                 "role": "SLAVE"
             }, 
@@ -1307,12 +1201,6 @@
                     "system.realview.local_cpu_timer.pio", 
                     "system.icache_mon_0.pio", 
                     "system.dcache_mon_0.pio", 
-                    "system.icache_mon_1.pio", 
-                    "system.dcache_mon_1.pio", 
-                    "system.icache_mon_2.pio", 
-                    "system.dcache_mon_2.pio", 
-                    "system.icache_mon_3.pio", 
-                    "system.dcache_mon_3.pio", 
                     "system.mem_ctrls.port"
                 ], 
                 "role": "MASTER"
@@ -1326,26 +1214,6 @@
             "frontend_latency": 3
         }, 
         "multi_thread": false, 
-        "dcache_3": {
-            "memPort": {
-                "peer": "system.membus.slave[16]", 
-                "role": "MASTER"
-            }, 
-            "name": "dcache_3", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu3.dcache_port", 
-                "role": "SLAVE"
-            }, 
-            "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.dcache_3", 
-            "type": "SysC_Cache", 
-            "port_data": "dcache_3"
-        }, 
         "eventq_index": 0, 
         "work_begin_cpu_id_exit": -1, 
         "dvfs_handler": {
@@ -1388,25 +1256,15 @@
             "resp_size": 16, 
             "type": "Bridge"
         }, 
-        "dcache_2": {
-            "memPort": {
-                "peer": "system.membus.slave[12]", 
-                "role": "MASTER"
-            }, 
-            "name": "dcache_2", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu2.dcache_port", 
-                "role": "SLAVE"
-            }, 
+        "voltage_domain": {
+            "name": "voltage_domain", 
             "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.dcache_2", 
-            "type": "SysC_Cache", 
-            "port_data": "dcache_2"
+            "voltage": [
+                "1.0"
+            ], 
+            "cxx_class": "VoltageDomain", 
+            "path": "system.voltage_domain", 
+            "type": "VoltageDomain"
         }, 
         "cache_line_size": 4, 
         "dcache_0": {
@@ -1419,7 +1277,7 @@
             "system": "system", 
             "addr_ranges": [], 
             "extPort": {
-                "peer": "system.cpu0.dcache_port", 
+                "peer": "system.cpu.dcache_port", 
                 "role": "SLAVE"
             }, 
             "eventq_index": 0, 
@@ -1450,7 +1308,7 @@
             "system": "system", 
             "addr_ranges": [], 
             "extPort": {
-                "peer": "system.cpu0.icache_port", 
+                "peer": "system.cpu.icache_port", 
                 "role": "SLAVE"
             }, 
             "eventq_index": 0, 
@@ -1460,65 +1318,15 @@
             "type": "SysC_Cache", 
             "port_data": "icache_0"
         }, 
-        "icache_1": {
-            "memPort": {
-                "peer": "system.membus.slave[7]", 
-                "role": "MASTER"
-            }, 
-            "name": "icache_1", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu1.icache_port", 
-                "role": "SLAVE"
-            }, 
+        "vncserver": {
+            "name": "vncserver", 
+            "number": 0, 
+            "frame_capture": false, 
             "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.icache_1", 
-            "type": "SysC_Cache", 
-            "port_data": "icache_1"
-        }, 
-        "icache_2": {
-            "memPort": {
-                "peer": "system.membus.slave[11]", 
-                "role": "MASTER"
-            }, 
-            "name": "icache_2", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu2.icache_port", 
-                "role": "SLAVE"
-            }, 
-            "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.icache_2", 
-            "type": "SysC_Cache", 
-            "port_data": "icache_2"
-        }, 
-        "icache_3": {
-            "memPort": {
-                "peer": "system.membus.slave[15]", 
-                "role": "MASTER"
-            }, 
-            "name": "icache_3", 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "addr_ranges": [], 
-            "extPort": {
-                "peer": "system.cpu3.icache_port", 
-                "role": "SLAVE"
-            }, 
-            "eventq_index": 0, 
-            "port_type": "tlm", 
-            "cxx_class": "SysC_Cache", 
-            "path": "system.icache_3", 
-            "type": "SysC_Cache", 
-            "port_data": "icache_3"
+            "cxx_class": "VncServer", 
+            "path": "system.vncserver", 
+            "type": "VncServer", 
+            "port": 5900
         }, 
         "terminal": {
             "name": "terminal", 
@@ -1548,7 +1356,7 @@
                         "sys": "system", 
                         "eventq_index": 0, 
                         "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu0.itb.walker", 
+                        "path": "system.cpu.itb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
                             "peer": "system.membus.slave[5]", 
@@ -1556,14 +1364,14 @@
                         }, 
                         "num_squash_per_cycle": 2
                     }, 
-                    "path": "system.cpu0.itb", 
+                    "path": "system.cpu.itb", 
                     "type": "ArmTLB", 
                     "size": 64
                 }, 
-                "system": "system", 
+                "simulate_data_stalls": false, 
                 "istage2_mmu": {
                     "name": "istage2_mmu", 
-                    "tlb": "system.cpu0.itb", 
+                    "tlb": "system.cpu.itb", 
                     "sys": "system", 
                     "stage2_tlb": {
                         "name": "stage2_tlb", 
@@ -1577,30 +1385,33 @@
                             "sys": "system", 
                             "eventq_index": 0, 
                             "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu0.istage2_mmu.stage2_tlb.walker", 
+                            "path": "system.cpu.istage2_mmu.stage2_tlb.walker", 
                             "type": "ArmTableWalker", 
                             "num_squash_per_cycle": 2
                         }, 
-                        "path": "system.cpu0.istage2_mmu.stage2_tlb", 
+                        "path": "system.cpu.istage2_mmu.stage2_tlb", 
                         "type": "ArmTLB", 
                         "size": 32
                     }, 
                     "eventq_index": 0, 
                     "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu0.istage2_mmu", 
+                    "path": "system.cpu.istage2_mmu", 
                     "type": "ArmStage2MMU"
                 }, 
                 "function_trace": false, 
                 "do_checkpoint_insts": true, 
-                "cxx_class": "TimingSimpleCPU", 
+                "cxx_class": "AtomicSimpleCPU", 
                 "max_loads_all_threads": 0, 
+                "system": "system", 
                 "clk_domain": "system.cpu_clk_domain", 
                 "function_trace_start": 0, 
                 "cpu_id": 0, 
+                "width": 1, 
                 "checker": null, 
                 "eventq_index": 0, 
                 "do_quiesce": true, 
-                "type": "TimingSimpleCPU", 
+                "type": "AtomicSimpleCPU", 
+                "fastmem": false, 
                 "profile": 0, 
                 "icache_port": {
                     "peer": "system.icache_0.extPort", 
@@ -1609,7 +1420,7 @@
                 "interrupts": [
                     {
                         "eventq_index": 0, 
-                        "path": "system.cpu0.interrupts", 
+                        "path": "system.cpu.interrupts", 
                         "type": "ArmInterrupts", 
                         "name": "interrupts", 
                         "cxx_class": "ArmISA::Interrupts"
@@ -1623,7 +1434,7 @@
                 "max_insts_all_threads": 0, 
                 "dstage2_mmu": {
                     "name": "dstage2_mmu", 
-                    "tlb": "system.cpu0.dtb", 
+                    "tlb": "system.cpu.dtb", 
                     "sys": "system", 
                     "stage2_tlb": {
                         "name": "stage2_tlb", 
@@ -1637,24 +1448,24 @@
                             "sys": "system", 
                             "eventq_index": 0, 
                             "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu0.dstage2_mmu.stage2_tlb.walker", 
+                            "path": "system.cpu.dstage2_mmu.stage2_tlb.walker", 
                             "type": "ArmTableWalker", 
                             "num_squash_per_cycle": 2
                         }, 
-                        "path": "system.cpu0.dstage2_mmu.stage2_tlb", 
+                        "path": "system.cpu.dstage2_mmu.stage2_tlb", 
                         "type": "ArmTLB", 
                         "size": 32
                     }, 
                     "eventq_index": 0, 
                     "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu0.dstage2_mmu", 
+                    "path": "system.cpu.dstage2_mmu", 
                     "type": "ArmStage2MMU"
                 }, 
-                "path": "system.cpu0", 
+                "path": "system.cpu", 
                 "max_loads_any_thread": 0, 
                 "switched_out": false, 
                 "workload": [], 
-                "name": "cpu0", 
+                "name": "cpu", 
                 "dtb": {
                     "name": "dtb", 
                     "is_stage2": false, 
@@ -1667,7 +1478,7 @@
                         "sys": "system", 
                         "eventq_index": 0, 
                         "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu0.dtb.walker", 
+                        "path": "system.cpu.dtb.walker", 
                         "type": "ArmTableWalker", 
                         "port": {
                             "peer": "system.membus.slave[6]", 
@@ -1675,12 +1486,13 @@
                         }, 
                         "num_squash_per_cycle": 2
                     }, 
-                    "path": "system.cpu0.dtb", 
+                    "path": "system.cpu.dtb", 
                     "type": "ArmTLB", 
                     "size": 64
                 }, 
                 "simpoint_start_insts": [], 
                 "max_insts_any_thread": 0, 
+                "simulate_inst_stalls": false, 
                 "progress_interval": 0, 
                 "branchPred": null, 
                 "isa": [
@@ -1708,7 +1520,7 @@
                         "id_mmfr3": 34611729, 
                         "id_aa64mmfr0_el1": 15728642, 
                         "id_aa64dfr0_el1": 1052678, 
-                        "path": "system.cpu0.isa", 
+                        "path": "system.cpu.isa", 
                         "id_aa64isar0_el1": 0, 
                         "decoderFlavour": "Generic", 
                         "name": "isa", 
@@ -1721,589 +1533,7 @@
                 ], 
                 "tracer": {
                     "eventq_index": 0, 
-                    "path": "system.cpu0.tracer", 
-                    "type": "ExeTracer", 
-                    "name": "tracer", 
-                    "cxx_class": "Trace::ExeTracer"
-                }
-            }, 
-            {
-                "do_statistics_insts": true, 
-                "numThreads": 1, 
-                "itb": {
-                    "name": "itb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu1.itb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[9]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu1.itb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "system": "system", 
-                "istage2_mmu": {
-                    "name": "istage2_mmu", 
-                    "tlb": "system.cpu1.itb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu1.istage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu1.istage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu1.istage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "function_trace": false, 
-                "do_checkpoint_insts": true, 
-                "cxx_class": "TimingSimpleCPU", 
-                "max_loads_all_threads": 0, 
-                "clk_domain": "system.cpu_clk_domain", 
-                "function_trace_start": 0, 
-                "cpu_id": 1, 
-                "checker": null, 
-                "eventq_index": 0, 
-                "do_quiesce": true, 
-                "type": "TimingSimpleCPU", 
-                "profile": 0, 
-                "icache_port": {
-                    "peer": "system.icache_1.extPort", 
-                    "role": "MASTER"
-                }, 
-                "interrupts": [
-                    {
-                        "eventq_index": 0, 
-                        "path": "system.cpu1.interrupts", 
-                        "type": "ArmInterrupts", 
-                        "name": "interrupts", 
-                        "cxx_class": "ArmISA::Interrupts"
-                    }
-                ], 
-                "dcache_port": {
-                    "peer": "system.dcache_1.extPort", 
-                    "role": "MASTER"
-                }, 
-                "socket_id": 0, 
-                "max_insts_all_threads": 0, 
-                "dstage2_mmu": {
-                    "name": "dstage2_mmu", 
-                    "tlb": "system.cpu1.dtb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu1.dstage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu1.dstage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu1.dstage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "path": "system.cpu1", 
-                "max_loads_any_thread": 0, 
-                "switched_out": false, 
-                "workload": [], 
-                "name": "cpu1", 
-                "dtb": {
-                    "name": "dtb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu1.dtb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[10]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu1.dtb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "simpoint_start_insts": [], 
-                "max_insts_any_thread": 0, 
-                "progress_interval": 0, 
-                "branchPred": null, 
-                "isa": [
-                    {
-                        "pmu": null, 
-                        "id_pfr1": 4113, 
-                        "id_pfr0": 49, 
-                        "id_isar1": 34677009, 
-                        "id_isar0": 34607377, 
-                        "id_isar3": 17899825, 
-                        "id_isar2": 555950401, 
-                        "id_isar5": 0, 
-                        "id_isar4": 268501314, 
-                        "cxx_class": "ArmISA::ISA", 
-                        "id_aa64mmfr1_el1": 0, 
-                        "id_aa64pfr1_el1": 0, 
-                        "system": "system", 
-                        "eventq_index": 0, 
-                        "type": "ArmISA", 
-                        "id_aa64dfr1_el1": 0, 
-                        "fpsid": 1090793632, 
-                        "id_mmfr0": 270536963, 
-                        "id_mmfr1": 0, 
-                        "id_mmfr2": 19070976, 
-                        "id_mmfr3": 34611729, 
-                        "id_aa64mmfr0_el1": 15728642, 
-                        "id_aa64dfr0_el1": 1052678, 
-                        "path": "system.cpu1.isa", 
-                        "id_aa64isar0_el1": 0, 
-                        "decoderFlavour": "Generic", 
-                        "name": "isa", 
-                        "midr": 1091551472, 
-                        "id_aa64afr0_el1": 0, 
-                        "id_aa64isar1_el1": 0, 
-                        "id_aa64afr1_el1": 0, 
-                        "id_aa64pfr0_el1": 17
-                    }
-                ], 
-                "tracer": {
-                    "eventq_index": 0, 
-                    "path": "system.cpu1.tracer", 
-                    "type": "ExeTracer", 
-                    "name": "tracer", 
-                    "cxx_class": "Trace::ExeTracer"
-                }
-            }, 
-            {
-                "do_statistics_insts": true, 
-                "numThreads": 1, 
-                "itb": {
-                    "name": "itb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu2.itb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[13]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu2.itb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "system": "system", 
-                "istage2_mmu": {
-                    "name": "istage2_mmu", 
-                    "tlb": "system.cpu2.itb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu2.istage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu2.istage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu2.istage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "function_trace": false, 
-                "do_checkpoint_insts": true, 
-                "cxx_class": "TimingSimpleCPU", 
-                "max_loads_all_threads": 0, 
-                "clk_domain": "system.cpu_clk_domain", 
-                "function_trace_start": 0, 
-                "cpu_id": 2, 
-                "checker": null, 
-                "eventq_index": 0, 
-                "do_quiesce": true, 
-                "type": "TimingSimpleCPU", 
-                "profile": 0, 
-                "icache_port": {
-                    "peer": "system.icache_2.extPort", 
-                    "role": "MASTER"
-                }, 
-                "interrupts": [
-                    {
-                        "eventq_index": 0, 
-                        "path": "system.cpu2.interrupts", 
-                        "type": "ArmInterrupts", 
-                        "name": "interrupts", 
-                        "cxx_class": "ArmISA::Interrupts"
-                    }
-                ], 
-                "dcache_port": {
-                    "peer": "system.dcache_2.extPort", 
-                    "role": "MASTER"
-                }, 
-                "socket_id": 0, 
-                "max_insts_all_threads": 0, 
-                "dstage2_mmu": {
-                    "name": "dstage2_mmu", 
-                    "tlb": "system.cpu2.dtb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu2.dstage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu2.dstage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu2.dstage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "path": "system.cpu2", 
-                "max_loads_any_thread": 0, 
-                "switched_out": false, 
-                "workload": [], 
-                "name": "cpu2", 
-                "dtb": {
-                    "name": "dtb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu2.dtb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[14]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu2.dtb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "simpoint_start_insts": [], 
-                "max_insts_any_thread": 0, 
-                "progress_interval": 0, 
-                "branchPred": null, 
-                "isa": [
-                    {
-                        "pmu": null, 
-                        "id_pfr1": 4113, 
-                        "id_pfr0": 49, 
-                        "id_isar1": 34677009, 
-                        "id_isar0": 34607377, 
-                        "id_isar3": 17899825, 
-                        "id_isar2": 555950401, 
-                        "id_isar5": 0, 
-                        "id_isar4": 268501314, 
-                        "cxx_class": "ArmISA::ISA", 
-                        "id_aa64mmfr1_el1": 0, 
-                        "id_aa64pfr1_el1": 0, 
-                        "system": "system", 
-                        "eventq_index": 0, 
-                        "type": "ArmISA", 
-                        "id_aa64dfr1_el1": 0, 
-                        "fpsid": 1090793632, 
-                        "id_mmfr0": 270536963, 
-                        "id_mmfr1": 0, 
-                        "id_mmfr2": 19070976, 
-                        "id_mmfr3": 34611729, 
-                        "id_aa64mmfr0_el1": 15728642, 
-                        "id_aa64dfr0_el1": 1052678, 
-                        "path": "system.cpu2.isa", 
-                        "id_aa64isar0_el1": 0, 
-                        "decoderFlavour": "Generic", 
-                        "name": "isa", 
-                        "midr": 1091551472, 
-                        "id_aa64afr0_el1": 0, 
-                        "id_aa64isar1_el1": 0, 
-                        "id_aa64afr1_el1": 0, 
-                        "id_aa64pfr0_el1": 17
-                    }
-                ], 
-                "tracer": {
-                    "eventq_index": 0, 
-                    "path": "system.cpu2.tracer", 
-                    "type": "ExeTracer", 
-                    "name": "tracer", 
-                    "cxx_class": "Trace::ExeTracer"
-                }
-            }, 
-            {
-                "do_statistics_insts": true, 
-                "numThreads": 1, 
-                "itb": {
-                    "name": "itb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu3.itb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[17]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu3.itb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "system": "system", 
-                "istage2_mmu": {
-                    "name": "istage2_mmu", 
-                    "tlb": "system.cpu3.itb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu3.istage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu3.istage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu3.istage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "function_trace": false, 
-                "do_checkpoint_insts": true, 
-                "cxx_class": "TimingSimpleCPU", 
-                "max_loads_all_threads": 0, 
-                "clk_domain": "system.cpu_clk_domain", 
-                "function_trace_start": 0, 
-                "cpu_id": 3, 
-                "checker": null, 
-                "eventq_index": 0, 
-                "do_quiesce": true, 
-                "type": "TimingSimpleCPU", 
-                "profile": 0, 
-                "icache_port": {
-                    "peer": "system.icache_3.extPort", 
-                    "role": "MASTER"
-                }, 
-                "interrupts": [
-                    {
-                        "eventq_index": 0, 
-                        "path": "system.cpu3.interrupts", 
-                        "type": "ArmInterrupts", 
-                        "name": "interrupts", 
-                        "cxx_class": "ArmISA::Interrupts"
-                    }
-                ], 
-                "dcache_port": {
-                    "peer": "system.dcache_3.extPort", 
-                    "role": "MASTER"
-                }, 
-                "socket_id": 0, 
-                "max_insts_all_threads": 0, 
-                "dstage2_mmu": {
-                    "name": "dstage2_mmu", 
-                    "tlb": "system.cpu3.dtb", 
-                    "sys": "system", 
-                    "stage2_tlb": {
-                        "name": "stage2_tlb", 
-                        "is_stage2": true, 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TLB", 
-                        "walker": {
-                            "name": "walker", 
-                            "is_stage2": true, 
-                            "clk_domain": "system.cpu_clk_domain", 
-                            "sys": "system", 
-                            "eventq_index": 0, 
-                            "cxx_class": "ArmISA::TableWalker", 
-                            "path": "system.cpu3.dstage2_mmu.stage2_tlb.walker", 
-                            "type": "ArmTableWalker", 
-                            "num_squash_per_cycle": 2
-                        }, 
-                        "path": "system.cpu3.dstage2_mmu.stage2_tlb", 
-                        "type": "ArmTLB", 
-                        "size": 32
-                    }, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::Stage2MMU", 
-                    "path": "system.cpu3.dstage2_mmu", 
-                    "type": "ArmStage2MMU"
-                }, 
-                "path": "system.cpu3", 
-                "max_loads_any_thread": 0, 
-                "switched_out": false, 
-                "workload": [], 
-                "name": "cpu3", 
-                "dtb": {
-                    "name": "dtb", 
-                    "is_stage2": false, 
-                    "eventq_index": 0, 
-                    "cxx_class": "ArmISA::TLB", 
-                    "walker": {
-                        "name": "walker", 
-                        "is_stage2": false, 
-                        "clk_domain": "system.cpu_clk_domain", 
-                        "sys": "system", 
-                        "eventq_index": 0, 
-                        "cxx_class": "ArmISA::TableWalker", 
-                        "path": "system.cpu3.dtb.walker", 
-                        "type": "ArmTableWalker", 
-                        "port": {
-                            "peer": "system.membus.slave[18]", 
-                            "role": "MASTER"
-                        }, 
-                        "num_squash_per_cycle": 2
-                    }, 
-                    "path": "system.cpu3.dtb", 
-                    "type": "ArmTLB", 
-                    "size": 64
-                }, 
-                "simpoint_start_insts": [], 
-                "max_insts_any_thread": 0, 
-                "progress_interval": 0, 
-                "branchPred": null, 
-                "isa": [
-                    {
-                        "pmu": null, 
-                        "id_pfr1": 4113, 
-                        "id_pfr0": 49, 
-                        "id_isar1": 34677009, 
-                        "id_isar0": 34607377, 
-                        "id_isar3": 17899825, 
-                        "id_isar2": 555950401, 
-                        "id_isar5": 0, 
-                        "id_isar4": 268501314, 
-                        "cxx_class": "ArmISA::ISA", 
-                        "id_aa64mmfr1_el1": 0, 
-                        "id_aa64pfr1_el1": 0, 
-                        "system": "system", 
-                        "eventq_index": 0, 
-                        "type": "ArmISA", 
-                        "id_aa64dfr1_el1": 0, 
-                        "fpsid": 1090793632, 
-                        "id_mmfr0": 270536963, 
-                        "id_mmfr1": 0, 
-                        "id_mmfr2": 19070976, 
-                        "id_mmfr3": 34611729, 
-                        "id_aa64mmfr0_el1": 15728642, 
-                        "id_aa64dfr0_el1": 1052678, 
-                        "path": "system.cpu3.isa", 
-                        "id_aa64isar0_el1": 0, 
-                        "decoderFlavour": "Generic", 
-                        "name": "isa", 
-                        "midr": 1091551472, 
-                        "id_aa64afr0_el1": 0, 
-                        "id_aa64isar1_el1": 0, 
-                        "id_aa64afr1_el1": 0, 
-                        "id_aa64pfr0_el1": 17
-                    }
-                ], 
-                "tracer": {
-                    "eventq_index": 0, 
-                    "path": "system.cpu3.tracer", 
+                    "path": "system.cpu.tracer", 
                     "type": "ExeTracer", 
                     "name": "tracer", 
                     "cxx_class": "Trace::ExeTracer"
@@ -2359,7 +1589,7 @@
         }, 
         "work_end_ckpt_count": 0, 
         "systemc_caches": true, 
-        "mem_mode": "timing", 
+        "mem_mode": "atomic", 
         "name": "system", 
         "init_param": 0, 
         "system_port": {
@@ -2377,22 +1607,6 @@
             "type": "IntrControl"
         }, 
         "have_security": false, 
-        "dcache_mon_3": {
-            "name": "dcache_mon_3", 
-            "pio": {
-                "peer": "system.membus.master[12]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.dcache_3", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.dcache_mon_3", 
-            "pio_addr": 3489742848, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "atags_addr": 134217728, 
         "memories": [
             "system.mem_ctrls", 
@@ -2414,42 +1628,16 @@
                 "null": false, 
                 "type": "SimpleMemory", 
                 "port": {
-                    "peer": "system.membus.master[13]", 
+                    "peer": "system.membus.master[7]", 
                     "role": "SLAVE"
                 }, 
                 "in_addr_map": true
             }
         ], 
-        "icache_mon_3": {
-            "name": "icache_mon_3", 
-            "pio": {
-                "peer": "system.membus.master[11]", 
-                "role": "SLAVE"
-            }, 
-            "cache": "system.icache_3", 
-            "pio_latency": 100000, 
-            "clk_domain": "system.clk_domain", 
-            "system": "system", 
-            "eventq_index": 0, 
-            "cxx_class": "SysC_CacheMonitor", 
-            "path": "system.icache_mon_3", 
-            "pio_addr": 3489738752, 
-            "type": "SysC_CacheMonitor"
-        }, 
         "num_work_ids": 16, 
         "boot_loader": [
             "/home/uzair/aarch-system-2014-10/binaries/boot_emm.arm"
         ], 
-        "vncserver": {
-            "name": "vncserver", 
-            "number": 0, 
-            "frame_capture": false, 
-            "eventq_index": 0, 
-            "cxx_class": "VncServer", 
-            "path": "system.vncserver", 
-            "type": "VncServer", 
-            "port": 5900
-        }, 
         "exit_on_work_items": false
     }, 
     "time_sync_period": 100000000000, 

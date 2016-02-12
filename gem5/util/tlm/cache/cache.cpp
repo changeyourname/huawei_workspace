@@ -286,13 +286,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    m_current_way = current_way_orig;
 	    }	    	    
     } else if (req_addr>=m_cache_regspace_base && 
-                            req_addr<(m_cache_regspace_base + 8*2)) {
+                            req_addr<(m_cache_regspace_base + 8*2)) {                            
         // request accessing this cache registers
         // right now only 2 register each being 8B 
         // that's why 8*2 -> size in B in above conditional!!
-
-        // this has to be first level cache
-        assert(m_level == 1);
         
         tlm::tlm_command cmd = trans.get_command();
         // for now only support is provided to read this cahce reigsters
@@ -304,8 +301,31 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         assert(len==8);
         if (req_addr == m_cache_regspace_base) {
             memcpy(ptr, &m_access_register, len);
+//            printf("0x%08lx......access:%ld\r\n", req_addr, m_access_register);
+            
+/*            if (m_level == 1) {
+                tlm::tlm_generic_payload tmp_trans;
+                req_extension *tmp_ext = new req_extension();
+                tmp_ext->m_type = req_extension::NORMAL;            
+                uint64_t *data = new uint64_t();
+                sc_core::sc_time tmp_delay = sc_core::SC_ZERO_TIME;
+                
+                tmp_trans.set_extension(tmp_ext);
+                tmp_trans.set_read();
+                tmp_trans.set_address(0xD0015000);
+                tmp_trans.set_data_length(8);
+                tmp_trans.set_data_ptr((unsigned char *)data);
+                (*m_isocket_d)->b_transport(tmp_trans, tmp_delay);
+                assert(tmp_trans.get_response_status() == tlm::TLM_OK_RESPONSE);
+                
+                tmp_trans.clear_extension(tmp_ext);
+                delete tmp_ext;
+                delete data;
+                printf("\r\n");
+            }*/
         } else if (req_addr == m_cache_regspace_base + 8) {
             memcpy(ptr, &m_miss_register, len);
+//            printf("0x%08lx......miss:%ld\r\n", req_addr, m_miss_register);
         } else {
             assert(0);
         }
