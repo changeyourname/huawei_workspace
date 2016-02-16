@@ -24,6 +24,8 @@ class cache : public sc_core::sc_module {
 	public:
 		enum req_type {NORMAL, M_UPDATE, BACK_INVALIDATE, WB_UPDATE};
 		req_type m_type;
+		uint32_t core_id;
+		uint32_t coremask;
 		// for memory management
 		static std::vector< req_extension * > req_extension_clones;
 
@@ -47,6 +49,8 @@ class cache : public sc_core::sc_module {
 	    bool write_back;
 	    bool write_allocate;
 	    cache::eviction_policy evict_policy;
+	    uint32_t num_alloc_blocks;
+	    uint32_t CPU_id;
 	};
 		
 
@@ -73,6 +77,7 @@ private:
 	bool m_write_allocate;
 	eviction_policy m_evict_policy;
 	std::vector< std::vector< cache_block > > m_blocks;
+	std::vector< std::vector< uint32_t > > m_alloc_blocks_coremask;
 	FILE *m_fid;
 	bool m_log;
 	uint32_t m_level;
@@ -80,6 +85,7 @@ private:
 	uint64_t m_current_tag;
 	uint64_t m_current_blockAddr;
 	uint32_t m_current_way;
+	std::vector< uint32_t > m_current_ways_lookup;	
 	sc_core::sc_time *m_current_delay;
 	uint32_t m_id;
 	uint64_t m_cache_regspace_base;	
@@ -90,6 +96,7 @@ private:
 	sc_core::sc_time m_write_delay;
 	bool m_fake_back_invalidation;
 	uint32_t m_debug;
+	uint32_t m_CPU;
 
 	bool cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE);
 	uint32_t find_way_evict();
@@ -120,6 +127,10 @@ public:
 	void set_delays(uint32_t lookup, uint32_t read, uint32_t write);	
 };
 
+
+
+//TODO: for now alloc blocks for partitioned caches have to be fixed size..make them
+//      variable length if need be
 
 
 #endif /* CACHE_HPP_ */

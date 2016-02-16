@@ -94,11 +94,11 @@ Tick
 sc_transactor::recvAtomic(PacketPtr packet)
 {
     uint64_t addr = packet->getAddr();
-    if (addr >= MEM_BASE && addr < (MEM_BASE + MEM_SIZE)) {
+    if (addr>=MEM_BASE && addr<(MEM_BASE + MEM_SIZE)) {
         to_SysC_Cache(packet);
     }         
     
-    if (addr >= CACHE_REGSPACE_BASE && addr <(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
+    if (addr>=CACHE_REGSPACE_BASE && addr<(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
         for (int i=0; i<owners.size(); i++) {
             if (owners[i]->regSpace(packet->getAddr())) {
                 if (packet->getSize() == 4) {
@@ -163,10 +163,25 @@ bool
 sc_transactor::recvTimingReq(PacketPtr packet)
 {
     uint64_t addr = packet->getAddr();
-    if (addr >= MEM_BASE && addr < (MEM_BASE + MEM_SIZE)) {
+    if (addr>=MEM_BASE && addr<(MEM_BASE + MEM_SIZE)) {
         to_SysC_Cache(packet);
-    }
-    return owner.recvTimingReq(packet);
+    }         
+    
+    if (addr>=CACHE_REGSPACE_BASE && addr<(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
+        for (int i=0; i<owners.size(); i++) {
+            if (owners[i]->regSpace(packet->getAddr())) {
+                if (packet->getSize() == 4) {
+                    packet->set<uint32_t>((uint32_t)owners[i]->readReg(packet->getAddr()));
+                } else if (packet->getSize() == 8) {
+                    packet->set<uint64_t>((uint64_t)owners[i]->readReg(packet->getAddr()));
+                }
+                packet->makeAtomicResponse();
+                break;
+            }
+        }        
+    } else {
+        owner.recvTimingReq(packet);
+    }    
 }
 
 // send request to systemc cache

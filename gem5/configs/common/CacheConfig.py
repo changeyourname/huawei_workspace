@@ -178,11 +178,12 @@ def config_cache(options, system):
             else:
                 system.cpu[i].connectAllPorts(system.membus)           
     
-    system.l2cache = SysC_Cache(
-                                    port_data = "l2cache", 
-                                    reg_base = cache_reg_base,
-                                    first_level = False
-                               )
+    if options.systemc_cache:
+        system.l2cache = SysC_Cache(
+                                        port_data = "l2cache", 
+                                        reg_base = cache_reg_base,
+                                        first_level = False
+                                   )
 
     return system
 
