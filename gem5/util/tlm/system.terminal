@@ -22,13 +22,13 @@ Booting Linux on physical CPU 0x0
 sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 178956969942ns
 PERCPU: Embedded 8 pages/cpu @80b97000 s11648 r8192 d12928 u32768
 pcpu-alloc: s11648 r8192 d12928 u32768 alloc=8*4096
-pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+pcpu-alloc: [0] 0 
 Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 130048
 Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1
 PID hash table entries: 2048 (order: 1, 8192 bytes)
 Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
 Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-Memory: 495488K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28800K reserved, 0K highmem)
+Memory: 495584K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28704K reserved, 0K highmem)
 Virtual kernel memory layout:
     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
@@ -40,9 +40,9 @@ Booting Linux on physical CPU 0x0
       .init : 0x806aa000 - 0x806f3d80   ( 296 kB)
       .data : 0x806f4000 - 0x80732754   ( 250 kB)
        .bss : 0x80732754 - 0x8078e9d8   ( 369 kB)
-SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
 Preemptible hierarchical RCU implementation.
-	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
 NR_IRQS:16 nr_irqs:16 16
 Architected cp15 timer(s) running at 25.16MHz (phys).
 sched_clock: 56 bits at 25MHz, resolution 39ns, wraps every 2730666655744ns
@@ -52,20 +52,11 @@ Booting Linux on physical CPU 0x0
 pid_max: default: 32768 minimum: 301
 Mount-cache hash table entries: 512
 CPU: Testing write buffer coherency: ok
-/cpus/cpu@1 missing clock-frequency property
-/cpus/cpu@2 missing clock-frequency property
-/cpus/cpu@3 missing clock-frequency property
 CPU0: update cpu_power 1024
 CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
 Setting up static identity map for 0x804fee68 - 0x804fee9c
-CPU1: Booted secondary processor
-CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
-CPU2: Booted secondary processor
-CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
-CPU3: Booted secondary processor
-CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
-Brought up 4 CPUs
-SMP: Total of 4 processors activated.
+Brought up 1 CPUs
+SMP: Total of 1 processors activated.
 CPU: All CPU(s) started in SVC mode.
 VFP support v0.3: implementor 41 architecture 4 part 30 variant a rev 0
 NET: Registered protocol family 16
@@ -77,19 +68,10 @@ Booting Linux on physical CPU 0x0
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0b0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0c0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/wdt@0f0000
-hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 2
-hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 3
-hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 1
-hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 3
-hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 1
-hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 3
-hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 1
-hw-breakpoint: CPU 3 failed to disable vector catch
-hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 2
-hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 2
 hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 0
+hw-breakpoint: CPU 0 failed to disable vector catch
 Serial: AMBA PL011 UART driver
 1c090000.uart: ttyAMA0 at MMIO 0x1c090000 (irq = 37, base_baud = 0) is a PL011 rev3
 console [ttyAMA0] enabled
@@ -172,9 +154,9 @@ scsi 0:0:0:0: Direct-Access     ATA      M5 IDE Disk      n/a  PQ: 0 ANSI: 5
 sd 0:0:0:0: [sda] 1048320 512-byte logical blocks: (536 MB/511 MiB)
 sd 0:0:0:0: [sda] Write Protect is off
 sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
-sd 0:0:0:0: Attached scsi generic sg0 type 0
 sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
  sda: sda1
+sd 0:0:0:0: Attached scsi generic sg0 type 0
 sd 0:0:0:0: [sda] Attached SCSI disk
 e1000 0000:00:00.0 eth0: (PCI:33MHz:32-bit) 00:90:00:00:00:01
 e1000 0000:00:00.0 eth0: Intel(R) PRO/1000 Network Connection
@@ -220,12 +202,12 @@ EXT2-fs (sda1): warning: mounting unchecked fs, running e2fsck is recommended
 VFS: Mounted root (ext2 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 init started: BusyBox v1.15.3 (2010-05-07 01:27:07 BST)
-starting pid 692, tty '': '/etc/rc.d/rc.local'
+starting pid 673, tty '': '/etc/rc.d/rc.local'
 warning: can't open /etc/mtab: No such file or directory
 Thu Jan  1 00:00:02 UTC 2009
 S: devpts
 Thu Jan  1 00:00:02 UTC 2009
-starting pid 714, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+starting pid 694, tty '': '/sbin/getty -L ttySA0 38400 vt100'
 
 AEL login: root
 
@@ -233,34 +215,13 @@ AEL login: root
 BusyBox v1.15.3 (2010-05-07 01:27:07 BST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
+# devmem 0xd000f000  10 0x0
+devmem: invalid number '0x0'
 # ./startup
-# taskset 0x1 ./cachebench -r
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-8192		31.225883
-12288		2.608015
-16384		1.570217
-24576		2.327519
-32768		4.858305
-49152		4.734219
-
-# # taskset 0x1 ./cachebench -r[J ./cachebench -r [17D8 ./cachebench -r[16Drandom: nonblocking pool is initialized
- ./cachebench -r
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-8192		32.034103
-12288		3.356716
-16384		1.570194
-24576		2.327415
-32768		3.120767
-49152		4.530739
-65536		6.221758
-98304		16.560818
-
-# [H# [J
+# random: nonblocking pool is initialized
+# ./startup[J# devmem 0xd000f010 0x0[J# ./startup[J# devmem 0xd000f010 0x0[J
+devmem: invalid number '0x0'
+# # devmem 0xd000f010 0x0[J   w 0x0
+# # devmem 0xd000f010 w 0x0[J 1
+# # devmem 0xd000f010 w 0x1[J ffffffff
+# 

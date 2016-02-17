@@ -84,10 +84,8 @@ cache::cache(
         for (uint32_t j=0; j<m_num_of_ways; j++) {
             // initially all cores can cache data in any way at any alloc_block
             // right now assuming max 32 smp cores
-//            m_alloc_blocks_coremask[i][j] = 0xffffffff;
-            m_alloc_blocks_coremask[i][j] = 0x1;
+            m_alloc_blocks_coremask[i][j] = 0xffffffff;
         }        
-        m_alloc_blocks_coremask[i][0] = 0xfffffffe;
 	}
 
 	// req type indicator
@@ -178,12 +176,12 @@ cache::do_logging()
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
 {
+    req_extension *ext;
+    trans.get_extension(ext);
     uint64_t req_addr = trans.get_address();
+    
     if (req_addr>=MEM_BASE && req_addr<(MEM_BASE + MEM_SIZE)) {
-        // memory request!!
-        
-	    req_extension *ext;
-	    trans.get_extension(ext);
+        // memory request!!        
 	    req_extension::req_type type;
 	    if (!ext) {
 		    assert(m_level == 1);		// has to be first level
@@ -194,6 +192,12 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		        m_CPU = ext->core_id;
 		    }
 	    }    	    	    
+	    
+	    if (type == req_extension::FLUSH) {
+	        flush_cache();
+	        trans.set_response_status(tlm::TLM_OK_RESPONSE);
+	        return;
+	    }
 
         if (m_id==0 || m_id==2 || m_id==4 || m_id==6) {
             // icaches can't get write requests for memory 
@@ -308,14 +312,12 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    m_current_way = current_way_orig;
 	    }	    	    
     } else if (req_addr>=m_cache_regspace_base && 
-                            req_addr<(m_cache_regspace_base + 8*2)) {                            
+                            req_addr<(m_cache_regspace_base + 8*3)) {                            
         // request accessing this cache registers
         // right now only 2 register each being 8B 
         // that's why 8*2 -> size in B in above conditional!!
         
         tlm::tlm_command cmd = trans.get_command();
-        // for now only support is provided to read this cahce reigsters
-        assert(cmd == tlm::TLM_READ_COMMAND);
         
         unsigned char *ptr = trans.get_data_ptr();
         assert(ptr);
@@ -325,6 +327,13 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
             memcpy(ptr, &m_access_register, len);
         } else if (req_addr == m_cache_regspace_base + 8) {
             memcpy(ptr, &m_miss_register, len);
+        } else if (req_addr == m_cache_regspace_base + 16) {                        
+            flush_cache();  
+            uint64_t reg_data = *((uint64_t *) ptr);
+            char core = reg_data & 0xff;
+            uint32_t way_mask = (reg_data >> 8) & 0xffffff;
+            uint32_t block = (reg_data >> 32) & 0xffffffff;
+            printf("%ld..%d..%d..%d\r\n", reg_data, core, way_mask, block);     
         } else {
             assert(0);
         }
@@ -735,13 +744,14 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 void 
 cache::do_eviction() 
 {
+    uint64_t m_current_blockAddr_prev = m_current_blockAddr;
 	cache_block::cache_block_state *state = &m_blocks[m_current_set][m_current_way].state;
-	uint64_t evict_block_addr = ((m_blocks[m_current_set][m_current_way].tag << 
+	m_current_blockAddr = ((m_blocks[m_current_set][m_current_way].tag << 
 	                             (uint32_t)(log2((double) m_num_of_sets))) | m_current_set
 	                            ) << (uint32_t)(log2((double) WORD_SIZE) + 
 	                                            log2((double) m_block_size/WORD_SIZE));
 	
-	m_trans.set_address(evict_block_addr);
+//	m_trans.set_address(evict_block_addr);
 	                                            	                                            
 	// incase this block is in 'S' then no writeback is needed
 	
@@ -757,25 +767,65 @@ cache::do_eviction()
 		m_trans.set_write();
 		m_ext->m_type = req_extension::NORMAL;
 		m_ext->core_id = m_CPU;
-		send_request(true, true);
+		send_request(true);
 	}
 	*state = cache_block::I;
 
 	// BACK INVALIDATION
 	m_fake_back_invalidation = false;
-	send_request(false, true);
+	send_request(false);
+	
+	m_current_blockAddr = m_current_blockAddr_prev;
 }
+
+
+
+void 
+cache::flush_cache() {    
+    if (m_level > 1) {
+        // fllushing all upstream master caches for inclusivity
+        for (uint32_t i=0; i<m_num_upstream_masters; i++) {
+            m_ext->m_type = req_extension::FLUSH;
+            m_trans.set_command(tlm::TLM_IGNORE_COMMAND);		        
+            m_trans.set_address(MEM_BASE);
+		    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		
+        	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);	            
+        }
+    }
+
+	for (uint32_t i=0; i<m_num_of_sets; i++) {
+		for (uint32_t j=0; j<m_num_of_ways; j++) {
+		    if (m_blocks[i][j].state==cache_block::M || m_blocks[i][j].state==cache_block::MBS) {		   
+        		assert(m_write_back);			// this has to be a writeback cache
+		        // writing through this block downstream..if a cache exists on the 
+		        // downstream path then it can update the status of its block (MBS to M)
+	            uint64_t m_current_blockAddr = ((m_blocks[i][j].tag << 
+	                                         (uint32_t)(log2((double) m_num_of_sets))) | i
+	                                        ) << (uint32_t)(log2((double) WORD_SIZE) + 
+	                                                        log2((double) m_block_size/WORD_SIZE));	        		        
+		        m_trans.set_write();
+		        m_ext->m_type = req_extension::NORMAL;
+		        m_ext->core_id = m_CPU;
+		        send_request(true);		        
+		    }
+			m_blocks[i][j].state = cache_block::I;
+			m_blocks[i][j].tag = 0x0;
+			m_blocks[i][j].evict_tag = 0x0;
+		}
+	} 
+	
+    m_access_register = 0x0;
+    m_miss_register = 0x0;  	   
+}
+
 
 
 // request transport mechanism
 void 
-cache::send_request(bool downstream, bool new_address) 
+cache::send_request(bool downstream) 
 {
     m_trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
-    
-	if (!new_address) {
-		m_trans.set_address(m_current_blockAddr);
-	}
+    m_trans.set_address(m_current_blockAddr);
 	
 	if (downstream) {
 		// downstream 'true' will send the request downstream if there is any
@@ -854,7 +904,6 @@ cache::set_delays(uint32_t lookup, uint32_t read, uint32_t write)
     m_read_delay = sc_core::sc_time(read, sc_core::SC_NS);
     m_write_delay = sc_core::sc_time(write, sc_core::SC_NS);
 }
-
 
 
 

@@ -22,7 +22,7 @@ class cache : public sc_core::sc_module {
 	// for special requests (e.g back-invalidation) between caches
 	class req_extension : public tlm::tlm_extension< req_extension > {
 	public:
-		enum req_type {NORMAL, M_UPDATE, BACK_INVALIDATE, WB_UPDATE};
+		enum req_type {NORMAL, M_UPDATE, BACK_INVALIDATE, WB_UPDATE, FLUSH};
 		req_type m_type;
 		uint32_t core_id;
 		uint32_t coremask;
@@ -104,7 +104,8 @@ private:
 	void process_special_request(req_extension::req_type type);
 	void process_miss(tlm::tlm_generic_payload &trans, bool evict_needed);
 	void do_eviction();
-	void send_request(bool downstream, bool new_address=false);
+	void send_request(bool downstream);
+	void flush_cache();	
 public:
 	tlm_utils::simple_initiator_socket< cache > *m_isocket_d;	// in downstream direction
 	tlm_utils::simple_initiator_socket< cache > *m_isocket_u;	// in upstream direction
