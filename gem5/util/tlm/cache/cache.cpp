@@ -15,6 +15,7 @@
 
 #include "cache.hpp"
 #include "../sc_ext.hh"
+#include <algorithm>
 
 // to clean up allocated stuff globally for the whole class
 std::vector< cache::req_extension * > cache::req_extension::req_extension_clones;
@@ -85,7 +86,9 @@ cache::cache(
             // initially all cores can cache data in any way at any alloc_block
             // right now assuming max 32 smp cores
             m_alloc_blocks_coremask[i][j] = 0xffffffff;
+//            m_alloc_blocks_coremask[i][j] = 0xfffffffe;
         }        
+//        m_alloc_blocks_coremask[i][0] = 0xffffffff;
 	}
 
 	// req type indicator
@@ -202,14 +205,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         if (m_id==0 || m_id==2 || m_id==4 || m_id==6) {
             // icaches can't get write requests for memory 
             assert(trans.get_command() != tlm::TLM_WRITE_COMMAND);
-        }	 
-        
-        if (type == req_extension::BACK_INVALIDATE) {
-            if (!((ext->coremask >> m_CPU) & 1)) {
-                trans.set_response_status(tlm::TLM_OK_RESPONSE);
-                return;
-            }
-        }   
+        }	  
 	    
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
@@ -238,6 +234,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	                                    log2((double)m_block_size/WORD_SIZE) + 
 	                                    log2((double)m_num_of_sets)));
 
+//        if (sc_core::sc_time_stamp() > sc_core::sc_time(72000000, sc_core::SC_NS)) {
+//            m_log = true;
+//        } else {
+//            m_log = false;
+//        }
         if (m_log) {   
 	        if (m_level == 1 && type==req_extension::NORMAL) {                	        
 	            if (common_fid) {
@@ -327,7 +328,8 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
             memcpy(ptr, &m_access_register, len);
         } else if (req_addr == m_cache_regspace_base + 8) {
             memcpy(ptr, &m_miss_register, len);
-        } else if (req_addr == m_cache_regspace_base + 16) {                        
+        } else if (req_addr == m_cache_regspace_base + 16) { 
+            // TODO: is flush needed????                       
             flush_cache();  
             uint64_t reg_data = *((uint64_t *) ptr);
             char core = reg_data & 0xff;
@@ -356,7 +358,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 bool 
 cache::cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE) 
 {
-    // finding ways inwhich this core has privilege to cache data
+    // finding ways inwhich this core has privilege to cache data in case of miss
     m_current_ways_lookup.clear();
     if (m_alloc_blocks_coremask.size()) {
         uint32_t current_alloc_block = (m_current_set*m_alloc_blocks_coremask.size()) 
@@ -371,25 +373,32 @@ cache::cache_lookup(bool &evict_needed, uint32_t &way_free, bool WB_UPDATE)
         for (uint32_t i=0; i<m_num_of_ways; i++) {
             m_current_ways_lookup.push_back(i);
         }
-    }
-    
-    // there should atleast be one way for caching data for a given smp core
+    }    
+    // there should atleast be one way for caching missed data for a given smp core
     assert(m_current_ways_lookup.size() > 0);
     
+    
+    // doing lookup
 	evict_needed = true;
-	for (uint32_t i=0; i<m_current_ways_lookup.size(); i++) {
-	    bool hit = (m_blocks[m_current_set][m_current_ways_lookup[i]].tag == m_current_tag); 
+	for (uint32_t i=0; i<m_num_of_ways; i++) {
+	    bool hit = (m_blocks[m_current_set][i].tag == m_current_tag); 
 	    
-		if (m_blocks[m_current_set][m_current_ways_lookup[i]].state != cache_block::I) {
+		if (m_blocks[m_current_set][i].state != cache_block::I) {
 			if (hit) {
 				evict_needed = false;
-				way_free = m_current_ways_lookup[i];
+				way_free = i;
 				return true;
 			}
 		} else {
-            evict_needed = false;
-            way_free = m_current_ways_lookup[i];			
+            // can this 'I' way be considered for caching for this core??
+            if (std::find(m_current_ways_lookup.begin(), m_current_ways_lookup.end(), i) 
+                            !=  m_current_ways_lookup.end()) 
+            {
+                evict_needed = false;            
+                way_free = i;                              
+            } 			          
 		    if (hit && WB_UPDATE) {	    
+		        way_free = i;
 		        return true;
 		    }
 		}
@@ -516,10 +525,7 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 	}
 
 	// update eviction policy stuff		
-	if (m_evict_policy == LRU) {
-        // LRU eviction policy only supported with no cache-partitioning stuff
-        assert(m_current_ways_lookup.size() == m_num_of_ways);
-        	
+	if (m_evict_policy == LRU) {        	
 		for (uint32_t j=0; j<m_num_of_ways; j++) {
 			if (j!=m_current_way && m_blocks[m_current_set][j].state!=cache_block::I && 
 			             (m_blocks[m_current_set][j].evict_tag <=
@@ -532,9 +538,6 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 		}
 		m_blocks[m_current_set][m_current_way].evict_tag = 1;
 	} else if (m_evict_policy == LFU) {
-        // LFU eviction policy only supported with no cache-partitioning stuff
-        assert(m_current_ways_lookup.size() == m_num_of_ways);	
-	
 		m_blocks[m_current_set][m_current_way].evict_tag++;
 	}
 }
@@ -641,10 +644,7 @@ cache::process_special_request(req_extension::req_type type)
 	if (invalidation_done) {
 		// updating cache evition stuff				
 		// TODO: right now support only for LRU do for others as well
-        if (m_evict_policy == cache::LRU) {
-            // LRU eviction policy only supported with no cache-partitioning stuff
-            assert(m_current_ways_lookup.size() == m_num_of_ways);	
-                    
+        if (m_evict_policy == cache::LRU) {                    
 		    for (uint32_t i=0; i<m_num_of_ways; i++) {
 		        if (m_blocks[m_current_set][i].evict_tag > 
 		                        m_blocks[m_current_set][m_current_way].evict_tag) 
@@ -715,10 +715,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 	    }
 
 	    // update eviction policy stuff
-	    if (m_evict_policy==LRU || m_evict_policy==FIFO) {
-	        // right now LRU/FIFO only supported with no cache-partitioning stuff
-	        assert(m_current_ways_lookup.size() == m_num_of_ways);
-	        		    
+	    if (m_evict_policy==LRU || m_evict_policy==FIFO) {	        		    
 		    for (uint32_t j=0; j<m_num_of_ways; j++) {
 			    if (m_current_way!=j && m_blocks[m_current_set][j].state!=cache_block::I) 
 			    {
@@ -841,33 +838,17 @@ cache::send_request(bool downstream)
                 // assuming write buffers on way to memory so ignoring this delay of 
                 // writing the cache block to main memory!!
             }
-	        return;
 		}
-	} else {	    
-	    // send back-invalidations to only those upstream masters that can cache data in 
-	    // this way i.e in m_current_way
-	    uint32_t current_coremask = 0x0;
-        if (m_alloc_blocks_coremask.size()) {
-            uint32_t current_alloc_block = (m_current_set*m_alloc_blocks_coremask.size())
-                                                           / 
-                                                    m_num_of_sets;
-            current_coremask = m_alloc_blocks_coremask[current_alloc_block][m_current_way];
-        } else {
-            current_coremask = 0xffffffff;
-        }
-	
+	} else {	    	
 		// send request to all upstream masters if they are present
 		if (m_level > 1) {   		
 		    for (uint32_t i=0; i<m_num_upstream_masters; i++) {
 		        // TODO: right now this interface is only used to send back-invalidates!!
                 m_ext->m_type = req_extension::BACK_INVALIDATE;
-                m_ext->coremask = current_coremask;
                 m_trans.set_command(tlm::TLM_IGNORE_COMMAND);		        
 			    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		
             	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);			        
 		    }
-	    } else {
-	        return;
 	    }
 	}	
 }

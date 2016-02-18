@@ -25,7 +25,6 @@ class cache : public sc_core::sc_module {
 		enum req_type {NORMAL, M_UPDATE, BACK_INVALIDATE, WB_UPDATE, FLUSH};
 		req_type m_type;
 		uint32_t core_id;
-		uint32_t coremask;
 		// for memory management
 		static std::vector< req_extension * > req_extension_clones;
 

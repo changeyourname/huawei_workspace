@@ -22,13 +22,13 @@ Booting Linux on physical CPU 0x0
 sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 178956969942ns
 PERCPU: Embedded 8 pages/cpu @80b97000 s11648 r8192 d12928 u32768
 pcpu-alloc: s11648 r8192 d12928 u32768 alloc=8*4096
-pcpu-alloc: [0] 0 
+pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
 Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 130048
 Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1
 PID hash table entries: 2048 (order: 1, 8192 bytes)
 Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
 Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-Memory: 495584K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28704K reserved, 0K highmem)
+Memory: 495488K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28800K reserved, 0K highmem)
 Virtual kernel memory layout:
     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
@@ -40,9 +40,9 @@ Booting Linux on physical CPU 0x0
       .init : 0x806aa000 - 0x806f3d80   ( 296 kB)
       .data : 0x806f4000 - 0x80732754   ( 250 kB)
        .bss : 0x80732754 - 0x8078e9d8   ( 369 kB)
-SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
 Preemptible hierarchical RCU implementation.
-	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
 NR_IRQS:16 nr_irqs:16 16
 Architected cp15 timer(s) running at 25.16MHz (phys).
 sched_clock: 56 bits at 25MHz, resolution 39ns, wraps every 2730666655744ns
@@ -52,11 +52,20 @@ Booting Linux on physical CPU 0x0
 pid_max: default: 32768 minimum: 301
 Mount-cache hash table entries: 512
 CPU: Testing write buffer coherency: ok
+/cpus/cpu@1 missing clock-frequency property
+/cpus/cpu@2 missing clock-frequency property
+/cpus/cpu@3 missing clock-frequency property
 CPU0: update cpu_power 1024
 CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
 Setting up static identity map for 0x804fee68 - 0x804fee9c
-Brought up 1 CPUs
-SMP: Total of 1 processors activated.
+CPU1: Booted secondary processor
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+CPU2: Booted secondary processor
+CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+CPU3: Booted secondary processor
+CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+Brought up 4 CPUs
+SMP: Total of 4 processors activated.
 CPU: All CPU(s) started in SVC mode.
 VFP support v0.3: implementor 41 architecture 4 part 30 variant a rev 0
 NET: Registered protocol family 16
@@ -68,10 +77,19 @@ Booting Linux on physical CPU 0x0
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0b0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0c0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/wdt@0f0000
+hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 2
+hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 3
+hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 1
+hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 3
+hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 1
+hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 3
+hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 1
+hw-breakpoint: CPU 3 failed to disable vector catch
+hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 2
+hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 2
 hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 0
-hw-breakpoint: CPU 0 failed to disable vector catch
 Serial: AMBA PL011 UART driver
 1c090000.uart: ttyAMA0 at MMIO 0x1c090000 (irq = 37, base_baud = 0) is a PL011 rev3
 console [ttyAMA0] enabled
@@ -154,9 +172,9 @@ scsi 0:0:0:0: Direct-Access     ATA      M5 IDE Disk      n/a  PQ: 0 ANSI: 5
 sd 0:0:0:0: [sda] 1048320 512-byte logical blocks: (536 MB/511 MiB)
 sd 0:0:0:0: [sda] Write Protect is off
 sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+sd 0:0:0:0: Attached scsi generic sg0 type 0
 sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
  sda: sda1
-sd 0:0:0:0: Attached scsi generic sg0 type 0
 sd 0:0:0:0: [sda] Attached SCSI disk
 e1000 0000:00:00.0 eth0: (PCI:33MHz:32-bit) 00:90:00:00:00:01
 e1000 0000:00:00.0 eth0: Intel(R) PRO/1000 Network Connection
@@ -202,12 +220,12 @@ EXT2-fs (sda1): warning: mounting unchecked fs, running e2fsck is recommended
 VFS: Mounted root (ext2 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 init started: BusyBox v1.15.3 (2010-05-07 01:27:07 BST)
-starting pid 673, tty '': '/etc/rc.d/rc.local'
+starting pid 692, tty '': '/etc/rc.d/rc.local'
 warning: can't open /etc/mtab: No such file or directory
 Thu Jan  1 00:00:02 UTC 2009
 S: devpts
 Thu Jan  1 00:00:02 UTC 2009
-starting pid 694, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+starting pid 714, tty '': '/sbin/getty -L ttySA0 38400 vt100'
 
 AEL login: root
 
@@ -215,13 +233,145 @@ AEL login: root
 BusyBox v1.15.3 (2010-05-07 01:27:07 BST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
-# devmem 0xd000f000  10 0x0
-devmem: invalid number '0x0'
 # ./startup
-# random: nonblocking pool is initialized
-# ./startup[J# devmem 0xd000f010 0x0[J# ./startup[J# devmem 0xd000f010 0x0[J
-devmem: invalid number '0x0'
-# # devmem 0xd000f010 0x0[J   w 0x0
-# # devmem 0xd000f010 w 0x0[J 1
-# # devmem 0xd000f010 w 0x1[J ffffffff
+# ./cacheben          taskset ./cachebench -r 0 -X1024 - 0./cachebench
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+524288		0.512903
+# jobrandom: nonblocking pool is initialized
+s
+# jobs
+# bg
+-sh: bg: No current job
+# tasks set 0x2 .cachebench            /cachebench -r -X128  024
+
+
+
+# # taskset 0x2 ./cachebench -r -X1024[J&
+# taskset 0x1 ./cachebench -r -X64
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+ -X1024&[24D ./cachebench -r -X1024&
+# # taskset 0x8 ./cachebench -r -X1024&[J# taskset 0x4 ./cachebench -r -X1024&[J& & & &  256ench x4 ./cachebench -r -X256 [23D1 ./cachebench -r -X256[22D ./cachebench -r -X256
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+
+
+
 # 
+# 
+# # taskset 0x1 ./cachebench -r -X256[J   128
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+524288		81.326309
+# jobs
+[3]+  Running                    taskset 0x8 ./cachebench -r -X1024
+[2]-  Running                    taskset 0x4 ./cachebench -r -X1024
+[1]   Running                    taskset 0x2 ./cachebench -r -X1024
+# ps -all   -all     -all    
+PID   USER     TIME   COMMAND
+    1 root       0:00 init       
+    2 root       0:00 [kthreadd]
+    3 root       0:00 [ksoftirqd/0]
+    5 root       0:00 [kworker/0:0H]
+    7 root       0:00 [rcu_preempt]
+    8 root       0:00 [rcu_sched]
+    9 root       0:00 [rcu_bh]
+   10 root       0:00 [migration/0]
+   11 root       0:00 [migration/1]
+   12 root       0:00 [ksoftirqd/1]
+   13 root       0:00 [kworker/1:0]
+   14 root       0:00 [kworker/1:0H]
+   15 root       0:00 [migration/2]
+   16 root       0:00 [ksoftirqd/2]
+   17 root       0:00 [kworker/2:0]
+   18 root       0:00 [kworker/2:0H]
+   19 root       0:00 [migration/3]
+   20 root       0:00 [ksoftirqd/3]
+   21 root       0:00 [kworker/3:0]
+   22 root       0:00 [kworker/3:0H]
+   23 root       0:00 [khelper]
+   24 root       0:00 [kworker/u8:1]
+  271 root       0:00 [writeback]
+  273 root       0:00 [bioset]
+  275 root       0:00 [kblockd]
+  283 root       0:00 [ata_sff]
+  293 root       0:00 [khubd]
+  392 root       0:00 [kworker/0:1]
+  393 root       0:00 [rpciod]
+  410 root       0:00 [kswapd0]
+  455 root       0:00 [fsnotify_mark]
+  471 root       0:00 [nfsiod]
+  564 root       0:00 [nvme]
+  582 root       0:00 [scsi_eh_0]
+  585 root       0:00 [scsi_eh_1]
+  588 root       0:00 [kworker/u8:2]
+  596 root       0:00 [kworker/1:1]
+  631 root       0:00 [kpsmoused]
+  633 root       0:00 [kworker/0:2]
+  666 root       0:00 [binder]
+  686 root       0:00 [deferwq]
+  697 root       0:00 [kworker/2:1]
+  701 root       0:00 /usr/sbin/telnetd 
+  714 root       0:00 -sh 
+  718 root       0:00 [kworker/3:1]
+  719 root       0:00 ./cachebench -r -X1024 
+  720 root       0:00 ./cachebench -r -X1024 
+  721 root       0:00 ./cachebench -r -X1024 
+  724 root       0:00 ps 
+# kill 718 9
+# kill 720
+# kill 271   721
+# 
+# 
+# 
+# 
+# random: nonblocking pool is initialized
+[H# [J[H# [J# kill 721[J# kill 720[J# kill 719[J# ps [J# kill 719[J# kill 720[J# kill 721[J# [Jbg
+[3] taskset 0x8 ./cachebench -r -X1024
+[3]+  Terminated                 taskset 0x8 ./cachebench -r -X1024
+[2]+  Terminated                 taskset 0x4 ./cachebench -r -X1024
+[1]+  Terminated                 taskset 0x2 ./cachebench -r -X1024
+# jobs
+# [H# [Jls
+[1;32mcachebench[0m        [1;34mgem5_ARM_SW_dev[0m   [1;32mstartup[0m
+[1;32mcachebench_time[0m   [1;32mmyDeviceDriver.c[0m  [1;32mtest[0m
+# ./cachebench -r -X  128   64
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
+
+# # ./cachebench -r -X64[J./cachebench -t./cachebench -r -X64[20Da./cachebench -r -X64[20Ds./cachebench -r -X64[20Dk./cachebench -r -X64[20Ds./cachebench -r -X64[20De./cachebench -r -X64[20Dt./cachebench -r -X64[20D ./cachebench -r -X64[20D0./cachebench -r -X64[20Dx./cachebench -r -X64[20D ./cachebench -r -X64[20D./cachebench -r -X64 [21D1./cachebench -r -X64[20D ./cachebench -r -X64[20D./cachebench -r -X64
+
+		long int Read Cache Test
+
+C Size		MissRate
+-------		-------
