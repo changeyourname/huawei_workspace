@@ -85,10 +85,11 @@ cache::cache(
         for (uint32_t j=0; j<m_num_of_ways; j++) {
             // initially all cores can cache data in any way at any alloc_block
             // right now assuming max 32 smp cores
-            m_alloc_blocks_coremask[i][j] = 0xffffffff;
-//            m_alloc_blocks_coremask[i][j] = 0xfffffffe;
+//            m_alloc_blocks_coremask[i][j] = 0xffffffff;
+            m_alloc_blocks_coremask[i][j] = 0xfffffffe;
         }        
 //        m_alloc_blocks_coremask[i][0] = 0xffffffff;
+        m_alloc_blocks_coremask[i][0] = 0x1;
 	}
 
 	// req type indicator
@@ -266,7 +267,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 
 	    // updating the access register
 	    if (type == req_extension::NORMAL) {
-	        m_access_register++;
+	        // TODO: do this in a nicer way
+	        // for l2 cache only calculating miss-rates due to interaction with CPU0 only
+	        if (m_id==8 && m_CPU==0) {
+    	        m_access_register++;
+	        }
             m_current_delay = &delay;	    	        
             // doing cache lookup for this new memory request
             *m_current_delay += m_lookup_delay;            
@@ -293,7 +298,11 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 			    assert(type==req_extension::NORMAL);			    			
 			    process_miss(trans, evict_needed);
         	    // updating the misses register
-	            m_miss_register++;			    
+        	    // TODO: do this in a nicer way
+        	    if (m_id ==8 && m_CPU==0) {             // for l2cache..only measure misses
+        	                                            // because of CPU0
+    	            m_miss_register++;			    
+	            }
 		    }
 	    }
 
@@ -313,7 +322,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    m_current_way = current_way_orig;
 	    }	    	    
     } else if (req_addr>=m_cache_regspace_base && 
-                            req_addr<(m_cache_regspace_base + 8*3)) {                            
+                            req_addr<(m_cache_regspace_base + 4096)) {                            
         // request accessing this cache registers
         // right now only 2 register each being 8B 
         // that's why 8*2 -> size in B in above conditional!!
@@ -330,12 +339,15 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
             memcpy(ptr, &m_miss_register, len);
         } else if (req_addr == m_cache_regspace_base + 16) { 
             // TODO: is flush needed????                       
-            flush_cache();  
+//            flush_cache();  
+            
             uint64_t reg_data = *((uint64_t *) ptr);
             char core = reg_data & 0xff;
             uint32_t way_mask = (reg_data >> 8) & 0xffffff;
             uint32_t block = (reg_data >> 32) & 0xffffffff;
             printf("%ld..%d..%d..%d\r\n", reg_data, core, way_mask, block);     
+        } else if (req_addr == m_cache_regspace_base + 24) {
+            flush_cache();
         } else {
             assert(0);
         }
