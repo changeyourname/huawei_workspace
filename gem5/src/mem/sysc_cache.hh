@@ -88,7 +88,8 @@ class SysC_Cache : public MemObject
         ~SPort() { }
 
         AddrRangeList getAddrRanges() const;   
-        virtual unsigned long long readReg(uint64_t addr) {return 0;}      
+        virtual unsigned long long readReg(uint64_t addr) {return 0;}     
+        virtual void writeReg(uint64_t addr, unsigned char *data) {} 
         /** Any or all of recv... can be overloaded to provide the port's
          *  functionality */       
     };        
@@ -216,6 +217,7 @@ class SysC_Cache : public MemObject
     void handleLockErasure(ContextID ctx_id);
     
     unsigned long long readReg(uint64_t addr);          
+    void writeReg(uint64_t addr, unsigned char *data);
     
     std::string portData;
     

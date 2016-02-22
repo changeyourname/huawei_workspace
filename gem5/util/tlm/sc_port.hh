@@ -156,6 +156,7 @@ class sc_transactor : public tlm::tlm_initiator_socket<>,
     
     void to_SysC_Cache(PacketPtr packet);     
     unsigned long long readReg(uint64_t addr) override;
+    void writeReg(uint64_t addr, unsigned char *data) override;
 
     /** The TLM initiator interface */
     tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload& trans,

@@ -85,11 +85,8 @@ cache::cache(
         for (uint32_t j=0; j<m_num_of_ways; j++) {
             // initially all cores can cache data in any way at any alloc_block
             // right now assuming max 32 smp cores
-//            m_alloc_blocks_coremask[i][j] = 0xffffffff;
-            m_alloc_blocks_coremask[i][j] = 0xfffffffe;
+            m_alloc_blocks_coremask[i][j] = 0xffffffff;
         }        
-//        m_alloc_blocks_coremask[i][0] = 0xffffffff;
-        m_alloc_blocks_coremask[i][0] = 0x1;
 	}
 
 	// req type indicator
@@ -342,10 +339,20 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 //            flush_cache();  
             
             uint64_t reg_data = *((uint64_t *) ptr);
+            printf("0x%lx\r\n", reg_data);
             char core = reg_data & 0xff;
-            uint32_t way_mask = (reg_data >> 8) & 0xffffff;
-            uint32_t block = (reg_data >> 32) & 0xffffffff;
-            printf("%ld..%d..%d..%d\r\n", reg_data, core, way_mask, block);     
+            assert(core <= NUM_CPUS);
+            short block = (reg_data >> 8) & 0xffff;    
+            assert(block <= m_alloc_blocks_coremask.size());
+            uint32_t way_mask = (reg_data >> 24) & 0xffffffff;
+            printf("%d..%d..0x%x\r\n", core, block, way_mask);            
+            for (int i=0; i<m_num_of_ways; i++) {
+                if (way_mask>>i & 1) {
+                    m_alloc_blocks_coremask[block][i] |= (1 << core);
+                } else {
+                    m_alloc_blocks_coremask[block][i] &= ~(1 << core);
+                }
+            }               
         } else if (req_addr == m_cache_regspace_base + 24) {
             flush_cache();
         } else {

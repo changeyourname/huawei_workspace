@@ -101,10 +101,15 @@ sc_transactor::recvAtomic(PacketPtr packet)
     if (addr>=CACHE_REGSPACE_BASE && addr<(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
         for (int i=0; i<owners.size(); i++) {
             if (owners[i]->regSpace(packet->getAddr())) {
-                if (packet->getSize() == 4) {
-                    packet->set<uint32_t>((uint32_t)owners[i]->readReg(packet->getAddr()));
-                } else if (packet->getSize() == 8) {
-                    packet->set<uint64_t>((uint64_t)owners[i]->readReg(packet->getAddr()));
+                if (packet->isRead()) {
+                    if (packet->getSize() == 4) {
+                        packet->set<uint32_t>((uint32_t)owners[i]->readReg(packet->getAddr()));
+                    } else if (packet->getSize() == 8) {
+                        packet->set<uint64_t>((uint64_t)owners[i]->readReg(packet->getAddr()));
+                    }
+                } else {
+                    unsigned char *data = packet->getPtr<unsigned char>();
+                    owners[i]->writeReg(packet->getAddr(), data);
                 }
                 packet->makeAtomicResponse();
                 break;
@@ -162,6 +167,10 @@ sc_transactor::recvFunctionalSnoop(PacketPtr packet)
 bool
 sc_transactor::recvTimingReq(PacketPtr packet)
 {
+    assert(0);
+    
+    
+    
     uint64_t addr = packet->getAddr();
     if (addr>=MEM_BASE && addr<(MEM_BASE + MEM_SIZE)) {
         to_SysC_Cache(packet);
@@ -352,6 +361,30 @@ sc_transactor::readReg(uint64_t addr) {
     delete ptr;    
     return (unsigned long long) ret;
 }
+
+
+
+void
+sc_transactor::writeReg(uint64_t addr, unsigned char *data) {
+    tlm::tlm_generic_payload trans;
+    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+    unsigned char *ptr = data;
+    trans.set_write();
+    trans.set_address(addr);
+    trans.set_data_length(8);
+    trans.set_data_ptr(ptr);
+    
+    iSocket->b_transport(trans, delay);
+    assert(trans.get_response_status() == tlm::TLM_OK_RESPONSE);    
+}
+
+
+
+
+
+
+
+
 
 
 

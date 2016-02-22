@@ -249,6 +249,12 @@ SysC_Cache::readReg(uint64_t addr) {
 }
 
 
+void
+SysC_Cache::writeReg(uint64_t addr, unsigned char *data) {
+    cfgPort->writeReg(addr, data);
+}
+
+
 
 bool
 SysC_Cache::regSpace(uint64_t addr) {

@@ -22,13 +22,13 @@ Booting Linux on physical CPU 0x0
 sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 178956969942ns
 PERCPU: Embedded 8 pages/cpu @80b97000 s11648 r8192 d12928 u32768
 pcpu-alloc: s11648 r8192 d12928 u32768 alloc=8*4096
-pcpu-alloc: [0] 0 [0] 1 
+pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
 Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 130048
 Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=512MB root=/dev/sda1
 PID hash table entries: 2048 (order: 1, 8192 bytes)
 Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
 Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
-Memory: 495552K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28736K reserved, 0K highmem)
+Memory: 495488K/524288K available (5248K kernel code, 249K rwdata, 1540K rodata, 295K init, 368K bss, 28800K reserved, 0K highmem)
 Virtual kernel memory layout:
     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
@@ -40,9 +40,9 @@ Booting Linux on physical CPU 0x0
       .init : 0x806aa000 - 0x806f3d80   ( 296 kB)
       .data : 0x806f4000 - 0x80732754   ( 250 kB)
        .bss : 0x80732754 - 0x8078e9d8   ( 369 kB)
-SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
 Preemptible hierarchical RCU implementation.
-	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=2.
+	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
 NR_IRQS:16 nr_irqs:16 16
 Architected cp15 timer(s) running at 25.16MHz (phys).
 sched_clock: 56 bits at 25MHz, resolution 39ns, wraps every 2730666655744ns
@@ -53,13 +53,19 @@ Booting Linux on physical CPU 0x0
 Mount-cache hash table entries: 512
 CPU: Testing write buffer coherency: ok
 /cpus/cpu@1 missing clock-frequency property
+/cpus/cpu@2 missing clock-frequency property
+/cpus/cpu@3 missing clock-frequency property
 CPU0: update cpu_power 1024
 CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
 Setting up static identity map for 0x804fee68 - 0x804fee9c
 CPU1: Booted secondary processor
 CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
-Brought up 2 CPUs
-SMP: Total of 2 processors activated.
+CPU2: Booted secondary processor
+CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+CPU3: Booted secondary processor
+CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+Brought up 4 CPUs
+SMP: Total of 4 processors activated.
 CPU: All CPU(s) started in SVC mode.
 VFP support v0.3: implementor 41 architecture 4 part 30 variant a rev 0
 NET: Registered protocol family 16
@@ -71,10 +77,16 @@ Booting Linux on physical CPU 0x0
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0b0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/uart@0c0000
 of_amba_device_create(): amba_device_add() failed (-19) for /smb/motherboard/iofpga@3,00000000/wdt@0f0000
+hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 2
+hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 3
 hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 1
+hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 3
 hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 1
+hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 3
 hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 1
-hw-breakpoint: CPU 1 failed to disable vector catch
+hw-breakpoint: CPU 3 failed to disable vector catch
+hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 2
+hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 2
 hw-breakpoint: Debug register access (0xee113e93) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee013e90) caused undefined instruction on CPU 0
 hw-breakpoint: Debug register access (0xee003e17) caused undefined instruction on CPU 0
@@ -160,8 +172,8 @@ scsi 0:0:0:0: Direct-Access     ATA      M5 IDE Disk      n/a  PQ: 0 ANSI: 5
 sd 0:0:0:0: [sda] 1048320 512-byte logical blocks: (536 MB/511 MiB)
 sd 0:0:0:0: [sda] Write Protect is off
 sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
-sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
 sd 0:0:0:0: Attached scsi generic sg0 type 0
+sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
  sda: sda1
 sd 0:0:0:0: [sda] Attached SCSI disk
 e1000 0000:00:00.0 eth0: (PCI:33MHz:32-bit) 00:90:00:00:00:01
@@ -208,134 +220,11 @@ EXT2-fs (sda1): warning: mounting unchecked fs, running e2fsck is recommended
 VFS: Mounted root (ext2 filesystem) on device 8:1.
 Freeing unused kernel memory: 292K (806aa000 - 806f3000)
 init started: BusyBox v1.15.3 (2010-05-07 01:27:07 BST)
-starting pid 680, tty '': '/etc/rc.d/rc.local'
+starting pid 692, tty '': '/etc/rc.d/rc.local'
 warning: can't open /etc/mtab: No such file or directory
 Thu Jan  1 00:00:02 UTC 2009
 S: devpts
 Thu Jan  1 00:00:02 UTC 2009
-starting pid 701, tty '': '/sbin/getty -L ttySA0 38400 vt100'
+starting pid 714, tty '': '/sbin/getty -L ttySA0 38400 vt100'
 
 AEL login: root
-
-
-BusyBox v1.15.3 (2010-05-07 01:27:07 BST) built-in shell (ash)
-Enter 'help' for a list of built-in commands.
-
-# ./startup
-# devmem 0xd0011018
-0x00000000
-# random: nonblocking pool is initialized
-taskset 0x2 ./test&
-# taskset 0x1 ./cachenb  bench -r -X128
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-524288		13.088709
-# ps -all
-PID   USER     TIME   COMMAND
-    1 root       0:00 init       
-    2 root       0:00 [kthreadd]
-    3 root       0:00 [ksoftirqd/0]
-    5 root       0:00 [kworker/0:0H]
-    7 root       0:00 [rcu_preempt]
-    8 root       0:00 [rcu_sched]
-    9 root       0:00 [rcu_bh]
-   10 root       0:00 [migration/0]
-   11 root       0:00 [migration/1]
-   12 root       0:00 [ksoftirqd/1]
-   13 root       0:00 [kworker/1:0]
-   14 root       0:00 [kworker/1:0H]
-   15 root       0:00 [khelper]
-   16 root       0:00 [kworker/u4:1]
-  261 root       0:00 [writeback]
-  263 root       0:00 [bioset]
-  265 root       0:00 [kblockd]
-  273 root       0:00 [ata_sff]
-  283 root       0:00 [khubd]
-  382 root       0:00 [kworker/0:1]
-  383 root       0:00 [rpciod]
-  398 root       0:00 [kswapd0]
-  443 root       0:00 [fsnotify_mark]
-  459 root       0:00 [nfsiod]
-  552 root       0:00 [nvme]
-  570 root       0:00 [scsi_eh_0]
-  573 root       0:00 [scsi_eh_1]
-  576 root       0:00 [kworker/u4:2]
-  584 root       0:00 [kworker/1:1]
-  619 root       0:00 [kpsmoused]
-  621 root       0:00 [kworker/0:2]
-  654 root       0:00 [binder]
-  674 root       0:00 [deferwq]
-  688 root       0:00 /usr/sbin/telnetd 
-  701 root       0:00 -sh 
-  706 root       0:00 ./test 
-  708 root       0:00 ps -all 
-# kill 706
-# 
-# 
-# 
-[1]+  Terminated                 taskset 0x2 ./test
-# 
-# devmem 0xd0011018
-0x00000000
-# # devmem 0xd0011018[J# kill 706[J# ps -all[J# taskset 0x1 ./cachebench -r -X128[J# taskset 0x2 ./test&[J# taskset 0x1 ./cachebench -r -X128[J
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-524288		26.788754
-# 
-    1 root       0:00 init       
-    2 root       0:00 [kthreadd]
-    3 root       0:00 [ksoftirqd/0]
-    5 root       0:00 [kworker/0:0H]
-    7 root       0:00 [rcu_preempt]
-    8 root       0:00 [rcu_sched]
-    9 root       0:00 [rcu_bh]
-   10 root       0:00 [migration/0]
-   11 root       0:00 [migration/1]
-   12 root       0:00 [ksoftirqd/1]
-   13 root       0:00 [kworker/1:0]
-   14 root       0:00 [kworker/1:0H]
-   15 root       0:00 [khelper]
-   16 root       0:00 [kworker/u4:1]
-  261 root       0:00 [writeback]
-  263 root       0:00 [bioset]
-  265 root       0:00 [kblockd]
-  273 root       0:00 [ata_sff]
-  283 root       0:00 [khubd]
-  382 root       0:00 [kworker/0:1]
-  383 root       0:00 [rpciod]
-  398 root       0:00 [kswapd0]
-  443 root       0:00 [fsnotify_mark]
-  459 root       0:00 [nfsiod]
-  552 root       0:00 [nvme]
-  570 root       0:00 [scsi_eh_0]
-  573 root       0:00 [scsi_eh_1]
-  576 root       0:00 [kworker/u4:2]
-  584 root       0:00 [kworker/1:1]
-  619 root       0:00 [kpsmoused]
-  621 root       0:00 [kworker/0:2]
-  654 root       0:00 [binder]
-  674 root       0:00 [deferwq]
-  688 root       0:00 /usr/sbin/telnetd 
-  701 root       0:00 -sh 
-  710 root       0:00 ./test 
-  712 root       0:00 ps -all 
-# kill 710
-# 
-[1]+  Terminated                 taskset 0x2 ./test
-# 
-# devmem 0xd0011018
-0x06050E70
-# # devmem 0xd0011018[J# kill 710[J# ps -all[J# taskset 0x1 ./cachebench -r -X128[J
-
-		long int Read Cache Test
-
-C Size		MissRate
--------		-------
-524288		18.436008
-# 
