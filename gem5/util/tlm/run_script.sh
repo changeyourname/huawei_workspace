@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NUM_CPUS=4              # 1/2/4
+NUM_CPUS=1              # 1/2/4
 
 ARM_SYSTEM="armv7"      # "armv7"; "armv8"
 
