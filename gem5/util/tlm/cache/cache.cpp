@@ -51,9 +51,8 @@ cache::cache(
 		        m_current_way(0),														            // cache way for current request
 		        m_current_delay(NULL),                              					            // delay object for current request
 		        m_id(id),
+		        m_misses_type_read(0),
 		        m_cache_regspace_base(regbase),		        
-		        m_access_register(0),
-		        m_miss_register(0),
 		        m_lookup_delay(sc_core::SC_ZERO_TIME),
 		        m_read_delay(sc_core::SC_ZERO_TIME),
 		        m_write_delay(sc_core::SC_ZERO_TIME),
@@ -121,6 +120,14 @@ cache::cache(
     
     m_cfgsocket = new tlm_utils::simple_target_socket< cache >("m_cfgsocket");
     m_cfgsocket->register_b_transport(this, &cache::b_transport);
+    
+    if (m_level > 1) {
+        m_miss_register = new uint64_t[NUM_CPUS + 1];
+        m_access_register = new uint64_t[NUM_CPUS + 1];
+    } else {
+        m_miss_register = new uint64_t;
+        m_access_register = new uint64_t;
+    }
 
 	// logging
 	if (logfile) {
@@ -159,6 +166,9 @@ cache::~cache() {
 
 	m_trans.clear_extension(m_ext);
 	delete m_ext;
+	
+	delete m_miss_register;
+	delete m_access_register;
 }
 
 
@@ -232,11 +242,6 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	                                    log2((double)m_block_size/WORD_SIZE) + 
 	                                    log2((double)m_num_of_sets)));
 
-//        if (sc_core::sc_time_stamp() > sc_core::sc_time(72000000, sc_core::SC_NS)) {
-//            m_log = true;
-//        } else {
-//            m_log = false;
-//        }
         if (m_log) {   
 	        if (m_level == 1 && type==req_extension::NORMAL) {                	        
 	            if (common_fid) {
@@ -264,11 +269,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 
 	    // updating the access register
 	    if (type == req_extension::NORMAL) {
-	        // TODO: do this in a nicer way
-	        // for l2 cache only calculating miss-rates due to interaction with CPU0 only
-	        if (m_id==8 && m_CPU==0) {
-    	        m_access_register++;
-	        }
+            m_access_register[0]++;
+            if (m_level > 1) {
+                m_access_register[m_CPU + 1]++;
+            }
             m_current_delay = &delay;	    	        
             // doing cache lookup for this new memory request
             *m_current_delay += m_lookup_delay;            
@@ -295,11 +299,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 			    assert(type==req_extension::NORMAL);			    			
 			    process_miss(trans, evict_needed);
         	    // updating the misses register
-        	    // TODO: do this in a nicer way
-        	    if (m_id ==8 && m_CPU==0) {             // for l2cache..only measure misses
-        	                                            // because of CPU0
-    	            m_miss_register++;			    
-	            }
+                m_miss_register[0]++;
+                if (m_level > 1) {
+                    m_miss_register[m_CPU + 1]++;
+                }
 		    }
 	    }
 
@@ -331,13 +334,10 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         unsigned int len = trans.get_data_length();
         assert(len==8);
         if (req_addr == m_cache_regspace_base) {
-            memcpy(ptr, &m_access_register, len);
+            memcpy(ptr, &m_access_register[m_misses_type_read], len);
         } else if (req_addr == m_cache_regspace_base + 8) {
-            memcpy(ptr, &m_miss_register, len);
-        } else if (req_addr == m_cache_regspace_base + 16) { 
-            // TODO: is flush needed????                       
-//            flush_cache();  
-            
+            memcpy(ptr, &m_miss_register[m_misses_type_read], len);
+        } else if (req_addr == m_cache_regspace_base + 16) {             
             uint64_t reg_data = *((uint64_t *) ptr);
             char core = reg_data & 0xff;
             assert(core <= NUM_CPUS);
@@ -353,6 +353,15 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
             }               
         } else if (req_addr == m_cache_regspace_base + 24) {
             flush_cache();
+        } else if (req_addr == m_cache_regspace_base + 32) {
+            uint64_t reg_data = *((uint64_t *) ptr);
+            if (m_level == 1) {
+                assert(reg_data == 0);
+            } else {
+                assert(reg_data <= NUM_CPUS+1);
+            }
+            
+            m_misses_type_read = reg_data;            
         } else {
             assert(0);
         }
@@ -763,9 +772,7 @@ cache::do_eviction()
 	m_current_blockAddr = ((m_blocks[m_current_set][m_current_way].tag << 
 	                             (uint32_t)(log2((double) m_num_of_sets))) | m_current_set
 	                            ) << (uint32_t)(log2((double) WORD_SIZE) + 
-	                                            log2((double) m_block_size/WORD_SIZE));
-	
-//	m_trans.set_address(evict_block_addr);
+	                                            log2((double) m_block_size/WORD_SIZE));	
 	                                            	                                            
 	// incase this block is in 'S' then no writeback is needed
 	
@@ -826,10 +833,7 @@ cache::flush_cache() {
 			m_blocks[i][j].tag = 0x0;
 			m_blocks[i][j].evict_tag = 0x0;
 		}
-	} 
-	
-    m_access_register = 0x0;
-    m_miss_register = 0x0;  	   
+	}  
 }
 
 

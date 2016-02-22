@@ -87,9 +87,10 @@ private:
 	std::vector< uint32_t > m_current_ways_lookup;	
 	sc_core::sc_time *m_current_delay;
 	uint32_t m_id;
+	uint32_t m_misses_type_read;
 	uint64_t m_cache_regspace_base;	
-	uint64_t m_access_register;
-	uint64_t m_miss_register;
+	uint64_t *m_access_register;
+	uint64_t *m_miss_register;	
     sc_core::sc_time m_lookup_delay;
 	sc_core::sc_time m_read_delay;
 	sc_core::sc_time m_write_delay;
