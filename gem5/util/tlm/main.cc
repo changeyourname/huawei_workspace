@@ -298,7 +298,7 @@ sc_main(int argc, char **argv)
 
     cache::cache_specs specs;
     specs.num_masters = 1;
-    specs.size = 8*1024;
+    specs.size = 32*1024;
     specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 2;
     specs.write_back = true;
@@ -558,7 +558,7 @@ sc_main(int argc, char **argv)
     
 #ifdef L2_CACHE
     specs.num_masters = NUM_CPUS*2;
-    specs.size = 1024*1024;
+    specs.size = 2*1024*1024;
     specs.block_size = CACHE_BLOCK_SIZE;
     specs.num_ways = 4;    
     specs.evict_policy = cache::RAND;

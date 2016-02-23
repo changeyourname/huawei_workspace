@@ -812,6 +812,11 @@ cache::flush_cache() {
 		    m_isocket_u[i]->b_transport(m_trans, *m_current_delay);		
         	assert(m_trans.get_response_status() == tlm::TLM_OK_RESPONSE);	            
         }
+        
+        for (uint32_t i=1; i<=NUM_CPUS; i++) {
+            m_miss_register[i] = 0;
+            m_access_register[i] = 0;
+        }
     }
 
 	for (uint32_t i=0; i<m_num_of_sets; i++) {
@@ -834,6 +839,8 @@ cache::flush_cache() {
 			m_blocks[i][j].evict_tag = 0x0;
 		}
 	}  
+	m_miss_register[0] = 0;
+	m_access_register[0] = 0;
 }
 
 
