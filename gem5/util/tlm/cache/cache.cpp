@@ -142,7 +142,7 @@ cache::cache(
 	    fprintf(m_fid, "..write_allocate:%d", m_write_allocate);
 	    fprintf(m_fid, "..level:%d", m_level);
 	    fprintf(m_fid, "..evict_policy:%d\r\n\r\n", m_evict_policy);
-	    fflush(m_fid);    	
+//	    fflush(m_fid);    	
 	} else {
 	    m_fid = NULL;
 	}
@@ -167,8 +167,13 @@ cache::~cache() {
 	m_trans.clear_extension(m_ext);
 	delete m_ext;
 	
-	delete m_miss_register;
-	delete m_access_register;
+	if (m_level > 1) {
+	    delete[] m_miss_register;
+	    delete[] m_access_register;
+    } else {
+        delete m_miss_register;
+        delete m_access_register;
+    }
 }
 
 
@@ -186,7 +191,7 @@ cache::do_logging()
 // port interface method
 void 
 cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay) 
-{
+{    
     req_extension *ext;
     trans.get_extension(ext);
     uint64_t req_addr = trans.get_address();
@@ -209,11 +214,6 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 	        trans.set_response_status(tlm::TLM_OK_RESPONSE);
 	        return;
 	    }
-
-        if (m_id==0 || m_id==2 || m_id==4 || m_id==6) {
-            // icaches can't get write requests for memory 
-            assert(trans.get_command() != tlm::TLM_WRITE_COMMAND);
-        }	  
 	    
 	    bool evict_needed;
 	    uint64_t current_blockAddr_orig, current_tag_orig;
@@ -252,7 +252,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		            }
 		            fprintf(common_fid, "0x%08lx------------------------------------\r\n", 
 		                                req_addr);
-		            fflush(common_fid);
+//		            fflush(common_fid);
 	            }		
 	        }	
 	        
@@ -496,7 +496,7 @@ cache::process_hit(tlm::tlm_generic_payload &trans)
 		fprintf(m_fid, "cache hit for 0x%08llux", trans.get_address());
 		fprintf(m_fid, "..tag=0x%08lx", m_current_tag);
 		fprintf(m_fid, "..set=%d\r\n", m_current_set);
-		fflush(m_fid);			// disable this when not debugging
+//		fflush(m_fid);			// disable this when not debugging
 	}
 
 	tlm::tlm_command cmd = trans.get_command();
@@ -692,7 +692,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		fprintf(m_fid, "cache miss for 0x%08llux", trans.get_address());
 		fprintf(m_fid, "..tag=0x%08lx", m_current_tag);
 		fprintf(m_fid, "...set=%d\r\n", m_current_set);
-		fflush(m_fid);			
+//		fflush(m_fid);			
 	}
 
 	if (evict_needed) {
@@ -899,7 +899,7 @@ cache::print_cache_set(uint32_t set)
 		    fprintf(common_fid, "lru=%d\r\n", m_blocks[set][x].evict_tag);
 	    }
 	    fprintf(common_fid, "\r\n\r\n");
-	    fflush(common_fid);			
+//	    fflush(common_fid);			
     }
 }
 

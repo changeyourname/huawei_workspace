@@ -560,7 +560,7 @@ sc_main(int argc, char **argv)
     specs.num_masters = NUM_CPUS*2;
     specs.size = 2*1024*1024;
     specs.block_size = CACHE_BLOCK_SIZE;
-    specs.num_ways = 4;    
+    specs.num_ways = 8;    
     specs.evict_policy = cache::RAND;
     specs.num_alloc_blocks = 1;
     specs.CPU_id = 0;
