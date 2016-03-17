@@ -99,7 +99,7 @@ sc_transactor::recvAtomic(PacketPtr packet)
     }         
     
     if (addr>=CACHE_REGSPACE_BASE && addr<(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
-        for (int i=0; i<owners.size(); i++) {
+        for (uint32_t i=0; i<owners.size(); i++) {
             if (owners[i]->regSpace(packet->getAddr())) {
                 if (packet->isRead()) {
                     if (packet->getSize() == 4) {
@@ -114,9 +114,11 @@ sc_transactor::recvAtomic(PacketPtr packet)
                 packet->makeAtomicResponse();
                 break;
             }
-        }        
+        }      
+        
+        return 0;  
     } else {
-        owner.recvAtomic(packet);
+        return owner.recvAtomic(packet);
     }
 }
 
@@ -177,7 +179,7 @@ sc_transactor::recvTimingReq(PacketPtr packet)
     }         
     
     if (addr>=CACHE_REGSPACE_BASE && addr<(CACHE_REGSPACE_BASE + CACHE_REGSPACE_SIZE)) {
-        for (int i=0; i<owners.size(); i++) {
+        for (uint32_t i=0; i<owners.size(); i++) {
             if (owners[i]->regSpace(packet->getAddr())) {
                 if (packet->getSize() == 4) {
                     packet->set<uint32_t>((uint32_t)owners[i]->readReg(packet->getAddr()));
@@ -222,7 +224,7 @@ sc_transactor::pec(
     sc_time delay;
 
     if(phase == tlm::END_REQ ||
-            &trans == blockingRequest && phase == tlm::BEGIN_RESP) {
+            (&trans == blockingRequest && phase == tlm::BEGIN_RESP)) {
         assert(0);
     }
     else if(phase == tlm::BEGIN_RESP)

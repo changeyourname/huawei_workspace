@@ -124,9 +124,15 @@ cache::cache(
     if (m_level > 1) {
         m_miss_register = new uint64_t[NUM_CPUS + 1];
         m_access_register = new uint64_t[NUM_CPUS + 1];
+        for (int i=0; i<=NUM_CPUS; i++) {
+            m_access_register[i] = 0;
+            m_miss_register[i] = 0;
+        }
     } else {
         m_miss_register = new uint64_t;
         m_access_register = new uint64_t;
+        *m_access_register = 0;
+        *m_miss_register = 0;
     }
 
 	// logging
@@ -265,18 +271,18 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
                                             trans.get_command(),
                                             m_debug);
 		    print_cache_set(m_current_set);	                	    
-        }
+        }                
 
 	    // updating the access register
 	    if (type == req_extension::NORMAL) {
             m_access_register[0]++;
             if (m_level > 1) {
                 m_access_register[m_CPU + 1]++;
-            }
+            }     
             m_current_delay = &delay;	    	        
             // doing cache lookup for this new memory request
             *m_current_delay += m_lookup_delay;            
-	    }    	    
+	    }   	            	    
 
 	    if (cache_lookup(evict_needed, m_current_way, 
 	                       (type == req_extension::WB_UPDATE))) {
@@ -293,16 +299,16 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
 		    if (type == req_extension::BACK_INVALIDATE) {
 			    // this block is already invalidated (nor present in cache) so do nothing
 		    } else {
-			    // normal request path
-			
+			    // normal request path			
 			    // any special request except back-invalidate shouldn't result in a miss
-			    assert(type==req_extension::NORMAL);			    			
-			    process_miss(trans, evict_needed);
+			    assert(type==req_extension::NORMAL);		
         	    // updating the misses register
                 m_miss_register[0]++;
                 if (m_level > 1) {
                     m_miss_register[m_CPU + 1]++;
-                }
+                } 			    
+			    	    	
+			    process_miss(trans, evict_needed);		                                   
 		    }
 	    }
 
@@ -324,10 +330,6 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
     } else if (req_addr>=m_cache_regspace_base && 
                             req_addr<(m_cache_regspace_base + 4096)) {                            
         // request accessing this cache registers
-        // right now only 2 register each being 8B 
-        // that's why 8*2 -> size in B in above conditional!!
-        
-        tlm::tlm_command cmd = trans.get_command();
         
         unsigned char *ptr = trans.get_data_ptr();
         assert(ptr);
@@ -336,15 +338,15 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         if (req_addr == m_cache_regspace_base) {
             memcpy(ptr, &m_access_register[m_misses_type_read], len);
         } else if (req_addr == m_cache_regspace_base + 8) {
-            memcpy(ptr, &m_miss_register[m_misses_type_read], len);
+            memcpy(ptr, &m_miss_register[m_misses_type_read], len);            
         } else if (req_addr == m_cache_regspace_base + 16) {             
             uint64_t reg_data = *((uint64_t *) ptr);
             char core = reg_data & 0xff;
             assert(core <= NUM_CPUS);
-            short block = (reg_data >> 8) & 0xffff;    
+            unsigned short block = (reg_data >> 8) & 0xffff;    
             assert(block <= m_alloc_blocks_coremask.size());
             uint32_t way_mask = (reg_data >> 24) & 0xffffffff;
-            for (int i=0; i<m_num_of_ways; i++) {
+            for (uint32_t i=0; i<m_num_of_ways; i++) {
                 if (way_mask>>i & 1) {
                     m_alloc_blocks_coremask[block][i] |= (1 << core);
                 } else {
@@ -708,7 +710,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		m_trans.set_read();
 		m_ext->m_type = req_extension::NORMAL;
 		m_ext->core_id = m_CPU;
-		send_request(true);
+		send_request(true);			
 
         // only cache data if there is an allocated way in this set
 	    // update tag of block
