@@ -305,7 +305,7 @@ cache::b_transport(tlm::tlm_generic_payload &trans, sc_core::sc_time &delay)
         	    // updating the misses register
                 m_miss_register[0]++;
                 if (m_level > 1) {
-                    m_miss_register[m_CPU + 1]++;
+                   m_miss_register[m_CPU + 1]++;
                 } 			    
 			    	    	
 			    process_miss(trans, evict_needed);		                                   
@@ -737,6 +737,7 @@ cache::process_miss(tlm::tlm_generic_payload &trans, bool evict_needed)
 		    assert(m_current_delay);
             *m_current_delay += m_write_delay;
 	    } else {
+	        // read miss
 		    m_blocks[m_current_set][m_current_way].state = cache_block::S;
     		assert(m_current_delay);			
             *m_current_delay += m_read_delay;
